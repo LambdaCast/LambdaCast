@@ -2,12 +2,10 @@ import os
 import site
 import sys
 
-sys.path.append('/opt')
-sys.path.append('/opt/owntube')
-sys.path.append('/opt/owntube/owntube')
-sys.path.append('/opt/owntube/owntube/vidoes')
+sys.path.append('/data/srv/OwnTube')
+sys.path.append('/data/srv/OwnTube/owntube')
 
-site.addsitedir('/opt/owntube/lib/python2.7/site-packages')
+site.addsitedir('/data/srv/OwnTube/.venv/lib/python2.6/site-packages')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'owntube.settings'
 
