@@ -15,12 +15,11 @@ from videoportal.models import Video, Comment, Channel, Collection
 from videoportal.forms import VideoForm, CommentForm
 from transloadit.client import Client
 from taggit.models import Tag
-import appsettings as settings
+import owntube.settings as settings
 
 import djangotasks
 
 import simplejson as json
-import transmissionrpc
 import urllib2
 import datetime
 import os

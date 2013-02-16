@@ -5,7 +5,7 @@ from videoportal.models import Video
 from videoportal.models import Comment
 
 class VideoForm(ModelForm):
-    ''' Used for the uplaading form '''
+    ''' Used for the uploading form '''
 
     class Meta:
         model = Video
