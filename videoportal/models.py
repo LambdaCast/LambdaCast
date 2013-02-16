@@ -25,9 +25,7 @@ from threading import Event
 from BitTornadoABC.btmakemetafile import calcsize, make_meta_file, ignore
 
 KIND_CHOICES = (
-    (0, 'Video-only'),
     (1, 'Audio-only'),
-    (2, 'Audio & Video'),
 )
 
 class Video(models.Model):
