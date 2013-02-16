@@ -2,18 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>OwnTube{% block title %}{% endblock %}</title>
+    <title>Records{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="Philip Brechler">
+    <meta name="author" content="TheRadio.CC">
     {% block rss %}
     {% endblock %}
-    <link rel="alternate" type="application/rss+xml" title="Latest Originals" href="/feeds/latest/torrent/" />
-    <link rel="alternate" type="application/rss+xml" title="Latest Videos (MP4)" href="/feeds/latest/mp4/" />
-    <link rel="alternate" type="application/rss+xml" title="Latest Videos (WEBM)" href="/feeds/latest/webm/" />
     <link rel="alternate" type="application/rss+xml" title="Latest Audio Files (MP3)" href="/feeds/latest/mp3/" />
     <link rel="alternate" type="application/rss+xml" title="Latest Audio Files (OGG)" href="/feeds/latest/ogg/" />
-    <link rel="alternate" type="application/rss+xml" title="Upcoming Events" href="/feeds/stream/upcoming/" />
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-custom.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}bootstrap/css/custom_style.css" rel="stylesheet">
@@ -43,11 +39,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">OwnTube</a>
+          <a class="brand" href="/">Records</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li {% block active1 %}{% endblock %}><a href="/">Videos</a></li>
-              <li {% block active2 %}{% endblock %}><a href="/stream/">Live</a></li>
               <li {% block active3 %}{% endblock %}><a href="/about/">Infos</a></li>
               <li {% block active4 %}{% endblock %}><a href="/contact/">Impressum</a></li>
               {% if user.is_authenticated %}
