@@ -18,8 +18,6 @@ TEMPLATE_DEBUG = DEBUG
 # If you use an virtualenv (you schould) enter it here
 VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/python2-6/sites-packages'
 
-FORCE_SCRIPT_NAME = ''
-
 # The guys who will get an email if something is wrong
 ADMINS = (
     ('name', 'root@localhost'),
@@ -111,6 +109,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
