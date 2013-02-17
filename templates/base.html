@@ -5,7 +5,7 @@
     <title>OwnTube{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="Philip Brechler">
+    <meta name="author" content="{{ settings.AUTHOR_NAME }}">
     {% block rss %}
     {% endblock %}
     {% if settings.USE_BITTORRENT %}
