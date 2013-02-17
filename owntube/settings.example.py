@@ -9,7 +9,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # If you use an virtualenv (you schould) enter it here
-VIRTUALENV = "{{ ABSOLUTE_PATH }}/lib/python2-6/sites-packages"
+VIRTUALENV = "{{ ABSOLUTE_PATH }/.venv/lib/python2-6/sites-packages"
 
 FORCE_SCRIPT_NAME = ''
 
