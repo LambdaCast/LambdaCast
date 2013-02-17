@@ -5,6 +5,8 @@ from videoportal.models import Video, Channel, Collection
 
 import owntube.settings as settings
 
+import markdown
+
 import os
 
 class LatestMP4Videos(Feed):
@@ -24,7 +26,7 @@ class LatestMP4Videos(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
         
     def item_enclosure_url(self, item):
     	return item.mp4URL
@@ -48,7 +50,7 @@ class LatestWEBMVideos(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
         
     def item_enclosure_url(self, item):
     	return item.webmURL
@@ -72,7 +74,7 @@ class LatestMP3Audio(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
         
     def item_enclosure_url(self, item):
     	return item.mp3URL
@@ -96,7 +98,7 @@ class LatestOGGAudio(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
         
     def item_enclosure_url(self, item):
     	return item.oggURL
@@ -120,7 +122,7 @@ class TorrentFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
         
     def item_enclosure_url(self, item):
     	return item.torrentURL
@@ -156,7 +158,7 @@ class ChannelFeedMP4(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.mp4URL
@@ -191,7 +193,7 @@ class ChannelFeedWEBM(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.webmURL
@@ -226,7 +228,7 @@ class ChannelFeedMP3(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.mp3URL
@@ -261,7 +263,7 @@ class ChannelFeedOGG(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.oggURL
@@ -295,7 +297,7 @@ class ChannelFeedTorrent(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.torrentURL
@@ -329,7 +331,7 @@ class CollectionFeedMP4(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.mp4URL
@@ -363,7 +365,7 @@ class CollectionFeedWEBM(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.webmURL
@@ -397,7 +399,7 @@ class CollectionFeedMP3(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.mp3URL
@@ -431,7 +433,7 @@ class CollectionFeedOGG(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.oggURL
@@ -465,7 +467,7 @@ class CollectionFeedTorrent(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
         return item.torrentURL
