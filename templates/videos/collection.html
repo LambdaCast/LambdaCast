@@ -14,12 +14,15 @@ class="active"
 <div class="span4">
 <div class=well>
 <ul class="nav nav-list">
+  {% if settings.USE_BITTORRENT %}
   <li class="nav-header">
     Original Material
   </li>
   <li>
     <a href="/feeds/collection/{{ collection.slug }}/torrent/"">Torrents-Feed</a>
   </li>
+  {% endif %}
+  {% if settings.ENABLE_VIDEO_FEEDS %}
   <li class="nav-header">
     Video-Podcast
   </li>
@@ -29,6 +32,8 @@ class="active"
   <li>
     <a href="/feeds/collection/{{ collection.slug }}/webm/">WEBM-Format</a>
   </li>
+  {% endif %}
+  {% if settings.ENABLE_AUDIO_FEEDS %}
   <li class="nav-header">
     Audio-Podcast
   </li>
@@ -38,6 +43,7 @@ class="active"
   <li>
     <a href="/feeds/collection/{{ collection.slug }}/ogg/">OGG-Format</a>
   </li>
+  {% endif %}
 </ul>
 </div>
 </div>

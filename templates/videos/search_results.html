@@ -14,12 +14,15 @@ class="active"
 <div class="span4">
 <div class=well>
 <ul class="nav nav-list">
+  {% if settings.USE_BITTORRENT %}
   <li class="nav-header">
     Original Material
   </li>
   <li>
     <a href="/feeds/latest/torrent/"">Torrents-Feed</a>
   </li>
+  {% endif %}
+  {% if settings.ENABLE_VIDEO_FEEDS %}
   <li class="nav-header">
     Video-Podcast
   </li>
@@ -29,6 +32,8 @@ class="active"
   <li>
     <a href="/feeds/latest/webm/">WEBM-Format</a>
   </li>
+  {% endif %}
+  {% if settings.ENABLE_AUDIO_FEEDS %}
   <li class="nav-header">
     Audio-Podcast
   </li>
@@ -38,9 +43,10 @@ class="active"
   <li>
     <a href="/feeds/latest/ogg/">OGG-Format</a>
   </li>
+  {% endif %}
   <li class="divider"></li>
   <li>
-  	<a href="mailto:pbrechler@mac.com"><i class="icon-bullhorn"></i> Kontakt</a>
+  	<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-bullhorn"></i> Kontakt</a>
   </li>
 </ul>
 </div>
