@@ -47,8 +47,10 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li {% block active1 %}{% endblock %}><a href="/">Videos</a></li>
-              <li {% block active2 %}{% endblock %}><a href="/stream/">Live</a></li>
-              <li {% block active3 %}{% endblock %}><a href="/about/">Infos</a></li>
+              {% if {{ ENABLE_LIVESTREAMS }} == True: % }
+	      <li {% block active2 %}{% endblock %}><a href="/stream/">Live</a></li>
+              {% endif %}
+	      <li {% block active3 %}{% endblock %}><a href="/about/">Infos</a></li>
               <li {% block active4 %}{% endblock %}><a href="/contact/">Impressum</a></li>
               {% if user.is_authenticated %}
               <li {% block active5 %}{% endblock %}><a href="/submit/">Hochladen</a></li>
