@@ -2,10 +2,7 @@ import os
 import site
 import sys
 
-sys.path.append('/opt')
-sys.path.append('/opt/owntube')
-sys.path.append('/opt/owntube/owntube')
-sys.path.append('/opt/owntube/owntube/vidoes')
+sys.path.append(os.path.abspath(os.pardir))
 
 site.addsitedir('/opt/owntube/lib/python2.7/site-packages')
 
