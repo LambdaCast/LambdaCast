@@ -47,7 +47,7 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li {% block active1 %}{% endblock %}><a href="/">Videos</a></li>
-              {% if settings.ENABLE_LIVESTREAMS %} <!-- TODO: fix if -->
+              {% if settings.ENABLE_LIVESTREAMS %}
               <li {% block active2 %}{% endblock %}><a href="/stream/">Live</a></li>
               {% endif %}
               <li {% block active3 %}{% endblock %}><a href="/about/">Infos</a></li>
