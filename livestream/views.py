@@ -4,10 +4,11 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+import owntube.settings as settings
+
 from livestream.models import Stream
 
 import datetime
-
 
 def current(request):
     ''' This view gets all streams that are scheduled to be live right now
@@ -18,15 +19,14 @@ def current(request):
     if not stream_list:
         return redirect(list)
     else:
-        return render_to_response('livestream/current.html', {'stream_list': stream_list, 'upcoming_streams_list': upcoming_streams_list},
+        return render_to_response('livestream/current.html', {'stream_list': stream_list, 'upcoming_streams_list': upcoming_streams_list, 'settings': settings},
                             context_instance=RequestContext(request))
-
 
 def list(request):
     ''' This view shows gets all upcoming streaming events
     and forwards them to our template '''
     stream_list = Stream.objects.filter(published=True,endDate__gt=datetime.datetime.now).order_by('-startDate')
-    return render_to_response('livestream/list.html', {'stream_list': stream_list},
+    return render_to_response('livestream/list.html', {'stream_list': stream_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def detail(request, slug):
@@ -35,5 +35,5 @@ def detail(request, slug):
     for showing the player'''
     stream = get_object_or_404(Stream, slug=slug)
     upcoming_streams_list = Stream.objects.filter(published=True,endDate__gt=datetime.datetime.now).order_by('-startDate')[:5]
-    return render_to_response('livestream/detail.html', {'stream': stream, 'upcoming_streams_list': upcoming_streams_list},
+    return render_to_response('livestream/detail.html', {'stream': stream, 'upcoming_streams_list': upcoming_streams_list, 'settings': settings},
                             context_instance=RequestContext(request))

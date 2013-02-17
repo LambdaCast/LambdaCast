@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from autoslug import AutoSlugField
 from taggit.managers import TaggableManager
 
-import appsettings as settings
+import owntube.settings as settings
 
 from pytranscode.ffmpeg import *
 from pytranscode.presets import *

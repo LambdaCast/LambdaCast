@@ -7,8 +7,17 @@ class="active"
 - Channel: {{ channel.name }}
 {% endblock %}
 {% block rss %}
-<link rel="alternate" type="application/rss+xml" title="Sendungs Audio Feed (MP3)" href="/feeds/{{ channel.slug }}/mp3/" />
-<link rel="alternate" type="application/rss+xml" title="Sendungs Audio Feed (OGG)" href="/feeds/{{ channel.slug }}/ogg/" />
+{% if settings.USE_BITTORRENT %}
+<link rel="alternate" type="application/rss+xml" title="Channel Original Feed (Torrents)" href="/feeds/{{ channel.slug }}/torrent/" />
+{% endif %}
+{% if settings.ENABLE_VIDEO_FEEDS %}
+<link rel="alternate" type="application/rss+xml" title="Channel Video Feed (MP4)" href="/feeds/{{ channel.slug }}/mp4/" />
+<link rel="alternate" type="application/rss+xml" title="Channel Video Feed (WEBM)" href="/feeds/{{ channel.slug }}/webm/" />
+{% endif %}
+{% if settings.ENABLE_AUDIO_FEEDS %}
+<link rel="alternate" type="application/rss+xml" title="Channel Audio Feed (MP3)" href="/feeds/{{ channel.slug }}/mp3/" />
+<link rel="alternate" type="application/rss+xml" title="Channel Audio Feed (OGG)" href="/feeds/{{ channel.slug }}/ogg/" />
+{% endif %}
 {% endblock %}
 {% block body %}
 <div class="page-header">
@@ -61,6 +70,26 @@ class="active"
 <div class="span4">
 <div class=well>
 <ul class="nav nav-list">
+  {% if settings.USE_BITTORRENT %}
+  <li class="nav-header">
+    Original Material
+  </li>
+  <li>
+    <a href="/feeds/{{ channel.slug }}/torrent/"">Torrents-Feed</a>
+  </li>
+  {% endif %}
+  {% if settings.ENABLE_VIDEO_FEEDS %}
+  <li class="nav-header">
+    Video-Podcast
+  </li>
+  <li>
+    <a href="/feeds/{{ channel.slug }}/mp4/">MP4-Format</a>
+  </li>
+  <li>
+    <a href="/feeds/{{ channel.slug }}/webm/">WEBM-Format</a>
+  </li>
+  {% endif %}
+  {% if settings.ENABLE_AUDIO_FEEDS %}
   <li class="nav-header">
     Audio-Podcast
   </li>
@@ -70,6 +99,7 @@ class="active"
   <li>
     <a href="/feeds/{{ channel.slug }}/ogg/">OGG-Format</a>
   </li>
+  {% endif %}
 </ul>
 </div>
 </div>

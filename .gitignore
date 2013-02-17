@@ -6,3 +6,7 @@ settings.py
 media/*
 static_files/*
 media
+.venv
+owntube.sql
+*~
+*.swp

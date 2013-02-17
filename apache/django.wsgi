@@ -2,8 +2,7 @@ import os
 import site
 import sys
 
-sys.path.append('/data/srv/OwnTube')
-sys.path.append('/data/srv/OwnTube/owntube')
+sys.path.append(os.path.abspath(os.pardir))
 
 site.addsitedir('/data/srv/OwnTube/.venv/lib/python2.6/site-packages')
 
