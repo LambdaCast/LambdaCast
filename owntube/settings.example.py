@@ -4,6 +4,13 @@ ABSOLUTE_PATH = '/opt/owntube'
 # Domain your instance should use, for example: 'http://example.com' (no / behind the path)
 DOMAIN = 'http://localhost:8000'
 
+# Domain of your website, for example: 'http://example.com' (no / behind the path)
+WEBSITE_URL = 'http://example.com'
+
+AUTHOR_NAME = 'Author Name'
+
+CONTACT_EMAIL = 'root@example.com'
+
 # Django settings for owntube project.
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
