@@ -65,7 +65,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ABSOLUTE_PATH + '/owntube/media'
+MEDIA_ROOT = ABSOLUTE_PATH + '/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -78,7 +78,7 @@ FILE_UPLOAD_TEMP_DIR = "/mnt/iscsi0/upload/"
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ABSOLUTE_PATH + '/owntube/static_files/'
+STATIC_ROOT = ABSOLUTE_PATH + '/static_files/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -206,7 +206,7 @@ TRANSMISSION_PORT = 9091
 
 # Base-Dir vor Hotfolders, example: "/opt/hotfolder/" 
 HOTFOLDER_BASE_DIR = ''
-HOTFOLDER_MOVE_TO_DIR = ABSOLUTE_PATH + '/owntube/media/raw/'
+HOTFOLDER_MOVE_TO_DIR = MEDIA_ROOT + '/raw/'
 
 
 # A sample logging configuration. The only tangible logging
