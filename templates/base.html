@@ -8,12 +8,20 @@
     <meta name="author" content="Philip Brechler">
     {% block rss %}
     {% endblock %}
+    {% if settings.USE_BITTORRENT %}
     <link rel="alternate" type="application/rss+xml" title="Latest Originals" href="/feeds/latest/torrent/" />
+    {% endif %}
+    {% if settings.ENABLE_VIDEO_FEEDS %}
     <link rel="alternate" type="application/rss+xml" title="Latest Videos (MP4)" href="/feeds/latest/mp4/" />
     <link rel="alternate" type="application/rss+xml" title="Latest Videos (WEBM)" href="/feeds/latest/webm/" />
+    {% endif %}
+    {% if settings.ENABLE_AUDIO_FEEDS %}
     <link rel="alternate" type="application/rss+xml" title="Latest Audio Files (MP3)" href="/feeds/latest/mp3/" />
     <link rel="alternate" type="application/rss+xml" title="Latest Audio Files (OGG)" href="/feeds/latest/ogg/" />
+    {% endif %}
+    {% if settings.ENABLE_LIVESTREAMS %}
     <link rel="alternate" type="application/rss+xml" title="Upcoming Events" href="/feeds/stream/upcoming/" />
+    {% endif %}
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-custom.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}bootstrap/css/custom_style.css" rel="stylesheet">

@@ -179,6 +179,9 @@ ENCODING_VIDEO_BASE_URL = DOMAIN + '/media/encoded/'
 
 ENABLE_LIVESTREAMS = False
 
+ENABLE_AUDIO_FEEDS = True
+ENABLE_VIDEO_FEEDS = True
+
 USE_BITTORRENT = False
 # example: "udp://tracker.example.com:80"
 BITTORRENT_TRACKER_ANNOUNCE_URL = ''
