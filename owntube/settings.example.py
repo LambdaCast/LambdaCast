@@ -177,6 +177,8 @@ ENCODING_OUTPUT_DIR = '{{ MEDIA_ROOT }}/encoded/'
 # How can we reach this files (public access is needed)
 ENCODING_VIDEO_BASE_URL = '{{ DOMAIN }}/media/encoded/'
 
+ENABLE_LIVESTREAMS = False
+
 USE_BITTORRENT = False
 # example: "udp://tracker.example.com:80"
 BITTORRENT_TRACKER_ANNOUNCE_URL = ''

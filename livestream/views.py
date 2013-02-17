@@ -8,7 +8,7 @@ from livestream.models import Stream
 
 import datetime
 
-
+if {{ ENABLE_LIVESTREAMS }} == True :
 def current(request):
     ''' This view gets all streams that are scheduled to be live right now
     if there are no streams it redirects to the liste view. The upcoming_streams_list
@@ -20,7 +20,6 @@ def current(request):
     else:
         return render_to_response('livestream/current.html', {'stream_list': stream_list, 'upcoming_streams_list': upcoming_streams_list},
                             context_instance=RequestContext(request))
-
 
 def list(request):
     ''' This view shows gets all upcoming streaming events
