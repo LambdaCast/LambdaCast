@@ -1,21 +1,21 @@
 # Path to your OwnTube instance, for example: '/opt/owntube' (no / behind the path)
-ABSOLUTE_PATH = ''
+ABSOLUTE_PATH = '/opt/owntube'
 
 # Domain your instance should use, for example: 'http://example.com' (no / behind the path)
-DOMAIN = ''
+DOMAIN = 'http://localhost:8000'
 
 # Django settings for owntube project.
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # If you use an virtualenv (you schould) enter it here
-VIRTUALENV = "{{ ABSOLUTE_PATH }}/.venv/lib/python2-6/sites-packages"
+VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/python2-6/sites-packages'
 
 FORCE_SCRIPT_NAME = ''
 
 # The guys who will get an email if something is wrong
 ADMINS = (
-    ('name', 'e-mail address'),
+    ('name', 'root@localhost'),
 )
 
 # Your database settings, sqlite is good for development and testing, not for deployment
@@ -58,12 +58,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '{{ ABSOLUTE_PATH }}/owntube/media'
+MEDIA_ROOT = ABSOLUTE_PATH + '/owntube/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '{{ DOMAIN }}/media/'
+MEDIA_URL = DOMAIN + '/media/'
 
 # Where do you want your upload cache to live (there should be some space left)
 FILE_UPLOAD_TEMP_DIR = "/mnt/iscsi0/upload/"
@@ -71,18 +71,18 @@ FILE_UPLOAD_TEMP_DIR = "/mnt/iscsi0/upload/"
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '{{ ABSOLUTE_PATH }}/owntube/static_files/'
+STATIC_ROOT = ABSOLUTE_PATH + '/owntube/static_files/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '{{ DOMAIN }}/static/'
+STATIC_URL = DOMAIN + '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '{{ ABSOLUTE_PATH }}/owntube/static/',
+    ABSOLUTE_PATH + '/owntube/static/',
 )
 
 # List of finder classes that know how to find static files in
@@ -122,7 +122,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "{{ ABSOLUTE_PATH }}/owntube/templates"
+    ABSOLUTE_PATH + '/templates'
 )
 
 INSTALLED_APPS = (
@@ -165,7 +165,7 @@ TRANSLOAD_TEMPLATE_AUDIO_ID = ''
 TRANSLOAD_TEMPLATE_VIDEO_AUDIO_ID = ''
 
 # The URL Transloadit should notify if it was done (please remember the trailing slash)
-TRANSLOAD_NOTIFY_URL = '{{ DOMAIN }}/encodingdone/'
+TRANSLOAD_NOTIFY_URL = DOMAIN + '/encodingdone/'
 
 TRANSLOAD_MP4_ENCODE = 'encode_iphone'
 TRANSLOAD_WEBM_ENCODE = 'encode_webm'
@@ -173,9 +173,9 @@ TRANSLOAD_MP3_ENCODE = 'encode_mp3'
 TRANSLOAD_OGG_ENCODE = 'encode_ogg'
 TRANSLOAD_THUMB_ENCODE = 'create_thumb'
 
-ENCODING_OUTPUT_DIR = '{{ MEDIA_ROOT }}/encoded/'
+ENCODING_OUTPUT_DIR = MEDIA_ROOT + '/encoded/'
 # How can we reach this files (public access is needed)
-ENCODING_VIDEO_BASE_URL = '{{ DOMAIN }}/media/encoded/'
+ENCODING_VIDEO_BASE_URL = DOMAIN + '/media/encoded/'
 
 ENABLE_LIVESTREAMS = False
 
@@ -184,11 +184,11 @@ USE_BITTORRENT = False
 BITTORRENT_TRACKER_ANNOUNCE_URL = ''
 # example: "udp://tracker.example1.com:80,udp://tracker.example2.com:80,udp://tracker.example3.com:80"
 BITTORRENT_TRACKER_BACKUP = ''
-BITTORRENT_FILES_DIR = '{{ MEDIA_ROOT }}/torrents/'
+BITTORRENT_FILES_DIR = MEDIA_ROOT + '/torrents/'
 # Where does transmission expects the original files? (This directory must be writeable for both transmission and owntube!)
 BITTORRENT_DOWNLOADS_DIR = ''
 # What is the URL of the BITTORRENT_FILES_DIR?
-BITTORRENT_FILES_BASE_URL = '{{ DOMAIN }}/media/torrents/'
+BITTORRENT_FILES_BASE_URL = DOMAIN + '/media/torrents/'
 
 # Host and port Transmission is listining on (probably localhost
 TRANSMISSION_HOST = '127.0.0.1'
@@ -196,7 +196,7 @@ TRANSMISSION_PORT = 9091
 
 # Base-Dir vor Hotfolders, example: "/opt/hotfolder/" 
 HOTFOLDER_BASE_DIR = ''
-HOTFOLDER_MOVE_TO_DIR = '{{ ABSOLUTE_PATH }}/owntube/media/raw/'
+HOTFOLDER_MOVE_TO_DIR = ABSOLUTE_PATH + '/owntube/media/raw/'
 
 
 # A sample logging configuration. The only tangible logging
