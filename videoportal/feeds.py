@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 
 from videoportal.models import Video, Channel, Collection
 
-import owntube.settings as settings
+import lambdaproject.settings as settings
 
 import markdown
 

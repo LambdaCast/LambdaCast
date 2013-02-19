@@ -1,5 +1,5 @@
-# Path to your OwnTube instance, for example: '/opt/owntube' (no / behind the path)
-ABSOLUTE_PATH = '/opt/owntube'
+# Path to your OwnTube instance, for example: '/opt/owntube. (no / behind the path)
+ABSOLUTE_PATH = '/opt/owntube.
 
 # Domain your instance should use, for example: 'http://example.com' (no / behind the path)
 DOMAIN = 'http://localhost:8000'
@@ -11,7 +11,7 @@ AUTHOR_NAME = 'Author Name'
 
 CONTACT_EMAIL = 'root@example.com'
 
-# Django settings for owntube project.
+# Django settings for owntube.project.
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
@@ -71,7 +71,7 @@ MEDIA_ROOT = ABSOLUTE_PATH + '/media'
 MEDIA_URL = DOMAIN + '/media/'
 
 # Where do you want your upload cache to live (there should be some space left)
-FILE_UPLOAD_TEMP_DIR = ABSOLUTE_PATH + '/upload/'
+FILE_UPLOAD_TEMP_DIR = "/mnt/iscsi0/upload/"
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -87,7 +87,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    ABSOLUTE_PATH + '/owntube/static/',
+    ABSOLUTE_PATH + '/owntube.static/',
 )
 
 # List of finder classes that know how to find static files in
@@ -194,7 +194,7 @@ BITTORRENT_TRACKER_ANNOUNCE_URL = ''
 # example: "udp://tracker.example1.com:80,udp://tracker.example2.com:80,udp://tracker.example3.com:80"
 BITTORRENT_TRACKER_BACKUP = ''
 BITTORRENT_FILES_DIR = MEDIA_ROOT + '/torrents/'
-# Where does transmission expects the original files? (This directory must be writeable for both transmission and owntube!)
+# Where does transmission expects the original files? (This directory must be writeable for both transmission and owntube.)
 BITTORRENT_DOWNLOADS_DIR = ''
 # What is the URL of the BITTORRENT_FILES_DIR?
 BITTORRENT_FILES_BASE_URL = DOMAIN + '/media/torrents/'

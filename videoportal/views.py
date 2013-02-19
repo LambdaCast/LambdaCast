@@ -1,4 +1,3 @@
-# TO DO: CLEANING!!!
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django import forms
 from django.template import RequestContext
@@ -15,7 +14,7 @@ from videoportal.models import Video, Comment, Channel, Collection
 from videoportal.forms import VideoForm, CommentForm
 from transloadit.client import Client
 from taggit.models import Tag
-import owntube.settings as settings
+import lambdaproject.settings as settings
 
 import djangotasks
 

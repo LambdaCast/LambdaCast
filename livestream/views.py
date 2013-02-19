@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-import owntube.settings as settings
+import lambdaproject.settings as settings
 
 from livestream.models import Stream
 
