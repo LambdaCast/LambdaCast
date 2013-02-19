@@ -1,33 +1,30 @@
-OwnTube
-=======
+LambdaCast
+==========
 
-OwnTube is your personal video portal based on Django.
+LambdaCast is your personal podcast platform based on Django. It serves your files via projekktor and audio.js, servers original files using Bittorrent and gives you feeds for MP4, MP3, and OGG files. You can use any podcast fetcher to get the feeds.
 
 Features
 --------
 
-* Encode Videos using ffmpeg or transloadit.com
-* Uses Bittorrent and Transmission to distribute original files (We want to switch to WebSeed if anyone could help with that)
+* Encode Videos using ffmpeg
+* Uses Bittorrent to distribute original files (Using original Bittorrent python libs)
 * Task Managment using djangotasks
-* Uses Projekktor to show videos and play audio
+* Uses Projekktor or audio.js to show videos in a modern way
 * Upload files using AJAX
 * Schedule live streaming events with the livestream app
-* Static pages app for, well, static pages
+* static pages app for, well, static pages
+
 
 Status
 ------
 
-The status could be described as early beta. It is feature complete and we are just deploying it under real world conditions and the code isn't as elegant as it could be.
+The status could be described as early alpha. At first e are working on an usable structure.
 
 Requirements & Installation
 ---------------------------
  
-[Read this](https://github.com/Piratenfraktion-Berlin/OwnTube/wiki/Installation-and-Setup)
+[Read this](https://github.com/TheRadialActive/LambdaCast/wiki/Installation)
 
-Support
--------
-
-Not available, but if you have any issues use the github issue tracker or contact pbrechler@piratenfraktion-berlin.de
 
 Fork?
 -----
