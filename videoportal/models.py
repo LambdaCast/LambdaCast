@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -37,7 +38,7 @@ class Video(models.Model):
     (like Amazon S3) to store your files '''
     title = models.CharField(u"Titel",max_length=200)
     slug = AutoSlugField(populate_from='title',unique=True)
-    date = models.DateField("Datum",help_text="Hochlade oder Aufnahmedatum angeben")
+    date = models.DateField("Datum",help_text=ugettext('Hochlade- oder Aufnahmedatum angeben'))
     description = models.TextField(u"Beschreibung")
     user = models.ForeignKey(User, blank=True, null=True, help_text="Der Kanal indem das Video angezeigt werden soll.")
     channel = models.ForeignKey('videoportal.Channel',blank=True,null=True)

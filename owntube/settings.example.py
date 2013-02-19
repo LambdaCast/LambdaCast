@@ -18,8 +18,6 @@ TEMPLATE_DEBUG = DEBUG
 # If you use an virtualenv (you schould) enter it here
 VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/python2-6/sites-packages'
 
-FORCE_SCRIPT_NAME = ''
-
 # The guys who will get an email if something is wrong
 ADMINS = (
     ('name', 'root@localhost'),
@@ -73,7 +71,7 @@ MEDIA_ROOT = ABSOLUTE_PATH + '/media'
 MEDIA_URL = DOMAIN + '/media/'
 
 # Where do you want your upload cache to live (there should be some space left)
-FILE_UPLOAD_TEMP_DIR = "/mnt/iscsi0/upload/"
+FILE_UPLOAD_TEMP_DIR = ABSOLUTE_PATH + '/upload/'
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -111,6 +109,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
