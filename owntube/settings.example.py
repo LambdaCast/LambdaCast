@@ -71,7 +71,7 @@ MEDIA_ROOT = ABSOLUTE_PATH + '/media'
 MEDIA_URL = DOMAIN + '/media/'
 
 # Where do you want your upload cache to live (there should be some space left)
-FILE_UPLOAD_TEMP_DIR = "/mnt/iscsi0/upload/"
+FILE_UPLOAD_TEMP_DIR = ABSOLUTE_PATH + '/upload/'
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
