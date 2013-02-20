@@ -1,4 +1,4 @@
-# Path to your OwnTube instance (no / behind the path)
+# Path to your LambdaCast instance (no / behind the path)
 ABSOLUTE_PATH = '/opt/LambdaCast'
 
 # Domain your instance should use, for example: 'http://example.com' (no / behind the path)
@@ -120,10 +120,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'owntube.urls'
+ROOT_URLCONF = 'lambdaproject.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'owntube.wsgi.application'
+WSGI_APPLICATION = 'lambdacast.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
