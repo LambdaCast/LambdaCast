@@ -5,7 +5,7 @@ import datetime
 
 class UpcomingEvents(Feed):
     ''' This sub class of Django's Feed class handles the feed URL from urls.py
-    in the owntube.directory, it gets all upcoming
+    in the LambdaCast directory, it gets all upcoming
     streaming events and returns the data as required
     for the django feed class
     TO DO: 

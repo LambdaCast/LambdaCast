@@ -228,7 +228,7 @@ class Channel(models.Model):
         return "/videos/channel/%s/" % self.slug
 
 class Hotfolder(models.Model):
-    ''' This is used for hotfolder support. Files in one of these will be added to owntube.automagicly using a cron job and a manage task '''
+    ''' This is used for hotfolder support. Files in one of these will be added to LambdaCast automagicly using a cron job and a manage task '''
     activated = models.BooleanField()
     channel = models.ForeignKey(Channel)
     folderName = models.CharField(u"Ordnername",max_length=30)
