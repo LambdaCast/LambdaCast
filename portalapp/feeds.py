@@ -1,7 +1,7 @@
 from django.contrib.syndication.views import Feed, FeedDoesNotExist
 from django.shortcuts import get_object_or_404
 
-from videoportal.models import Video, Channel, Collection
+from portalapp.models import Video, Channel, Collection
 
 import lambdaproject.settings as settings
 

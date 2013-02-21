@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from videoportal.feeds import *
+from portalapp.feeds import *
 from livestream.feeds import UpcomingEvents
 from django.conf import settings
 
@@ -9,18 +9,18 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'videoportal.views.list'),
-    url(r'^videos/(?P<slug>[-\w]+)/$', 'videoportal.views.detail'),
-    url(r'^tags/(?P<tag>[\w|\W]+)/$', 'videoportal.views.tag'),
-    url(r'^collection/(?P<slug>[-\w]+)/$', 'videoportal.views.collection'),
-    url(r'^json_tags/(?P<tag>[\w|\W]+)/$', 'videoportal.views.tag_json'),
-    url(r'^videos/channel/(?P<slug>[-\w]+)/$', 'videoportal.views.channel_list'),
-    url(r'^videos/iframe/(?P<slug>[-\w]+)/$', 'videoportal.views.iframe'),
-    url(r'^search/', 'videoportal.views.search'),
-    url(r'^json_search/', 'videoportal.views.search_json'),
-    url(r'^submit/', 'videoportal.views.submit'),
-    url(r'^encodingdone/', 'videoportal.views.encodingdone'),
-    url(r'^status/', 'videoportal.views.status'),
+    url(r'^$', 'portalapp.views.list'),
+    url(r'^videos/(?P<slug>[-\w]+)/$', 'portalapp.views.detail'),
+    url(r'^tags/(?P<tag>[\w|\W]+)/$', 'portalapp.views.tag'),
+    url(r'^collection/(?P<slug>[-\w]+)/$', 'portalapp.views.collection'),
+    url(r'^json_tags/(?P<tag>[\w|\W]+)/$', 'portalapp.views.tag_json'),
+    url(r'^videos/channel/(?P<slug>[-\w]+)/$', 'portalapp.views.channel_list'),
+    url(r'^videos/iframe/(?P<slug>[-\w]+)/$', 'portalapp.views.iframe'),
+    url(r'^search/', 'portalapp.views.search'),
+    url(r'^json_search/', 'portalapp.views.search_json'),
+    url(r'^submit/', 'portalapp.views.submit'),
+    url(r'^encodingdone/', 'portalapp.views.encodingdone'),
+    url(r'^status/', 'portalapp.views.status'),
     url(r'^contact/', 'static_pages.views.contact'),
     url(r'^about/', 'static_pages.views.about'),
     url(r'^stream/$', 'livestream.views.current'),

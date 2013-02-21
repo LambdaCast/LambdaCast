@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from videoportal.models import *
-import videoportal.appsettings as settings
+from portalapp.models import *
+import portalapp.appsettings as settings
 import djangotasks
 import datetime
 import shutil

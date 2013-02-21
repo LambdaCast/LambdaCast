@@ -43,7 +43,7 @@ class Video(models.Model):
     date = models.DateField("Datum",help_text=ugettext('Hochlade- oder Aufnahmedatum angeben'))
     description = models.TextField(u"Beschreibung")
     user = models.ForeignKey(User, blank=True, null=True, help_text="Der Kanal indem das Video angezeigt werden soll.")
-    channel = models.ForeignKey('videoportal.Channel',blank=True,null=True)
+    channel = models.ForeignKey('portalapp.Channel',blank=True,null=True)
     linkURL = models.URLField("Link",blank=True,verify_exists=False)
     kind = models.IntegerField("Art",max_length=1, choices=KIND_CHOICES)
     torrentURL = models.URLField("Torrent-URL",blank=True,verify_exists=False)
@@ -119,7 +119,7 @@ class Video(models.Model):
             else:
                 raise StandardError('Encoding WEBM Failed')
     
-            outcode = subprocess.Popen(['/usr/local/bin/ffmpeg -i '+ self.originalFile.path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
+            outcode = subprocess.Popen(['/usr/bin/ffmpeg -i '+ self.originalFile.path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
             
             while outcode.poll() == None:
                 pass
@@ -247,8 +247,8 @@ class Collection(models.Model):
     description = models.TextField(u"Beschreibung", max_length=1000)
     slug = AutoSlugField(populate_from='title',unique=True)
     date = models.DateField("Datum",null=True)
-    videos = models.ManyToManyField('videoportal.Video')
-    channel = models.ForeignKey('videoportal.Channel',blank=True,null=True)
+    videos = models.ManyToManyField('portalapp.Video')
+    channel = models.ForeignKey('portalapp.Channel',blank=True,null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     def __unicode__(self):
@@ -260,7 +260,7 @@ class Collection(models.Model):
 
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a video file using ffmpeg '''
-    process = subprocess.Popen(['/usr/local/bin/ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    process = subprocess.Popen(['/usr/bin/ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, stderr = process.communicate()
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])

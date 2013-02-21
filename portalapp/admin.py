@@ -1,8 +1,8 @@
-from videoportal.models import Video
-from videoportal.models import Comment
-from videoportal.models import Channel
-from videoportal.models import Hotfolder
-from videoportal.models import Collection
+from portalapp.models import Video
+from portalapp.models import Comment
+from portalapp.models import Channel
+from portalapp.models import Hotfolder
+from portalapp.models import Collection
 
 from django.contrib import admin
 
