@@ -5,9 +5,9 @@ local_settings.py
 settings.py
 media/*
 static_files/*
-media
+upload/*
 .venv
-owntube.sql
+*.sql
 *~
 *.swp
 extract.sh
