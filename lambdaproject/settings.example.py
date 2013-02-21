@@ -145,7 +145,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.markup',
     'taggit',
-    'portalapp',
+    'portal',
     'livestream',
     'static_pages',
     'djangotasks',
@@ -158,7 +158,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-# ehemalig "portalapp/appsettings.py"
+# ehemalig "portal/appsettings.py"
 # Transloadit.com Settings
 
 # Should we use transloadit? Otherwise we will try ffmpeg

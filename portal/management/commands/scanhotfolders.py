@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from portalapp.models import *
-import portalapp.appsettings as settings
+from portal.models import *
+import portal.appsettings as settings
 import djangotasks
 import datetime
 import shutil

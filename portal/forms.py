@@ -1,8 +1,8 @@
 from django.forms import ModelForm
 from django import forms
 
-from portalapp.models import Video
-from portalapp.models import Comment
+from portal.models import Video
+from portal.models import Comment
 
 class VideoForm(ModelForm):
     ''' Used for the uploading form '''

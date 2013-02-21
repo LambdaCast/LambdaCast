@@ -8,25 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Hotfolder'
-        db.create_table('portalapp_hotfolder', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('activated', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('channel', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portalapp.Channel'])),
-            ('folderName', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('defaultName', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(max_length=1000, null=True, blank=True)),
-            ('autoPublish', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('kind', self.gf('django.db.models.fields.IntegerField')(max_length=1)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('portalapp', ['Hotfolder'])
+        # Adding field 'Channel.featured'
+        db.add_column('portal_channel', 'featured',
+                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'Hotfolder'
-        db.delete_table('portalapp_hotfolder')
+        # Deleting field 'Channel.featured'
+        db.delete_column('portal_channel', 'featured')
 
 
     models = {
@@ -79,7 +69,7 @@ class Migration(SchemaMigration):
             'object_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'taggit_taggeditem_items'", 'to': "orm['taggit.Tag']"})
         },
-        'portalapp.channel': {
+        'portal.channel': {
             'Meta': {'object_name': 'Channel'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
@@ -89,7 +79,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'})
         },
-        'portalapp.comment': {
+        'portal.comment': {
             'Meta': {'object_name': 'Comment'},
             'comment': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -99,25 +89,12 @@ class Migration(SchemaMigration):
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'timecode': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2', 'blank': 'True'}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Video']"})
+            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Video']"})
         },
-        'portalapp.hotfolder': {
-            'Meta': {'object_name': 'Hotfolder'},
-            'activated': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'autoPublish': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Channel']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'defaultName': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
-            'folderName': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'kind': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'portalapp.video': {
+        'portal.video': {
             'Meta': {'object_name': 'Video'},
             'assemblyid': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Channel']", 'null': 'True', 'blank': 'True'}),
+            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Channel']", 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {}),
@@ -145,4 +122,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['portalapp']
+    complete_apps = ['portal']

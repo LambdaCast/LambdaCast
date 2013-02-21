@@ -8,26 +8,26 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Video.user'
-        db.add_column('portalapp_video', 'user',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True),
+        # Adding field 'Video.channel'
+        db.add_column('portal_video', 'channel',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.Channel'], null=True, blank=True),
                       keep_default=False)
 
-        # Removing M2M table for field user on 'Video'
-        db.delete_table('portalapp_video_user')
+        # Removing M2M table for field videos on 'Channel'
+        db.delete_table('portal_channel_videos')
 
 
     def backwards(self, orm):
-        # Deleting field 'Video.user'
-        db.delete_column('portalapp_video', 'user_id')
+        # Deleting field 'Video.channel'
+        db.delete_column('portal_video', 'channel_id')
 
-        # Adding M2M table for field user on 'Video'
-        db.create_table('portalapp_video_user', (
+        # Adding M2M table for field videos on 'Channel'
+        db.create_table('portal_channel_videos', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('video', models.ForeignKey(orm['portalapp.video'], null=False)),
-            ('user', models.ForeignKey(orm['auth.user'], null=False))
+            ('channel', models.ForeignKey(orm['portal.channel'], null=False)),
+            ('video', models.ForeignKey(orm['portal.video'], null=False))
         ))
-        db.create_unique('portalapp_video_user', ['video_id', 'user_id'])
+        db.create_unique('portal_channel_videos', ['channel_id', 'video_id'])
 
 
     models = {
@@ -80,7 +80,7 @@ class Migration(SchemaMigration):
             'object_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'taggit_taggeditem_items'", 'to': "orm['taggit.Tag']"})
         },
-        'portalapp.channel': {
+        'portal.channel': {
             'Meta': {'object_name': 'Channel'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -88,7 +88,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'})
         },
-        'portalapp.comment': {
+        'portal.comment': {
             'Meta': {'object_name': 'Comment'},
             'comment': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -98,12 +98,12 @@ class Migration(SchemaMigration):
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'timecode': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2', 'blank': 'True'}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Video']"})
+            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Video']"})
         },
-        'portalapp.video': {
+        'portal.video': {
             'Meta': {'object_name': 'Video'},
             'assemblyid': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Channel']", 'null': 'True', 'blank': 'True'}),
+            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Channel']", 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {}),
@@ -124,11 +124,11 @@ class Migration(SchemaMigration):
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'torrentURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'videoThumbURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'webmSize': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'webmURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
         }
     }
 
-    complete_apps = ['portalapp']
+    complete_apps = ['portal']

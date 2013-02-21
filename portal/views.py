@@ -10,8 +10,8 @@ from django.views.generic.list_detail import object_list
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 
-from portalapp.models import Video, Comment, Channel, Collection
-from portalapp.forms import VideoForm, CommentForm
+from portal.models import Video, Comment, Channel, Collection
+from portal.forms import VideoForm, CommentForm
 from transloadit.client import Client
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -234,7 +234,7 @@ def status(request):
         processing_videos = Video.objects.filter(encodingDone=False)
     running_tasks = []
     for video in processing_videos:
-        tasks = djangotasks.models.Task.objects.filter(model="portalapp.video", object_id=video.pk)
+        tasks = djangotasks.models.Task.objects.filter(model="portal.video", object_id=video.pk)
         running_tasks.append(tasks)
     return render_to_response('videos/status.html',
                                     {'processing_videos': processing_videos, 'running_tasks': running_tasks, 'settings': settings},

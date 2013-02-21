@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Collection.channel'
-        db.add_column('portalapp_collection', 'channel',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portalapp.Channel'], null=True, blank=True),
+        # Adding field 'Collection.date'
+        db.add_column('portal_collection', 'date',
+                      self.gf('django.db.models.fields.DateField')(null=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Collection.channel'
-        db.delete_column('portalapp_collection', 'channel_id')
+        # Deleting field 'Collection.date'
+        db.delete_column('portal_collection', 'date')
 
 
     models = {
@@ -69,7 +69,7 @@ class Migration(SchemaMigration):
             'object_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'taggit_taggeditem_items'", 'to': "orm['taggit.Tag']"})
         },
-        'portalapp.channel': {
+        'portal.channel': {
             'Meta': {'object_name': 'Channel'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
@@ -79,18 +79,19 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'})
         },
-        'portalapp.collection': {
+        'portal.collection': {
             'Meta': {'object_name': 'Collection'},
-            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Channel']", 'null': 'True', 'blank': 'True'}),
+            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Channel']", 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'videos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['portalapp.Video']", 'symmetrical': 'False'})
+            'videos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['portal.Video']", 'symmetrical': 'False'})
         },
-        'portalapp.comment': {
+        'portal.comment': {
             'Meta': {'object_name': 'Comment'},
             'comment': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -100,13 +101,13 @@ class Migration(SchemaMigration):
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'timecode': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2', 'blank': 'True'}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Video']"})
+            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Video']"})
         },
-        'portalapp.hotfolder': {
+        'portal.hotfolder': {
             'Meta': {'object_name': 'Hotfolder'},
             'activated': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'autoPublish': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Channel']"}),
+            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Channel']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'defaultName': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
@@ -115,11 +116,11 @@ class Migration(SchemaMigration):
             'kind': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
-        'portalapp.video': {
+        'portal.video': {
             'Meta': {'object_name': 'Video'},
             'assemblyid': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'autoPublish': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portalapp.Channel']", 'null': 'True', 'blank': 'True'}),
+            'channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Channel']", 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {}),
@@ -148,4 +149,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['portalapp']
+    complete_apps = ['portal']
