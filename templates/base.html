@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>OwnTube{% block title %}{% endblock %}</title>
+    <title>LambdaCast{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="{{ settings.AUTHOR_NAME }}">
@@ -51,10 +51,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">OwnTube</a>
+          <a class="brand" href="/">LambdaCast</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li {% block active1 %}{% endblock %}><a href="/">Home</a></li>
+              <li {% block active1 %}{% endblock %}><a href="/">Portal</a></li>
               {% if settings.ENABLE_LIVESTREAMS %}
               <li {% block active2 %}{% endblock %}><a href="/stream/">Live</a></li>
               {% endif %}
