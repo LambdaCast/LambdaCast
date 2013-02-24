@@ -8,8 +8,8 @@ from taggit.managers import TaggableManager
 import lambdaproject.settings as settings
 
 from pytranscode.ffmpeg import *
-from pytranscode.presets import *
 from pytranscode.runner import *
+from ffmpeg_presets import *
 
 import os
 import subprocess
@@ -86,12 +86,12 @@ class Video(models.Model):
             logfile = outputdir + 'encoding_mp4_log.txt'
             outfile_mp4 = outputdir + self.slug + '.mp4'
             # Create the command line
-            cl_mp4 = ffmpeg(path, outfile_mp4, logfile, OWNTUBE_MP4_VIDEO, OWNTUBE_MP4_AUDIO).build_command_line()
+            cl_mp4 = ffmpeg(path, outfile_mp4, logfile, MP4_VIDEO, MP4_AUDIO).build_command_line()
             
             logfile = outputdir + 'encoding_webm_log.txt'
             outfile_webm = outputdir + self.slug + '.webm'
     
-            cl_webm = ffmpeg(path, outfile_webm, logfile, OWNTUBE_WEBM_VIDEO, OWNTUBE_WEBM_AUDIO).build_command_line()
+            cl_webm = ffmpeg(path, outfile_webm, logfile, WEBM_VIDEO, WEBM_AUDIO).build_command_line()
             
             self.mp4URL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.mp4'
             self.webmURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.webm' 
@@ -134,12 +134,12 @@ class Video(models.Model):
             logfile = outputdir + 'encoding_mp3_log.txt'
             outfile_mp3 = outputdir + self.slug + '.mp3'
             # Create the command line
-            cl_mp3 = ffmpeg(path, outfile_mp3, logfile, OWNTUBE_NULL_VIDEO , OWNTUBE_MP3_AUDIO).build_command_line()
+            cl_mp3 = ffmpeg(path, outfile_mp3, logfile, NULL_VIDEO , MP3_AUDIO).build_command_line()
             
             logfile = outputdir + 'encoding_ogg_log.txt'
             outfile_ogg = outputdir + self.slug + '.ogg'
 
-            cl_ogg = ffmpeg(path, outfile_ogg, logfile, OWNTUBE_NULL_VIDEO, OWNTUBE_OGG_AUDIO).build_command_line()
+            cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
             
             self.mp3URL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
             self.oggURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'

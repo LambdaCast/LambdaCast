@@ -1,6 +1,3 @@
 [submodule "djangotasks"]
 	path = djangotasks
 	url = https://github.com/Piratenfraktion-Berlin/djangotasks.git
-[submodule "portal/pytranscode"]
-	path = portal/pytranscode
-	url = git@github.com:Piratenfraktion-Berlin/pytranscode.git
