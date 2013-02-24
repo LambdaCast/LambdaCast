@@ -12,3 +12,4 @@ simplejson==2.6.2
 wsgiref==0.1.2
 docutils==0.10
 -e git://github.com/puzzlet/pytranscode.git@master#egg=pytranscode-dev
+-e git://github.com/cro/django-tasks.git#egg=djangotasks-dev
