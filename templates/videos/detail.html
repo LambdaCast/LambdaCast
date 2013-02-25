@@ -64,6 +64,9 @@
 				{% if video.description %}
 				<div class="row">
 					<div class="span8">
+						{% if user.is_authenticated %}
+						<p><dt><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}">Bearbeiten</a></dt></p>
+						{% endif %}
 						<p><dt>Beschreibung:</dt></p>
 						<div class="well">
 							<dd><div style="max-height:200px; overflow-y: auto;">{{ video.description|markdown:"safe" }}</div></dd>
