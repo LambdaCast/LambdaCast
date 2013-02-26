@@ -77,13 +77,15 @@ def detail(request, slug):
             video = get_object_or_404(Video, slug=slug)
             emptyform = CommentForm()
             form = CommentForm(request.POST, instance=comment)
+            comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
+
             if form.is_valid():
                     comment = form.save(commit=False)
                     comment.save()
-                    comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
                     message = "Ihr Kommentar muss noch freigeschaltet werden"
-            
-            return render_to_response('videos/detail.html', {'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
+                    return render_to_response('videos/detail.html', {'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
+            else:
+                    return render_to_response('videos/detail.html', {'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
                     
     else:
         video = get_object_or_404(Video, slug=slug)
