@@ -64,9 +64,6 @@
 				{% if video.description %}
 				<div class="row">
 					<div class="span8">
-						{% if user.is_authenticated %}
-						<p><dt><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}">Bearbeiten</a></dt></p>
-						{% endif %}
 						<p><dt>Beschreibung:</dt></p>
 						<div class="well">
 							<dd><div style="max-height:200px; overflow-y: auto;">{{ video.description|markdown:"safe" }}</div></dd>
@@ -126,8 +123,15 @@
 		</div>
 	</div>
 	<div class="span4">
+		{% if user.is_authenticated %}
 		<div class="well">
-			<dl>
+			<dt>Aktionen</dt>
+			<ul>
+				<li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}">Bearbeiten</a></li>
+			</ul>
+		</div>
+		{% endif %}
+		<div class="well">
 			<dt>Datum</dt>
 			<dd>{{ video.date }}</dd>
 			{% if video.channel %}
