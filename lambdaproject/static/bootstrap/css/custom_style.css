@@ -36,3 +36,5 @@ body {
 .video-image-container img {
 	width: 100px;
 }
+
+#videoForm .control-label label { float: left; }

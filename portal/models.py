@@ -66,7 +66,7 @@ class Video(models.Model):
     tags = TaggableManager("Tags",blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    originalFile = models.FileField("Datei",upload_to="raw/%Y/%m/%d/",blank=True, max_length=2048)
+    originalFile = models.FileField("Datei",upload_to="raw/%Y/%m/%d/", max_length=2048)
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
