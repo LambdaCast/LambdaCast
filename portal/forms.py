@@ -11,6 +11,13 @@ class VideoForm(ModelForm):
         model = Video
         exclude = ["slug","mp4URL","mp4Size","flashURL","flashSize","webmURL","webmSize","mp3URL","mp3Size","oggURL","oggSize","ogvURL","ogvSize","duration","videoThumbURL","audioThumbURL","published","encodingDone","assemblyid","torrentURL","user","autoPublish", "torrentDone"]
 
+    def __init__(self, *args, **kwargs):
+        super(VideoForm, self).__init__(*args, **kwargs)
+        for fieldName in self.fields:
+            field = self.fields[fieldName]
+            if field.required:
+        	    field.widget.attrs['class'] = 'required'
+
 class CommentForm(ModelForm):
     ''' Used for the comments '''
     class Meta:
