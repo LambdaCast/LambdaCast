@@ -87,7 +87,7 @@ class="active"
 </div>
 <div class="span4">
 <div class="well">
-{% get_tagcloud as tags for 'videoportal.Video' %}
+{% get_tagcloud as tags for 'portal.Video' %}
 <ul>
 {% for tag in tags %}
 <a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
