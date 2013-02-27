@@ -12,203 +12,220 @@
 <h1>{{ video.title }}</h1>
 </div>
 <div class="row">
-<div class="span8">
-  {% if video.kind == 0 %}
-  <div class="row">
-    <div class="span8">
-      <video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-        {% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-        {% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
-      </video>
-    </div>
-  </div>
-  {% endif %}
-  {% if video.kind == 1 %}
-  <div class="row">
-    <div class="span8">
-	  <audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-	    {% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-        {% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
-      </audio>
-    </div>
-  </div>
-  {% endif %}
-  {% if video.kind == 2 %}
-  <div class="row">
-    <div class="span8">
-      <ul class="nav nav-tabs">
-        <li class="active" id="video_tab"><a>Video</a></li>
-        <li  id="audio_tab"><a>Audio</a></li>
-      </ul>
-      <div id="player_container">
-        <div id="video_player">
-          <video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-            {% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-            {% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
-          </video>
-        </div>
-        <div id="audio_player" style="display:none;">
-          <audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-	        {% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-            {% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
-          </audio>'
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-  <div class="row">
-  <div class="span8">
-  <h2>Kommentare</h2>
-  {% if comments %}
-  {% for comment in comments %}
-  <div class="row">
-  <div class="span8">
-  <div class="well">
-  <strong>Name: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>Zeit: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
-  <div class="comment-body">
-  {{ comment.comment }}
-  </div>
-  </div>
-  </div>
-  </div>
-  {% endfor %}
-  {% else %}
-  <div class="row">
-  <div class="span8">
-  <div class="well">
-  <p>Bis jetzt keine Kommentare</p>
-  </div>
-  </div>
-  </div>
-  {% endif %}
-  {% if message %}
-  <div class="alert">
-  {{ message }}
-  </div>
-  {% endif %}
-  <form enctype="multipart/form-data" class="form-horizontal" action="/videos/{{ video.slug }}/" method="post">{% csrf_token %}
-    {% for field in comment_form %}
-    	<div class="control-group">
-    		{% if field.errors %}
-    		<div class="alert alert-error">
-				<strong>Fehler! </strong>{{ field.errors }}
+	<div class="span8">
+		{% if video.kind == 0 %}
+		<div class="row">
+			<div class="span8">
+				<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+					{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
+					{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+				</video>
 			</div>
-    		{% endif %}
-			<div class="control-label">
-        	{{ field.label_tag }}
-        	</div>
-        	<div class="controls">
-        	{{ field }}
-        	</div>
-        </div>
-    {% endfor %}
-<div class="form-actions">
-<input type="submit" class="btn btn-primary" value="Senden" />
+		</div>
+		{% endif %}
+		{% if video.kind == 1 %}
+		<div class="row">
+			<div class="span8">
+				<center>			
+					<audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+				{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
+						{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+					</audio>
+				</center>		
+			</div>
+		</div>
+		{% endif %}
+		{% if video.kind == 2 %}
+		<div class="row">
+			<div class="span8">
+				<ul class="nav nav-tabs">
+					<li class="active" id="video_tab"><a>Video</a></li>
+					<li	id="audio_tab"><a>Audio</a></li>
+				</ul>
+				<div id="player_container">
+					<div id="video_player">
+						<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+							{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
+							{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+						</video>
+					</div>
+					<div id="audio_player" style="display:none;">
+						<audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+							{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
+							{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+						</audio>'
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		<div class="row">
+			<div class="span8">
+				{% if video.description %}
+				<div class="row">
+					<div class="span8">
+						<p><dt>Beschreibung:</dt></p>
+						<div class="well">
+							<dd><div style="max-height:200px; overflow-y: auto;">{{ video.description|markdown:"safe" }}</div></dd>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				<h2>Kommentare</h2>
+				{% if comments %}
+				{% for comment in comments %}
+				<div class="row">
+					<div class="span8">
+						<div class="well">
+							<strong>Name: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>Zeit: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
+							<div class="comment-body">
+							{{ comment.comment }}
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+				{% else %}
+				<div class ="row">
+					<div class="span8">
+						<div class="well">
+							<p>Bis jetzt keine Kommentare</p>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{% if message %}
+					<div class="alert">
+						{{ message }}
+					</div>
+				{% endif %}
+				<form enctype="multipart/form-data" class="form-horizontal" action="/videos/{{ video.slug }}/" method="post">{% csrf_token %}
+					{% for field in comment_form %}
+					<div class="control-group">
+						{% if field.errors %}
+							<div class="alert alert-error">
+								<strong>Fehler! </strong>{{ field.errors }}
+							</div>
+						{% endif %}
+						<div class="control-label">
+							{{ field.label_tag }}
+						</div>
+						<div class="controls">
+							{{ field }}
+						</div>
+					</div>
+					{% endfor %}
+					<div class="form-actions">
+						<input type="submit" class="btn btn-primary" value="Senden" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="span4">
+		{% if user.is_authenticated %}
+		<div class="well">
+			<dt>Aktionen</dt>
+			<ul>
+				<li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}">Bearbeiten</a></li>
+			</ul>
+		</div>
+		{% endif %}
+		<div class="well">
+			<dt>Datum</dt>
+			<dd>{{ video.date }}</dd>
+			{% if video.channel %}
+			<dt>Sendung</dt>
+			<dd><a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
+			{% endif %}
+			{% if video.user %}
+				<dt>Hochgeladen von</dt>
+				{% if video.user.first_name %}
+				<dd>{{ video.user.first_name }} {{ video.user.last_name }}</dd>
+				{% else %}
+				<dd>{{ video.user }}
+				{% endif %}
+			{% endif %}
+			{% if video.linkURL %}
+			<dt>Link:</dt>
+			<dd><a href="{{ video.linkURL }}" target="_Blank">{{ video.linkURL|truncatechars:40 }}</a></dd>
+			{% endif %}
+			<dt>Einbetten:</dt>
+			<dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/videos/iframe/{{ video.slug }}/" frameborder="0"></iframe>'></dd>
+			{% if video.duration %}
+			<dt>Dauer:</dt>
+			<dd>{{ video.duration|secondstohms }}</dd>
+			{% endif %}
+			{% if video.torrentURL %}
+			<dt>Torrent:</dt>
+			<dd><a href="{{ video.torrentURL }}">Download Original</a></dd>
+			{% endif %}
+			<dt>Download:</dt>
+			{% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}">Download MP4 Video</a></dd>{% endif %}
+			{% if video.webmURL %}<dd><a href="{{ video.webmURL }}">Download WEBM Video</a></dd>{% endif %}
+			{% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}">Download MP3 Audio</a></dd>{% endif %}
+			{% if video.oggURL %}<dd><a href="{{ video.oggURL }}">Download OGG Audio</a></dd>{% endif %}
+		</div>
+		{% if video.tags.all %}
+		<div class="well">
+			<ul>
+			{% for tag in video.tags.all %}
+				<li><a href="/tags/{{ tag.name }}/">{{ tag.name }}</a></li>
+			{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	</div>
 </div>
-</form>
-  </div>
-  </div>
-  </div>
-  <div class="span4">
-  <div class="well">
-  <dl>
-  <dt>Datum</dt>
-  <dd>{{ video.date }}</dd>
-  <dt>Beschreibung<dt>
-  <dd><div style="max-height:200px; overflow-y: scroll;">{{ video.description|markdown:"safe" }}</div></dd>
-  {% if video.channel %}
-  <dt>Sendung</dt>
-  <dd><a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
-  {% endif %}
-  {% if video.user %}
-  <dt>Hochgeladen von</dt>
-  {% if video.user.first_name %}
-  <dd>{{ video.user.first_name }} {{ video.user.last_name }}</dd>
-  {% else %}
-  <dd>{{ video.user }}
-  {% endif %}
-  {% endif %}
-  {% if video.linkURL %}
-  <dt>Link:</dt>
-  <dd><a href="{{ video.linkURL }}" target="_Blank">{{ video.linkURL|truncatechars:40 }}</a></dd>
-  {% endif %}
-  <dt>Einbetten:</dt>
-
-  <dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/videos/iframe/{{ video.slug }}/" frameborder="0"></iframe>'></dd>
-  {% if video.duration %}
-  <dt>Dauer:</dt>
-  <dd>{{ video.duration|secondstohms }}</dd>
-  {% endif %}
-  {% if video.torrentURL %}
-  <dt>Torrent:</dt>
-  <dd><a href="{{ video.torrentURL }}">Download Original</a></dd>
-  {% endif %}
-  <dt>Download:</dt>
-  {% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}">Download MP4 Video</a></dd>{% endif %}
-  {% if video.webmURL %}<dd><a href="{{ video.webmURL }}">Download WEBM Video</a></dd>{% endif %}
-  {% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}">Download MP3 Audio</a></dd>{% endif %}
-  {% if video.oggURL %}<dd><a href="{{ video.oggURL }}">Download OGG Audio</a></dd>{% endif %}
-  </div>
-  <div class="well">
-  <ul>
-        {% for tag in video.tags.all %}
-            <li><a href="/tags/{{ tag.name }}/">{{ tag.name }}</a></li>
-        {% endfor %}
-  </ul>
-  </div>
-  </div>
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript">
-         $(document).ready(function() {
-         	   var timeListener = function(value) {	
-					$('#id_timecode').val( value.toFixed(2) )
-  				}
-               {% if video.kind == 0 or video.kind == 2 %}
-               var video_player = projekktor('#player_a', {
-	                /* path to the MP4 Flash-player fallback component */
-	                playerFlashMP4:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-	        
-	                /* path to the MP3 Flash-player fallback component */
-	                playerFlashMP3:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-                        streamType: 'http',
-               });
-               
-               video_player.addListener('time', timeListener);
-               
-               {% endif %}
-               {% if video.kind == 1 or video.kind == 2 %}
-               var audio_player = projekktor('#player_b', {
-	                /* path to the MP4 Flash-player fallback component */
-	                playerFlashMP4:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-	        
-	                /* path to the MP3 Flash-player fallback component */
-	                playerFlashMP3:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-                        streamType: 'http',
-               });
-               
-               audio_player.addListener('time', timeListener);
-               {% endif %}
-			  $('.timecode').click(function(){
-			    console.log(this.text);
-			  	video_player.setPlayhead(parseFloat(this.text)); 
-			  	audio_player.setPlayhead(parseFloat(this.text));
-			  	return false;
-			  	})
-			  
-         });         
+ $(document).ready(function() {
+ 	var timeListener = function(value) {	
+		$('#id_timecode').val( value.toFixed(2) )
+	}
+	{% if video.kind == 0 or video.kind == 2 %}
+	var video_player = projekktor('#player_a', {
+		/* path to the MP4 Flash-player fallback component */
+		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
+
+		/* path to the MP3 Flash-player fallback component */
+		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
+		streamType: 'http',
+	});
+
+	video_player.addListener('time', timeListener);
+	{% endif %}
+	{% if video.kind == 1 or video.kind == 2 %}
+	var audio_player = projekktor('#player_b', {
+		/* path to the MP4 Flash-player fallback component */
+		playerFlashMP4:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
+
+		/* path to the MP3 Flash-player fallback component */
+		playerFlashMP3:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
+		streamType: 'http',
+	});
+	 
+	audio_player.addListener('time', timeListener);
+	{% endif %}
+	$('.timecode').click(function(){
+		console.log(this.text);
+		video_player.setPlayhead(parseFloat(this.text)); 
+		audio_player.setPlayhead(parseFloat(this.text));
+		return false;
+	})
+});
 $('#video_tab a').click(function (e) {
-  e.preventDefault();
-  $(this).tab('show');
-  $('#video_player').toggle();
-  $('#audio_player').toggle();
+	e.preventDefault();
+	$(this).tab('show');
+	$('#video_player').toggle();
+	$('#audio_player').toggle();
 })
 $('#audio_tab a').click(function (e) {
-  e.preventDefault();
-  $(this).tab('show');
-  $('#video_player').toggle();
-  $('#audio_player').toggle();
+	e.preventDefault();
+	$(this).tab('show');
+	$('#video_player').toggle();
+	$('#audio_player').toggle();
 })
 </script>
 {% endblock %}

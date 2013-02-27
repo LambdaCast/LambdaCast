@@ -3,7 +3,7 @@ from django import forms
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 
-import owntube.settings as settings
+import lambdaproject.settings as settings
 
 # All this views are just showing static pages not really usefull
 
