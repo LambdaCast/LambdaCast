@@ -24,7 +24,7 @@ class="active"
   {% endif %}
   {% if settings.ENABLE_VIDEO_FEEDS %}
   <li class="nav-header">
-    Video-Podcast
+    <i class="icon-film"></i> {% trans "Video-Podcast" %}
   </li>
   <li>
     <a href="/feeds/collection/{{ collection.slug }}/mp4/">MP4-Format</a>
@@ -35,7 +35,7 @@ class="active"
   {% endif %}
   {% if settings.ENABLE_AUDIO_FEEDS %}
   <li class="nav-header">
-    Audio-Podcast
+    <i class="icon-headphones"></i> {% trans "Audio-Podcast" %}
   </li>
   <li>
     <a href="/feeds/collection/{{ collection.slug }}/mp3/">MP3-Format</a>

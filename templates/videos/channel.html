@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load custom_filters %}
+{% load i18n %}
 {% block active1 %}
 class="active"
 {% endblock %}
@@ -8,15 +9,15 @@ class="active"
 {% endblock %}
 {% block rss %}
 {% if settings.USE_BITTORRENT %}
-<link rel="alternate" type="application/rss+xml" title="Channel Original Feed (Torrents)" href="/feeds/{{ channel.slug }}/torrent/" />
+<link rel="alternate" type="application/rss+xml" title={% trans "Channel Original Feed (Torrents)" %} href="/feeds/{{ channel.slug }}/torrent/" />
 {% endif %}
 {% if settings.ENABLE_VIDEO_FEEDS %}
-<link rel="alternate" type="application/rss+xml" title="Channel Video Feed (MP4)" href="/feeds/{{ channel.slug }}/mp4/" />
-<link rel="alternate" type="application/rss+xml" title="Channel Video Feed (WEBM)" href="/feeds/{{ channel.slug }}/webm/" />
+<link rel="alternate" type="application/rss+xml" title={% trans "Channel Video Feed (MP4)" %} href="/feeds/{{ channel.slug }}/mp4/" />
+<link rel="alternate" type="application/rss+xml" title={% trans "Channel Video Feed (WEBM)" %} href="/feeds/{{ channel.slug }}/webm/" />
 {% endif %}
 {% if settings.ENABLE_AUDIO_FEEDS %}
-<link rel="alternate" type="application/rss+xml" title="Channel Audio Feed (MP3)" href="/feeds/{{ channel.slug }}/mp3/" />
-<link rel="alternate" type="application/rss+xml" title="Channel Audio Feed (OGG)" href="/feeds/{{ channel.slug }}/ogg/" />
+<link rel="alternate" type="application/rss+xml" title={% trans "Channel Audio Feed (MP3)" %} href="/feeds/{{ channel.slug }}/mp3/" />
+<link rel="alternate" type="application/rss+xml" title={% trans "Channel Audio Feed (OGG)" %} href="/feeds/{{ channel.slug }}/ogg/" />
 {% endif %}
 {% endblock %}
 {% block body %}
@@ -30,7 +31,7 @@ class="active"
 <div class="span8">
 <ul class="nav nav-tabs">
   <li>
-    <a href="/">Neuste Videos</a>
+    <a href="/">{% trans "Latest Media" %}</a>
   </li>
   {% for aChannel in channel_list %}
   {% if aChannel.featured %}
@@ -43,7 +44,7 @@ class="active"
   {% endfor %}
   <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        Alle Channel
+        {% trans "All Channels" %}
         <b class="caret"></b>
       </a>
     <ul class="dropdown-menu">
@@ -57,12 +58,12 @@ class="active"
 <ul class="pager">
 {% if videos_list.has_previous %}
   <li class="previous">
-      <a href="?page={{ videos_list.previous_page_number }}">&larr; Neuer</a>
+      <a href="?page={{ videos_list.previous_page_number }}">&larr; {% trans "Later" %}</a>
   </li>
 {% endif %}
 {% if videos_list.has_next %}
   <li class="next">
-      <a href="?page={{ videos_list.next_page_number }}">&Auml;lter &rarr;</a>
+      <a href="?page={{ videos_list.next_page_number }}">{% trans "Earlier" %} &rarr;</a>
     </li>
 {% endif %}
 </ul>
@@ -71,35 +72,41 @@ class="active"
 <div class=well>
 <ul class="nav nav-list">
   {% if settings.USE_BITTORRENT %}
-  <li class="nav-header">
-    Original Material
+  <li>
+    <i class="icon-file"></i> <u>{% trans "Original Material" %}</u>
   </li>
   <li>
-    <a href="/feeds/{{ channel.slug }}/torrent/"">Torrents-Feed</a>
+    <a href="/feeds/latest/torrent/">Torrents-Feed</a>
   </li>
+  <li class="divider"></li>
   {% endif %}
   {% if settings.ENABLE_VIDEO_FEEDS %}
-  <li class="nav-header">
-    Video-Podcast
+  <li>
+    <i class="icon-film"></i> <u>{% trans "Video-Podcast" %}</u>
   </li>
   <li>
-    <a href="/feeds/{{ channel.slug }}/mp4/">MP4-Format</a>
+    <a href="/feeds/latest/mp4/">{% trans "MP4-Format" %}</a>
   </li>
   <li>
-    <a href="/feeds/{{ channel.slug }}/webm/">WEBM-Format</a>
+    <a href="/feeds/latest/webm/">{% trans "WEBM-Format" %}</a>
   </li>
   {% endif %}
   {% if settings.ENABLE_AUDIO_FEEDS %}
-  <li class="nav-header">
-    Audio-Podcast
+  <li class="divider"></li>
+  <li>
+    <i class="icon-headphones"></i> <u>{% trans "Audio-Podcast" %}</u>
   </li>
   <li>
-    <a href="/feeds/{{ channel.slug }}/mp3/">MP3-Format</a>
+    <a href="/feeds/latest/mp3/">{% trans "MP3-Format" %}</a>
   </li>
   <li>
-    <a href="/feeds/{{ channel.slug }}/ogg/">OGG-Format</a>
+    <a href="/feeds/latest/ogg/">{% trans "OGG-Format" %}</a>
   </li>
   {% endif %}
+  <li class="divider"></li>
+  <li>
+    <a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
+  </li>
 </ul>
 </div>
 </div>

@@ -4,15 +4,16 @@ from portal.models import Channel
 from portal.models import Hotfolder
 from portal.models import Collection
 
+from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 
 def make_published(modeladmin, request, queryset):
     queryset.update(published=True)
-make_published.short_description = "Markierte Videos veroeffentlichen"
+make_published.short_description = _(u"Publish marked media")
 
 def make_torrent_done(modeladmin, request, queryset):
     queryset.update(torrentDone=True)
-make_torrent_done.short_description = "Markierte Videos also mit Torrent markieren"
+make_torrent_done.short_description = _(u"Marked media all get a torrent")
 
 class VideoAdmin (admin.ModelAdmin):
     list_display = ['title','published','encodingDone', 'channel' ,'date']
@@ -23,7 +24,7 @@ class VideoAdmin (admin.ModelAdmin):
         (None, {
             'fields': ('title', 'date', 'description', 'channel', 'linkURL', 'tags','published')
         }),
-        ('Erweiterte Optionen', {
+        (_(u'Advanced options'), {
             'classes': ('collapse',),
             'fields': ('kind','user','torrentURL','mp4URL','webmURL','mp3URL','oggURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
         }),
@@ -32,7 +33,7 @@ admin.site.register(Video,VideoAdmin)
 
 def make_moderated(modeladmin,request, queryset):
     queryset.update(moderated=True)
-make_moderated.short_description = "Markierte Kommentare zulassen"
+make_moderated.short_description = _(u"Moderate marked comments")
 
 class CommentAdmin (admin.ModelAdmin):
     list_display = ['comment','video','created','name','ip','moderated']
