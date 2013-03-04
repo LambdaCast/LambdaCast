@@ -1,4 +1,3 @@
-{% load i18n %}
 $(document).ready(function() {
 	var now = new Date();
 	var formatted = now.format("dd.mm.yyyy");
@@ -25,15 +24,15 @@ $(document).ready(function() {
 			var percentVal = percentComplete + '%';
 			bar.width(percentVal)
 			percent.html(percentVal);
-			document.title = 'LambdaCast - {% trans "Upload" %} - ' + percentVal;
+			document.title = 'Upload - ' + percentVal;
 		},
 		complete: function(xhr) {
 			if (xhr.status == 200){
 				// TODO: remove alert
-				alert({% trans "Thank you, your media will be transcoded and should be available soon." %});
+				alert("Thank you, your media will be transcoded and should be available soon.");
 				window.location.href = "/status/";
 			}else {
-				$("#formError").html({% trans "An error accured. Please, try again or contact the administrator." %});
+				$("#formError").html("An error accured. Please, try again or contact the administrator.");
 				$("#formError").show();
 			}
 		}
