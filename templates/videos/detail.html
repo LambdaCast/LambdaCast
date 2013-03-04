@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load custom_filters %}
 {% load markup %}
 {% block title %} - {{ video.title }}{% endblock %}
@@ -39,8 +40,8 @@
 		<div class="row">
 			<div class="span8">
 				<ul class="nav nav-tabs">
-					<li class="active" id="video_tab"><a>Video</a></li>
-					<li	id="audio_tab"><a>Audio</a></li>
+					<li class="active" id="video_tab"><a>{% trans "Video" %}</a></li>
+					<li	id="audio_tab"><a>{% trans "Audio" %}</a></li>
 				</ul>
 				<div id="player_container">
 					<div id="video_player">
@@ -64,14 +65,14 @@
 				{% if video.description %}
 				<div class="row">
 					<div class="span8">
-						<p><dt>Beschreibung:</dt></p>
+						<p><dt>{% trans "Description" %}:</dt></p>
 						<div class="well">
 							<dd><div style="max-height:200px; overflow-y: auto;">{{ video.description|markdown:"safe" }}</div></dd>
 						</div>
 					</div>
 				</div>
 				{% endif %}
-				<h2>Kommentare</h2>
+				<h2>{% trans "Comments" %}</h2>
 				{% if comments %}
 				{% for comment in comments %}
 				<div class="row">
@@ -89,7 +90,7 @@
 				<div class ="row">
 					<div class="span8">
 						<div class="well">
-							<p>Bis jetzt keine Kommentare</p>
+							<p>{% trans "No comments" %}</p>
 						</div>
 					</div>
 				</div>
@@ -104,7 +105,7 @@
 					<div class="control-group">
 						{% if field.errors %}
 							<div class="alert alert-error">
-								<strong>Fehler! </strong>{{ field.errors }}
+								<strong>{% trans "Error!" %} </strong>{{ field.errors }}
 							</div>
 						{% endif %}
 						<div class="control-label">
@@ -116,7 +117,7 @@
 					</div>
 					{% endfor %}
 					<div class="form-actions">
-						<input type="submit" class="btn btn-primary" value="Senden" />
+						<input type="submit" class="btn btn-primary" value={% trans "Send" %} />
 					</div>
 				</form>
 			</div>
@@ -125,46 +126,46 @@
 	<div class="span4">
 		{% if user.is_authenticated %}
 		<div class="well">
-			<dt>Aktionen</dt>
+			<dt>{% trans "Actions" %}</dt>
 			<ul>
-				<li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}">Bearbeiten</a></li>
+				<li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}"><i class="icon-pencil"></i> {% trans "Edit" %}</a></li>
 			</ul>
 		</div>
 		{% endif %}
 		<div class="well">
-			<dt>Datum</dt>
-			<dd>{{ video.date }}</dd>
+			<dt>{% trans "Date" %}:</dt>
+			<dd><i class="icon-calendar"></i> {{ video.date }}</dd>
 			{% if video.channel %}
-			<dt>Sendung</dt>
-			<dd><a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
+			<dt>{% trans "Channel" %}:</dt>
+			<dd><i class="icon-th"></i> <a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
 			{% endif %}
 			{% if video.user %}
-				<dt>Hochgeladen von</dt>
+				<dt>{% trans "Uploaded by" %}:</dt>
 				{% if video.user.first_name %}
-				<dd>{{ video.user.first_name }} {{ video.user.last_name }}</dd>
+				<dd><i class="icon-user"></i> {{ video.user.first_name }} {{ video.user.last_name }}</dd>
 				{% else %}
-				<dd>{{ video.user }}
+				<dd><i class="icon-user"></i> {{ video.user }}
 				{% endif %}
 			{% endif %}
 			{% if video.linkURL %}
 			<dt>Link:</dt>
 			<dd><a href="{{ video.linkURL }}" target="_Blank">{{ video.linkURL|truncatechars:40 }}</a></dd>
 			{% endif %}
-			<dt>Einbetten:</dt>
+			<dt>{% trans "Embedding" %}:</dt>
 			<dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/videos/iframe/{{ video.slug }}/" frameborder="0"></iframe>'></dd>
 			{% if video.duration %}
-			<dt>Dauer:</dt>
-			<dd>{{ video.duration|secondstohms }}</dd>
+			<dt>{% trans "Duration" %}:</dt>
+			<dd><i class="icon-time"></i> {{ video.duration|secondstohms }}</dd>
 			{% endif %}
 			{% if video.torrentURL %}
-			<dt>Torrent:</dt>
-			<dd><a href="{{ video.torrentURL }}">Download Original</a></dd>
+			<dt>{% trans "Torrent" %}:</dt>
+			<dd><a href="{{ video.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
-			<dt>Download:</dt>
-			{% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}">Download MP4 Video</a></dd>{% endif %}
-			{% if video.webmURL %}<dd><a href="{{ video.webmURL }}">Download WEBM Video</a></dd>{% endif %}
-			{% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}">Download MP3 Audio</a></dd>{% endif %}
-			{% if video.oggURL %}<dd><a href="{{ video.oggURL }}">Download OGG Audio</a></dd>{% endif %}
+			<dt>{% trans "Download" %}:</dt>
+			{% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}"><i class="icon-film"></i> {% trans "Download MP4 Video" %}</a></dd>{% endif %}
+			{% if video.webmURL %}<dd><a href="{{ video.webmURL }}"><i class="icon-film"></i> {% trans "Download WEBM Video" %}</a></dd>{% endif %}
+			{% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}"><i class="icon-headphones"></i> {% trans "Download MP3 Audio" %}</a></dd>{% endif %}
+			{% if video.oggURL %}<dd><a href="{{ video.oggURL }}"><i class="icon-headphones"></i> {% trans "Download OGG Audio" %}</a></dd>{% endif %}
 		</div>
 		{% if video.tags.all %}
 		<div class="well">

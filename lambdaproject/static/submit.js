@@ -24,15 +24,15 @@ $(document).ready(function() {
 			var percentVal = percentComplete + '%';
 			bar.width(percentVal)
 			percent.html(percentVal);
-			document.title = 'LambdaCast - Hochladen - ' + percentVal;
+			document.title = 'Upload - ' + percentVal;
 		},
 		complete: function(xhr) {
 			if (xhr.status == 200){
 				// TODO: remove alert
-				alert("Danke, ihr Video wird trancodiert und sollte bald zur Verfügung stehen");
+				alert("Thank you, your media will be transcoded and should be available soon.");
 				window.location.href = "/status/";
 			}else {
-				$("#formError").html("Tut uns leid, das hat nicht geklappt, bitte noch mal versuchen oder den Admin nerven.");
+				$("#formError").html("An error accured. Please, try again or contact the administrator.");
 				$("#formError").show();
 			}
 		}

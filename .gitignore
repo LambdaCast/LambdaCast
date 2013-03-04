@@ -11,3 +11,4 @@ upload/*
 *~
 *.swp
 extract.sh
+*.mo

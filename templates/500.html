@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load custom_filters %}
 {% block body %}
 <div class="page-header">
-<h1>500 <small>Da ist was schief gegangen</small></h1>
+<h1>500 <small>{% trans "Oh, Supercat broke it's paw" %}</small></h1>
 </div>
 <div class="row">
 <div class="span8">
 <div class="well">
-<p>Der Server hat leider einen Fehler produziert, dass tut uns Leid.</p>
+<p>{% trans "The Server has found an error. Supercat feels really sorry for that." %}</p>
 </div>
 </div>
 </div>

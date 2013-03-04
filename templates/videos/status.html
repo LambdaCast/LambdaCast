@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block active9 %}
 class="active"
 {% endblock %}
 {% block title %}
-- Status
+- {% trans "Status" %}
 {% endblock %}
 {% load custom_filters %}
 {% block body %}
 <div class="page-header">
-<h1>Status</h1>
-<p>Diese Seite zeigt alle Videos an, die im Moment noch umgewandelt werden.</p>
+<h1>{% trans "Status" %}</h1>
+<p>{% trans "This site shows all media that will be or is transcoded" %}</p>
 </div>
 <div class="row">
 <div class="span12">
@@ -17,9 +18,10 @@ class="active"
 	<div class="row">
   		<div class="span12 well">
 			<h4>{{ video.title }}</h4>
-   			<span><strong>Datum: </strong>{{ video.date }}</span><br/>
-        		<span><strong>Transcoding fertig:</strong>{% if video.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}    <strong>Torrent erstellt:</strong>{% if video.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}    <strong>Automatisch ver&ouml;ffentlichen:</strong>{% if video.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</span><br/>
-			<span><strong>Tasks:</strong></span>
+   			<span><strong>{% trans "Date" %}: </strong>{{ video.date }}</span><br/>
+        		<span><strong>{% trans "Transcoding finished" %}:</strong>{% if video.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}    
+<strong>{% trans "Torrent created" %}:</strong>{% if video.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}    <strong>{% trans "Publish automatically" %}:</strong>{% if video.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</span><br/>
+			<span><strong>{% trans "Tasks" %}:</strong></span>
 			<ul>
 			{% for task_list in running_tasks %}
 				{% for task in task_list %}
@@ -28,26 +30,26 @@ class="active"
 					{% endif %}
 				{% endfor %}
 			{% empty %}
-			<li>Keine Tasks</li>
+			<li>{% trans "No tasks" %}</li>
 			{% endfor %}
 			</ul>
 		</div>
 	</div>
 {% empty %}
-<p>Gerade werden keine Videos transcodiert</p>
+<p>{% trans "There are no media to transcode" %}</p>
 {% endfor %}
 </div>
 <div class="modal hide fade" id="logModal" style="width:800px;margin-left:-400px;">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Log</h3>
+    <h3>{% trans "Log" %}</h3>
   </div>
   <div class="modal-body">
-    <textarea id="logviewer" cols="500" rows="5" style="width:95%">Loading...</textarea>
+    <textarea id="logviewer" cols="500" rows="5" style="width:95%">{% trans "Loading" %}...</textarea>
   </div>
   <div class="modal-footer">
-    <a class="btn" id="reloadLog">Reload</a>
-    <a class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
+    <a class="btn" id="reloadLog">{% trans "Reload" %}</a>
+    <a class="btn" data-dismiss="modal" aria-hidden="true">{% trans "Close" %}</a>
   </div>
 </div>
 {% endblock %}

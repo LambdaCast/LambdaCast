@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load custom_filters %}
-{% block title %} - Livestream {% endblock %}
+{% block title %} - {% trans "Livestream" %} {% endblock %}
 {% block active2 %}class="active"{% endblock %}
 {% block head %}
 <style type="text/css">
@@ -22,7 +23,7 @@
 {% endblock %}
 {% block body %}
 <div class="page-header">
-<h1>Livestreams</h1>
+<h1>{% trans "Livestreams" %}</h1>
 </div>
 <div class="row">
 <div class="span8">
@@ -33,10 +34,10 @@
 {{ stream.display_iFrameSafeField }}
 </div>
 <h3>{{ stream.title }}</h3>
-<dt>Beschreibung:</dt>
+<dt>{% trans "Description" %}:</dt>
 <dd>{{ stream.description }} </dd>
 {% if stream.link %}
-<dt>Link:</dt>
+<dt>{% trans "Link" %}:</dt>
 <dd><a href="{{ stream.link }}" target="_Blank">{{ stream.link }}</a>
 {% endif %}
 {% if stream.rtmpLink %}
@@ -44,14 +45,14 @@
 <dd><a href="{{ stream.rtmpLink }}">{{ stream.rtmpLink }}</a>
 {% endif %}
 {% if stream.audioOnlyLink %}
-<dt>Audio-Only Stream:</dt>
+<dt>{% trans "Audio-Only Stream" %}:</dt>
 <dd><a href="{{ stream.audioOnlyLink }}">{{ stream.audioOnlyLink }}</a>
 {% endif %}
 </div>
 {% endfor %}
 {% else %}
 <div class="well">
-<p>Es gibt gerade keine Streams</p>
+<p>{% trans "There are no streams right know" %}</p>
 </div>
 {% endif %}
 </div>
@@ -59,20 +60,20 @@
 <div class=well>
 <ul class="nav nav-list">
   <li class="nav-header">
-    Die n&auml;chsten Streams
+    {% trans "The next streams" %}
   </li>
   	{% if upcoming_streams_list %}
     {% for stream in upcoming_streams_list %}
     <li><a href="/stream/{{ stream.slug }}/">{{ stream.startDate|date:"d.m.y H:i" }}: {{ stream.title }}</a></li>
     {% endfor %}
     {% else %}
-    <li>Es sind keine Streams geplant</li>
+    <li>{% trans "There are no streames planned" %}</li>
     {% endif %}
   <li class="nav-header">
     Feeds
   </li>
   <li>
-    <a href="/feeds/stream/upcoming/">Die n&auml;chsten Events</a>
+    <a href="/feeds/stream/upcoming/">{% trans "The next events" %}</a>
   </li>
 </ul>
 </div>
