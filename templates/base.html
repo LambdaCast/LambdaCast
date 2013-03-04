@@ -23,6 +23,9 @@
     {% if settings.ENABLE_LIVESTREAMS %}
     <link rel="alternate" type="application/rss+xml" title={% trans "Upcoming Events" %} href="/feeds/stream/upcoming/" />
     {% endif %}
+
+    <link rel="shortcut icon" href="/static/favicon.png">
+
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
