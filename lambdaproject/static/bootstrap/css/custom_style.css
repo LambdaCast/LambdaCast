@@ -42,4 +42,9 @@ img.header-image {
 	width: 100px;
 }
 
+ul.edit-menu {
+	list-style-type: none;
+	margin-left: 10px;
+}
+
 #videoForm .control-label label { float: left; }

@@ -127,7 +127,7 @@
 		{% if user.is_authenticated %}
 		<div class="well">
 			<dt>{% trans "Actions" %}</dt>
-			<ul>
+			<ul class="edit-menu">
 				<li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}"><i class="icon-pencil"></i> {% trans "Edit" %}</a></li>
 			</ul>
 		</div>
