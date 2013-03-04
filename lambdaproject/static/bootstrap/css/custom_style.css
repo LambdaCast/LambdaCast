@@ -7,6 +7,12 @@ body {
 	padding-top: 32px;
 }
 
+@media (max-width: 979px) {
+body {
+	padding-top: 0;
+}
+}
+
 .iframe-code {
 	word-wrap: break-word;
 	font-size: 80%;
