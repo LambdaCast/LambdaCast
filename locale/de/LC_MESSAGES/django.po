@@ -491,7 +491,7 @@ msgstr ""
 
 #: templates/base.html:61
 msgid "Admin"
-msgstr "Administrator"
+msgstr "Verwaltung"
 
 #: templates/base.html:62
 msgid "Logout"
