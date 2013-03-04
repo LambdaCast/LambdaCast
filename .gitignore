@@ -11,3 +11,4 @@ upload/*
 *~
 *.swp
 extract.sh
+locale/de/LC_MESSAGES/django.mo
