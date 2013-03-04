@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load custom_filters %}
 {% block body %}
 <div class="page-header">
-<h1>404 <small>Das haben wir leider nicht</small></h1>
+<h1>404 <small>{% trans "The Supercat destroyed it with it's SUPERSCRATCH!" %}</small></h1>
 </div>
 <div class="row">
 <div class="span8">
 <div class="well">
-<p>Wir konnten leider nichts finden, tut uns leid.</p>
+<p>{% trans "Supercat does not find anything. Speak Cattish to improve your results." %}</p>
 </div>
 </div>
 </div>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -9,18 +10,18 @@
     {% block rss %}
     {% endblock %}
     {% if settings.USE_BITTORRENT %}
-    <link rel="alternate" type="application/rss+xml" title="Latest Originals" href="/feeds/latest/torrent/" />
+    <link rel="alternate" type="application/rss+xml" title={% trans "Latest Originals" %} href="/feeds/latest/torrent/" />
     {% endif %}
     {% if settings.ENABLE_VIDEO_FEEDS %}
-    <link rel="alternate" type="application/rss+xml" title="Latest Videos (MP4)" href="/feeds/latest/mp4/" />
-    <link rel="alternate" type="application/rss+xml" title="Latest Videos (WEBM)" href="/feeds/latest/webm/" />
+    <link rel="alternate" type="application/rss+xml" title={% trans "Latest Videos (MP4)" %} href="/feeds/latest/mp4/" />
+    <link rel="alternate" type="application/rss+xml" title={% trans "Latest Videos (WEBM)" %} href="/feeds/latest/webm/" />
     {% endif %}
     {% if settings.ENABLE_AUDIO_FEEDS %}
-    <link rel="alternate" type="application/rss+xml" title="Latest Audio Files (MP3)" href="/feeds/latest/mp3/" />
-    <link rel="alternate" type="application/rss+xml" title="Latest Audio Files (OGG)" href="/feeds/latest/ogg/" />
+    <link rel="alternate" type="application/rss+xml" title={% trans "Latest Audio Files (MP3)" %} href="/feeds/latest/mp3/" />
+    <link rel="alternate" type="application/rss+xml" title={% trans "Latest Audio Files (OGG)" %} href="/feeds/latest/ogg/" />
     {% endif %}
     {% if settings.ENABLE_LIVESTREAMS %}
-    <link rel="alternate" type="application/rss+xml" title="Upcoming Events" href="/feeds/stream/upcoming/" />
+    <link rel="alternate" type="application/rss+xml" title={% trans "Upcoming Events" %} href="/feeds/stream/upcoming/" />
     {% endif %}
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -49,23 +50,23 @@
           <a class="brand" href="/">LambdaCast</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li {% block active1 %}{% endblock %}><a href="/">Portal</a></li>
+              <li {% block active1 %}{% endblock %}><a href="/"><i class="icon-home"></i> {% trans "Portal" %}</a></li>
               {% if settings.ENABLE_LIVESTREAMS %}
-              <li {% block active2 %}{% endblock %}><a href="/stream/">Live</a></li>
+              <li {% block active2 %}{% endblock %}><a href="/stream/">{% trans "Live" %}</a></li>
               {% endif %}
-              <li {% block active3 %}{% endblock %}><a href="/about/">Infos</a></li>
-              <li {% block active4 %}{% endblock %}><a href="/contact/">Impressum</a></li>
+              <li {% block active3 %}{% endblock %}><a href="/about/"><i class="icon-info-sign"></i> {% trans "Infos" %}</a></li>
               {% if user.is_authenticated %}
-              <li {% block active5 %}{% endblock %}><a href="/submit/">Hochladen</a></li>
-              <li {% block active9 %}{% endblock %}><a href="/status/">Status</a></li>
-              <li {% block active6 %}{% endblock %}><a href="/admin/">Admin</a></li>
-              <li {% block active7 %}{% endblock %}><a href="/logout/">Logout</a></li>
+              <li {% block active5 %}{% endblock %}><a href="/submit/"><i class="icon-upload"></i> {% trans "Upload" %}</a></li>
+              <li {% block active9 %}{% endblock %}><a href="/status/"><i class="icon-ok"></i> {% trans "Status" %}</a></li>
+              <li {% block active6 %}{% endblock %}><a href="/admin/">{% trans "Admin" %}</a></li>
+              <li {% block active7 %}{% endblock %}><a href="/logout/"><i class="icon-user"></i> {% trans "Logout" %}</a></li>
               {% else %}
-              <li {% block active8 %}{% endblock %}><a href="/login/">Login</a></li>
+              <li {% block active8 %}{% endblock %}><a href="/login/">{% trans "Login" %}</a></li>
               {% endif %}
               <form class="navbar-search pull-left" action="/search/" method="GET">
-  				<input type="text" class="search-query" name="q" placeholder="Suche...">
+  				<input type="text" class="search-query" name="q" placeholder={% trans "Search..." %}>
 			  </form>
+              <li {% block active4 %}{% endblock %}><a href="/contact/"><i class="icon-briefcase"></i> {% trans "Legal Notice" %}</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

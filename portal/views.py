@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.views.generic.list_detail import object_list
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
+from django.utils.translation import ugettext_lazy as _
 
 from portal.models import Video, Comment, Channel, Collection
 from portal.forms import VideoForm, CommentForm
@@ -82,7 +83,7 @@ def detail(request, slug):
             if form.is_valid():
                     comment = form.save(commit=False)
                     comment.save()
-                    message = "Ihr Kommentar muss noch freigeschaltet werden"
+                    message = _(u"Your comment will be moderated")
                     return render_to_response('videos/detail.html', {'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
             else:
                     return render_to_response('videos/detail.html', {'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
@@ -309,7 +310,7 @@ def encodingdone(request):
             video.save()
         except Video.DoesNotExist:
             raise Http404
-        return HttpResponse("Video was updated")
+        return HttpResponse(_(u"Video was updated"))
 
     else:
         return render_to_response('videos/nothing.html', {'settings': settings},

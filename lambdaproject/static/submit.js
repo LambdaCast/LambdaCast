@@ -1,3 +1,4 @@
+{% load i18n %}
 $(document).ready(function() {
 	var now = new Date();
 	var formatted = now.format("dd.mm.yyyy");
@@ -24,15 +25,15 @@ $(document).ready(function() {
 			var percentVal = percentComplete + '%';
 			bar.width(percentVal)
 			percent.html(percentVal);
-			document.title = 'LambdaCast - Hochladen - ' + percentVal;
+			document.title = 'LambdaCast - {% trans "Upload" %} - ' + percentVal;
 		},
 		complete: function(xhr) {
 			if (xhr.status == 200){
 				// TODO: remove alert
-				alert("Danke, ihr Video wird trancodiert und sollte bald zur Verfügung stehen");
+				alert({% trans "Thank you, your media will be transcoded and should be available soon." %});
 				window.location.href = "/status/";
 			}else {
-				$("#formError").html("Tut uns leid, das hat nicht geklappt, bitte noch mal versuchen oder den Admin nerven.");
+				$("#formError").html({% trans "An error accured. Please, try again or contact the administrator." %});
 				$("#formError").show();
 			}
 		}

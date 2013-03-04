@@ -1,5 +1,6 @@
 from django.contrib.syndication.views import Feed, FeedDoesNotExist
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from portal.models import Video, Channel, Collection
 
@@ -14,9 +15,9 @@ class LatestMP4Videos(Feed):
     TODO:
     Better handling: We sould only use one Feed class and get the desired format with GET
     Dynamic Title for the Feed'''
-    title = "OwnTube Latest Videos"
+    title = _(u"LambdaCast Latest Videos")
     link = "/"
-    description = "The newest media from OwnTube"
+    description = _(u"The newest media from LambdaCast")
     item_enclosure_mime_type = "video/mp4"
 	
     def items(self):
@@ -38,9 +39,9 @@ class LatestMP4Videos(Feed):
     	return item.created
     	
 class LatestWEBMVideos(Feed):
-    title = "OwnTube Latest Videos"
+    title = _(u"LambdaCast Latest Videos")
     link = "/"
-    description = "The newest media from OwnTube"
+    description = _(u"The newest media from LambdaCast")
     item_enclosure_mime_type = "video/webm"
 	
     def items(self):
@@ -62,9 +63,9 @@ class LatestWEBMVideos(Feed):
     	return item.created
     	
 class LatestMP3Audio(Feed):
-    title = "OwnTube Latest Audio Files"
+    title = _(u"LambdaCast Latest Audio Files")
     link = "/"
-    description = "The newest media from OwnTube"
+    description = _(u"The newest media from LambdaCast")
     item_enclosure_mime_type = "audio/mp3"
 	
     def items(self):
@@ -86,9 +87,9 @@ class LatestMP3Audio(Feed):
     	return item.created
     	
 class LatestOGGAudio(Feed):
-    title = "OwnTube Latest Audio Files"
+    title = _(u"LambdaCast Latest Audio Files")
     link = "/"
-    description = "The newest media from OwnTube"
+    description = _(u"The newest media from LambdaCast")
     item_enclosure_mime_type = "audio/ogg"
 	
     def items(self):
@@ -110,9 +111,9 @@ class LatestOGGAudio(Feed):
     	return item.created
 
 class TorrentFeed(Feed):
-    title = "OwnTube TorrentFeed"
+    title = _(u"LambdaCast TorrentFeed")
     link = "/"
-    description = "Torrent files from OwnTube"
+    description = _("Torrent files from LambdaCast")
     item_enclosure_mime_type = "application/x-bittorrent"
 	
     def items(self):
@@ -280,7 +281,7 @@ class ChannelFeedTorrent(Feed):
         return get_object_or_404(Channel, slug=channel_slug)
 
     def title(self, obj):
-        return "OwnTube: Torrents for Channel %s" % obj.name
+        return _(u"LambdaCast: Torrents for Channel %s") % obj.name
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -314,7 +315,7 @@ class CollectionFeedMP4(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return "OwnTube: Videos in Collection %s" % obj.title
+        return _(u"LambdaCast: Videos in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -348,7 +349,7 @@ class CollectionFeedWEBM(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return "OwnTube: Videos in Collection %s" % obj.title
+        return _(u"LambdaCast: Videos in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -382,7 +383,7 @@ class CollectionFeedMP3(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return "OwnTube: Videos in Collection %s" % obj.title
+        return _(u"LambdaCast: Videos in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -416,7 +417,7 @@ class CollectionFeedOGG(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return "OwnTube: Videos in Collection %s" % obj.title
+        return _(u"LambdaCast: Videos in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -450,7 +451,7 @@ class CollectionFeedTorrent(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return "OwnTube: Videos in Collection %s" % obj.title
+        return _(u"LambdaCast: Videos in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
