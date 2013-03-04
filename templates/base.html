@@ -58,7 +58,7 @@
               {% if user.is_authenticated %}
               <li {% block active5 %}{% endblock %}><a href="/submit/"><i class="icon-upload"></i> {% trans "Upload" %}</a></li>
               <li {% block active9 %}{% endblock %}><a href="/status/"><i class="icon-ok"></i> {% trans "Status" %}</a></li>
-              <li {% block active6 %}{% endblock %}><a href="/admin/">{% trans "Admin" %}</a></li>
+              <li {% block active6 %}{% endblock %}><a href="/admin/"><i class="icon-wrench"></i> {% trans "Admin" %}</a></li>
               <li {% block active7 %}{% endblock %}><a href="/logout/"><i class="icon-user"></i> {% trans "Logout" %}</a></li>
               {% else %}
               <li {% block active8 %}{% endblock %}><a href="/login/">{% trans "Login" %}</a></li>
