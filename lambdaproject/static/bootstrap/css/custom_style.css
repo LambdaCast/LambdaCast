@@ -7,6 +7,11 @@ body {
 	padding-top: 32px;
 }
 
+img.header-image {
+	border-radius: 3px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
 .iframe-code {
 	word-wrap: break-word;
 	font-size: 80%;
