@@ -63,9 +63,11 @@
               {% else %}
               <li {% block active8 %}{% endblock %}><a href="/login/">{% trans "Login" %}</a></li>
               {% endif %}
-              <form class="navbar-search pull-left" action="/search/" method="GET">
-  				<input type="text" class="search-query" name="q" placeholder={% trans "Search..." %}>
-			  </form>
+              <li>
+                <form class="navbar-search" action="/search/" method="GET">
+                  <input type="text" class="search-query" name="q" placeholder="{% trans "Search..." %}">
+                </form>
+              </li>
               <li {% block active4 %}{% endblock %}><a href="/contact/"><i class="icon-briefcase"></i> {% trans "Legal Notice" %}</a></li>
             </ul>
           </div><!--/.nav-collapse -->
