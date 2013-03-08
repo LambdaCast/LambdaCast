@@ -9,15 +9,15 @@ class="active"
 {% endblock %}
 {% block rss %}
 {% if settings.USE_BITTORRENT %}
-<link rel="alternate" type="application/rss+xml" title={% trans "Channel Original Feed (Torrents)" %} href="/feeds/{{ channel.slug }}/torrent/" />
+<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Original Feed (Torrents)" %}" href="/feeds/{{ channel.slug }}/torrent/" />
 {% endif %}
 {% if settings.ENABLE_VIDEO_FEEDS %}
-<link rel="alternate" type="application/rss+xml" title={% trans "Channel Video Feed (MP4)" %} href="/feeds/{{ channel.slug }}/mp4/" />
-<link rel="alternate" type="application/rss+xml" title={% trans "Channel Video Feed (WEBM)" %} href="/feeds/{{ channel.slug }}/webm/" />
+<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (MP4)" %}" href="/feeds/{{ channel.slug }}/mp4/" />
+<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (WEBM)" %}" href="/feeds/{{ channel.slug }}/webm/" />
 {% endif %}
 {% if settings.ENABLE_AUDIO_FEEDS %}
-<link rel="alternate" type="application/rss+xml" title={% trans "Channel Audio Feed (MP3)" %} href="/feeds/{{ channel.slug }}/mp3/" />
-<link rel="alternate" type="application/rss+xml" title={% trans "Channel Audio Feed (OGG)" %} href="/feeds/{{ channel.slug }}/ogg/" />
+<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (MP3)" %}" href="/feeds/{{ channel.slug }}/mp3/" />
+<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (OGG)" %}" href="/feeds/{{ channel.slug }}/ogg/" />
 {% endif %}
 {% endblock %}
 {% block body %}
@@ -76,7 +76,7 @@ class="active"
     <i class="icon-file"></i> <u>{% trans "Original Material" %}</u>
   </li>
   <li>
-    <a href="/feeds/latest/torrent/">Torrents-Feed</a>
+    <a href="/feeds/{{ channel.slug }}/torrent/">Torrents-Feed</a>
   </li>
   <li class="divider"></li>
   {% endif %}
@@ -85,10 +85,10 @@ class="active"
     <i class="icon-film"></i> <u>{% trans "Video-Podcast" %}</u>
   </li>
   <li>
-    <a href="/feeds/latest/mp4/">{% trans "MP4-Format" %}</a>
+    <a href="/feeds/{{ channel.slug }}/mp4/">{% trans "MP4-Format" %}</a>
   </li>
   <li>
-    <a href="/feeds/latest/webm/">{% trans "WEBM-Format" %}</a>
+    <a href="/feeds/{{ channel.slug }}/webm/">{% trans "WEBM-Format" %}</a>
   </li>
   {% endif %}
   {% if settings.ENABLE_AUDIO_FEEDS %}
@@ -97,10 +97,10 @@ class="active"
     <i class="icon-headphones"></i> <u>{% trans "Audio-Podcast" %}</u>
   </li>
   <li>
-    <a href="/feeds/latest/mp3/">{% trans "MP3-Format" %}</a>
+    <a href="/feeds/{{ channel.slug }}/mp3/">{% trans "MP3-Format" %}</a>
   </li>
   <li>
-    <a href="/feeds/latest/ogg/">{% trans "OGG-Format" %}</a>
+    <a href="/feeds/{{ channel.slug }}/ogg/">{% trans "OGG-Format" %}</a>
   </li>
   {% endif %}
   <li class="divider"></li>

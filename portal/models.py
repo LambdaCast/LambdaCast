@@ -14,13 +14,14 @@ from ffmpeg_presets import *
 import os
 import subprocess
 import re
-import decimal 
-from mutagen import File
-
+import decimal
 import urllib2
 import datetime
-import os
-import re
+
+from types import NoneType
+
+from mutagen import File
+
 from threading import Event
 
 from BitTornadoABC.btmakemetafile import calcsize, make_meta_file, ignore
@@ -118,7 +119,7 @@ class Video(models.Model):
             else:
                 raise StandardError(_(u"Encoding WEBM Failed"))
     
-            outcode = subprocess.Popen(['/usr/bin/ffmpeg -i '+ self.originalFile.path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
+            outcode = subprocess.Popen(['ffmpeg -i '+ self.originalFile.path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
             
             while outcode.poll() == None:
                 pass
@@ -166,7 +167,7 @@ class Video(models.Model):
                 
         if (kind == 1):
             file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
-            if file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
+            if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
                 artwork = file.tags['APIC:'].data # access APIC frame and grab the image
                 with open(outputdir + self.slug + '_cover.jpg', 'wb') as img:
                     img.write(artwork)
@@ -260,7 +261,7 @@ class Collection(models.Model):
 
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a video file using ffmpeg '''
-    process = subprocess.Popen(['/usr/bin/ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, stderr = process.communicate()
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
