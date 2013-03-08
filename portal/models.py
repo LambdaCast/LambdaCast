@@ -14,13 +14,14 @@ from ffmpeg_presets import *
 import os
 import subprocess
 import re
-import decimal 
-from mutagen import File
-
+import decimal
 import urllib2
 import datetime
-import os
-import re
+
+from types import NoneType
+
+from mutagen import File
+
 from threading import Event
 
 from BitTornadoABC.btmakemetafile import calcsize, make_meta_file, ignore
@@ -168,7 +169,7 @@ class Video(models.Model):
                 
         if (kind == 1):
             file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
-            if file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
+            if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
                 artwork = file.tags['APIC:'].data # access APIC frame and grab the image
                 with open(outputdir + self.slug + '_cover.jpg', 'wb') as img:
                     img.write(artwork)
