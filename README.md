@@ -23,7 +23,7 @@ The status could be described as early alpha. At first e are working on an usabl
 Requirements & Installation
 ---------------------------
  
-[Read this](https://github.com/TheRadialActive/LambdaCast/wiki/Installation)
+[Read this](https://github.com/LambdaCast/LambdaCast/wiki/Installation)
 
 
 Fork?
