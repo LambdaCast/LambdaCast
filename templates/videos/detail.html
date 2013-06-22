@@ -162,10 +162,10 @@
 			<dd><a href="{{ video.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}"><i class="icon-film"></i> {% trans "Download MP4 Video" %}</a></dd>{% endif %}
-			{% if video.webmURL %}<dd><a href="{{ video.webmURL }}"><i class="icon-film"></i> {% trans "Download WEBM Video" %}</a></dd>{% endif %}
-			{% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}"><i class="icon-headphones"></i> {% trans "Download MP3 Audio" %}</a></dd>{% endif %}
-			{% if video.oggURL %}<dd><a href="{{ video.oggURL }}"><i class="icon-headphones"></i> {% trans "Download OGG Audio" %}</a></dd>{% endif %}
+			{% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}" download="{{video.title}}"><i class="icon-film"></i> {% trans "Download MP4 Video" %}</a></dd>{% endif %}
+			{% if video.webmURL %}<dd><a href="{{ video.webmURL }}" download="{{video.title}}"><i class="icon-film"></i> {% trans "Download WEBM Video" %}</a></dd>{% endif %}
+			{% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}" download="{{video.title}}"><i class="icon-headphones"></i> {% trans "Download MP3 Audio" %}</a></dd>{% endif %}
+			{% if video.oggURL %}<dd><a href="{{ video.oggURL }}" download="{{video.title}}"><i class="icon-headphones"></i> {% trans "Download OGG Audio" %}</a></dd>{% endif %}
 		</div>
 		{% if video.tags.all %}
 		<div class="well">
