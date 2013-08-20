@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load custom_filters %}
+{% block title %} - {{ page.title }}{% endblock %}
+{% block body %}
+<div class="page-header">
+<h1>{{ page.title }}<br><small>{{ page.description }}</small></h1>
+</div>
+{% if user.is_authenticated %}
+<a href="/admin/pages/page/{{ page.id }}/">Bearbeiten</a>
+{% endif %}
+{{ page.body|safe|escape }}
+
+{% endblock %}

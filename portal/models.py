@@ -75,6 +75,22 @@ class Video(models.Model):
         return "/videos/%s/" % self.slug
     def getClassName(self):
         return self.__class__.__name__
+  
+    def oggSize_mb(self):
+        size = float(self.oggSize) / 1024 / 1024
+        return round(size, 3)
+    
+    def mp3Size_mb(self):
+        size = float(self.mp3Size) / 1024 / 1024
+        return round(size, 3)
+
+    def mp4Size_mb(self):
+        size = float(self.mp4Size) / 1024 / 1024
+        return round(size, 3)
+
+    def webmSize_mb(self):
+        size = float(self.webmSize) / 1024 / 1024
+        return round(size, 3)
 
     def encode_media(self):
         ''' This is used to tell ffmpeg what to do '''

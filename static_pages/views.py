@@ -5,10 +5,3 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 import lambdaproject.settings as settings
 
-# All this views are just showing static pages not really usefull
-
-def contact(request):
-    return render_to_response('static_pages/contact.html', {'settings': settings}, context_instance=RequestContext(request))
-    
-def about(request):
-    return render_to_response('static_pages/about.html', {'settings': settings}, context_instance=RequestContext(request))

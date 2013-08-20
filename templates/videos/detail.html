@@ -13,137 +13,135 @@
 <h1>{{ video.title }}</h1>
 </div>
 <div class="row">
-	<div class="span8">
-		{% if video.kind == 0 %}
-		<div class="row">
-			<div class="span8">
-				<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-					{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-					{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
-				</video>
-			</div>
-		</div>
-		{% endif %}
-		{% if video.kind == 1 %}
-		<div class="row">
-			<div class="span8">
-				<center>			
-					<audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-				{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-						{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
-					</audio>
-				</center>		
-			</div>
-		</div>
-		{% endif %}
-		{% if video.kind == 2 %}
-		<div class="row">
-			<div class="span8">
-				<ul class="nav nav-tabs">
-					<li class="active" id="video_tab"><a>{% trans "Video" %}</a></li>
-					<li	id="audio_tab"><a>{% trans "Audio" %}</a></li>
-				</ul>
-				<div id="player_container">
-					<div id="video_player">
-						<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-							{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-							{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
-						</video>
-					</div>
-					<div id="audio_player" style="display:none;">
-						<audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-							{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-							{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
-						</audio>'
-					</div>
-				</div>
-			</div>
-		</div>
-		{% endif %}
-		<div class="row">
-			<div class="span8">
-				{% if video.description %}
-				<div class="row">
-					<div class="span8">
-						<p><dt>{% trans "Description" %}:</dt></p>
-						<div class="well">
-							<dd><div style="max-height:200px; overflow-y: auto;">{{ video.description|markdown:"safe" }}</div></dd>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-				<h2>{% trans "Comments" %}</h2>
-				{% if comments %}
-				{% for comment in comments %}
-				<div class="row">
-					<div class="span8">
-						<div class="well">
-							<strong>Name: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>Zeit: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
-							<div class="comment-body">
-							{{ comment.comment }}
-							</div>
-						</div>
-					</div>
-				</div>
-				{% endfor %}
-				{% else %}
-				<div class ="row">
-					<div class="span8">
-						<div class="well">
-							<p>{% trans "No comments" %}</p>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-				{% if message %}
-					<div class="alert">
-						{{ message }}
-					</div>
-				{% endif %}
-				<form enctype="multipart/form-data" class="form-horizontal" action="/videos/{{ video.slug }}/" method="post">{% csrf_token %}
-					{% for field in comment_form %}
-					<div class="control-group">
-						{% if field.errors %}
-							<div class="alert alert-error">
-								<strong>{% trans "Error!" %} </strong>{{ field.errors }}
-							</div>
-						{% endif %}
-						<div class="control-label">
-							{{ field.label_tag }}
-						</div>
-						<div class="controls">
-							{{ field }}
-						</div>
-					</div>
-					{% endfor %}
-					<div class="form-actions">
-						<input type="submit" class="btn btn-primary" value={% trans "Send" %} />
-					</div>
-				</form>
-			</div>
-		</div>
+  <div class="span8">
+  {% if video.kind == 0 %}
+  <div class="row">
+    <div class="span8">
+      <video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+	{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
+	{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+      </video>
+    </div>
+  </div>
+  {% endif %}
+  {% if video.kind == 1 %}
+  <div class="row">
+    <div class="span8">
+      <center>			
+        <audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+        {% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
+        {% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+        </audio>
+      </center>		
+    </div>
+  </div>
+  {% endif %}
+  {% if video.kind == 2 %}
+  <div class="row">
+    <div class="span8">
+      <ul class="nav nav-tabs">
+	<li class="active" id="video_tab"><a>{% trans "Video" %}</a></li>
+	<li	id="audio_tab"><a>{% trans "Audio" %}</a></li>
+      </ul>
+      <div id="player_container">
+        <div id="video_player">
+          <video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+          {% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
+          {% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+	  </video>
 	</div>
-	<div class="span4">
-		{% if user.is_authenticated %}
-		<div class="well">
-			<dt>{% trans "Actions" %}</dt>
-			<ul class="edit-menu">
-				<li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}"><i class="icon-pencil"></i> {% trans "Edit" %}</a></li>
-			</ul>
-		</div>
-		{% endif %}
-		<div class="well">
-			<dt>{% trans "Date" %}:</dt>
-			<dd><i class="icon-calendar"></i> {{ video.date }}</dd>
-			{% if video.channel %}
-			<dt>{% trans "Channel" %}:</dt>
-			<dd><i class="icon-th"></i> <a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
-			{% endif %}
-			{% if video.user %}
-				<dt>{% trans "Uploaded by" %}:</dt>
-				{% if video.user.first_name %}
-				<dd><i class="icon-user"></i> {{ video.user.first_name }} {{ video.user.last_name }}</dd>
-				{% else %}
+	<div id="audio_player" style="display:none;">
+	  <audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+            {% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
+	    {% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+	  </audio>'
+	</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="row">
+    <div class="span8">
+      {% if video.description %}
+      <div class="row">
+        <div class="span8">
+	  <p><dt>{% trans "Description" %}:</dt></p>
+	  <div class="well">
+	    <dd><div style="max-height:200px; overflow-y: auto;">{{ video.description|markdown:"safe" }}</div></dd>
+	    </div>
+	  </div>
+	</div>
+	{% endif %}
+	<h2>{% trans "Comments" %}</h2>
+	  {% if comments %}
+	  {% for comment in comments %}
+	  <div class="row">
+	    <div class="span8">
+	      <div class="well">
+	      <strong>Name: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>Zeit: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
+		<div class="comment-body">{{ comment.comment }}	</div>
+              </div>
+	    </div>
+	  </div>
+	  {% endfor %}
+	  {% else %}
+	  <div class ="row">
+	    <div class="span8">
+	      <div class="well">
+		<p>{% trans "No comments" %}</p>
+	      </div>
+	    </div>
+	  </div>
+	  {% endif %}
+	  {% if message %}
+          <div class="alert">
+	    {{ message }}
+	  </div>
+	  {% endif %}
+	  <form enctype="multipart/form-data" class="form-horizontal" action="/videos/{{ video.slug }}/" method="post">{% csrf_token %}
+	    {% for field in comment_form %}
+	    <div class="control-group">
+	      {% if field.errors %}
+	      <div class="alert alert-error">
+	        <strong>{% trans "Error!" %} </strong>{{ field.errors }}
+	      </div>
+              {% endif %}
+              <div class="control-label">
+  	      {{ field.label_tag }}
+              </div>
+  	      <div class="controls">
+  	        {{ field }}
+  	      </div>
+            </div>
+  	    {% endfor %}
+            <div class="form-actions">
+              <input type="submit" class="btn btn-primary" value={% trans "Send" %} />
+	    </div>
+	  </form>
+	</div>
+      </div>
+    </div>
+    <div class="span4">
+      {% if user.is_authenticated %}
+      <div class="well">
+	<dt>{% trans "Actions" %}</dt>
+        <ul class="edit-menu">
+	  <li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}"><i class="icon-pencil"></i> {% trans "Edit" %}</a></li>
+	</ul>
+      </div>
+      {% endif %}
+      <div class="well">
+        <dt>{% trans "Date" %}:</dt>
+        <dd><i class="icon-calendar"></i> {{ video.date }}</dd>
+	{% if video.channel %}
+	<dt>{% trans "Channel" %}:</dt>
+	<dd><i class="icon-th"></i> <a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
+	{% endif %}
+	{% if video.user %}
+	<dt>{% trans "Uploaded by" %}:</dt>
+	{% if video.user.first_name %}
+	<dd><i class="icon-user"></i> {{ video.user.first_name }} {{ video.user.last_name }}</dd>
+	{% else %}
 				<dd><i class="icon-user"></i> {{ video.user }}
 				{% endif %}
 			{% endif %}
@@ -162,10 +160,26 @@
 			<dd><a href="{{ video.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4"><i class="icon-film"></i> {% trans "Download MP4 Video" %}</a></dd>{% endif %}
-			{% if video.webmURL %}<dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm"><i class="icon-film"></i> {% trans "Download WEBM Video" %}</a></dd>{% endif %}
-			{% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3"><i class="icon-headphones"></i> {% trans "Download MP3 Audio" %}</a></dd>{% endif %}
-			{% if video.oggURL %}<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg"><i class="icon-headphones"></i> {% trans "Download OGG Audio" %}</a></dd>{% endif %}
+			{% if video.mp4URL %}
+                        <dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
+                           <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4Size_mb }} MB)</a>
+                        </dd>
+                        {% endif %}
+                        {% if video.webmURL %}
+                        <dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm">
+                           <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmSize_mb }} MB)</a>
+                        </dd>
+                        {% endif %}
+			{% if video.mp3URL %}
+                        <dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
+                          <i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3Size_mb }} MB)</a>
+                        </dd>
+                        {% endif %}
+			{% if video.oggURL %}
+                        <dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
+                          <i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggSize_mb }} MB)</a>
+                        </dd>
+                        {% endif %}
 		</div>
 		{% if video.tags.all %}
 		<div class="well">

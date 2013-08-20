@@ -88,13 +88,15 @@ class="active"
 </ul>
 </div>
 </div>
+{% get_tagcloud as tags for 'portal.Video' %}
+{% if tags %}
 <div class="span4">
 <div class="well">
-{% get_tagcloud as tags for 'portal.Video' %}
 {% for tag in tags %}
 <a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
 {% endfor %}
 </div>
 </div>
+{% endif %}
 </div>
 {% endblock %}

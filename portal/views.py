@@ -11,6 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
 
+from pages.models import Page
 from portal.models import Video, Comment, Channel, Collection
 from portal.forms import VideoForm, CommentForm
 from transloadit.client import Client
@@ -31,6 +32,8 @@ from sys import argv
 from operator import attrgetter
 import itertools
 
+page_list = Page.objects.all()
+
 def list(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available video and
     forwards them to the template. We use Django's Paginator to have pagination '''
@@ -38,7 +41,6 @@ def list(request):
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
-    
     page = request.GET.get('page')
     try:
         videos = paginator.page(page)
@@ -48,7 +50,7 @@ def list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         videos = paginator.page(paginator.num_pages)
-    return render_to_response('videos/index.html', {'latest_videos_list': videos, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('videos/index.html', {'page_list': page_list, 'latest_videos_list': videos, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def channel_list(request,slug):
@@ -68,7 +70,7 @@ def channel_list(request,slug):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         videos = paginator.page(paginator.num_pages)
-    return render_to_response('videos/channel.html', {'videos_list': videos, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('videos/channel.html', {'page_list':page_list,'videos_list': videos, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def detail(request, slug):
@@ -84,35 +86,35 @@ def detail(request, slug):
                     comment = form.save(commit=False)
                     comment.save()
                     message = _(u"Your comment will be moderated")
-                    return render_to_response('videos/detail.html', {'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
+                    return render_to_response('videos/detail.html', {'page_list':page_list,'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
             else:
-                    return render_to_response('videos/detail.html', {'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
+                    return render_to_response('videos/detail.html', {'page_list':page_list,'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
                     
     else:
         video = get_object_or_404(Video, slug=slug)
         form = CommentForm()
         comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
-        return render_to_response('videos/detail.html', {'video': video, 'comment_form': form, 'comments': comments, 'settings': settings},
+        return render_to_response('videos/detail.html', {'video': video, 'page_list':page_list,'comment_form': form, 'comments': comments, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def iframe(request, slug):
     ''' Returns an iframe for a video so that videos can be shared easily '''                         
     video = get_object_or_404(Video, slug=slug)
-    return render_to_response('videos/iframe.html', {'video': video, 'settings': settings}, context_instance=RequestContext(request))
+    return render_to_response('videos/iframe.html', {'video': video, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
 
 
 def tag(request, tag):
     ''' Gets all videos for a specified tag'''
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
     tag_name = get_object_or_404(Tag, slug=tag)
-    return render_to_response('videos/list.html', {'videos_list': videolist, 'tag':tag_name, 'settings': settings},
+    return render_to_response('videos/list.html', {'videos_list': videolist, 'tag':tag_name, 'page_list':page_list,'settings': settings},
                             context_instance=RequestContext(request))
 
 def collection(request, slug):
     ''' Gets all videos for a channel'''
     collection = get_object_or_404(Collection, slug=slug)
     videolist = collection.videos.filter(encodingDone=True, published=True)
-    return render_to_response('videos/collection.html', {'videos_list': videolist, 'collection':collection, 'settings': settings},
+    return render_to_response('videos/collection.html', {'videos_list': videolist, 'page_list':page_list,'collection':collection, 'settings': settings},
                             context_instance=RequestContext(request))
                             
 def search(request):
@@ -127,7 +129,7 @@ def search(request):
         found_entries = Video.objects.filter(entry_query).order_by('-date')
 
     return render_to_response('videos/search_results.html',
-                          { 'query_string': query_string, 'videos_list': found_entries, 'settings': settings},
+                          { 'query_string': query_string, 'videos_list': found_entries, 'page_list':page_list, 'settings': settings},
                           context_instance=RequestContext(request))
 
 def search_json(request):
@@ -218,15 +220,15 @@ def submit(request):
                     return redirect(list)
     
             return render_to_response('videos/submit.html',
-                                    {'submit_form': form, 'settings': settings},
+                                    {'submit_form': form, 'settings': settings, 'page_list':page_list},
                                     context_instance=RequestContext(request))
         else:
             form = VideoForm()
             return render_to_response('videos/submit.html',
-                                    {'submit_form': form, 'settings': settings},
+                                    {'submit_form': form, 'settings': settings, 'page_list':page_list},
                                     context_instance=RequestContext(request))
     else:
-        return render_to_response('videos/nothing.html', {'settings': settings},
+        return render_to_response('videos/nothing.html', {'page_list':page_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
@@ -240,7 +242,7 @@ def status(request):
         tasks = djangotasks.models.Task.objects.filter(model="portal.video", object_id=video.pk)
         running_tasks.append(tasks)
     return render_to_response('videos/status.html',
-                                    {'processing_videos': processing_videos, 'running_tasks': running_tasks, 'settings': settings},
+                                    {'processing_videos': processing_videos, 'page_list':page_list, 'running_tasks': running_tasks, 'settings': settings},
                                     context_instance=RequestContext(request))
 
 @csrf_exempt
@@ -313,7 +315,7 @@ def encodingdone(request):
         return HttpResponse(_(u"Video was updated"))
 
     else:
-        return render_to_response('videos/nothing.html', {'settings': settings},
+        return render_to_response('videos/nothing.html', {'settings': settings, 'page_list':page_list},
                             context_instance=RequestContext(request))
     
 
