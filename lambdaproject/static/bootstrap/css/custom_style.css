@@ -13,6 +13,10 @@ body {
 }
 }
 
+.row {
+  margin-top: 20px;
+}
+
 .iframe-code {
 	word-wrap: break-word;
 	font-size: 80%;

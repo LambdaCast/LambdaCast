@@ -6,9 +6,6 @@
 class="active"
 {% endblock %}
 {% block body %}
-<div class="page-header">
-<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>
-</div>
 <div class="row">
 <div class="span8">
 <ul class="nav nav-tabs">
@@ -47,6 +44,9 @@ class="active"
 </ul>
 </div>
 <div class="span4">
+<div class="page-header">
+<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>
+</div>
 <div class=well>
 <ul class="nav nav-list">
   {% if settings.USE_BITTORRENT %}
