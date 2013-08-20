@@ -4,11 +4,11 @@
 {% block title %} - {{ page.title }}{% endblock %}
 {% block body %}
 <div class="page-header">
+{% if user.is_authenticated %}
+<a href="/admin/pages/page/{{ page.id }}/" class="pull-right" style="margin-top: 15px;">Bearbeiten</a>
+{% endif %}
 <h1>{{ page.title }} <small>{{ page.description }}</small></h1>
 </div>
-{% if user.is_authenticated %}
-<a href="/admin/pages/page/{{ page.id }}/">Bearbeiten</a>
-{% endif %}
 {{ page.body|safe|escape }}
 
 {% endblock %}
