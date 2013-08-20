@@ -71,9 +71,9 @@
               <li {% block active5 %}{% endblock %}><a href="/submit/" title={% trans "Upload" %}><i class="icon-upload"></i></a></li>
               <li {% block active9 %}{% endblock %}><a href="/status/" title={% trans "Status" %}><i class="icon-ok"></i></a></li>
               <li {% block active6 %}{% endblock %}><a href="/admin/" title={% trans "Admin" %}><i class="icon-wrench"></i></a></li>
-              <li {% block active7 %}{% endblock %}><a href="/logout/" title={% trans "Logout" %}><i class="icon-user"></i></a></li>
+              <li {% block active7 %}{% endblock %}><a href="/logout/" title={% trans "Logout" %}><i class="icon-off"></i></a></li>
               {% else %}
-              <li {% block active8 %}{% endblock %}><a href="/login/"> {% trans "Login" %}</a></li>
+              <li {% block active8 %}{% endblock %}><a href="/login/"><i class="icon-user"></i> {% trans "Login" %}</a></li>
               {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
