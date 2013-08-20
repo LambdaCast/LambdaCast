@@ -152,7 +152,7 @@ INSTALLED_APPS = (
     'taggit',
     'portal',
     'livestream',
-    'static_pages',
+    'pages',
     'djangotasks',
     'south',
     'taggit_templatetags',
