@@ -22,49 +22,49 @@
 {% endblock %}
 {% block body %}
 <div class="page-header">
-<h1>{{ stream.title }}</h1>
+	<h1>{{ stream.title }}</h1>
 </div>
 <div class="row">
-<div class="span8">
-<div class="well">
-<h3>{{ stream.title }}</h3>
-<dt>Beschreibung:</dt>
-<dd>{{ stream.description }} </dd>
-{% if stream.link %}
-<dt>Link:</dt>
-<dd><a href="{{ stream.link }}" target="_Blank">{{ stream.link }}</a>
-{% endif %}
-{% if stream.rtmpLink %}
-<dt>RTMP:</dt>
-<dd><a href="{{ stream.rtmpLink }}">{{ stream.rtmpLink }}</a>
-{% endif %}
-{% if stream.audioOnlyLink %}
-<dt>Audio-Only Stream:</dt>
-<dd><a href="{{ stream.audioOnlyLink }}">{{ stream.audioOnlyLink }}</a>
-{% endif %}
-</div>
-</div>
-<div class="span4">
-<div class=well>
-<ul class="nav nav-list">
-  <li class="nav-header">
-    Die n&auml;chsten Streams
-  </li>
-  	{% if upcoming_streams_list %}
-    {% for stream in upcoming_streams_list %}
-    <li><a href="/stream/{{ stream.slug }}/">{{ stream.startDate|date:"d.m.y H:i" }}: {{ stream.title }}</a></li>
-    {% endfor %}
-    {% else %}
-    <li>Es sind keine Streams geplant</li>
-    {% endif %}
-  <li class="nav-header">
-    Feeds
-  </li>
-  <li>
-    <a href="/feeds/stream/upcoming/">Die n&auml;chsten Events</a>
-  </li>
-</ul>
-</div>
-</div>
+	<div class="span8">
+		<div class="well">
+			<h3>{{ stream.title }}</h3>
+			<dt>Beschreibung:</dt>
+			<dd>{{ stream.description }} </dd>
+			{% if stream.link %}
+			<dt>Link:</dt>
+			<dd><a href="{{ stream.link }}" target="_Blank">{{ stream.link }}</a>
+			{% endif %}
+			{% if stream.rtmpLink %}
+			<dt>RTMP:</dt>
+			<dd><a href="{{ stream.rtmpLink }}">{{ stream.rtmpLink }}</a>
+			{% endif %}
+			{% if stream.audioOnlyLink %}
+			<dt>Audio-Only Stream:</dt>
+			<dd><a href="{{ stream.audioOnlyLink }}">{{ stream.audioOnlyLink }}</a>
+			{% endif %}
+		</div>
+	</div>
+	<div class="span4">
+		<div class=well>
+			<ul class="nav nav-list">
+				<li class="nav-header">
+					Die n&auml;chsten Streams
+				</li>
+				{% if upcoming_streams_list %}
+				{% for stream in upcoming_streams_list %}
+				<li><a href="/stream/{{ stream.slug }}/">{{ stream.startDate|date:"d.m.y H:i" }}: {{ stream.title }}</a></li>
+				{% endfor %}
+				{% else %}
+				<li>Es sind keine Streams geplant</li>
+				{% endif %}
+				<li class="nav-header">
+					Feeds
+				</li>
+				<li>
+					<a href="/feeds/stream/upcoming/">Die n&auml;chsten Events</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
 {% endblock %}

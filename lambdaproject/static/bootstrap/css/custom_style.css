@@ -18,6 +18,14 @@ img.header-image {
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
+.navbar-search {
+	margin-right: 5px;
+}
+
+.row {
+	margin-top: 20px;
+}
+
 .iframe-code {
 	word-wrap: break-word;
 	font-size: 80%;
@@ -39,13 +47,14 @@ img.header-image {
 
 .video-image-container {
 	display: table-cell;
-	padding: 0 15px;
+	padding: 0px 15px;
 	vertical-align: middle;
 	width: 100px;
 }
 
 .video-image-container img {
 	width: 100px;
+	padding-top:10px;
 }
 
 ul.edit-menu {

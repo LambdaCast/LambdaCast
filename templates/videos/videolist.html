@@ -1,5 +1,6 @@
 {% load custom_filters %}
 {% load i18n %}
+{% load markup %}
 {% for video in video_list %}
 	<div class="row">
 		<div class="span8 well video-container">
@@ -18,7 +19,7 @@
 				{% endif %}
 			{% endif %}
 			<a href="/videos/{{ video.slug }}/"><h4>{{ video.title }}</h4></a>
-			<span><strong>{% trans "Description" %}: </strong>{{ video.description|truncatechars:90 }}</span><br/>
+			<span><strong>{% trans "Description" %}: </strong>{{ video.markdown_free|truncatechars:90 }}</span><br/>
 			<span><strong></strong><i class="icon-calendar"></i> {{ video.date }}{% if video.duration %} / <strong></strong><i class="icon-time"></i> {{ video.duration|secondstohms }}{% endif %}</span>
 		{% else %}
 			<div class="video-image-container"><a href="/collection/{{ video.slug }}/"><img src="{{ STATIC_URL }}default-playlist.png"/></a></div>

@@ -10,7 +10,7 @@
 {% block active1 %}class="active"{% endblock %}
 {% block body %}
 <div class="page-header">
-<h1>{{ video.title }}</h1>
+	<h1>{{ video.title }}</h1>
 </div>
 <div class="row">
 	<div class="span8">
@@ -27,12 +27,12 @@
 		{% if video.kind == 1 %}
 		<div class="row">
 			<div class="span8">
-				<center>			
+				<center>
 					<audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-				{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
+						{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
 						{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
 					</audio>
-				</center>		
+				</center>
 			</div>
 		</div>
 		{% endif %}
@@ -79,9 +79,7 @@
 					<div class="span8">
 						<div class="well">
 							<strong>Name: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>Zeit: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
-							<div class="comment-body">
-							{{ comment.comment }}
-							</div>
+							<div class="comment-body">{{ comment.comment }}	</div>
 						</div>
 					</div>
 				</div>
@@ -96,17 +94,17 @@
 				</div>
 				{% endif %}
 				{% if message %}
-					<div class="alert">
-						{{ message }}
-					</div>
+				<div class="alert">
+					{{ message }}
+				</div>
 				{% endif %}
 				<form enctype="multipart/form-data" class="form-horizontal" action="/videos/{{ video.slug }}/" method="post">{% csrf_token %}
 					{% for field in comment_form %}
 					<div class="control-group">
 						{% if field.errors %}
-							<div class="alert alert-error">
-								<strong>{% trans "Error!" %} </strong>{{ field.errors }}
-							</div>
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %} </strong>{{ field.errors }}
+						</div>
 						{% endif %}
 						<div class="control-label">
 							{{ field.label_tag }}
@@ -140,12 +138,12 @@
 			<dd><i class="icon-th"></i> <a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
 			{% endif %}
 			{% if video.user %}
-				<dt>{% trans "Uploaded by" %}:</dt>
-				{% if video.user.first_name %}
-				<dd><i class="icon-user"></i> {{ video.user.first_name }} {{ video.user.last_name }}</dd>
-				{% else %}
-				<dd><i class="icon-user"></i> {{ video.user }}
-				{% endif %}
+			<dt>{% trans "Uploaded by" %}:</dt>
+			{% if video.user.first_name %}
+			<dd><i class="icon-user"></i> {{ video.user.first_name }} {{ video.user.last_name }}</dd>
+			{% else %}
+			<dd><i class="icon-user"></i> {{ video.user }}
+			{% endif %}
 			{% endif %}
 			{% if video.linkURL %}
 			<dt>Link:</dt>
@@ -162,10 +160,26 @@
 			<dd><a href="{{ video.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if video.mp4URL %}<dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4"><i class="icon-film"></i> {% trans "Download MP4 Video" %}</a></dd>{% endif %}
-			{% if video.webmURL %}<dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm"><i class="icon-film"></i> {% trans "Download WEBM Video" %}</a></dd>{% endif %}
-			{% if video.mp3URL %}<dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3"><i class="icon-headphones"></i> {% trans "Download MP3 Audio" %}</a></dd>{% endif %}
-			{% if video.oggURL %}<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg"><i class="icon-headphones"></i> {% trans "Download OGG Audio" %}</a></dd>{% endif %}
+			{% if video.mp4URL %}
+			<dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
+				 <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4Size_mb }} MB)</a>
+			</dd>
+			{% endif %}
+			{% if video.webmURL %}
+			<dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm">
+				 <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmSize_mb }} MB)</a>
+			</dd>
+			{% endif %}
+			{% if video.mp3URL %}
+			<dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
+				<i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3Size_mb }} MB)</a>
+			</dd>
+			{% endif %}
+			{% if video.oggURL %}
+			<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
+				<i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggSize_mb }} MB)</a>
+			</dd>
+			{% endif %}
 		</div>
 		{% if video.tags.all %}
 		<div class="well">

@@ -24,6 +24,8 @@ from mutagen import File
 
 from threading import Event
 
+import markdown
+
 from BitTornadoABC.btmakemetafile import calcsize, make_meta_file, ignore
 
 KIND_CHOICES = (
@@ -73,6 +75,27 @@ class Video(models.Model):
         return "/videos/%s/" % self.slug
     def getClassName(self):
         return self.__class__.__name__
+  
+    def oggSize_mb(self):
+        size = float(self.oggSize) / 1024 / 1024
+        return round(size, 3)
+    
+    def mp3Size_mb(self):
+        size = float(self.mp3Size) / 1024 / 1024
+        return round(size, 3)
+
+    def mp4Size_mb(self):
+        size = float(self.mp4Size) / 1024 / 1024
+        return round(size, 3)
+
+    def webmSize_mb(self):
+        size = float(self.webmSize) / 1024 / 1024
+        return round(size, 3)
+
+    def markdown_free(self):
+        md_free_desc = markdown.markdown(self.description)
+        html_free_desc = re.sub('<[^<]+?>', '', md_free_desc)
+        return unicode(html_free_desc)
 
     def encode_media(self):
         ''' This is used to tell ffmpeg what to do '''

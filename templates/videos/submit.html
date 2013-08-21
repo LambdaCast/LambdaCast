@@ -6,41 +6,41 @@ class="active"
 {% block title %} - {% trans "Upload" %}{% endblock %}
 {% block body %}
 <div class="page-header">
-<h1>{% trans "Upload" %}</h1>
+	<h1>{% trans "Upload" %}</h1>
 </div>
 <div class=row">
-<div class="span6">
-<form id="videoForm" enctype="multipart/form-data" class="form-horizontal" action="/submit/" method="post">
-	{% csrf_token %}
-	<div style="display: none" id="formError" class="alert alert-error">
-		<strong>{% trans "Error!" %}</strong>
+	<div class="span6">
+		<form id="videoForm" enctype="multipart/form-data" class="form-horizontal" action="/submit/" method="post">
+			{% csrf_token %}
+			<div style="display: none" id="formError" class="alert alert-error">
+				<strong>{% trans "Error!" %}</strong>
+			</div>
+			{% for field in submit_form %}
+			<div class="control-group">
+				{% if field.errors %}
+				<div class="alert alert-error">
+					<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+				</div>
+				{% endif %}
+				<div class="control-label">
+					{{ field.label_tag }}{% if field.field.required %} *{% endif %}
+				</div>
+				<div class="controls">
+					{{ field }}
+				</div>
+			</div>
+			{% endfor %}
+			<div id="progress-indicator">
+				<div class="progress progress-striped active">
+					<div class="bar"></div >
+				</div>
+				<div class="percent">0%</div >
+			</div>
+			<div class="form-actions">
+				<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+			</div>
+		</form>
 	</div>
-	{% for field in submit_form %}
-	<div class="control-group">
-		{% if field.errors %}
-		<div class="alert alert-error">
-			<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
-		</div>
-		{% endif %}
-		<div class="control-label">
-		{{ field.label_tag }}{% if field.field.required %} *{% endif %}
-		</div>
-		<div class="controls">
-		{{ field }}
-		</div>
-	</div>
-	{% endfor %}
-	<div id="progress-indicator">
-		<div class="progress progress-striped active">
-			<div class="bar"></div >
-		</div>
-		<div class="percent">0%</div >
-	</div>
-<div class="form-actions">
-<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
-</div>
-</form>
-</div>
 </div>
 {% endblock %}
 {% block javascript %}
