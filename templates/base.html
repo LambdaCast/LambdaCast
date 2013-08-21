@@ -54,8 +54,8 @@
 							<li {% block active2 %}{% endblock %}><a href="/stream/">{% trans "Live" %}</a></li>
 							{% endif %}
 							{% for page in page_list %}
-							<li {% block pages %}{% endblock %}>
-								{% if page.display == "body" %} 
+							<li{% if page.slug == current_page.slug %} class="active"{% endif %}>
+								{% if page.display == "body" %}
 								<a href="/p/{{ page.slug }}/"><i class={{ page.icon }}></i> {{ page.title }}</a>
 								{% else %}
 								<a href="{{ page.link }}"><i class={{ page.icon }}></i> {{ page.title }}</a>
