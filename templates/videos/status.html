@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block active9 %}
-class="active"
-{% endblock %}
-{% block title %}
-- {% trans "Status" %}
-{% endblock %}
+{% block active-status %}class="active"{% endblock %}
+{% block title %} - {% trans "Status" %}{% endblock %}
 {% load custom_filters %}
 {% block body %}
 <div class="page-header">
