@@ -62,7 +62,9 @@
                 <a href="{{ page.link }}"><i class={{ page.icon }}></i> {{ page.title }}</a>
               {% endif %}</li>
               {% endfor %}
-              <li class="pull-right">
+            </ul>
+            <ul class="nav pull-right">
+              <li>
                 <form class="navbar-search" action="/search/" method="GET">
                   <input type="text" class="search-query" name="q" placeholder="{% trans "Search..." %}">
                 </form>
