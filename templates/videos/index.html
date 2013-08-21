@@ -7,96 +7,96 @@ class="active"
 {% endblock %}
 {% block body %}
 <div class="row">
-<div class="span8">
-<ul class="nav nav-tabs">
-  <li class="active">
-    <a href="/">{% trans "Latest Videos" %}</a>
-  </li>
-  {% for channel in channel_list %}
-  {% if channel.featured %}
-  <li><a href="/videos/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
-  {% endif %}
-  {% endfor %}
-  <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <i class="icon-th"></i> {% trans "All Channels" %}
-        <b class="caret"></b>
-      </a>
-    <ul class="dropdown-menu">
-      {% for channel in channel_list %}
-        <li><a href="/videos/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
-     {% endfor %}
-    </ul>
-  </li>
-</ul>
-{% include "videos/videolist.html" with video_list=latest_videos_list %}
-<ul class="pager">
-{% if latest_videos_list.has_previous %}
-  <li class="previous">
-      <a href="?page={{ latest_videos_list.previous_page_number }}">&larr; Neuer</a>
-  </li>
-{% endif %}
-{% if latest_videos_list.has_next %}
-  <li class="next">
-      <a href="?page={{ latest_videos_list.next_page_number }}">&Auml;lter &rarr;</a>
-    </li>
-{% endif %}
-</ul>
-</div>
-<div class="span4">
-<div class="page-header">
-<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>
-</div>
-<div class=well>
-<ul class="nav nav-list">
-  {% if settings.USE_BITTORRENT %}
-  <li>
-    <i class="icon-file"></i> <u>{% trans "Original Material" %}</u>
-  </li>
-  <li>
-    <a href="/feeds/latest/torrent/">Torrents-Feed</a>
-  </li>
-  <li class="divider"></li>
-  {% endif %}
-  {% if settings.ENABLE_VIDEO_FEEDS %}
-  <li>
-    <i class="icon-film"></i> <u>{% trans "Video-Podcast" %}</u>
-  </li>
-  <li>
-    <a href="/feeds/latest/mp4/">{% trans "MP4-Format" %}</a>
-  </li>
-  <li>
-    <a href="/feeds/latest/webm/">{% trans "WEBM-Format" %}</a>
-  </li>
-  {% endif %}
-  {% if settings.ENABLE_AUDIO_FEEDS %}
-  <li class="divider"></li>
-  <li>
-    <i class="icon-headphones"></i> <u>{% trans "Audio-Podcast" %}</u>
-  </li>
-  <li>
-    <a href="/feeds/latest/mp3/">{% trans "MP3-Format" %}</a>
-  </li>
-  <li>
-    <a href="/feeds/latest/ogg/">{% trans "OGG-Format" %}</a>
-  </li>
-  {% endif %}
-  <li class="divider"></li>
-  <li>
-    <a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
-  </li>
-</ul>
-</div>
-</div>
-{% get_tagcloud as tags for 'portal.Video' %}
-{% if tags %}
-<div class="span4">
-<div class="well">
-{% for tag in tags %}
-<a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
-{% endfor %}
-</div>
-</div>
-{% endif %}
+	<div class="span8">
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a href="/">{% trans "Latest Videos" %}</a>
+			</li>
+			{% for channel in channel_list %}
+			{% if channel.featured %}
+			<li><a href="/videos/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
+			{% endif %}
+			{% endfor %}
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="icon-th"></i> {% trans "All Channels" %}
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					{% for channel in channel_list %}
+					<li><a href="/videos/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul>
+		{% include "videos/videolist.html" with video_list=latest_videos_list %}
+		<ul class="pager">
+			{% if latest_videos_list.has_previous %}
+			<li class="previous">
+				<a href="?page={{ latest_videos_list.previous_page_number }}">&larr; Neuer</a>
+			</li>
+			{% endif %}
+			{% if latest_videos_list.has_next %}
+			<li class="next">
+				<a href="?page={{ latest_videos_list.next_page_number }}">&Auml;lter &rarr;</a>
+			</li>
+			{% endif %}
+		</ul>
+	</div>
+	<div class="span4">
+		<div class="page-header">
+			<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>
+		</div>
+		<div class=well>
+			<ul class="nav nav-list">
+				{% if settings.USE_BITTORRENT %}
+				<li>
+					<i class="icon-file"></i> <u>{% trans "Original Material" %}</u>
+				</li>
+				<li>
+					<a href="/feeds/latest/torrent/">Torrents-Feed</a>
+				</li>
+				<li class="divider"></li>
+				{% endif %}
+				{% if settings.ENABLE_VIDEO_FEEDS %}
+				<li>
+					<i class="icon-film"></i> <u>{% trans "Video-Podcast" %}</u>
+				</li>
+				<li>
+					<a href="/feeds/latest/mp4/">{% trans "MP4-Format" %}</a>
+				</li>
+				<li>
+					<a href="/feeds/latest/webm/">{% trans "WEBM-Format" %}</a>
+				</li>
+				{% endif %}
+				{% if settings.ENABLE_AUDIO_FEEDS %}
+				<li class="divider"></li>
+				<li>
+					<i class="icon-headphones"></i> <u>{% trans "Audio-Podcast" %}</u>
+				</li>
+				<li>
+					<a href="/feeds/latest/mp3/">{% trans "MP3-Format" %}</a>
+				</li>
+				<li>
+					<a href="/feeds/latest/ogg/">{% trans "OGG-Format" %}</a>
+				</li>
+				{% endif %}
+				<li class="divider"></li>
+				<li>
+					<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	{% get_tagcloud as tags for 'portal.Video' %}
+	{% if tags %}
+	<div class="span4">
+		<div class="well">
+			{% for tag in tags %}
+			<a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
 </div>
 {% endblock %}
