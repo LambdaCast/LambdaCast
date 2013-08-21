@@ -59,9 +59,9 @@
 							{% for page in page_list %}
 							<li{% if page.slug == current_page.slug %} class="active"{% endif %}>
 								{% if page.display == "body" %}
-								<a href="/p/{{ page.slug }}/"><i class={{ page.icon }}></i> {{ page.title }}</a>
+								<a href="/p/{{ page.slug }}/"><i class="icon-{{ page.icon }}"></i> {{ page.title }}</a>
 								{% else %}
-								<a href="{{ page.link }}"><i class={{ page.icon }}></i> {{ page.title }}</a>
+								<a href="{{ page.link }}"><i class="icon-{{ page.icon }}"></i> {{ page.title }}</a>
 								{% endif %}
 							</li>
 							{% endfor %}
