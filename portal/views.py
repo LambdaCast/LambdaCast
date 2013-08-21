@@ -32,8 +32,6 @@ from sys import argv
 from operator import attrgetter
 import itertools
 
-page_list = Page.objects.all()
-
 def list(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available video and
     forwards them to the template. We use Django's Paginator to have pagination '''
@@ -41,6 +39,7 @@ def list(request):
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     page = request.GET.get('page')
     try:
         videos = paginator.page(page)
@@ -57,6 +56,7 @@ def channel_list(request,slug):
     ''' This view is the view for the channels video list it works almost like the index view'''
     channel = get_object_or_404(Channel, slug=slug)
 #    videos_list = Video.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified')
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     queryset = itertools.chain(Video.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
@@ -75,6 +75,7 @@ def channel_list(request,slug):
 
 def detail(request, slug):
     ''' Handles the detail view of a video (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.method == 'POST':
             comment = Comment(video=Video.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
             video = get_object_or_404(Video, slug=slug)
@@ -98,13 +99,15 @@ def detail(request, slug):
                             context_instance=RequestContext(request))
 
 def iframe(request, slug):
-    ''' Returns an iframe for a video so that videos can be shared easily '''                         
+    ''' Returns an iframe for a video so that videos can be shared easily '''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     video = get_object_or_404(Video, slug=slug)
     return render_to_response('videos/iframe.html', {'video': video, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
 
 
 def tag(request, tag):
     ''' Gets all videos for a specified tag'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
     tag_name = get_object_or_404(Tag, slug=tag)
     return render_to_response('videos/list.html', {'videos_list': videolist, 'tag':tag_name, 'page_list':page_list,'settings': settings},
@@ -112,6 +115,7 @@ def tag(request, tag):
 
 def collection(request, slug):
     ''' Gets all videos for a channel'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     collection = get_object_or_404(Collection, slug=slug)
     videolist = collection.videos.filter(encodingDone=True, published=True)
     return render_to_response('videos/collection.html', {'videos_list': videolist, 'page_list':page_list,'collection':collection, 'settings': settings},
@@ -119,6 +123,7 @@ def collection(request, slug):
                             
 def search(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     query_string = ''
     found_entries = None
     if ('q' in request.GET) and request.GET['q'].strip():
@@ -134,6 +139,7 @@ def search(request):
 
 def search_json(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     query_string = ''
     found_entries = None
     if ('q' in request.GET) and request.GET['q'].strip():
@@ -147,6 +153,7 @@ def search_json(request):
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
            
 def tag_json(request, tag):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
     data = serializers.serialize('json', videolist)
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
@@ -159,6 +166,7 @@ def submit(request):
     a new task task for encoding this video. If we use bittorrent to distribute our files
     we also use django tasks to make the .torrent files (this can take a few minutes for
     very large files '''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         if request.method == 'POST':
             form = VideoForm(request.POST, request.FILES or None)
@@ -233,6 +241,7 @@ def submit(request):
 
 @login_required(login_url='/login/')
 def status(request):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if settings.USE_BITTORRENT:
         processing_videos = Video.objects.filter(Q(encodingDone=False) | Q(torrentDone=False))
     else:
@@ -254,6 +263,7 @@ def encodingdone(request):
     using for example curl but they would need to guess a assembly_id and these are 
     quite long hex strings. To improve the security we could also use the custom header
     option from transloadit but I think this wouldn't really help in a open source project'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.method == 'POST':
         data = json.loads(request.POST['transloadit'])
         try:

@@ -158,24 +158,24 @@ class Page(models.Model):
     )
     
     DEFAULT_CONTENT = """
-        <div class="row">
-        <div class="span12">
-        <dib class="row">
-        <div class="span3">
-        <h3>Title 1</h3>
-        <p>This is sample content</p>
-        </div>
-        <div class="span3">
-        <h3>Title 2</h3>
-        <p>This is sample content</p>
-        </div>
-        <div class="span3">
-        <h3>Title</h3>
-        <p>This is sample content</p>
-        </div>
-        </div>
-        </div>
-        </div>
+    <div class="row">
+    <div class="span12">
+    <dib class="row">
+    <div class="span3">
+    <h3>Title 1</h3>
+    <p>This is sample content</p>
+    </div>
+    <div class="span3">
+    <h3>Title 2</h3>
+    <p>This is sample content</p>
+    </div>
+    <div class="span3">
+    <h3>Title</h3>
+    <p>This is sample content</p>
+    </div>
+    </div>
+    </div>
+    </div>
     """   
 
     activated = models.BooleanField(verbose_name=_(u"Activated"))
@@ -187,7 +187,7 @@ class Page(models.Model):
     body = models.TextField(_(u"Body"),blank=True,max_length=10000,default=DEFAULT_CONTENT)
     icon = models.CharField(_(u"Icon"),blank=True,max_length=200,choices=ICONS)
     link = models.URLField(_(u"URL"),help_text=_(u"URL that links to an external website"),blank=True)
-    orderid = models.DecimalField(verbose_name=_(u"Order"),unique=True,max_digits=2,decimal_places=1,help_text=_(u"Set the order of the menu items"))
+    orderid = models.DecimalField(verbose_name=_(u"Order"),unique=True,max_digits=2,decimal_places=0,help_text=_(u"Set the order of the menu items with smallest number first"))
     
     def __unicode__(self):
         return self.title

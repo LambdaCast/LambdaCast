@@ -8,7 +8,6 @@ import lambdaproject.settings as settings
 
 
 def page(request,slug):
-    pag_instance = Page()
-    page_list = Page.objects.filter(activated=True)
+    page_list = list(Page.objects.filter(activated=True).order_by('orderid'))
     page = get_object_or_404(Page, slug=slug)
-    return render_to_response('pages/page.html', {'page_list':page_list, 'page': page,'settings': settings}, context_instance=RequestContext(request))
+    return render_to_response('pages/page.html', {'page_list': page_list, 'page': page,'settings': settings}, context_instance=RequestContext(request))
