@@ -12,23 +12,17 @@
 		<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
 	</head>
 	<body>
-		{% if video.kind == 0 %}
-		<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+		{% if video.kind == 0 or video.kind == 2 %}
+		<video class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
 			{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
 			{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
 		</video>
 		{% endif %}
 		{% if video.kind == 1 %}
-		<audio id="player_a" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+		<audio class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
 			{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
 			{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
 		</audio>
-		{% endif %}
-		{% if video.kind == 2 %}
-		<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-			{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-			{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
-		</video>
 		{% endif %}
 		<script type="text/javascript">
 			$(document).ready(function() {
