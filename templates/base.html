@@ -74,6 +74,7 @@
 							</li>
 							{% if user.is_authenticated %}
 							<li {% block active-upload %}{% endblock %}><a href="/submit/" title="{% trans "Upload" %}"><i class="icon-upload"></i></a></li>
+							<li><a href="/admin/portal/video/add/" title="{% trans "Add Video" %}"><i class="icon-plus-sign"></i></a></li>
 							<li {% block active-status %}{% endblock %}><a href="/status/" title="{% trans "Status" %}"><i class="icon-ok"></i></a></li>
 							<li><a href="/admin/" title="{% trans "Admin" %}"><i class="icon-wrench"></i></a></li>
 							<li><a href="/logout/" title="{% trans "Logout" %}"><i class="icon-off"></i></a></li>
