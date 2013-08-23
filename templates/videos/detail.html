@@ -5,7 +5,7 @@
 {% block title %} - {{ video.title }}{% endblock %}
 {% block head %}
 <script type="text/javascript" src="{{ STATIC_URL }}projekktor/projekktor.min.js"></script>
-<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
 {% endblock %}
 {% block active-home %}class="active"{% endblock %}
 {% block body %}
@@ -17,7 +17,7 @@
 		{% if video.kind == 0 %}
 		<div class="row">
 			<div class="span8">
-				<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+				<video id="player_video" class="projekktor center" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
 					{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
 					{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
 				</video>
@@ -27,12 +27,10 @@
 		{% if video.kind == 1 %}
 		<div class="row">
 			<div class="span8">
-				<center>
-					<audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-						{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-						{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
-					</audio>
-				</center>
+				<audio id="player_audio" class="projekktor center" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+					{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
+					{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+				</audio>
 			</div>
 		</div>
 		{% endif %}
@@ -45,13 +43,13 @@
 				</ul>
 				<div id="player_container">
 					<div id="video_player">
-						<video id="player_a" class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+						<video id="player_video" class="projekktor center" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
 							{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
 							{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
 						</video>
 					</div>
 					<div id="audio_player" style="display:none;">
-						<audio id="player_b" class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+						<audio id="player_audio" class="projekktor center" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
 							{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
 							{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
 						</audio>'
@@ -200,7 +198,7 @@
 		$('#id_timecode').val( value.toFixed(2) )
 	}
 	{% if video.kind == 0 or video.kind == 2 %}
-	var video_player = projekktor('#player_a', {
+	var video_player = projekktor('#player_video', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 
@@ -212,7 +210,7 @@
 	video_player.addListener('time', timeListener);
 	{% endif %}
 	{% if video.kind == 1 or video.kind == 2 %}
-	var audio_player = projekktor('#player_b', {
+	var audio_player = projekktor('#player_audio', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 
@@ -224,9 +222,8 @@
 	audio_player.addListener('time', timeListener);
 	{% endif %}
 	$('.timecode').click(function(){
-		console.log(this.text);
-		video_player.setPlayhead(parseFloat(this.text)); 
-		audio_player.setPlayhead(parseFloat(this.text));
+		if (typeof(video_player) !== 'undefined') { video_player.setPlayhead(parseFloat(this.text)); }
+		if (typeof(audio_player) !== 'undefined') { audio_player.setPlayhead(parseFloat(this.text)); }
 		return false;
 	})
 });

@@ -63,3 +63,9 @@ ul.edit-menu {
 }
 
 #videoForm .control-label label { float: left; }
+
+.center {
+     float: none;
+     margin-left: auto;
+     margin-right: auto;
+}
