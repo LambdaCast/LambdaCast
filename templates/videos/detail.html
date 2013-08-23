@@ -201,9 +201,11 @@
 {% block javascript %}
 <script type="text/javascript">
 $('audio,video').mediaelementplayer({
+  alwaysShowHours: false,
+  showTimecodeFrameCount: false,
   success: function (mediaElement, domObject) {
     mediaElement.addEventListener('timeupdate', function(e) {
-      document.getElementById('id_timecode').value = mediaElement.currentTime;
+      document.getElementById('id_timecode').value = mediaElement.currentTime.toFixed(2);
     }, false);
   },
 });
