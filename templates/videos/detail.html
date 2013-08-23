@@ -203,6 +203,7 @@
 $('audio,video').mediaelementplayer({
   alwaysShowHours: false,
   showTimecodeFrameCount: false,
+  duration:parseInt("{{ video.duration }}",10),
   success: function (mediaElement, domObject) {
     mediaElement.addEventListener('timeupdate', function(e) {
       document.getElementById('id_timecode').value = mediaElement.currentTime.toFixed(2);
