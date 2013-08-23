@@ -18,7 +18,7 @@
 		{% if video.kind == 0 %}
 		<div class="row">
 			<div class="span8">
-				<video width=640" height="360" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" controls="controls" preload="none">
+				<video width="640" height="360" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" controls="controls" preload="none">
 					{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
 					{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
                                         <object width="640" height="360" type="application/x-shockwave-flash" data="{{ STATIC_URL }}build/flashmediaelement.swf">
@@ -34,7 +34,7 @@
 		{% if video.kind == 1 %}
 		<div class="row">
 			<div class="span8">
-				<audio width="640" height="360" title="{{ video.title}}" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+				<audio width="640" height="360" title="{{ video.title}}" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls="controls">
 					{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
 					{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
 				</audio>
@@ -200,6 +200,13 @@
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript">
-$('audio,video').mediaelementplayer();
+$('audio,video').mediaelementplayer({
+  success: function (mediaElement, domObject) {
+    mediaElement.addEventListener('timeupdate', function(e) {
+      document.getElementById('current-time').innerHTML = mediaElement.currentTime;
+      document.getElementById('id_timecode').innerHTML = mediaElement.currentTime;
+    }, false);
+  }
+});
 </script>
 {% endblock %}
