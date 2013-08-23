@@ -203,10 +203,9 @@
 $('audio,video').mediaelementplayer({
   success: function (mediaElement, domObject) {
     mediaElement.addEventListener('timeupdate', function(e) {
-      document.getElementById('current-time').innerHTML = mediaElement.currentTime;
-      document.getElementById('id_timecode').innerHTML = mediaElement.currentTime;
+      document.getElementById('id_timecode').value = mediaElement.currentTime;
     }, false);
-  }
+  },
 });
 </script>
 {% endblock %}
