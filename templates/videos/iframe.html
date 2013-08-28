@@ -7,34 +7,34 @@
 		<meta name="description" content="">
 		<meta name="author" content="{{ settings.AUTHOR_NAME }}">
 		<script src="{{ STATIC_URL }}jquery.min.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}projekktor/projekktor.min.js"></script>
-		<script src="{{ STATIC_URL }}audiojs/audio.min.js"></script>
-		<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="{{ STATIC_URL }}mediaelementjs/build/mediaelement-and-player.min.js"></script>
+		<!--- <script src="{{ STATIC_URL }}audiojs/audio.min.js"></script>-->
+		<link rel="stylesheet" href="{{ STATIC_URL }}mediaelementjs/build/mediaelementplayer.min.css" type="text/css" media="screen" />
 	</head>
 	<body>
 		{% if video.kind == 0 or video.kind == 2 %}
-		<video class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
+		<video poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
 			{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
 			{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
 		</video>
 		{% endif %}
 		{% if video.kind == 1 %}
-		<audio class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+		<audio title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
 			{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
 			{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
 		</audio>
 		{% endif %}
 		<script type="text/javascript">
-			$(document).ready(function() {
-				var player = projekktor('.projekktor', {
-					/* path to the MP4 Flash-player fallback component */
-					playerFlashMP4: '{{ STATIC_URL }}projekktor/jarisplayer.swf',
-					/* path to the MP3 Flash-player fallback component */
-					playerFlashMP3: '{{ STATIC_URL }}projekktor/jarisplayer.swf',
-					streamType: 'http',
-					iframe: true
-				});
-			});
-		</script>
+		    $('audio,video').mediaelementplayer({
+                      alwaysShowHours: false,
+                      showTimecodeFrameCount: false,
+                      duration:parseInt("{{ video.duration }}",10),
+                      success: function (mediaElement, domObject) {
+                        mediaElement.addEventListener('timeupdate', function(e) {
+                          document.getElementById('id_timecode').value = mediaElement.currentTime.toFixed(2);
+                        }, false);
+                      },
+                    });
+                </script>
 	</body>
 </html>
