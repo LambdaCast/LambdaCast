@@ -156,6 +156,7 @@ INSTALLED_APPS = (
     'djangotasks',
     'south',
     'taggit_templatetags',
+    'captcha',
 )
 
 AUTHENTICATION_BACKENDS = (
