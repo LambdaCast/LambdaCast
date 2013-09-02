@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 {% load i18n %}
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 	<head>
 		<meta charset="utf-8">
 		<title>LambdaCast{% block title %}{% endblock %}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="{{ settings.AUTHOR_NAME }}">
-		{% block rss %}
+		{% block extra_head %}{% endblock %}
+                {% block rss %}
 		{% endblock %}
 		{% if settings.USE_BITTORRENT %}
 		<link rel="alternate" type="application/rss+xml" title={% trans "Latest Originals" %}" href="/feeds/latest/torrent/" />

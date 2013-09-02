@@ -2,10 +2,24 @@
 {% load i18n %}
 {% load custom_filters %}
 {% load markup %}
+{% load simple_open_graph %}
 {% block title %} - {{ video.title }}{% endblock %}
 {% block head %}
 <script type="text/javascript" src="{{ STATIC_URL }}projekktor/projekktor.min.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
+{% block extra_head %}
+    <meta content="{{ video.title }}" property="og:title"></meta>
+    <meta content="article" property="og:type"></meta>
+    {% if video.videoThumbURL %}
+      <meta content="{{ video.videoThumbURL }}" property="og:image"></meta>
+    {% else %}
+      <meta content="{{ video.audioThumbURL }}" property="og:image"></meta>
+    {% endif %}
+    <meta content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/" property="og:url"></meta>
+    <meta content="{{ video.description|truncatechars:200 }}" property="og:description"></meta>
+    <meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
+    <meta content="LambdaCast" property="og:site_name"></meta>
+{% endblock %}
 {% endblock %}
 {% block active-home %}class="active"{% endblock %}
 {% block body %}
