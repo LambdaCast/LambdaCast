@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load markup %}
+
+<head>
+<title>{{ video.title }} - Wordpress Embed</title>
+</head>
+
+<body>
+{% if video.oggURL or video.mp3URL or video.mp4URL or video.webmURL %}
+[audio src="{{ video.oggURL }}"]
+<br><br>
+{% filter force_escape %}
+Download: <a title="{{ video.title }} OGG" href="{{ video.oggURL }}" target="_blank">ogg</a>, <a title="{{ video.title }} MP3" href="{{ video.mp3URL }}" target="_blank">mp3</a>
+{% endfilter %}
+<br><br>
+{% if video.description %}
+&lt;!--more--&gt;<br>
+{{ video.description|markdown:"safe"|force_escape }}
+{% endif %}
+{% endif %}
+</body>
