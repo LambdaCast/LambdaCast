@@ -13,7 +13,7 @@ AUTHOR_NAME = 'Author Name'
 CONTACT_EMAIL = 'root@example.com'
 
 # Django settings for lambdaproject.project
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # If you use an virtualenv (you schould) enter it here
@@ -28,8 +28,8 @@ ADMINS = (
 # Your database settings, sqlite is good for development and testing, not for deployment
 DATABASES = {
     'default': {
-        'ENGINE': '', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',            # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'lambda.sql',            # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.

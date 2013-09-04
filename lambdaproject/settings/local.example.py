@@ -10,7 +10,7 @@ AUTHOR_NAME = 'Author Name'
 CONTACT_EMAIL = 'root@example.com'
 
 # Django settings for lambdaproject.project
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # If you use an virtualenv (you schould) enter it here
