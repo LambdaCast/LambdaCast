@@ -96,8 +96,11 @@ class Video(models.Model):
 
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
-        html_free_desc = re.sub('<[^<]+?>', '', md_free_desc)
-        return unicode(html_free_desc)
+        md_free_desc = md_free_desc.replace('</p>', ' | ').replace('</li>', ' | ').replace('<ul>', ' | ')
+        md_free_desc = re.sub('</h\\d>', ' | ', md_free_desc)
+        md_free_desc = re.sub('<[^<]+?>', '', md_free_desc)
+        md_free_desc = re.sub('\\|(\\s+\\|)+', '|', md_free_desc)
+        return md_free_desc
 
     def get_wp_code(self):
         wp_code = ""
