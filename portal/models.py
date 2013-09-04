@@ -96,10 +96,11 @@ class Video(models.Model):
 
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
-        break_desc = md_free_desc.replace('</p>', '\\n')
-        html_free_desc = re.sub('<[^<]+?>', '', break_desc)
-        html_w_break_desc = html_free_desc.replace('\\n', '<br>')
-        return html_w_break_desc
+        md_free_desc = md_free_desc.replace('</p>', ' | ').replace('</li>', ' | ').replace('<ul>', ' | ')
+        md_free_desc = re.sub('</h\\d>', ' | ', md_free_desc)
+        md_free_desc = re.sub('<[^<]+?>', '', md_free_desc)
+        md_free_desc = re.sub('\\|(\\s+\\|)+', '|', md_free_desc)
+        return md_free_desc
 
     def encode_media(self):
         ''' This is used to tell ffmpeg what to do '''
