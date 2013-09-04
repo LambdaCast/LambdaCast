@@ -1,5 +1,6 @@
+import os
 # Path to your LambdaCast instance (no / behind the path)
-ABSOLUTE_PATH = '/opt/LambdaCast'
+ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../"
 
 # Domain your instance should use, for example: 'http://example.com' (no / behind the path)
 DOMAIN = 'http://localhost:8000'
@@ -27,8 +28,8 @@ ADMINS = (
 # Your database settings, sqlite is good for development and testing, not for deployment
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'lambda.sql',            # Or path to database file if using sqlite3.
+        'ENGINE': '', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',            # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -242,3 +243,4 @@ LOGGING = {
         },
     }
 }
+
