@@ -150,9 +150,10 @@
 			<dt>{% trans "Embedding" %}:</dt>
 			<dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/videos/iframe/{{ video.slug }}/" frameborder="0"></iframe>'></dd>
                         {% if user.is_authenticated %}
-                          <dd><a href="{% url portal.views.wp_embed video.slug %}">{% trans "Wordpress Embedding Code" %}</a></dd>
-                        {% endif %}
-			{% if video.duration %}
+                        <dt>{% trans "Wordpress Embed Code" %}:<dt>
+                        <dd><textarea readonly="readonly">{{ video.get_wp_code }}</textarea></dd>
+			{% endif %}
+                        {% if video.duration %}
 			<dt>{% trans "Duration" %}:</dt>
 			<dd><i class="icon-time"></i> {{ video.duration|secondstohms }}</dd>
 			{% endif %}

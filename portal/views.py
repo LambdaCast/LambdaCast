@@ -105,14 +105,6 @@ def iframe(request, slug):
     return render_to_response('videos/iframe.html', {'video': video, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
 
 
-def wp_embed(request, slug):
-    ''' Returns code for a wordpress article with integrated mediaplayer.js player '''
-    if request.user.is_authenticated():
-        video = get_object_or_404(Video, slug=slug)
-        return render_to_response('videos/wp-embed.html', {'video': video}, context_instance=RequestContext(request))
-    else:
-        return HttpResponse('')
- 
 def tag(request, tag):
     ''' Gets all videos for a specified tag'''
     page_list = Page.objects.filter(activated=True).order_by('orderid')
