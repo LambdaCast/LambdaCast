@@ -97,7 +97,7 @@
 				</div>
 				{% endif %}
 				<form enctype="multipart/form-data" class="form-horizontal" action="/videos/{{ video.slug }}/" method="post">{% csrf_token %}
-					{% for field in comment_form %}
+                                        {% for field in comment_form %}
 					<div class="control-group">
 						{% if field.errors %}
 						<div class="alert alert-error">
@@ -112,9 +112,13 @@
 						</div>
 					</div>
 					{% endfor %}
-					<div class="form-actions">
-						<input type="submit" class="btn btn-primary" value={% trans "Send" %} />
-                                                <button class='js-captcha-refresh'></button>
+                                        <div class="control-group">
+                                                <div class="controls">
+                                                    <button class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</button>
+                                                </div>
+                                        </div>
+                                        <div class="form-actions">
+                                                <input type="submit" class="btn btn-primary" value={% trans "Send" %} />
 					</div>
 				</form>
 			</div>
