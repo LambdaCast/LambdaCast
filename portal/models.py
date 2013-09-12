@@ -190,14 +190,14 @@ class Video(models.Model):
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
                 
-        if (kind == 1):
-            file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
-            if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
-                artwork = file.tags['APIC:'].data # access APIC frame and grab the image
-                with open(outputdir + self.slug + '_cover.jpg', 'wb') as img:
-                    img.write(artwork)
+#        if (kind == 1):
+#            file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
+#            if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
+#                artwork = file.tags['APIC:'].data # access APIC frame and grab the image
+#                with open(outputdir + self.slug + '_cover.jpg', 'wb') as img:
+#                    img.write(artwork)
 
-                self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '_cover.jpg'
+#                self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '_cover.jpg'
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT

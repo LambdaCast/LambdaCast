@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
 from portal.models import Video, Comment, Channel, Collection
-from portal.forms import VideoForm, CommentForm
+from portal.forms import VideoForm, CommentForm, getThumbnails
 from transloadit.client import Client
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -172,6 +172,7 @@ def submit(request):
             form = VideoForm(request.POST, request.FILES or None)
             if form.is_valid():
                     cmodel = form.save()
+                    cmodel.audioThumbURL = str(cmodel.Thumb)
                     if cmodel.originalFile:
                         if settings.USE_TRANLOADIT:
                             client = Client(settings.TRANSLOAD_AUTH_KEY, settings.TRANSLOAD_AUTH_SECRET)
