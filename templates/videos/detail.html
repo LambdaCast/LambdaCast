@@ -10,9 +10,9 @@
 {% block active-home %}class="active"{% endblock %}
 {% block body %}
 <div class="page-header">
-        {% if user.is_authenticated %}
-          <a href="/admin/portal/video/{{ video.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
-        {% endif %}
+	{% if user.is_authenticated %}
+		<a href="/admin/portal/video/{{ video.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+	{% endif %}
 	<h1>{{ video.title }}</h1>
 </div>
 <div class="row">
@@ -117,7 +117,7 @@
 					{% endfor %}
 					<div class="control-group">
 						<div class="controls">
-						    <a name="captcha" href="#captcha"><p name="refresh_captcha" class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</p></a>
+							<a name="captcha" href="#captcha"><p name="refresh_captcha" class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</p></a>
 						</div>
 					</div>
 					<div class="form-actions">
@@ -149,11 +149,11 @@
 			{% endif %}
 			<dt>{% trans "Embedding" %}:</dt>
 			<dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/videos/iframe/{{ video.slug }}/" frameborder="0"></iframe>'></dd>
-                        {% if user.is_authenticated %}
-                        <dt>{% trans "Wordpress Embed Code" %}:<dt>
-                        <dd><textarea readonly="readonly">{{ video.get_wp_code }}</textarea></dd>
+			{% if user.is_authenticated %}
+			<dt>{% trans "Wordpress Embed Code" %}:<dt>
+			<dd><textarea readonly="readonly">{{ video.get_wp_code }}</textarea></dd>
 			{% endif %}
-                        {% if video.duration %}
+			{% if video.duration %}
 			<dt>{% trans "Duration" %}:</dt>
 			<dd><i class="icon-time"></i> {{ video.duration|secondstohms }}</dd>
 			{% endif %}

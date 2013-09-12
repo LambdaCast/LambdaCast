@@ -18,7 +18,7 @@
 					<span><strong>{% trans "Transcoding finished" %}:</strong>{% if video.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
 					<strong>{% trans "Torrent created" %}:</strong>{% if video.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
 					<strong>{% trans "Publish automatically" %}:</strong>{% if video.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</span><br/>
-                                        <span><strong>{% trans "Tasks" %}:</strong></span>
+					<span><strong>{% trans "Tasks" %}:</strong></span>
 					<ul>
 						{% for task_list in running_tasks %}
 							{% for task in task_list %}
