@@ -10,6 +10,9 @@
 {% block active-home %}class="active"{% endblock %}
 {% block body %}
 <div class="page-header">
+	{% if user.is_authenticated %}
+		<a href="/admin/portal/video/{{ video.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+	{% endif %}
 	<h1>{{ video.title }}</h1>
 </div>
 <div class="row">
@@ -76,7 +79,7 @@
 				<div class="row">
 					<div class="span8">
 						<div class="well">
-							<strong>Name: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>Zeit: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
+							<strong>{% trans "Name: " %}</strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>{% trans "Zeit: " %}</strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
 							<div class="comment-body">{{ comment.comment }}	</div>
 						</div>
 					</div>
@@ -112,22 +115,19 @@
 						</div>
 					</div>
 					{% endfor %}
+					<div class="control-group">
+						<div class="controls">
+							<a name="captcha" href="#captcha"><p name="refresh_captcha" class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</p></a>
+						</div>
+					</div>
 					<div class="form-actions">
-						<input type="submit" class="btn btn-primary" value={% trans "Send" %} />
+						<input type="submit" name="submit_comment" class="btn btn-primary" value={% trans "Send" %} />
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<div class="span4">
-		{% if user.is_authenticated %}
-		<div class="well">
-			<dt>{% trans "Actions" %}</dt>
-			<ul class="edit-menu">
-				<li><a href="{{ DOMAIN }}/admin/portal/video/{{ video.id }}"><i class="icon-pencil"></i> {% trans "Edit" %}</a></li>
-			</ul>
-		</div>
-		{% endif %}
 		<div class="well">
 			<dt>{% trans "Date" %}:</dt>
 			<dd><i class="icon-calendar"></i> {{ video.date }}</dd>
@@ -149,6 +149,10 @@
 			{% endif %}
 			<dt>{% trans "Embedding" %}:</dt>
 			<dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/videos/iframe/{{ video.slug }}/" frameborder="0"></iframe>'></dd>
+			{% if user.is_authenticated %}
+			<dt>{% trans "Wordpress Embed Code" %}:<dt>
+			<dd><textarea readonly="readonly">{{ video.get_wp_code }}</textarea></dd>
+			{% endif %}
 			{% if video.duration %}
 			<dt>{% trans "Duration" %}:</dt>
 			<dd><i class="icon-time"></i> {{ video.duration|secondstohms }}</dd>
@@ -193,8 +197,18 @@
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript">
- $(document).ready(function() {
- 	var timeListener = function(value) {	
+function updateCaptcha(){
+	$.getJSON('/captcha/refresh/', {}, function(json) {
+		$('img.captcha').attr('src', json.image_url);
+		$('#id_captcha_0').val(json.key);
+		// This your should update captcha image src and captcha hidden input
+	});
+}
+
+$('.js-captcha-refresh').click(updateCaptcha);
+
+$(document).ready(function() {
+	var timeListener = function(value) {	
 		$('#id_timecode').val( value.toFixed(2) )
 	}
 	{% if video.kind == 0 or video.kind == 2 %}

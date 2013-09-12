@@ -12,6 +12,7 @@
 		<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
 	</head>
 	<body>
+
 		{% if video.kind == 0 or video.kind == 2 %}
 		<video class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
 			{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}

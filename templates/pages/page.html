@@ -5,7 +5,7 @@
 {% block body %}
 <div class="page-header">
 	{% if user.is_authenticated %}
-	<a href="/admin/pages/page/{{ current_page.id }}/" class="pull-right" style="margin-top: 15px;">Bearbeiten</a>
+	<a href="/admin/pages/page/{{ current_page.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 	<h1>{{ current_page.title }} <small>{{ current_page.description }}</small></h1>
 </div>
