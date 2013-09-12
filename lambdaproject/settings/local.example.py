@@ -6,8 +6,10 @@ DOMAIN = 'http://localhost:8000'
 # Domain of your website, for example: 'http://example.com' (no / behind the path)
 WEBSITE_URL = 'http://localhost'
 
+# Name of the author of the rss feed
 AUTHOR_NAME = 'Author Name'
 
+# E-mail adress for the contact link in the sidebar on index page
 CONTACT_EMAIL = 'root@example.com'
 
 # Django settings for lambdaproject.project

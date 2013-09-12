@@ -15,13 +15,14 @@ try:
     DOMAIN = local.DOMAIN
 except ImportError:
     DOMAIN = 'http://localhost:8000'
-    print 'WARNING: DOMAIN not found in local. Default: %s' % DOMAIN
 
 # Domain of your website, for example: 'http://example.com' (no / behind the path)
 WEBSITE_URL = 'http://example.com'
 
+# Name of the author of the rss feed
 AUTHOR_NAME = 'Author Name'
 
+# E-mail adress for the contact link in the sidebar on index page
 CONTACT_EMAIL = 'root@example.com'
 
 # Django settings for lambdaproject.project
@@ -29,8 +30,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # If you use an virtualenv (you schould) enter it here
-VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/python2-6/sites-packages'
-# VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/pythons2-7/site-packages'
+VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/pythons2-7/site-packages'
 
 # The guys who will get an email if something is wrong
 ADMINS = (
