@@ -18,6 +18,9 @@
 {% endblock %}
 {% block body %}
 <div class="page-header">
+	{% if perms.portal.change_channel and user.is_staff %}
+		<a href="/admin/portal/channel/{{ channel.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+	{% endif %}
 	<h1>Sendung: {{ channel.name }}</h1>
 	{% if channel.description %}
 	<p>{{ channel.description }}</p>
