@@ -1,9 +1,21 @@
 import os
+
 # Path to your LambdaCast instance (no / behind the path)
-ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../"
+try:
+    import local
+    from local import ABSOLUTE_PATH
+    ABSOLUTE_PATH = local.ABSOLUTE_PATH
+except ImportError:
+    ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../.."
 
 # Domain your instance should use, for example: 'http://example.com' (no / behind the path)
-DOMAIN = 'http://localhost:8000'
+try:
+    import local
+    from local import DOMAIN
+    DOMAIN = local.DOMAIN
+except ImportError:
+    DOMAIN = 'http://localhost:8000'
+    print 'WARNING: DOMAIN not found in local. Default: %s' % DOMAIN
 
 # Domain of your website, for example: 'http://example.com' (no / behind the path)
 WEBSITE_URL = 'http://example.com'
@@ -69,7 +81,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ABSOLUTE_PATH + '/media'
+try:
+    import local
+    from local import MEDIA_ROOT
+    MEDIA_ROOT = local.MEDIA_ROOT
+except ImportError:
+    MEDIA_ROOT = ABSOLUTE_PATH + '/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.

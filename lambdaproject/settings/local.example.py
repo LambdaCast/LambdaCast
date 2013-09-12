@@ -1,4 +1,5 @@
-from base import *
+from base import ABSOLUTE_PATH
+
 # Domain your instance should use, for example: 'http://example.com' (no / behind the path)
 DOMAIN = 'http://localhost:8000'
 
