@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block active-home %}class="active"{% endblock %}
 {% load custom_filters %}
+{% load i18n %}
 {% block body %}
 <div class="page-header">
+ {% if user.is_authenticated %}
+    <a href="/admin/portal/collection/{{ collection.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+  {% endif %}
 <h1>Playlist: {{ collection.title }}</h1>
 </div>
 <div class="row">
