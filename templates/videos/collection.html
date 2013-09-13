@@ -4,12 +4,15 @@
 {% load custom_filters %}
 {% block head %}
 {% block extra_head %}
-    <meta content="{{ collection.title }}" property="og:title"></meta>
-    <meta content="article" property="og:type"></meta>
-    <meta content="{{ settings.DOMAIN }}/collection/{{ collection.slug }}/" property="og:url"></meta>
-    <meta content="{{ collection.description|truncatechars:200 }}" property="og:description"></meta>
-    <meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
-    <meta content="LambdaCast" property="og:site_name"></meta>
+	<meta content="{{ collection.title }}" property="og:title"></meta>
+	<meta content="article" property="og:type"></meta>
+	<meta content="{{ settings.LOGO_URL }}" property="og:image"></meta>
+	<meta content="{{ settings.DOMAIN }}/collection/{{ collection.slug }}/" property="og:url"></meta>
+	{% if collection.description %}
+		<meta content="{{ collection.description|truncatechars:150 }}" property="og:description"></meta>
+	{% endif %}
+	<meta content="{{ settings.OG_LANG_CODE }}" property="og:locale"></meta>
+	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
 {% endblock %}
 {% endblock %}
 {% block body %}

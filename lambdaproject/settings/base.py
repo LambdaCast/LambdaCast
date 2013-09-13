@@ -15,11 +15,17 @@ except ImportError:
 # Domain of your website, for example: 'http://example.com' (no / behind the path)
 WEBSITE_URL = 'http://example.com'
 
+# Name of your website, will be displayed in title, header and opengraph
+SITE_NAME = 'LambdaCast'
+
 # Name of the author of the rss feed
 AUTHOR_NAME = 'Author Name'
 
 # E-mail adress for the contact link in the sidebar on index page
 CONTACT_EMAIL = 'root@example.com'
+
+# URL or path to your logo that will be displayed above the right sidebar
+LOGO_URL = DOMAIN + '/static/logo.png'
 
 # Django settings for lambdaproject.project
 DEBUG = True
@@ -57,6 +63,9 @@ TIME_ZONE = 'Europe/Berlin'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'de-de'
+
+# OpenGraph language code, you can look at the LANGUAGE_CODE and write it a bit different like "de_DE"
+OG_LANG_CODE = 'de_DE'
 
 LOCALE_PATHS = (
     ABSOLUTE_PATH + '/locale',

@@ -5,12 +5,15 @@
 {% block title %} - Channel: {{ channel.name }}{% endblock %}
 {% block head %}
 {% block extra_head %}
-    <meta content="{{ channel.name }}" property="og:title"></meta>
-    <meta content="article" property="og:type"></meta>
-    <meta content="{{ settings.DOMAIN }}/videos/channel/{{ channel.slug }}/" property="og:url"></meta>
-    <meta content="{{ channel.description|truncatechars:200 }}" property="og:description"></meta>
-    <meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
-    <meta content="LambdaCast" property="og:site_name"></meta>
+	<meta content="{{ channel.title }}" property="og:title"></meta>
+	<meta content="article" property="og:type"></meta>
+	<meta content="{{ settings.LOGO_URL }}" property="og:image"></meta>
+	<meta content="{{ settings.DOMAIN }}/channel/{{ channel.slug }}/" property="og:url"></meta>
+	{% if channel.description %}
+		<meta content="{{ channel.description|truncatechars:150 }}" property="og:description"></meta>
+	{% endif %}
+	<meta content="{{ settings.OG_LANG_CODE }}" property="og:locale"></meta>
+	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
 {% endblock %}
 {% endblock %}
 {% block rss %}

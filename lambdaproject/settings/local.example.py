@@ -6,6 +6,9 @@ DOMAIN = 'http://localhost:8000'
 # Domain of your website, for example: 'http://example.com' (no / behind the path)
 WEBSITE_URL = 'http://localhost'
 
+# Name of your website, will be displayed in title, header and opengraph
+SITE_NAME = 'LambdaCast'
+
 # Name of the author of the rss feed
 AUTHOR_NAME = 'Author Name'
 
@@ -50,3 +53,5 @@ TIME_ZONE = 'Europe/Berlin'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'de-de'
 
+# OpenGraph language code, you can look at the LANGUAGE_CODE and write it a bit different like "de_DE"
+OG_LANG_CODE = 'de_DE'
