@@ -84,6 +84,7 @@ def detail(request, slug):
             comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
 
             if form.is_valid():
+                    human = True
                     comment = form.save(commit=False)
                     comment.save()
                     message = _(u"Your comment will be moderated")

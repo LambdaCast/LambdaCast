@@ -1,6 +1,8 @@
 from django.forms import ModelForm
 from django import forms
 
+from captcha.fields import CaptchaField
+
 from portal.models import Video
 from portal.models import Comment
 
@@ -42,6 +44,7 @@ class VideoForm(ModelForm):
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
+    captcha = CaptchaField()
     class Meta:
         model = Comment
         exclude = ["ip","moderated","video"]

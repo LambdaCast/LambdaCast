@@ -17,8 +17,8 @@ body {
 	margin-right: 5px;
 }
 
-.row {
-	margin-top: 20px;
+#page-container {
+	margin-top: 30px;
 }
 
 .iframe-code {
@@ -58,3 +58,9 @@ ul.edit-menu {
 }
 
 #videoForm .control-label label { float: left; }
+
+.center {
+     float: none;
+     margin-left: auto;
+     margin-right: auto;
+}

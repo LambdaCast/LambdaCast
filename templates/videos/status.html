@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block active9 %}
-class="active"
-{% endblock %}
-{% block title %}
-- {% trans "Status" %}
-{% endblock %}
+{% block active-status %}class="active"{% endblock %}
+{% block title %} - {% trans "Status" %}{% endblock %}
 {% load custom_filters %}
 {% block body %}
 <div class="page-header">
@@ -17,7 +13,7 @@ class="active"
 		{% for video in processing_videos %}
 			<div class="row">
 				<div class="span12 well">
-					<h4>{{ video.title }}</h4>
+					<a href="/videos/{{ video.slug }}"><h4>{{ video.title }}</h4></a>
 					<span><strong>{% trans "Date" %}: </strong>{{ video.date }}</span><br/>
 					<span><strong>{% trans "Transcoding finished" %}:</strong>{% if video.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
 					<strong>{% trans "Torrent created" %}:</strong>{% if video.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}

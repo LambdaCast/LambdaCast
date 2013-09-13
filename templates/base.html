@@ -49,16 +49,16 @@
 					<a class="brand" href="/">LambdaCast</a>
 					<div class="nav-collapse">
 						<ul class="nav">
-							<li {% block active1 %}{% endblock %}><a href="/"><i class="icon-home"></i> {% trans "Portal" %}</a></li>
+							<li {% block active-home %}{% endblock %}><a href="/"><i class="icon-home"></i> {% trans "Portal" %}</a></li>
 							{% if settings.ENABLE_LIVESTREAMS %}
-							<li {% block active2 %}{% endblock %}><a href="/stream/">{% trans "Live" %}</a></li>
+							<li {% block active-stream %}{% endblock %}><a href="/stream/">{% trans "Live" %}</a></li>
 							{% endif %}
 							{% for page in page_list %}
-							<li {% block pages %}{% endblock %}>
-								{% if page.display == "body" %} 
-								<a href="/p/{{ page.slug }}/"><i class={{ page.icon }}></i> {{ page.title }}</a>
+							<li{% if page.slug == current_page.slug %} class="active"{% endif %}>
+								{% if page.display == "body" %}
+								<a href="/p/{{ page.slug }}/"><i class="icon-{{ page.icon }}"></i> {{ page.title }}</a>
 								{% else %}
-								<a href="{{ page.link }}"><i class={{ page.icon }}></i> {{ page.title }}</a>
+								<a href="{{ page.link }}"><i class="icon-{{ page.icon }}"></i> {{ page.title }}</a>
 								{% endif %}
 							</li>
 							{% endfor %}
@@ -70,12 +70,12 @@
 								</form>
 							</li>
 							{% if user.is_authenticated %}
-							<li {% block active5 %}{% endblock %}><a href="/submit/" title={% trans "Upload" %}><i class="icon-upload"></i></a></li>
-							<li {% block active9 %}{% endblock %}><a href="/status/" title={% trans "Status" %}><i class="icon-ok"></i></a></li>
-							<li {% block active6 %}{% endblock %}><a href="/admin/" title={% trans "Admin" %}><i class="icon-wrench"></i></a></li>
-							<li {% block active7 %}{% endblock %}><a href="/logout/" title={% trans "Logout" %}><i class="icon-off"></i></a></li>
+							<li {% block active-upload %}{% endblock %}><a href="/submit/" title="{% trans "Upload" %}"><i class="icon-upload"></i></a></li>
+							<li {% block active-status %}{% endblock %}><a href="/status/" title="{% trans "Status" %}"><i class="icon-ok"></i></a></li>
+							<li><a href="/admin/" title="{% trans "Admin" %}"><i class="icon-wrench"></i></a></li>
+							<li><a href="/logout/" title="{% trans "Logout" %}"><i class="icon-off"></i></a></li>
 							{% else %}
-							<li {% block active8 %}{% endblock %}><a href="/login/"><i class="icon-user"></i> {% trans "Login" %}</a></li>
+							<li {% block active-login %}{% endblock %}><a href="/login/"><i class="icon-user"></i> {% trans "Login" %}</a></li>
 							{% endif %}
 						</ul>
 					</div><!--/.nav-collapse -->
@@ -83,7 +83,7 @@
 			</div>
 		</div>
 
-		<div class="container">
+		<div class="container" id="page-container">
 			{% block body %}{% endblock %}
 		</div> <!-- /container -->
 
