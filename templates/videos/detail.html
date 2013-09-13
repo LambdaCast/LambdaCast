@@ -12,13 +12,15 @@
     <meta content="article" property="og:type"></meta>
     {% if video.videoThumbURL %}
       <meta content="{{ video.videoThumbURL }}" property="og:image"></meta>
-    {% else %}
+    {% elif video.audioThumbURL %}
       <meta content="{{ video.audioThumbURL }}" property="og:image"></meta>
+    {% else %}
+      <meta content="{{ settings.LOGO_URL }}" property="og:image"></meta>
     {% endif %}
     <meta content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/" property="og:url"></meta>
-    <meta content="{{ video.description|truncatechars:200 }}" property="og:description"></meta>
-    <meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
-    <meta content="LambdaCast" property="og:site_name"></meta>
+    <meta content="{{ video.markdown_free|truncatechars:90 }}" property="og:description"></meta>
+    <meta content="{{ settings.OG_LANG_CODE }}" property="og:locale"></meta>
+    <meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
 {% endblock %}
 {% endblock %}
 {% block active-home %}class="active"{% endblock %}
