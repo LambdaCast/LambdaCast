@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 01:51+0200\n"
+"POT-Creation-Date: 2013-09-02 15:33+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgstr "Aktiviert"
 
 #: pages/models.py:183
 msgid "Is part of the URL that you can define"
-msgstr ""
+msgstr "Ist Teil der URL, die festgelegt werden kann"
 
 #: pages/models.py:184 portal/models.py:44 portal/models.py:261
 #: portal/models.py:272
@@ -118,31 +118,31 @@ msgstr "Titel"
 
 #: pages/models.py:186
 msgid "Display"
-msgstr ""
+msgstr "Anzeige"
 
 #: pages/models.py:187
 msgid "Body"
-msgstr ""
+msgstr "Inhalt"
 
 #: pages/models.py:188
 msgid "Icon"
-msgstr ""
+msgstr "Symbol"
 
 #: pages/models.py:189
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: pages/models.py:189
 msgid "URL that links to an external website"
-msgstr ""
+msgstr "URL die zu einer externen Webseite verweist"
 
 #: pages/models.py:190
 msgid "Order"
-msgstr ""
+msgstr "Reihenfolge"
 
 #: pages/models.py:190
 msgid "Set the order of the menu items with smallest number first"
-msgstr ""
+msgstr "Die Reihenfolge der Menüpunkte beginnt mit der kleinsten Zahl"
 
 #: portal/admin.py:12
 msgid "Publish marked media"
@@ -321,7 +321,7 @@ msgstr ""
 msgid "Use a picture as cover for the media list"
 msgstr "Benutze ein Bild als Cover für die Auflistung der Inhalte."
 
-#: portal/models.py:63 templates/videos/detail.html:153
+#: portal/models.py:63 templates/videos/detail.html:156
 msgid "Duration"
 msgstr "Dauer"
 
@@ -439,7 +439,7 @@ msgstr "Kanäle die der Sammlung hinzugefügt werden"
 msgid "Your comment will be moderated"
 msgstr "Dein Kommentar wird freigeschaltet"
 
-#: portal/views.py:325
+#: portal/views.py:333
 msgid "Video was updated"
 msgstr "Inhalte wurden aktualisiert"
 
@@ -584,80 +584,80 @@ msgstr "Warnung!"
 msgid "Username and password are not working together"
 msgstr "Benutzername und Passwort sind nicht passend"
 
-#: templates/videos/channel.html:8
+#: templates/videos/channel.html:7
 msgid "Channel Original Feed (Torrents)"
 msgstr "Kanal Original Feed (Torrents)"
 
-#: templates/videos/channel.html:11
+#: templates/videos/channel.html:10
 msgid "Channel Video Feed (MP4)"
 msgstr "Kanal Video Feed (MP4)"
 
-#: templates/videos/channel.html:12
+#: templates/videos/channel.html:11
 msgid "Channel Video Feed (WEBM)"
 msgstr "Kanal Video Feed (WEBM)"
 
-#: templates/videos/channel.html:15
+#: templates/videos/channel.html:14
 msgid "Channel Audio Feed (MP3)"
 msgstr "Kanal Audio Feed (MP3)"
 
-#: templates/videos/channel.html:16
+#: templates/videos/channel.html:15
 msgid "Channel Audio Feed (OGG)"
 msgstr "Kanal Audio Feed (OGG)"
 
-#: templates/videos/channel.html:30
+#: templates/videos/channel.html:29
 msgid "Latest Media"
 msgstr "Neuste Inhalte"
 
-#: templates/videos/channel.html:43 templates/videos/index.html:20
+#: templates/videos/channel.html:42 templates/videos/index.html:20
 msgid "All Channels"
 msgstr "Alle Kanäle"
 
-#: templates/videos/channel.html:57
+#: templates/videos/channel.html:56
 msgid "Later"
 msgstr "Später"
 
-#: templates/videos/channel.html:62
+#: templates/videos/channel.html:61
 msgid "Earlier"
 msgstr "Früher"
 
-#: templates/videos/channel.html:72 templates/videos/index.html:52
+#: templates/videos/channel.html:71 templates/videos/index.html:52
 #: templates/videos/list.html:18 templates/videos/search_results.html:18
 msgid "Original Material"
 msgstr "Originales Material"
 
-#: templates/videos/channel.html:81 templates/videos/collection.html:25
+#: templates/videos/channel.html:80 templates/videos/collection.html:25
 #: templates/videos/index.html:61 templates/videos/list.html:27
 #: templates/videos/search_results.html:27
 msgid "Video-Podcast"
 msgstr ""
 
-#: templates/videos/channel.html:84 templates/videos/index.html:64
+#: templates/videos/channel.html:83 templates/videos/index.html:64
 #: templates/videos/list.html:30 templates/videos/search_results.html:30
 msgid "MP4-Format"
 msgstr ""
 
-#: templates/videos/channel.html:87 templates/videos/index.html:67
+#: templates/videos/channel.html:86 templates/videos/index.html:67
 #: templates/videos/list.html:33 templates/videos/search_results.html:33
 msgid "WEBM-Format"
 msgstr ""
 
-#: templates/videos/channel.html:93 templates/videos/collection.html:36
+#: templates/videos/channel.html:92 templates/videos/collection.html:36
 #: templates/videos/index.html:73 templates/videos/list.html:39
 #: templates/videos/search_results.html:39
 msgid "Audio-Podcast"
 msgstr ""
 
-#: templates/videos/channel.html:96 templates/videos/index.html:76
+#: templates/videos/channel.html:95 templates/videos/index.html:76
 #: templates/videos/list.html:42 templates/videos/search_results.html:42
 msgid "MP3-Format"
 msgstr ""
 
-#: templates/videos/channel.html:99 templates/videos/index.html:79
+#: templates/videos/channel.html:98 templates/videos/index.html:79
 #: templates/videos/list.html:45 templates/videos/search_results.html:45
 msgid "OGG-Format"
 msgstr ""
 
-#: templates/videos/channel.html:104 templates/videos/index.html:84
+#: templates/videos/channel.html:103 templates/videos/index.html:84
 #: templates/videos/list.html:50 templates/videos/search_results.html:50
 msgid "Contact"
 msgstr "Kontakt"
@@ -699,31 +699,35 @@ msgstr "Hochgeladen von"
 msgid "Embedding"
 msgstr "Einbetten"
 
-#: templates/videos/detail.html:157
+#: templates/videos/detail.html:153 templates/videos/status.html:21
+msgid "Wordpress Embedding Code"
+msgstr "Wordpress-Code zum Einbetten"
+
+#: templates/videos/detail.html:160
 msgid "Torrent"
 msgstr ""
 
-#: templates/videos/detail.html:158
+#: templates/videos/detail.html:161
 msgid "Download Original"
 msgstr "Download des Originals"
 
-#: templates/videos/detail.html:160
+#: templates/videos/detail.html:163
 msgid "Download"
 msgstr ""
 
-#: templates/videos/detail.html:163
+#: templates/videos/detail.html:166
 msgid "Download MP4 Video"
 msgstr ""
 
-#: templates/videos/detail.html:168
+#: templates/videos/detail.html:171
 msgid "Download WEBM Video"
 msgstr ""
 
-#: templates/videos/detail.html:173
+#: templates/videos/detail.html:176
 msgid "Download MP3 Audio"
 msgstr ""
 
-#: templates/videos/detail.html:178
+#: templates/videos/detail.html:181
 msgid "Download OGG Audio"
 msgstr ""
 
@@ -750,38 +754,41 @@ msgid "Publish automatically"
 msgstr "Automatisch veröffentlichen"
 
 #: templates/videos/status.html:21
+msgid "Show code"
+msgstr "Zeige Quellcode"
+
+#: templates/videos/status.html:22
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: templates/videos/status.html:30
+#: templates/videos/status.html:31
 msgid "No tasks"
 msgstr "Keine Aufgaben"
 
-#: templates/videos/status.html:36
+#: templates/videos/status.html:37
 msgid "There are no media to transcode"
 msgstr "Es gibt keine Medien die transkodiert werden können"
 
-#: templates/videos/status.html:42
+#: templates/videos/status.html:43
 msgid "Log"
 msgstr ""
 
-#: templates/videos/status.html:45
+#: templates/videos/status.html:46
 msgid "Loading"
 msgstr "Laden"
 
-#: templates/videos/status.html:48
+#: templates/videos/status.html:49
 msgid "Reload"
 msgstr "Neu Laden"
 
-#: templates/videos/status.html:49
+#: templates/videos/status.html:50
 msgid "Close"
 msgstr "Schließen"
 
 #: templates/videos/videolist.html:26
 msgid "Playlist"
-msgstr ""
+msgstr "Wiedergabeliste"
 
 #: templates/videos/videolist.html:33
 msgid "No videos are available."
 msgstr "Es sind keine Videos verfügbar"
-

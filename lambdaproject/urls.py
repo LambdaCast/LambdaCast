@@ -45,6 +45,11 @@ urlpatterns = patterns('',
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/torrent/$', CollectionFeedTorrent()),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    
+)
+
+urlpatterns += patterns('',
+    url(r'^captcha/', include('captcha.urls')),
 )
 
 if settings.DEBUG:
