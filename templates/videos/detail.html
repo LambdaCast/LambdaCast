@@ -79,7 +79,7 @@
 				<div class="row">
 					<div class="span8">
 						<div class="well">
-							<strong>{% trans "Name: " %}</strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>{% trans "Zeit: " %}</strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
+							<strong>{% trans "Name" %}:</strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>{% trans "Time" %}:</strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
 							<div class="comment-body">{{ comment.comment }}	</div>
 						</div>
 					</div>
@@ -156,6 +156,12 @@
 			{% if video.duration %}
 			<dt>{% trans "Duration" %}:</dt>
 			<dd><i class="icon-time"></i> {{ video.duration|secondstohms }}</dd>
+			{% endif %}
+			<dt>{% trans "License" %}:</dt>
+			{% if video.license == "None" %}
+			<dd><i class="icon-book"></i> {% trans "None" %}</a></dd>
+			{% else %}
+			<dd><i class="icon-book"></i> <a href="{{ video.get_license_link }}">{{ video.license }}</a></dd>
 			{% endif %}
 			{% if video.torrentURL %}
 			<dt>{% trans "Torrent" %}:</dt>

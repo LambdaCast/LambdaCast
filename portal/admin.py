@@ -22,7 +22,7 @@ class VideoAdmin (admin.ModelAdmin):
     list_filter = ('kind', 'published', 'channel')
     fieldsets = (
         (None, {
-            'fields': ('title', 'date', 'description', 'channel', 'linkURL', 'tags','published')
+            'fields': ('title', 'date', 'description', 'channel', 'linkURL', 'tags','published','license')
         }),
         (_(u'Advanced options'), {
             'classes': ('collapse',),

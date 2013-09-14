@@ -28,6 +28,15 @@ import markdown
 
 from BitTornadoABC.btmakemetafile import calcsize, make_meta_file, ignore
 
+LICENSE_CHOICES = (
+    ("None", _(u"No License")),
+    ("CC0", _(u"Public Domain/CC0")),
+    ("CC-BY", _(u"CreativeCommons - Attribution")),
+    ("CC-BY-NC", _(u"CreativeCommons - Attribution - NonCommercial")),
+    ("CC-BY-NC-ND", _(u"CreativeCommons - Attribution - NonCommercial - NoDerivs")),
+    ("CC-BY-ND", _(u"CreativeCommons - Attribution - NoDerivs")),
+) 
+
 KIND_CHOICES = (
     (0, _(u'Video-only')),
     (1, _(u'Audio-only')),
@@ -70,7 +79,8 @@ class Video(models.Model):
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     originalFile = models.FileField(_(u"File"),upload_to="raw/%Y/%m/%d/",max_length=2048)
-    
+    license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
+
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
@@ -254,7 +264,22 @@ class Video(models.Model):
         self.torrentDone = True
         self.published = self.autoPublish
         self.save()
+
+    def get_license_link(self):
+        if self.license == "CC0":
+            return _(u"https://creativecommons.org/publicdomain/zero/1.0/")
+        elif self.license == "CC-BY":
+            return _(u"http://creativecommons.org/licenses/by/3.0/")
+        elif self.license == "CC-BY-NC":
+            return _(u"http://creativecommons.org/licenses/by-nc/3.0/")
+        elif self.license == "CC-BY-NC-ND":
+            return _(u"http://creativecommons.org/licenses/by-nc-nd/3.0/")
+        elif self.license == "CC-BY-ND":
+            return _(u"http://creativecommons.org/licenses/by-nd/3.0/")
+        elif self.license == "None":
+            return ""
         
+ 
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''
     name = models.CharField(_(u"Name"),max_length=30)
