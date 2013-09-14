@@ -24,9 +24,6 @@ AUTHOR_NAME = 'Author Name'
 # E-mail adress for the contact link in the sidebar on index page
 CONTACT_EMAIL = 'root@example.com'
 
-# URL or path to your logo that will be displayed above the right sidebar
-LOGO_URL = DOMAIN + '/static/logo.png'
-
 # Django settings for lambdaproject.project
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -123,6 +120,9 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+# URL or path to your logo that will be displayed above the right sidebar
+LOGO_URL = STATIC_URL + '/logo.png'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ThisOneIsNotUniqeSoPleaseChange'
