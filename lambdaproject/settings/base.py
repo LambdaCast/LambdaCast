@@ -59,10 +59,7 @@ TIME_ZONE = 'Europe/Berlin'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'de-de'
-
-# OpenGraph language code, you can look at the LANGUAGE_CODE and write it a bit different like "de_DE"
-OG_LANG_CODE = 'de_DE'
+LANGUAGE_CODE = 'de_DE'
 
 LOCALE_PATHS = (
     ABSOLUTE_PATH + '/locale',

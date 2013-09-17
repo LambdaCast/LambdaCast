@@ -12,7 +12,7 @@
 	{% if channel.description %}
 		<meta content="{{ channel.description|truncatechars:150 }}" property="og:description"></meta>
 	{% endif %}
-	<meta content="{{ settings.OG_LANG_CODE }}" property="og:locale"></meta>
+	<meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
 	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
 {% endblock %}
 {% endblock %}
