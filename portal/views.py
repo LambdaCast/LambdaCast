@@ -174,6 +174,7 @@ def submit(request):
             if form.is_valid():
                     cmodel = form.save()
                     cmodel.audioThumbURL = form.data['thumbURL']
+                    cmodel.videoThumbURL = form.data['thumbURL']
                     if cmodel.originalFile:
                         if settings.USE_TRANLOADIT:
                             client = Client(settings.TRANSLOAD_AUTH_KEY, settings.TRANSLOAD_AUTH_SECRET)
