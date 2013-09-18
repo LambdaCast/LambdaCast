@@ -16,7 +16,7 @@ def getThumbnails(thumbssettings):
     if not os.path.exists(thumbsdir):
         os.makedirs(thumbsdir)
     thumbsdir = thumbsdir + '/'
-    thumb_list = []
+    thumb_list = [("", "---")]
     for thumbfile in os.listdir(thumbsdir):
         if os.path.isfile(os.path.join(thumbsdir, thumbfile)):
             thumb_list.append((("http://" + thumbfile),("http://" + thumbfile)))
@@ -29,18 +29,17 @@ class VideoForm(ModelForm):
 
     class Meta:
         model = Video
-        exclude = ["slug","mp4URL","mp4Size","flashURL","flashSize","webmURL","webmSize","mp3URL","mp3Size","oggURL","oggSize","ogvURL","ogvSize","duration","published","encodingDone","assemblyid","torrentURL","user","autoPublish", "torrentDone", "audioThumbURL", "videoThumbURL"]
+        exclude = ["slug","mp4URL","mp4Size","flashURL","flashSize","webmURL","webmSize","mp3URL","mp3Size","oggURL","oggSize","ogvURL","ogvSize","duration","published","encodingDone","assemblyid","torrentURL","user","autoPublish", "torrentDone", "videoThumbURL"]
 
     def __init__(self, *args, **kwargs):
         super(VideoForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
-#            if fieldName == 'audioThumbURL':
-#                self.fields['audioThumbURL'] = forms.MultipleChoiceField(choices=THUMBNAILS_LIST) 
-#            else:
-            field = self.fields[fieldName]
-            if field.required:
-                field.widget.attrs['class'] = 'required'
-        Thumb = self.fields['Thumb'] = forms.ChoiceField(choices=THUMBNAILS_LIST)
+            if fieldName == 'audioThumbURL':
+                self.fields['thumbURL'] = forms.ChoiceField(choices=THUMBNAILS_LIST, required=False) 
+            else:
+                field = self.fields[fieldName]
+                if field.required:
+                    field.widget.attrs['class'] = 'required'
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
