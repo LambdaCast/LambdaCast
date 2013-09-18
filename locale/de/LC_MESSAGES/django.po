@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-02 15:33+0200\n"
+"POT-Creation-Date: 2013-09-19 01:45+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,12 +31,12 @@ msgid "Stream title"
 msgstr "Stream Titel"
 
 #: livestream/models.py:15 pages/models.py:183 portal/models.py:45
-#: portal/models.py:244 portal/models.py:274
+#: portal/models.py:275 portal/models.py:305
 msgid "Slug"
 msgstr "Slug"
 
-#: livestream/models.py:15 portal/models.py:45 portal/models.py:244
-#: portal/models.py:274
+#: livestream/models.py:15 portal/models.py:45 portal/models.py:275
+#: portal/models.py:305
 msgid "Slugs are parts of an URL that you can define"
 msgstr ""
 
@@ -49,8 +49,8 @@ msgid "End of the event"
 msgstr "Ende der Veranstaltung"
 
 #: livestream/models.py:18 pages/models.py:185 portal/models.py:47
-#: portal/models.py:245 portal/models.py:262 portal/models.py:273
-#: templates/livestream/current.html:37 templates/videos/detail.html:66
+#: portal/models.py:276 portal/models.py:293 portal/models.py:304
+#: templates/livestream/current.html:37 templates/videos/detail.html:69
 #: templates/videos/videolist.html:22 templates/videos/videolist.html.py:27
 msgid "Description"
 msgstr "Beschreibung"
@@ -84,14 +84,14 @@ msgstr "iFrame des Streams"
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: livestream/models.py:24 portal/models.py:70 portal/models.py:235
-#: portal/models.py:246 portal/models.py:265 portal/models.py:278
+#: livestream/models.py:24 portal/models.py:70 portal/models.py:266
+#: portal/models.py:277 portal/models.py:296 portal/models.py:309
 msgid "Created"
 msgstr "Erstellt"
 
 #: livestream/models.py:25 pages/models.py:182 portal/models.py:71
-#: portal/models.py:236 portal/models.py:247 portal/models.py:266
-#: portal/models.py:279
+#: portal/models.py:267 portal/models.py:278 portal/models.py:297
+#: portal/models.py:310
 msgid "Modified"
 msgstr "Geändert"
 
@@ -103,7 +103,7 @@ msgstr ""
 msgid "display the content of body"
 msgstr ""
 
-#: pages/models.py:181 portal/models.py:258
+#: pages/models.py:181 portal/models.py:289
 msgid "Activated"
 msgstr "Aktiviert"
 
@@ -111,8 +111,8 @@ msgstr "Aktiviert"
 msgid "Is part of the URL that you can define"
 msgstr "Ist Teil der URL, die festgelegt werden kann"
 
-#: pages/models.py:184 portal/models.py:44 portal/models.py:261
-#: portal/models.py:272
+#: pages/models.py:184 portal/models.py:44 portal/models.py:292
+#: portal/models.py:303
 msgid "Title"
 msgstr "Titel"
 
@@ -191,6 +191,10 @@ msgstr "LambdaCast: Torrents für den Kanal %s"
 msgid "LambdaCast: Videos in Collection %s"
 msgstr "LambdaCast: Videos in der Sammlung %s"
 
+#: portal/forms.py:40
+msgid "Thumbnail"
+msgstr "Vorschaubild"
+
 #: portal/models.py:32
 msgid "Video-only"
 msgstr "nur Videoinhalte"
@@ -203,7 +207,7 @@ msgstr "nur Audioinhalte"
 msgid "Audio and Video"
 msgstr "Audio und Video"
 
-#: portal/models.py:46 portal/models.py:275 templates/videos/detail.html:132
+#: portal/models.py:46 portal/models.py:306 templates/videos/detail.html:132
 #: templates/videos/status.html:17 templates/videos/videolist.html:28
 msgid "Date"
 msgstr "Datum"
@@ -227,7 +231,7 @@ msgstr "Benutzer"
 msgid "Shows which user made or uploaded the video"
 msgstr "Zeigt an welcher Benutzer den Inhalt hochgeladen oder gemacht hat"
 
-#: portal/models.py:49 portal/models.py:259 templates/videos/detail.html:135
+#: portal/models.py:49 portal/models.py:290 templates/videos/detail.html:135
 msgid "Channel"
 msgstr "Kanal"
 
@@ -241,7 +245,7 @@ msgstr ""
 "Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
 "Inhalt zu tun hat."
 
-#: portal/models.py:51 portal/models.py:264
+#: portal/models.py:51 portal/models.py:295
 msgid "Type"
 msgstr "Art des Inhalts"
 
@@ -321,7 +325,7 @@ msgstr ""
 msgid "Use a picture as cover for the media list"
 msgstr "Benutze ein Bild als Cover für die Auflistung der Inhalte."
 
-#: portal/models.py:63 templates/videos/detail.html:156
+#: portal/models.py:63 templates/videos/detail.html:157
 msgid "Duration"
 msgstr "Dauer"
 
@@ -329,7 +333,7 @@ msgstr "Dauer"
 msgid "The length of the media"
 msgstr "Die Dauer/Länge des Inhalts."
 
-#: portal/models.py:64 portal/models.py:263
+#: portal/models.py:64 portal/models.py:294
 msgid "Auto-Publish"
 msgstr "Automatisches Veröffentlichen"
 
@@ -359,63 +363,63 @@ msgstr ""
 msgid "File"
 msgstr "Datei"
 
-#: portal/models.py:133
+#: portal/models.py:164
 msgid "Encoding MP4 Failed"
 msgstr "Umwandlung der MP4-Datei fehlerhaft"
 
-#: portal/models.py:145
+#: portal/models.py:176
 msgid "Encoding WEBM Failed"
 msgstr "Umwandlung der WEBM-Datei fehlerhaft"
 
-#: portal/models.py:155
+#: portal/models.py:186
 msgid "Making Thumb Failed"
 msgstr "Erstellung des Vorschaubilded fehlerhaft"
 
-#: portal/models.py:181
+#: portal/models.py:212
 msgid "Encoding MP3 Failed"
 msgstr "Umwandlung der MP3-Datei fehlerhaft"
 
-#: portal/models.py:191
+#: portal/models.py:222
 msgid "Encoding OGG Failed"
 msgstr "Umwandlung der OGG-Datei fehlerhaft"
 
-#: portal/models.py:229 portal/models.py:243
+#: portal/models.py:260 portal/models.py:274
 msgid "Name"
 msgstr ""
 
-#: portal/models.py:230
+#: portal/models.py:261
 msgid "The IP of the one who posted the comment"
 msgstr "Die IP des Kommentators"
 
-#: portal/models.py:231
+#: portal/models.py:262
 msgid "Moderated"
 msgstr "Freigegeben"
 
-#: portal/models.py:232
+#: portal/models.py:263
 msgid "Timecode"
 msgstr "Zeitpunkt"
 
-#: portal/models.py:233
+#: portal/models.py:264
 msgid "Comment"
 msgstr "Kommentar"
 
-#: portal/models.py:234 templates/videos/detail.html:41
+#: portal/models.py:265 templates/videos/detail.html:44
 msgid "Video"
 msgstr "Inhalt"
 
-#: portal/models.py:245
+#: portal/models.py:276
 msgid "Describe the topic or content of the channel"
 msgstr "Beschreibe die Themen oder die Inhalte des Kanals"
 
-#: portal/models.py:248
+#: portal/models.py:279
 msgid "Featured"
 msgstr "Hervorgehoben"
 
-#: portal/models.py:259
+#: portal/models.py:290
 msgid "The media in the folder will be added to the channel automatically"
 msgstr "Die Inhalte im Ordner werden automatisch dem Kanal hinzugefügt"
 
-#: portal/models.py:260
+#: portal/models.py:291
 msgid ""
 "Set a folder you can add media in and then get it automatically listed in "
 "LambdaCast"
@@ -423,23 +427,23 @@ msgstr ""
 "Wähle einen Ordner aus dem man Inhalte hinzufügen kann und automatisch in "
 "LambdaCast erscheinen werden."
 
-#: portal/models.py:276
+#: portal/models.py:307
 msgid "Videos"
 msgstr "Inhalte"
 
-#: portal/models.py:276
+#: portal/models.py:307
 msgid "Media you want to add to your collection"
 msgstr "Inhalte die der Sammlung hinzufügt werden"
 
-#: portal/models.py:277
+#: portal/models.py:308
 msgid "Channels you want to add to your collection"
 msgstr "Kanäle die der Sammlung hinzugefügt werden"
 
-#: portal/views.py:89
+#: portal/views.py:90
 msgid "Your comment will be moderated"
 msgstr "Dein Kommentar wird freigeschaltet"
 
-#: portal/views.py:333
+#: portal/views.py:327
 msgid "Video was updated"
 msgstr "Inhalte wurden aktualisiert"
 
@@ -576,6 +580,11 @@ msgstr "Es sind derzeit keine Streams geplant"
 msgid "The next events"
 msgstr "Die nächsten Streams"
 
+#: templates/pages/page.html:8 templates/videos/channel.html:22
+#: templates/videos/collection.html:8 templates/videos/detail.html:14
+msgid "Edit"
+msgstr "Bearbeiten"
+
 #: templates/registration/login.html:14
 msgid "Warning!"
 msgstr "Warnung!"
@@ -584,112 +593,116 @@ msgstr "Warnung!"
 msgid "Username and password are not working together"
 msgstr "Benutzername und Passwort sind nicht passend"
 
-#: templates/videos/channel.html:7
+#: templates/videos/channel.html:8
 msgid "Channel Original Feed (Torrents)"
 msgstr "Kanal Original Feed (Torrents)"
 
-#: templates/videos/channel.html:10
+#: templates/videos/channel.html:11
 msgid "Channel Video Feed (MP4)"
 msgstr "Kanal Video Feed (MP4)"
 
-#: templates/videos/channel.html:11
+#: templates/videos/channel.html:12
 msgid "Channel Video Feed (WEBM)"
 msgstr "Kanal Video Feed (WEBM)"
 
-#: templates/videos/channel.html:14
+#: templates/videos/channel.html:15
 msgid "Channel Audio Feed (MP3)"
 msgstr "Kanal Audio Feed (MP3)"
 
-#: templates/videos/channel.html:15
+#: templates/videos/channel.html:16
 msgid "Channel Audio Feed (OGG)"
 msgstr "Kanal Audio Feed (OGG)"
 
-#: templates/videos/channel.html:29
+#: templates/videos/channel.html:33
 msgid "Latest Media"
 msgstr "Neuste Inhalte"
 
-#: templates/videos/channel.html:42 templates/videos/index.html:20
+#: templates/videos/channel.html:46 templates/videos/index.html:20
 msgid "All Channels"
 msgstr "Alle Kanäle"
 
-#: templates/videos/channel.html:56
+#: templates/videos/channel.html:60
 msgid "Later"
 msgstr "Später"
 
-#: templates/videos/channel.html:61
+#: templates/videos/channel.html:65
 msgid "Earlier"
 msgstr "Früher"
 
-#: templates/videos/channel.html:71 templates/videos/index.html:52
+#: templates/videos/channel.html:75 templates/videos/index.html:52
 #: templates/videos/list.html:18 templates/videos/search_results.html:18
 msgid "Original Material"
 msgstr "Originales Material"
 
-#: templates/videos/channel.html:80 templates/videos/collection.html:25
+#: templates/videos/channel.html:84 templates/videos/collection.html:29
 #: templates/videos/index.html:61 templates/videos/list.html:27
 #: templates/videos/search_results.html:27
 msgid "Video-Podcast"
 msgstr ""
 
-#: templates/videos/channel.html:83 templates/videos/index.html:64
+#: templates/videos/channel.html:87 templates/videos/index.html:64
 #: templates/videos/list.html:30 templates/videos/search_results.html:30
 msgid "MP4-Format"
 msgstr ""
 
-#: templates/videos/channel.html:86 templates/videos/index.html:67
+#: templates/videos/channel.html:90 templates/videos/index.html:67
 #: templates/videos/list.html:33 templates/videos/search_results.html:33
 msgid "WEBM-Format"
 msgstr ""
 
-#: templates/videos/channel.html:92 templates/videos/collection.html:36
+#: templates/videos/channel.html:96 templates/videos/collection.html:40
 #: templates/videos/index.html:73 templates/videos/list.html:39
 #: templates/videos/search_results.html:39
 msgid "Audio-Podcast"
 msgstr ""
 
-#: templates/videos/channel.html:95 templates/videos/index.html:76
+#: templates/videos/channel.html:99 templates/videos/index.html:76
 #: templates/videos/list.html:42 templates/videos/search_results.html:42
 msgid "MP3-Format"
 msgstr ""
 
-#: templates/videos/channel.html:98 templates/videos/index.html:79
+#: templates/videos/channel.html:102 templates/videos/index.html:79
 #: templates/videos/list.html:45 templates/videos/search_results.html:45
 msgid "OGG-Format"
 msgstr ""
 
-#: templates/videos/channel.html:103 templates/videos/index.html:84
+#: templates/videos/channel.html:107 templates/videos/index.html:84
 #: templates/videos/list.html:50 templates/videos/search_results.html:50
 msgid "Contact"
 msgstr "Kontakt"
 
-#: templates/videos/detail.html:42
+#: templates/videos/detail.html:45
 msgid "Audio"
 msgstr ""
 
-#: templates/videos/detail.html:73
+#: templates/videos/detail.html:76
 msgid "Comments"
 msgstr "Kommentare"
 
-#: templates/videos/detail.html:89
+#: templates/videos/detail.html:82
+msgid "Name: "
+msgstr ""
+
+#: templates/videos/detail.html:82
+msgid "Zeit: "
+msgstr ""
+
+#: templates/videos/detail.html:92
 msgid "No comments"
 msgstr "Keine Kommentare"
 
-#: templates/videos/detail.html:104 templates/videos/submit.html:14
+#: templates/videos/detail.html:107 templates/videos/submit.html:14
 #: templates/videos/submit.html.py:20
 msgid "Error!"
 msgstr "Fehler!"
 
-#: templates/videos/detail.html:116
+#: templates/videos/detail.html:120
+msgid "Refresh Captcha"
+msgstr ""
+
+#: templates/videos/detail.html:124
 msgid "Send"
 msgstr "Senden"
-
-#: templates/videos/detail.html:125
-msgid "Actions"
-msgstr "Aktionen"
-
-#: templates/videos/detail.html:127
-msgid "Edit"
-msgstr "Bearbeiten"
 
 #: templates/videos/detail.html:139
 msgid "Uploaded by"
@@ -699,35 +712,36 @@ msgstr "Hochgeladen von"
 msgid "Embedding"
 msgstr "Einbetten"
 
-#: templates/videos/detail.html:153 templates/videos/status.html:21
-msgid "Wordpress Embedding Code"
+#: templates/videos/detail.html:153
+#, fuzzy
+msgid "Wordpress Embed Code"
 msgstr "Wordpress-Code zum Einbetten"
 
-#: templates/videos/detail.html:160
+#: templates/videos/detail.html:161
 msgid "Torrent"
 msgstr ""
 
-#: templates/videos/detail.html:161
+#: templates/videos/detail.html:162
 msgid "Download Original"
 msgstr "Download des Originals"
 
-#: templates/videos/detail.html:163
+#: templates/videos/detail.html:164
 msgid "Download"
 msgstr ""
 
-#: templates/videos/detail.html:166
+#: templates/videos/detail.html:167
 msgid "Download MP4 Video"
 msgstr ""
 
-#: templates/videos/detail.html:171
+#: templates/videos/detail.html:172
 msgid "Download WEBM Video"
 msgstr ""
 
-#: templates/videos/detail.html:176
+#: templates/videos/detail.html:177
 msgid "Download MP3 Audio"
 msgstr ""
 
-#: templates/videos/detail.html:181
+#: templates/videos/detail.html:182
 msgid "Download OGG Audio"
 msgstr ""
 
@@ -754,34 +768,30 @@ msgid "Publish automatically"
 msgstr "Automatisch veröffentlichen"
 
 #: templates/videos/status.html:21
-msgid "Show code"
-msgstr "Zeige Quellcode"
-
-#: templates/videos/status.html:22
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: templates/videos/status.html:31
+#: templates/videos/status.html:30
 msgid "No tasks"
 msgstr "Keine Aufgaben"
 
-#: templates/videos/status.html:37
+#: templates/videos/status.html:36
 msgid "There are no media to transcode"
 msgstr "Es gibt keine Medien die transkodiert werden können"
 
-#: templates/videos/status.html:43
+#: templates/videos/status.html:42
 msgid "Log"
 msgstr ""
 
-#: templates/videos/status.html:46
+#: templates/videos/status.html:45
 msgid "Loading"
 msgstr "Laden"
 
-#: templates/videos/status.html:49
+#: templates/videos/status.html:48
 msgid "Reload"
 msgstr "Neu Laden"
 
-#: templates/videos/status.html:50
+#: templates/videos/status.html:49
 msgid "Close"
 msgstr "Schließen"
 
@@ -792,3 +802,9 @@ msgstr "Wiedergabeliste"
 #: templates/videos/videolist.html:33
 msgid "No videos are available."
 msgstr "Es sind keine Videos verfügbar"
+
+#~ msgid "Actions"
+#~ msgstr "Aktionen"
+
+#~ msgid "Show code"
+#~ msgstr "Zeige Quellcode"

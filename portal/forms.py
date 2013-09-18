@@ -6,6 +6,8 @@ from captcha.fields import CaptchaField
 from portal.models import Video
 from portal.models import Comment
 
+from django.utils.translation import ugettext_lazy as _
+
 import lambdaproject.settings as settings
 import os
 import os.path
@@ -35,7 +37,7 @@ class VideoForm(ModelForm):
         THUMBNAILS_LIST = getThumbnails(settings.THUMBNAILS_DIR)
         for fieldName in self.fields:
             if fieldName == 'audioThumbURL':
-                self.fields['thumbURL'] = forms.ChoiceField(choices=THUMBNAILS_LIST, required=False) 
+                self.fields['thumbURL'] = forms.ChoiceField(choices=THUMBNAILS_LIST, required=False, label=_("Thumbnail")) 
             else:
                 field = self.fields[fieldName]
                 if field.required:
