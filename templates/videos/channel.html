@@ -5,15 +5,15 @@
 {% block title %} - Channel: {{ channel.name }}{% endblock %}
 {% block head %}
 {% block extra_head %}
-	<meta content="{{ channel.title }}" property="og:title"></meta>
-	<meta content="article" property="og:type"></meta>
-	<meta content="{{ settings.LOGO_URL }}" property="og:image"></meta>
-	<meta content="{{ settings.DOMAIN }}/channel/{{ channel.slug }}/" property="og:url"></meta>
-	{% if channel.description %}
-		<meta content="{{ channel.description|truncatechars:150 }}" property="og:description"></meta>
-	{% endif %}
-	<meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
-	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
+        {% block og_title %}{{ channel.title }}{% endblock %}
+        {% block og_type %}article{% endblock %}
+        {% block og_image %}{{ settings.LOGO_URL }}{% endblock %}
+        {% block og_url %}{{ settings.DOMAIN }}/channel/{{ channel.slug }}/{% endblock %}
+        {% block extra_og %}
+        {% if collection.description %}
+                <meta content="{{ channel.description|truncatechars:150 }}" property="og:description"></meta>
+        {% endif %}
+        {% endblock %}
 {% endblock %}
 {% endblock %}
 {% block rss %}

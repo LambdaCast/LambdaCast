@@ -2,6 +2,16 @@
 {% load i18n %}
 {% load custom_filters %}
 {% block title %} - {{ current_page.title }}{% endblock %}
+{% block og_title %}{{ channel.title }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_image %}{{ settings.LOGO_URL }}{% endblock %}
+{% block og_url %}{{ settings.DOMAIN }}/p/{{ page.slug }}/{% endblock %}
+{% block extra_og %}
+{% if page.description %}
+        <meta content="{{ page.description|truncatechars:150 }}" property="og:description"></meta>
+{% endif %}
+{% endblock %}
+
 {% block body %}
 <div class="page-header">
 	{% if perms.pages.change_page and user.is_staff %}

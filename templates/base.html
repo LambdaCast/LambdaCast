@@ -4,9 +4,16 @@
 	<head>
 		<meta charset="utf-8">
 		<title>{{ settings.SITE_NAME }}{% block title %}{% endblock %}</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="author" content="{{ settings.AUTHOR_NAME }}">
-		{% block extra_head %}{% endblock %}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+		<meta name="author" content="{{ settings.AUTHOR_NAME }}"></meta>
+		<meta content="{% block og_title %}{{ settings.SITE_NAME }}{% endblock %}" property="og:title"></meta>
+                <meta content="{% block og_type %}website{% endblock %}" property="og:type"></meta>
+                <meta content="{% block og_image %}{{ settings.LOGO_URL }}{% endblock %}" property="og:image"></meta>
+                <meta content="{% block og_url %}{{ settings.DOMAIN }}{{ settings.DOMAIN }}{% endblock %}" property="og:url"></meta>
+                <meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
+                <meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
+                {% block extra_og %}{% endblock %}
+{% block extra_head %}{% endblock %}
                 {% block rss %}
 		{% endblock %}
 		{% if settings.USE_BITTORRENT %}
