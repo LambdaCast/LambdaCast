@@ -22,7 +22,6 @@ def getThumbnails(thumbssettings):
             thumb_list.append((("http://" + thumbfile),("http://" + thumbfile)))
     return thumb_list
 
-THUMBNAILS_LIST = getThumbnails(settings.THUMBNAILS_DIR)
 
 class VideoForm(ModelForm):
     ''' Used for the uploading form '''
@@ -33,6 +32,7 @@ class VideoForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VideoForm, self).__init__(*args, **kwargs)
+        THUMBNAILS_LIST = getThumbnails(settings.THUMBNAILS_DIR)
         for fieldName in self.fields:
             if fieldName == 'audioThumbURL':
                 self.fields['thumbURL'] = forms.ChoiceField(choices=THUMBNAILS_LIST, required=False) 
