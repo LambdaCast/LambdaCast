@@ -21,7 +21,7 @@ def getThumbnails(thumbssettings):
     thumb_list = [("", "---")]
     for thumbfile in os.listdir(thumbsdir):
         if os.path.isfile(os.path.join(thumbsdir, thumbfile)):
-            thumb_list.append(((settings.DOMAIN + "/media/thumbnails/" + thumbfile),(settings.DOMAIN + "/media/thumbnails/" + thumbfile)))
+            thumb_list.append(((settings.DOMAIN + "/media/thumbnails/" + thumbfile),(thumbfile)))
     return thumb_list
 
 
