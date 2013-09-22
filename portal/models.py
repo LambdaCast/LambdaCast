@@ -56,6 +56,7 @@ class Video(models.Model):
     description = models.TextField(_(u"Description"),blank=True,help_text=_(u"Insert a description to the media. You can use Markdown to add formatting"))
     user = models.ForeignKey(User,verbose_name=_(u"User"), blank=True, null=True, help_text=_(u"Shows which user made or uploaded the video"))
     channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
+    license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
     linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
     kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
     torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
@@ -79,7 +80,6 @@ class Video(models.Model):
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     originalFile = models.FileField(_(u"File"),upload_to="raw/%Y/%m/%d/",max_length=2048)
-    license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
 
     def __unicode__(self):
         return self.title
