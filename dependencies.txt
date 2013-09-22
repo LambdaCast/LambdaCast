@@ -1,4 +1,4 @@
-Django==1.4
+Django==1.4.8
 Markdown==2.2.0
 South==0.7.5
 django-autoslug==1.5.0
