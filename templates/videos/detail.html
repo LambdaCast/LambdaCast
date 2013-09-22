@@ -8,23 +8,23 @@
 <script type="text/javascript" src="{{ STATIC_URL }}projekktor/projekktor.min.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
 {% block extra_head %}
-	<meta content="{{ video.title }}" property="og:title"></meta>
-	<meta content="article" property="og:type"></meta>
+	<meta property="og:title" content="{{ video.title }}"></meta>
+	<meta property="og:type" content="article"></meta>
 	{% if video.videoThumbURL %}
-		<meta content="{{ video.videoThumbURL }}" property="og:image"></meta>
+	<meta property="og:image" content="{{ video.videoThumbURL }}"></meta>
 	{% elif video.audioThumbURL %}
-		<meta content="{{ video.audioThumbURL }}" property="og:image"></meta>
+	<meta property="og:image" content="{{ video.audioThumbURL }}"></meta>
 	{% else %}
-		<meta content="{{ settings.LOGO_URL }}" property="og:image"></meta>
+	<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
 	{% endif %}
-	<meta content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/" property="og:url"></meta>
+	<meta property="og:url" content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/"></meta>
 	{% if video.description %}
-		<meta content="{{ video.markdown_free|truncatechars:150 }}" property="og:description"></meta>
+	<meta property="og:description" content="{{ video.markdown_free|truncatechars:150 }}"></meta>
 	{% else %}
-		<meta content="{{ settings.SITE_NAME }}" property="og:description"></meta>
+	<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
 	{% endif %}
-	<meta content="{{ settings.OG_LANGUAGE_CODE }}" property="og:locale"></meta>
-	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
+	<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
+	<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
 {% endblock %}
 {% block active-home %}class="active"{% endblock %}
