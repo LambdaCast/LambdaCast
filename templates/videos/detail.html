@@ -20,6 +20,8 @@
 	<meta content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/" property="og:url"></meta>
 	{% if video.description %}
 		<meta content="{{ video.markdown_free|truncatechars:150 }}" property="og:description"></meta>
+	{% else %}
+		<meta content="{{ settings.SITE_NAME }}" property="og:description"></meta>
 	{% endif %}
 	<meta content="{{ settings.OG_LANGUAGE_CODE }}" property="og:locale"></meta>
 	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
