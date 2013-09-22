@@ -1,7 +1,22 @@
 {% extends "base.html" %}
-{% block active-home %}class="active"{% endblock %}
-{% load custom_filters %}
 {% load i18n %}
+{% load custom_filters %}
+{% block active-home %}class="active"{% endblock %}
+{% block extra_meta %}
+		<meta property="og:title" content="{{ collection.title }}"></meta>
+		<meta property="og:type" content="article"></meta>
+		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
+		<meta property="og:url" content="{{ settings.DOMAIN }}/collection/{{ collection.slug }}/"></meta>
+		{% if collection.description %}
+		<meta property="og:description" content="{{ collection.description|truncatechars:150|remove_newlines }}"></meta>
+		{% else %}
+		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
+		{% endif %}
+		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
+		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
+{% endblock %}
+{% block head %}
+{% endblock %}
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_collection and user.is_staff %}

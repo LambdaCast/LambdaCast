@@ -2,6 +2,19 @@
 {% load i18n %}
 {% load custom_filters %}
 {% block title %} - {{ current_page.title }}{% endblock %}
+{% block extra_meta %}
+		<meta property="og:title" content="{{ current_page.title }}"></meta>
+		<meta property="og:type" content="article"></meta>
+		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
+		<meta property="og:url" content="{{ settings.DOMAIN }}/p/{{ current_page.slug }}/"></meta>
+		{% if collection.description %}
+		<meta property="og:description" content="{{ current_page.description|truncatechars:150|remove_newlines }}"></meta>
+		{% else %}
+		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
+		{% endif %}
+		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
+		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
+{% endblock %}
 {% block body %}
 <div class="page-header">
 	{% if perms.pages.change_page and user.is_staff %}
