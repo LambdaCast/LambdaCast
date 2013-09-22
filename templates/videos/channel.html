@@ -3,33 +3,31 @@
 {% load i18n %}
 {% block active-home %}class="active"{% endblock %}
 {% block title %} - Channel: {{ channel.name }}{% endblock %}
-{% block head %}
-{% block extra_head %}
-	<meta property="og:title" content="{{ channel.title }}"></meta>
-	<meta property="og:type" content="article"></meta>
-	<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
-	<meta property="og:url" content="{{ settings.DOMAIN }}/channel/{{ channel.slug }}/"></meta>
-	{% if channel.description %}
-	<meta property="og:description" content="{{ channel.description|truncatechars:150 }}"></meta>
-	{% else %}
-	<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
-	{% endif %}
-	<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
-	<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
-{% endblock %}
+{% block extra_meta %}
+		<meta property="og:title" content="{{ channel.title }}"></meta>
+		<meta property="og:type" content="article"></meta>
+		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
+		<meta property="og:url" content="{{ settings.DOMAIN }}/channel/{{ channel.slug }}/"></meta>
+		{% if channel.description %}
+		<meta property="og:description" content="{{ channel.description|truncatechars:150 }}"></meta>
+		{% else %}
+		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
+		{% endif %}
+		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
+		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
 {% block rss %}
-{% if settings.USE_BITTORRENT %}
-<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Original Feed (Torrents)" %}" href="/feeds/{{ channel.slug }}/torrent/" />
-{% endif %}
-{% if settings.ENABLE_VIDEO_FEEDS %}
-<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (MP4)" %}" href="/feeds/{{ channel.slug }}/mp4/" />
-<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (WEBM)" %}" href="/feeds/{{ channel.slug }}/webm/" />
-{% endif %}
-{% if settings.ENABLE_AUDIO_FEEDS %}
-<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (MP3)" %}" href="/feeds/{{ channel.slug }}/mp3/" />
-<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (OGG)" %}" href="/feeds/{{ channel.slug }}/ogg/" />
-{% endif %}
+		{% if settings.USE_BITTORRENT %}
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Original Feed (Torrents)" %}" href="/feeds/{{ channel.slug }}/torrent/" />
+		{% endif %}
+		{% if settings.ENABLE_VIDEO_FEEDS %}
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (MP4)" %}" href="/feeds/{{ channel.slug }}/mp4/" />
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (WEBM)" %}" href="/feeds/{{ channel.slug }}/webm/" />
+		{% endif %}
+		{% if settings.ENABLE_AUDIO_FEEDS %}
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (MP3)" %}" href="/feeds/{{ channel.slug }}/mp3/" />
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (OGG)" %}" href="/feeds/{{ channel.slug }}/ogg/" />
+		{% endif %}
 {% endblock %}
 {% block body %}
 <div class="page-header">

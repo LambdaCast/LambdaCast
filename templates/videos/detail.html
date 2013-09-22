@@ -4,28 +4,28 @@
 {% load markup %}
 {% load simple_open_graph %}
 {% block title %} - {{ video.title }}{% endblock %}
-{% block head %}
-<script type="text/javascript" src="{{ STATIC_URL }}projekktor/projekktor.min.js"></script>
-<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
-{% block extra_head %}
-	<meta property="og:title" content="{{ video.title }}"></meta>
-	<meta property="og:type" content="article"></meta>
-	{% if video.videoThumbURL %}
-	<meta property="og:image" content="{{ video.videoThumbURL }}"></meta>
-	{% elif video.audioThumbURL %}
-	<meta property="og:image" content="{{ video.audioThumbURL }}"></meta>
-	{% else %}
-	<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
-	{% endif %}
-	<meta property="og:url" content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/"></meta>
-	{% if video.description %}
-	<meta property="og:description" content="{{ video.markdown_free|truncatechars:150 }}"></meta>
-	{% else %}
-	<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
-	{% endif %}
-	<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
-	<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
+{% block extra_meta %}
+		<meta property="og:title" content="{{ video.title }}"></meta>
+		<meta property="og:type" content="article"></meta>
+		{% if video.videoThumbURL %}
+		<meta property="og:image" content="{{ video.videoThumbURL }}"></meta>
+		{% elif video.audioThumbURL %}
+		<meta property="og:image" content="{{ video.audioThumbURL }}"></meta>
+		{% else %}
+		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
+		{% endif %}
+		<meta property="og:url" content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/"></meta>
+		{% if video.description %}
+		<meta property="og:description" content="{{ video.markdown_free|truncatechars:150 }}"></meta>
+		{% else %}
+		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
+		{% endif %}
+		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
+		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
+{% block head %}
+		<script type="text/javascript" src="{{ STATIC_URL }}projekktor/projekktor.min.js"></script>
+		<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
 {% endblock %}
 {% block active-home %}class="active"{% endblock %}
 {% block body %}

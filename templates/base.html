@@ -6,8 +6,8 @@
 		<title>{{ settings.SITE_NAME }}{% block title %}{% endblock %}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="author" content="{{ settings.AUTHOR_NAME }}">
-		{% block extra_head %}{% endblock %}
-                {% block rss %}
+		{% block extra_meta %}{% endblock %}
+		{% block rss %}
 		{% endblock %}
 		{% if settings.USE_BITTORRENT %}
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Originals" %}" href="/feeds/latest/torrent/" />
