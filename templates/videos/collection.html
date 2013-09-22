@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block active-home %}class="active"{% endblock %}
 {% load custom_filters %}
+{% block active-home %}class="active"{% endblock %}
 {% block extra_meta %}
 		<meta property="og:title" content="{{ collection.title }}"></meta>
 		<meta property="og:type" content="article"></meta>
 		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
 		<meta property="og:url" content="{{ settings.DOMAIN }}/collection/{{ collection.slug }}/"></meta>
 		{% if collection.description %}
-		<meta property="og:description" content="{{ collection.description|truncatechars:150 }}"></meta>
+		<meta property="og:description" content="{{ collection.description|truncatechars:150|remove_newlines }}"></meta>
 		{% else %}
 		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
 		{% endif %}

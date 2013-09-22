@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% load custom_filters %}
 {% load i18n %}
+{% load custom_filters %}
 {% block active-home %}class="active"{% endblock %}
 {% block title %} - Channel: {{ channel.name }}{% endblock %}
 {% block extra_meta %}
@@ -9,7 +9,7 @@
 		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
 		<meta property="og:url" content="{{ settings.DOMAIN }}/channel/{{ channel.slug }}/"></meta>
 		{% if channel.description %}
-		<meta property="og:description" content="{{ channel.description|truncatechars:150 }}"></meta>
+		<meta property="og:description" content="{{ channel.description|truncatechars:150|remove_newlines }}"></meta>
 		{% else %}
 		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
 		{% endif %}

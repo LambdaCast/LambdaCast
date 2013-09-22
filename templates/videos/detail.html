@@ -16,7 +16,7 @@
 		{% endif %}
 		<meta property="og:url" content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/"></meta>
 		{% if video.description %}
-		<meta property="og:description" content="{{ video.markdown_free|truncatechars:150 }}"></meta>
+		<meta property="og:description" content="{{ video.markdown_free|truncatechars:150|remove_newlines }}"></meta>
 		{% else %}
 		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
 		{% endif %}
