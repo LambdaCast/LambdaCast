@@ -4,15 +4,15 @@
 {% load custom_filters %}
 {% block head %}
 {% block extra_head %}
-        {% block og_title %}{{ channel.title }}{% endblock %}
-        {% block og_type %}article{% endblock %}
-        {% block og_image %}{{ settings.LOGO_URL }}{% endblock %}
-        {% block og_url %}{{ settings.DOMAIN }}/collection/{{ collection.slug }}/{% endblock %}
-        {% block extra_og %}
-        {% if collection.description %}
-                <meta content="{{ channel.collection|truncatechars:150 }}" property="og:description"></meta>
-        {% endif %}
-        {% endblock %}
+	<meta content="{{ collection.title }}" property="og:title"></meta>
+	<meta content="article" property="og:type"></meta>
+	<meta content="{{ settings.LOGO_URL }}" property="og:image"></meta>
+	<meta content="{{ settings.DOMAIN }}/collection/{{ collection.slug }}/" property="og:url"></meta>
+	{% if collection.description %}
+		<meta content="{{ collection.description|truncatechars:150 }}" property="og:description"></meta>
+	{% endif %}
+	<meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
+	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
 {% endblock %}
 {% endblock %}
 {% block body %}

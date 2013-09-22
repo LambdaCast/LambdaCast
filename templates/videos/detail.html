@@ -8,23 +8,21 @@
 <script type="text/javascript" src="{{ STATIC_URL }}projekktor/projekktor.min.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
 {% block extra_head %}
-	{% block og_title %}{{ video.title }}{% endblock %}
-	{% block og_type %}article{% endblock %}
-	{% block og_image %}
+	<meta content="{{ video.title }}" property="og:title"></meta>
+	<meta content="article" property="og:type"></meta>
 	{% if video.videoThumbURL %}
-		{{ video.videoThumbURL }}
+		<meta content="{{ video.videoThumbURL }}" property="og:image"></meta>
 	{% elif video.audioThumbURL %}
-		{{ video.audioThumbURL }}
+		<meta content="{{ video.audioThumbURL }}" property="og:image"></meta>
 	{% else %}
-		{{ settings.LOGO_URL }}
+		<meta content="{{ settings.LOGO_URL }}" property="og:image"></meta>
 	{% endif %}
-	{% endblock %}
-	{% block og_url %}{{ settings.DOMAIN }}/videos/{{ video.slug }}/{% endblock %}
-	{% block extra_og %}
+	<meta content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/" property="og:url"></meta>
 	{% if video.description %}
 		<meta content="{{ video.markdown_free|truncatechars:150 }}" property="og:description"></meta>
 	{% endif %}
-	{% endblock %}
+	<meta content="{{ settings.LANGUAGE_CODE }}" property="og:locale"></meta>
+	<meta content="{{ settings.SITE_NAME }}" property="og:site_name"></meta>
 {% endblock %}
 {% endblock %}
 {% block active-home %}class="active"{% endblock %}
