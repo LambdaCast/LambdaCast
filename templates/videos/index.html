@@ -3,6 +3,13 @@
 {% load custom_filters %}
 {% load taggit_extras %}
 {% block active-home %}class="active"{% endblock %}
+{% block head %}
+	<meta content="website" property="og:type"></meta>
+	<meta content="{{ LOGO_URL }}" property="og:image"></meta>
+	<meta content="{{ SITE_NAME }}" property="og:description"></meta>
+	<meta content="de_DE" property="og:locale"></meta>
+	<meta content="{{ SITE_NAME }}" property="og:site_name"></meta>
+{% endblock %}
 {% block body %}
 <div class="row">
 	<div class="span8">

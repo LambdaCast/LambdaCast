@@ -10,7 +10,7 @@
                 {% block rss %}
 		{% endblock %}
 		{% if settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title={% trans "Latest Originals" %}" href="/feeds/latest/torrent/" />
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Originals" %}" href="/feeds/latest/torrent/" />
 		{% endif %}
 		{% if settings.ENABLE_VIDEO_FEEDS %}
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Videos (MP4)" %}" href="/feeds/latest/mp4/" />
