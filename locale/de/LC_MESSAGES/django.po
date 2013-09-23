@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-23 04:01+0200\n"
+"POT-Creation-Date: 2013-09-23 04:04+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,7 +236,7 @@ msgstr "nur Audioinhalte"
 msgid "Audio and Video"
 msgstr "Audio und Video"
 
-#: portal/models.py:55 portal/models.py:331 templates/videos/detail.html:156
+#: portal/models.py:55 portal/models.py:331 templates/videos/detail.html:152
 #: templates/videos/status.html:17 templates/videos/videolist.html:28
 msgid "Date"
 msgstr "Datum"
@@ -260,7 +260,7 @@ msgstr "Benutzer"
 msgid "Shows which user made or uploaded the video"
 msgstr "Zeigt an welcher Benutzer den Inhalt hochgeladen oder gemacht hat"
 
-#: portal/models.py:58 portal/models.py:315 templates/videos/detail.html:159
+#: portal/models.py:58 portal/models.py:315 templates/videos/detail.html:155
 msgid "Channel"
 msgstr "Kanal"
 
@@ -268,7 +268,7 @@ msgstr "Kanal"
 msgid "Channels are used to order your media"
 msgstr "Kanäle werden für das Einordnen der Inhalte in Kategorien benutzt"
 
-#: portal/models.py:59 templates/videos/detail.html:184
+#: portal/models.py:59 templates/videos/detail.html:180
 msgid "License"
 msgstr "Lizenz"
 
@@ -362,7 +362,7 @@ msgstr "Bild-URL für Audio"
 msgid "Use a picture as cover for the media list"
 msgstr "Benutze ein Bild als Cover für die Auflistung der Inhalte."
 
-#: portal/models.py:73 templates/videos/detail.html:181
+#: portal/models.py:73 templates/videos/detail.html:177
 msgid "Duration"
 msgstr "Dauer"
 
@@ -440,7 +440,7 @@ msgstr "https://creativecommons.org/licenses/by-nc-nd/3.0/deed.de"
 msgid "http://creativecommons.org/licenses/by-nd/3.0/"
 msgstr "https://creativecommons.org/licenses/by-nd/3.0/deed.de"
 
-#: portal/models.py:285 portal/models.py:299 templates/videos/detail.html:103
+#: portal/models.py:285 portal/models.py:299 templates/videos/detail.html:102
 msgid "Name"
 msgstr ""
 
@@ -736,79 +736,70 @@ msgstr ""
 msgid "Comments"
 msgstr "Kommentare"
 
-#: templates/videos/detail.html:103
+#: templates/videos/detail.html:102
 #, fuzzy
 msgid "Time"
 msgstr "Zeitpunkt"
 
-#: templates/videos/detail.html:105
-msgid "Name: "
-msgstr ""
-
-#: templates/videos/detail.html:105
-#, fuzzy
-msgid "Time: "
-msgstr "Zeitpunkt"
-
-#: templates/videos/detail.html:116
+#: templates/videos/detail.html:112
 msgid "No comments"
 msgstr "Keine Kommentare"
 
-#: templates/videos/detail.html:131 templates/videos/submit.html:14
+#: templates/videos/detail.html:127 templates/videos/submit.html:14
 #: templates/videos/submit.html.py:20
 msgid "Error!"
 msgstr "Fehler!"
 
-#: templates/videos/detail.html:144
+#: templates/videos/detail.html:140
 msgid "Refresh Captcha"
 msgstr "Captcha Neuladen"
 
-#: templates/videos/detail.html:148
+#: templates/videos/detail.html:144
 msgid "Send"
 msgstr "Senden"
 
-#: templates/videos/detail.html:163
+#: templates/videos/detail.html:159
 msgid "Uploaded by"
 msgstr "Hochgeladen von"
 
-#: templates/videos/detail.html:174
+#: templates/videos/detail.html:170
 msgid "Embedding"
 msgstr "Einbetten"
 
-#: templates/videos/detail.html:177
+#: templates/videos/detail.html:173
 #, fuzzy
 msgid "Wordpress Embed Code"
 msgstr "Wordpress-Code zum Einbetten"
 
-#: templates/videos/detail.html:186
+#: templates/videos/detail.html:182
 msgid "None"
 msgstr "Keine"
 
-#: templates/videos/detail.html:191
+#: templates/videos/detail.html:187
 msgid "Torrent"
 msgstr ""
 
-#: templates/videos/detail.html:192
+#: templates/videos/detail.html:188
 msgid "Download Original"
 msgstr "Download des Originals"
 
-#: templates/videos/detail.html:194
+#: templates/videos/detail.html:190
 msgid "Download"
 msgstr ""
 
-#: templates/videos/detail.html:197
+#: templates/videos/detail.html:193
 msgid "Download MP4 Video"
 msgstr ""
 
-#: templates/videos/detail.html:202
+#: templates/videos/detail.html:198
 msgid "Download WEBM Video"
 msgstr ""
 
-#: templates/videos/detail.html:207
+#: templates/videos/detail.html:203
 msgid "Download MP3 Audio"
 msgstr ""
 
-#: templates/videos/detail.html:212
+#: templates/videos/detail.html:208
 msgid "Download OGG Audio"
 msgstr ""
 
@@ -870,3 +861,7 @@ msgstr "Wiedergabeliste"
 #: templates/videos/videolist.html:33
 msgid "No videos are available."
 msgstr "Es sind keine Videos verfügbar"
+
+#, fuzzy
+#~ msgid "Time: "
+#~ msgstr "Zeitpunkt"
