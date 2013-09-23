@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-23 04:04+0200\n"
+"POT-Creation-Date: 2013-09-23 04:37+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,8 +192,8 @@ msgid "LambdaCast: Videos in Collection %s"
 msgstr "LambdaCast: Videos in der Sammlung %s"
 
 #: portal/forms.py:21
-msgid "From ID3-tags/From file"
-msgstr "Von ID3-Tags/Von Datei"
+msgid "Automaticly"
+msgstr "Automatisch"
 
 #: portal/forms.py:42
 msgid "Thumbnail"
@@ -737,7 +737,6 @@ msgid "Comments"
 msgstr "Kommentare"
 
 #: templates/videos/detail.html:102
-#, fuzzy
 msgid "Time"
 msgstr "Zeitpunkt"
 
@@ -767,7 +766,6 @@ msgid "Embedding"
 msgstr "Einbetten"
 
 #: templates/videos/detail.html:173
-#, fuzzy
 msgid "Wordpress Embed Code"
 msgstr "Wordpress-Code zum Einbetten"
 
@@ -861,7 +859,3 @@ msgstr "Wiedergabeliste"
 #: templates/videos/videolist.html:33
 msgid "No videos are available."
 msgstr "Es sind keine Videos verfügbar"
-
-#, fuzzy
-#~ msgid "Time: "
-#~ msgstr "Zeitpunkt"
