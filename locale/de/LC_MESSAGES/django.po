@@ -193,7 +193,7 @@ msgstr "LambdaCast: Videos in der Sammlung %s"
 
 #: portal/forms.py:21
 msgid "From ID3-tags/From file"
-msgstr ""
+msgstr "Von ID3-Tags/Von Datei"
 
 #: portal/forms.py:42
 msgid "Thumbnail"
