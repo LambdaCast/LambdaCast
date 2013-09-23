@@ -212,6 +212,8 @@ ENCODING_OUTPUT_DIR = MEDIA_ROOT + '/encoded/'
 # How can we reach this files (public access is needed)
 ENCODING_VIDEO_BASE_URL = DOMAIN + '/media/encoded/'
 
+THUMBNAILS_DIR = MEDIA_ROOT + '/thumbnails/'
+
 ENABLE_LIVESTREAMS = False
 
 ENABLE_AUDIO_FEEDS = True
