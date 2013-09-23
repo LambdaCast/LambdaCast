@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-19 01:45+0200\n"
+"POT-Creation-Date: 2013-09-23 02:38+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr "Slug"
 #: livestream/models.py:15 portal/models.py:45 portal/models.py:275
 #: portal/models.py:305
 msgid "Slugs are parts of an URL that you can define"
-msgstr ""
+msgstr "Slugs sind Teile der URL die definiert werden können"
 
 #: livestream/models.py:16
 msgid "Beginning of the event"
@@ -97,11 +97,11 @@ msgstr "Geändert"
 
 #: pages/models.py:14
 msgid "link to another website"
-msgstr ""
+msgstr "Link zu einer anderen Webseite"
 
 #: pages/models.py:15
 msgid "display the content of body"
-msgstr ""
+msgstr "Zeige den Inhalt an"
 
 #: pages/models.py:181 portal/models.py:289
 msgid "Activated"
@@ -191,7 +191,11 @@ msgstr "LambdaCast: Torrents für den Kanal %s"
 msgid "LambdaCast: Videos in Collection %s"
 msgstr "LambdaCast: Videos in der Sammlung %s"
 
-#: portal/forms.py:40
+#: portal/forms.py:21
+msgid "From ID3-tags/From file"
+msgstr ""
+
+#: portal/forms.py:42
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
@@ -443,7 +447,7 @@ msgstr "Kanäle die der Sammlung hinzugefügt werden"
 msgid "Your comment will be moderated"
 msgstr "Dein Kommentar wird freigeschaltet"
 
-#: portal/views.py:327
+#: portal/views.py:328
 msgid "Video was updated"
 msgstr "Inhalte wurden aktualisiert"
 
@@ -684,8 +688,8 @@ msgid "Name: "
 msgstr ""
 
 #: templates/videos/detail.html:82
-msgid "Zeit: "
-msgstr ""
+msgid "Time: "
+msgstr "Zeit: "
 
 #: templates/videos/detail.html:92
 msgid "No comments"
@@ -698,7 +702,7 @@ msgstr "Fehler!"
 
 #: templates/videos/detail.html:120
 msgid "Refresh Captcha"
-msgstr ""
+msgstr "Captcha Neuladen"
 
 #: templates/videos/detail.html:124
 msgid "Send"
@@ -802,9 +806,3 @@ msgstr "Wiedergabeliste"
 #: templates/videos/videolist.html:33
 msgid "No videos are available."
 msgstr "Es sind keine Videos verfügbar"
-
-#~ msgid "Actions"
-#~ msgstr "Aktionen"
-
-#~ msgid "Show code"
-#~ msgstr "Zeige Quellcode"

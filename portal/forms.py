@@ -18,7 +18,7 @@ def getThumbnails(thumbssettings):
     if not os.path.exists(thumbsdir):
         os.makedirs(thumbsdir)
     thumbsdir = thumbsdir + '/'
-    thumb_list = [("", "---")]
+    thumb_list = [("", _(u"From ID3-tags/From file"))]
     for thumbfile in os.listdir(thumbsdir):
         if os.path.isfile(os.path.join(thumbsdir, thumbfile)):
             thumb_list.append(((settings.DOMAIN + "/media/thumbnails/" + thumbfile),(thumbfile)))
