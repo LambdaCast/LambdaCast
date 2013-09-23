@@ -221,7 +221,7 @@ class Video(models.Model):
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
                 
-        if (kind == 1 and audioThumbURL == "" and videoThumbURL == ""):
+        if (kind == 1 and self.audioThumbURL == "" and self.videoThumbURL == ""):
             file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
             if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
                 artwork = file.tags['APIC:'].data # access APIC frame and grab the image
