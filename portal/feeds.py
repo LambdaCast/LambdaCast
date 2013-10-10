@@ -29,7 +29,7 @@ class LatestVideos(Feed):
     item_enclosure_mime_type = '%s/%s' % (get_mime_type, fileformat)
 
     def items(self):
-        return Video.objects.filter(published=True).exclude(mp3URL='').order_by('-created')
+        return Video.objects.filter(published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
     def item_title(self, item):
         return item.title
