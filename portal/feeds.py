@@ -10,6 +10,60 @@ import markdown
 
 import os
 
+class LatestVideos(Feed):
+    title = _("LambdaCast Latest Videos")
+    link = "/"
+    description = _(u"The newest media from LambdaCast")
+    fileformat = ''
+
+    def get_object(self, request, fileformat):
+        if fileformat == 'mp4' or fileformat == 'webm' or fileformat == 'mp3' or fileformat == 'ogg':
+            self.fileformat = fileformat
+
+    def get_mime_type(self):
+        if self.fileformat == 'mp4' or self.fileformat == 'webm':
+            return 'video'
+        else:
+            return 'audio'
+    
+    item_enclosure_mime_type = '%s/%s' % (get_mime_type, fileformat)
+
+    def items(self):
+        return Video.objects.filter(published=True).exclude(mp3URL='').order_by('-created')
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
+
+    def item_enclosure_url(self, item):
+        if self.fileformat == 'mp3':
+            return item.mp3URL
+        elif self.fileformat == 'mp4':
+            return item.mp4URL
+        elif self.fileformat == 'ogg':
+            return item.oggURL
+        elif self.fileformat == 'webm':
+            return item.webmURL
+        else:
+            return Exception
+            
+    def item_enclosure_length(self, item):
+        if self.fileformat == 'mp3':
+            return item.mp3Size
+        elif self.fileformat == 'mp4':
+           return item.mp4Size
+        elif self.fileformat == 'ogg':
+            return item.oggSize
+        elif self.fileformat == 'webm':
+            return item.webmSize
+        else:
+            return Exception
+
+    def item_pubdate(self, item):
+        return item.created
+
 class LatestMP4Videos(Feed):
     ''' This class (like the following) are handling the feed requests from urls.py.
     TODO:
