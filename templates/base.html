@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 {% load i18n %}
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 	<head>
 		<meta charset="utf-8">
-		<title>Recordings{% block title %}{% endblock %}</title>
+		<title>{{ settings.SITE_NAME }}{% block title %}{% endblock %}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="">
 		<meta name="author" content="{{ settings.AUTHOR_NAME }}">
+		{% block extra_meta %}{% endblock %}
 		{% block rss %}
 		{% endblock %}
 		{% if settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title={% trans "Latest Originals" %}" href="/feeds/latest/torrent/" />
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Originals" %}" href="/feeds/latest/torrent/" />
 		{% endif %}
 		{% if settings.ENABLE_VIDEO_FEEDS %}
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Videos (MP4)" %}" href="/feeds/latest/mp4/" />
@@ -49,7 +49,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand" href="/">Recordings</a>
+					<a class="brand" href="/">{{ settings.SITE_NAME }}</a>
 					<div class="nav-collapse">
 						<ul class="nav">
 							<li {% block active-home %}{% endblock %}><a href="/"><i class="icon-home"></i> {% trans "Portal" %}</a></li>

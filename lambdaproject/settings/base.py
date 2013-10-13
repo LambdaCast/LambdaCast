@@ -15,11 +15,17 @@ except ImportError:
 # Domain of your website, for example: 'http://example.com' (no / behind the path)
 WEBSITE_URL = 'http://example.com'
 
+# Name of your website, will be displayed in title, header and opengraph
+SITE_NAME = 'LambdaCast'
+
 # Name of the author of the rss feed
 AUTHOR_NAME = 'Author Name'
 
 # E-mail adress for the contact link in the sidebar on index page
 CONTACT_EMAIL = 'root@example.com'
+
+# URL or path to your logo that will be displayed above the right sidebar
+LOGO_URL = DOMAIN + '/static/logo.png'
 
 # Django settings for lambdaproject.project
 DEBUG = True
@@ -57,6 +63,9 @@ TIME_ZONE = 'Europe/Berlin'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'de-de'
+
+# Language code for the OpenGraph implementation.
+OG_LANGUAGE_CODE = 'de_DE'
 
 LOCALE_PATHS = (
     ABSOLUTE_PATH + '/locale',
@@ -126,9 +135,9 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -168,6 +177,7 @@ INSTALLED_APPS = (
     'djangotasks',
     'south',
     'taggit_templatetags',
+    'simple_open_graph',
     'captcha',
 )
 
@@ -201,6 +211,8 @@ TRANSLOAD_THUMB_ENCODE = 'create_thumb'
 ENCODING_OUTPUT_DIR = MEDIA_ROOT + '/encoded/'
 # How can we reach this files (public access is needed)
 ENCODING_VIDEO_BASE_URL = DOMAIN + '/media/encoded/'
+
+THUMBNAILS_DIR = MEDIA_ROOT + '/thumbnails/'
 
 ENABLE_LIVESTREAMS = False
 
