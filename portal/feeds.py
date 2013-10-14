@@ -178,6 +178,63 @@ class ChannelFeedTorrent(Feed):
     def item_pubdate(self, item):
         return item.created
 
+class CollectionFeed(Feed):
+
+    def get_object(self, request, collection_slug, fileformat):
+        self.fileformat = fileformat
+        return get_object_or_404(Collection, slug=collection_slug)
+
+    def title(self, obj):
+        return _(u"LambdaCast: Videos in Collection %s") % obj.title
+
+    def link(self, obj):
+        return obj.get_absolute_url()
+
+    def description(self, obj):
+        return  obj.description
+
+    def item_enclosure_mime_type(self):
+        if self.fileformat == 'mp4' or self.fileformat == 'webm':
+            return 'video/%s' % self.fileformat
+        else:
+            return 'audio/%s' % self.fileformat
+
+    def items(self, obj):
+        return obj.videos.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
+
+    def item_enclosure_url(self, item):
+        if self.fileformat == 'mp3':
+            return item.mp3URL
+        elif self.fileformat == 'mp4':
+            return item.mp4URL
+        elif self.fileformat == 'ogg':
+            return item.oggURL
+        elif self.fileformat == 'webm':
+            return item.webmURL
+        else:
+            return Exception
+
+    def item_enclosure_length(self, item):
+        if self.fileformat == 'mp3':
+            return item.mp3Size
+        elif self.fileformat == 'mp4':
+           return item.mp4Size
+        elif self.fileformat == 'ogg':
+            return item.oggSize
+        elif self.fileformat == 'webm':
+            return item.webmSize
+        else:
+            return Exception
+
+    def item_pubdate(self, item):
+        return item.created
+
 class CollectionFeedMP4(Feed):
 
     def get_object(self, request, collection_slug):
