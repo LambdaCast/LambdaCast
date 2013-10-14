@@ -14,20 +14,16 @@ class LatestVideos(Feed):
     title = _("LambdaCast Latest Videos")
     link = "/"
     description = _(u"The newest media from LambdaCast")
-    fileformat = ''
 
     def get_object(self, request, fileformat):
-        if fileformat == 'mp4' or fileformat == 'webm' or fileformat == 'mp3' or fileformat == 'ogg':
-            self.fileformat = fileformat
+        self.fileformat = fileformat
 
-    def get_mime_type(self):
+    def item_enclosure_mime_type(self):
         if self.fileformat == 'mp4' or self.fileformat == 'webm':
-            return 'video'
+            return 'video/%s' % self.fileformat
         else:
-            return 'audio'
+            return 'audio/%s' % self.fileformat
     
-    item_enclosure_mime_type = '%s/%s' % (get_mime_type, fileformat)
-
     def items(self):
         return Video.objects.filter(published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
@@ -63,106 +59,6 @@ class LatestVideos(Feed):
 
     def item_pubdate(self, item):
         return item.created
-
-class LatestMP4Videos(Feed):
-    ''' This class (like the following) are handling the feed requests from urls.py.
-    TODO:
-    Better handling: We sould only use one Feed class and get the desired format with GET
-    Dynamic Title for the Feed'''
-    title = _(u"LambdaCast Latest Videos")
-    link = "/"
-    description = _(u"The newest media from LambdaCast")
-    item_enclosure_mime_type = "video/mp4"
-	
-    def items(self):
-        return Video.objects.filter(published=True).exclude(mp4URL='').order_by('-created')
-
-    def item_title(self, item):
-        return item.title
-
-    def item_description(self, item):
-        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
-        
-    def item_enclosure_url(self, item):
-    	return item.mp4URL
-    	
-    def item_enclosure_length(self, item):
-    	return item.mp4Size
-    	
-    def item_pubdate(self, item):
-    	return item.created
-    	
-class LatestWEBMVideos(Feed):
-    title = _(u"LambdaCast Latest Videos")
-    link = "/"
-    description = _(u"The newest media from LambdaCast")
-    item_enclosure_mime_type = "video/webm"
-	
-    def items(self):
-        return Video.objects.filter(published=True).exclude(webmURL='').order_by('-created')
-
-    def item_title(self, item):
-        return item.title
-
-    def item_description(self, item):
-        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
-        
-    def item_enclosure_url(self, item):
-    	return item.webmURL
-    	
-    def item_enclosure_length(self, item):
-    	return item.webmSize
-    	
-    def item_pubdate(self, item):
-    	return item.created
-    	
-class LatestMP3Audio(Feed):
-    title = _(u"LambdaCast Latest Audio Files")
-    link = "/"
-    description = _(u"The newest media from LambdaCast")
-    item_enclosure_mime_type = "audio/mp3"
-	
-    def items(self):
-        return Video.objects.filter(published=True).exclude(mp3URL='').order_by('-created')
-
-    def item_title(self, item):
-        return item.title
-
-    def item_description(self, item):
-        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
-        
-    def item_enclosure_url(self, item):
-    	return item.mp3URL
-    	
-    def item_enclosure_length(self, item):
-    	return item.mp3Size
-    	
-    def item_pubdate(self, item):
-    	return item.created
-    	
-class LatestOGGAudio(Feed):
-    title = _(u"LambdaCast Latest Audio Files")
-    link = "/"
-    description = _(u"The newest media from LambdaCast")
-    item_enclosure_mime_type = "audio/ogg"
-	
-    def items(self):
-        return Video.objects.filter(published=True).exclude(oggURL='').order_by('-created')
-
-    def item_title(self, item):
-        return item.title
-
-    def item_description(self, item):
-        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
-        
-    def item_enclosure_url(self, item):
-    	return item.oggURL
-    	
-    def item_enclosure_length(self, item):
-    	return item.oggSize
-    	
-    def item_pubdate(self, item):
-    	return item.created
 
 class TorrentFeed(Feed):
     title = _(u"LambdaCast TorrentFeed")
