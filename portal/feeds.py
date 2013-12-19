@@ -32,9 +32,9 @@ class iTunesFeed(Rss201rev2Feed):
 
     def add_item_elements(self,  handler, item):
         super(iTunesFeed, self).add_item_elements(handler, item)
-        handler.addQuickElement(u'iTunes:summary',item['summary'])
-        handler.addQuickElement(u'iTunes:duration',item['duration'])
-        handler.addQuickElement(u'iTunes:explicit',item['explicit'])
+        handler.addQuickElement(u'itunes:summary',item['summary'])
+        handler.addQuickElement(u'itunes:duration',item['duration'])
+        handler.addQuickElement(u'itunes:explicit',item['explicit'])
 
 class LatestVideos(Feed):
     feed_type = iTunesFeed
@@ -64,7 +64,6 @@ class LatestVideos(Feed):
         extra['summary'] = str(item.description)
         extra['explicit'] = 'no'
         return extra
-
 
     def item_title(self, item):
         return item.title
