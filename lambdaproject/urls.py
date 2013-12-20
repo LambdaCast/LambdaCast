@@ -10,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'portal.views.list'),
+    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/favicon.ico'}),
     url(r'^videos/(?P<slug>[-\w]+)/$', 'portal.views.detail'),
     url(r'^tags/(?P<tag>[\w|\W]+)/$', 'portal.views.tag'),
     url(r'^collection/(?P<slug>[-\w]+)/$', 'portal.views.collection'),
