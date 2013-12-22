@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block active-upload %}class="active"{% endblock %}
+{% block title %} - {% trans "Upload" %}{% endblock %}
+{% block body %}
+<div class="page-header">
+	<h1>{% trans "Upload" %}</h1>
+</div>
+<div class=row">
+	<div class="span6">
+		<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
+			{% csrf_token %}
+			<div style="display: none" id="formError" class="alert alert-error">
+				<strong>{% trans "Error!" %}</strong>
+			</div>
+			{% for field in thumbnail_form %}
+			<div class="control-group">
+<!--				{% if field.errors %}
+				<div class="alert alert-error">
+					<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+				</div>
+				{% endif %}
+				<div class="control-label">
+					{{ field.label_tag }}{% if field.field.required %} *{% endif %}
+				</div>-->
+				<div class="controls">
+					{{ field }}
+				</div>
+			</div>
+			{% endfor %}
+			<div id="progress-indicator">
+				<div class="progress progress-striped active">
+					<div class="bar"></div >
+				</div>
+				<div class="percent">0%</div >
+			</div>
+			<div class="form-actions">
+				<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}jquery.validate.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}date.format.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}submit.js"></script>
+{% endblock %}

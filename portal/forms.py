@@ -48,3 +48,10 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         exclude = ["ip","moderated","video"]
+
+class ThumbnailForm(forms.Form):
+    ''' Used for uploading thumbnails '''
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()
+
+

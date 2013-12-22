@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
 from portal.models import Video, Comment, Channel, Collection
-from portal.forms import VideoForm, CommentForm, getThumbnails
+from portal.forms import VideoForm, CommentForm, getThumbnails, ThumbnailForm
 from transloadit.client import Client
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -158,6 +158,24 @@ def tag_json(request, tag):
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
     data = serializers.serialize('json', videolist)
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
+
+@login_required(login_url='/login/')
+def upload_thumbnail(request):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
+    if request.method == 'POST':
+        form = ThumbnailForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['file'])
+            return HttpResponseRedirect('/')
+    else:
+        form = ThumbnailForm()
+        return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
+    
+def handle_uploaded_file(f):
+    destination = open('media/thumbnails/name.ico', 'wb+')
+    for chunk in f.chunks():
+        destination.write(chunk)
+    destination.close()
 
 @login_required(login_url='/login/')
 def submit(request):
