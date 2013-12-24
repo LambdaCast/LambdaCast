@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
@@ -85,7 +86,10 @@ class Video(models.Model):
         return "/videos/%s/" % self.slug
     def getClassName(self):
         return self.__class__.__name__
-  
+    
+    def comments_number(self):
+        return Comment.objects.filter(moderated=True, video=self.pk).count()  
+
     def oggSize_mb(self):
         size = float(self.oggSize) / 1024 / 1024
         return round(size, 3)
