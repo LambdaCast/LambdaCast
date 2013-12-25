@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-23 04:37+0200\n"
+"POT-Creation-Date: 2013-12-25 04:50+0100\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,36 +160,33 @@ msgstr "Erweiterte Einstellungen"
 msgid "Moderate marked comments"
 msgstr "Gib alle markierten Kommentare frei"
 
-#: portal/feeds.py:18 portal/feeds.py:42
-msgid "LambdaCast Latest Videos"
-msgstr "LambdaCast Neuste Videos"
+#: portal/feeds.py:119
+msgid "Latest Episodes"
+msgstr "Neuste Inhalte"
 
-#: portal/feeds.py:20 portal/feeds.py:44 portal/feeds.py:68 portal/feeds.py:92
-msgid "The newest media from LambdaCast"
-msgstr "Die neusten Inhalte von LambdaCast"
+#: portal/feeds.py:121
+msgid "The newest episodes from your beloved podcast"
+msgstr "Die neusten Inhalte von deinem geliebten Podcast"
 
-#: portal/feeds.py:66 portal/feeds.py:90
-msgid "LambdaCast Latest Audio Files"
-msgstr "LambdaCast Neuste Audiodateien"
+#: portal/feeds.py:128
+msgid "TorrentFeed"
+msgstr "Torrent erstellt"
 
-#: portal/feeds.py:114
-msgid "LambdaCast TorrentFeed"
-msgstr "LambdaCast Torrent-Feed"
+#: portal/feeds.py:130
+msgid "Torrent files from your beloved podcast"
+msgstr "Torrent Dateien von deinem geliebten Podcast"
 
-#: portal/feeds.py:116
-msgid "Torrent files from LambdaCast"
-msgstr "Torrent Dateien von LambdaCast"
+#: portal/feeds.py:176
+msgid "Torrents for Channel %s"
+msgstr "Torrents für den Kanal %s"
 
-#: portal/feeds.py:284
-#, python-format
-msgid "LambdaCast: Torrents for Channel %s"
-msgstr "LambdaCast: Torrents für den Kanal %s"
+#: portal/feeds.py:210
+msgid "Videos in Collection %s"
+msgstr "Videos in der Sammlung %s"
 
-#: portal/feeds.py:318 portal/feeds.py:352 portal/feeds.py:386
-#: portal/feeds.py:420 portal/feeds.py:454
-#, python-format
-msgid "LambdaCast: Videos in Collection %s"
-msgstr "LambdaCast: Videos in der Sammlung %s"
+#: portal/feeds.py:228
+msgid "Torrents for videos in Collection %s"
+msgstr "Torrents für Videos in der Sammlung %s"
 
 #: portal/forms.py:21
 msgid "Automaticly"
@@ -205,7 +202,7 @@ msgstr "Keine Lizenz"
 
 #: portal/models.py:33
 msgid "Public Domain/CC0"
-msgstr ""
+msgstr "Gemeinfrei/CC0"
 
 #: portal/models.py:34
 msgid "CreativeCommons - Attribution"
@@ -217,8 +214,7 @@ msgstr "CreativeCommons - Namensnennung - Nicht-Kommerziell"
 
 #: portal/models.py:36
 msgid "CreativeCommons - Attribution - NonCommercial - NoDerivs"
-msgstr ""
-"CreativeCommons - Namensnennung - Nicht-Kommerziell - Keine Bearbeitung"
+msgstr "CreativeCommons - Namensnennung - Nicht-Kommerziell - Keine Bearbeitung"
 
 #: portal/models.py:37
 msgid "CreativeCommons - Attribution - NoDerivs"
@@ -278,8 +274,7 @@ msgstr "Rechte die der Zuhörer/Zuschauer erhält"
 
 #: portal/models.py:60
 msgid "Insert a link to a blog or website that relates to the media"
-msgstr ""
-"Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
+msgstr "Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
 "Inhalt zu tun hat."
 
 #: portal/models.py:61 portal/models.py:320
@@ -392,8 +387,7 @@ msgstr ""
 
 #: portal/models.py:79
 msgid "Insert what the video is about in short terms divided by commas"
-msgstr ""
-"Füge kurze Begriffe ein, die den Inhalt beschreiben und trenne sie mit "
+msgstr "Füge kurze Begriffe ein, die den Inhalt beschreiben und trenne sie mit "
 "Kommatas."
 
 #: portal/models.py:82
@@ -534,8 +528,7 @@ msgstr ""
 
 #: templates/404.html:11
 msgid "Supercat does not find anything. Speak Cattish to improve your results."
-msgstr ""
-"Supercat hat nichts gefunden. Du musst Katzisch sprechen, damit dir "
+msgstr "Supercat hat nichts gefunden. Du musst Katzisch sprechen, damit dir "
 "Ergebnisse angezeigt werden."
 
 #: templates/500.html:6
@@ -807,8 +800,7 @@ msgstr "Neuste Inhalte"
 
 #: templates/videos/status.html:9
 msgid "This site shows all media that will be or is transcoded"
-msgstr ""
-"Diese Seite zeigt alle Medien, die transkodiert werden oder es schon "
+msgstr "Diese Seite zeigt alle Medien, die transkodiert werden oder es schon "
 "sindDiese Seite zeigt alle Inhalte an die transkodiert werden oder es "
 "bereits sind"
 
