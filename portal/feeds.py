@@ -147,6 +147,7 @@ class TorrentFeed(Feed):
 
 class ChannelFeed(Feed):
     ''' This class (like the next one) gives the feeds for channels"'''
+    feed_type = iTunesFeed
 
     def get_object(self, request, channel_slug, fileformat):
         self.fileformat = fileformat
@@ -160,17 +161,27 @@ class ChannelFeed(Feed):
 
     def description(self, obj):
         return  obj.description
-
-    def item_enclosure_mime_type(self):
-        if self.fileformat == 'mp4' or self.fileformat == 'webm':
-            return 'video/%s' % self.fileformat
-        else:
-            return 'audio/%s' % self.fileformat
-
+    
+    subtitle = description
     author_name = settings.AUTHOR_NAME
 
     def items(self, obj):
         return Video.objects.filter(encodingDone=True, published=True, channel=obj).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+
+    def feed_extra_kwargs(self, obj):
+        extra = {}
+        extra['iTunes_name'] = str(settings.AUTHOR_NAME)
+        extra['iTunes_email'] = str(settings.CONTACT_EMAIL)
+        extra['iTunes_image_url'] = str(settings.LOGO_URL)
+        extra['iTunes_explicit'] = 'no'
+        return extra
+
+    def item_extra_kwargs(self, item):
+        extra = {}
+        extra['duration'] = str(item.duration)
+        extra['summary'] = str(item.description)
+        extra['explicit'] = 'no'
+        return extra
 
     def item_title(self, item):
         return item.title
@@ -204,6 +215,15 @@ class ChannelFeed(Feed):
 
     def item_pubdate(self, item):
         return item.created
+
+    def item_enclosure_length(self, item):
+        return item.duration
+
+    def item_enclosure_mime_type(self):
+        if self.fileformat == 'mp4' or self.fileformat == 'webm':
+            return 'video/%s' % self.fileformat
+        else:
+            return 'audio/%s' % self.fileformat
 
 class ChannelFeedTorrent(Feed):
 
@@ -240,6 +260,7 @@ class ChannelFeedTorrent(Feed):
         return item.created
 
 class CollectionFeed(Feed):
+    feed_type = iTunesFeed
 
     def get_object(self, request, collection_slug, fileformat):
         self.fileformat = fileformat
@@ -254,14 +275,26 @@ class CollectionFeed(Feed):
     def description(self, obj):
         return  obj.description
 
-    def item_enclosure_mime_type(self):
-        if self.fileformat == 'mp4' or self.fileformat == 'webm':
-            return 'video/%s' % self.fileformat
-        else:
-            return 'audio/%s' % self.fileformat
+    subtitle = description
+    author_name = str(settings.AUTHOR_NAME)
 
     def items(self, obj):
         return obj.videos.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+
+    def feed_extra_kwargs(self, obj):
+        extra = {}
+        extra['iTunes_name'] = str(settings.AUTHOR_NAME)
+        extra['iTunes_email'] = str(settings.CONTACT_EMAIL)
+        extra['iTunes_image_url'] = str(settings.LOGO_URL)
+        extra['iTunes_explicit'] = 'no'
+        return extra
+
+    def item_extra_kwargs(self, item):
+        extra = {}
+        extra['duration'] = str(item.duration)
+        extra['summary'] = str(item.description)
+        extra['explicit'] = 'no'
+        return extra
 
     def item_title(self, item):
         return item.title
@@ -281,6 +314,19 @@ class CollectionFeed(Feed):
         else:
             return Exception
 
+    def item_link(self, item):
+        if self.fileformat == 'mp3':
+            return item.mp3URL
+        elif self.fileformat == 'mp4':
+            return item.mp4URL
+        elif self.fileformat == 'ogg':
+            return item.oggURL
+        elif self.fileformat == 'webm':
+            return item.webmURL
+        else:
+            return Exception            
+
+
     def item_enclosure_length(self, item):
         if self.fileformat == 'mp3':
             return item.mp3Size
@@ -295,6 +341,15 @@ class CollectionFeed(Feed):
 
     def item_pubdate(self, item):
         return item.created
+
+    def item_enclosure_length(self, item):
+        return item.duration
+
+    def item_enclosure_mime_type(self):
+        if self.fileformat == 'mp4' or self.fileformat == 'webm':
+            return 'video/%s' % self.fileformat
+        else:
+            return 'audio/%s' % self.fileformat
 
 class CollectionFeedTorrent(Feed):
 
