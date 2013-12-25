@@ -116,18 +116,18 @@ class MainFeed(Feed):
 
 
 class LatestVideos(MainFeed):
-    title = _("LambdaCast Latest Videos")
+    title = _("Latest Episodes")
     link = "/"
-    description = _(u"The newest media from LambdaCast")
+    description = _(u"The newest episodes from your beloved podcast")
   
     def get_object(self, request, fileformat):
         self.fileformat = fileformat
 
 
 class TorrentFeed(Feed):
-    title = _(u"LambdaCast TorrentFeed")
+    title = _(u"TorrentFeed")
     link = "/"
-    description = _("Torrent files from LambdaCast")
+    description = _("Torrent files from your beloved podcast")
     item_enclosure_mime_type = "application/x-bittorrent"
 	
     def items(self):
@@ -173,7 +173,7 @@ class ChannelFeedTorrent(Feed):
         return get_object_or_404(Channel, slug=channel_slug)
 
     def title(self, obj):
-        return _(u"LambdaCast: Torrents for Channel %s") % obj.name
+        return _(u"Torrents for Channel %s") % obj.name
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -207,7 +207,7 @@ class CollectionFeed(MainFeed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"LambdaCast: Videos in Collection %s") % obj.title
+        return _(u"Videos in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -225,7 +225,7 @@ class CollectionFeedTorrent(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"LambdaCast: Videos in Collection %s") % obj.title
+        return _(u"Torrents for videos in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
