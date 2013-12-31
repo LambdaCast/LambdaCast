@@ -165,14 +165,14 @@ def upload_thumbnail(request):
     if request.method == 'POST':
         form = ThumbnailForm(request.POST, request.FILES or None)
         if form.is_valid():
-            handle_uploaded_file(request.FILES['file'])
+            handle_uploaded_file(request.FILES['file'], form.data['title'])
             return HttpResponseRedirect('/')
     else:
         form = ThumbnailForm()
         return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
     
-def handle_uploaded_file(f):
-    destination = open('media/thumbnails/name.ico', 'wb+')
+def handle_uploaded_file(f, filename):
+    destination = open('media/thumbnails/' + filename, 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
     destination.close()
