@@ -16,10 +16,16 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="upload">
 				<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
+				{% if error %}
+					<div class="alert alert-error">{{ error }}</div>
+				{% endif %}
+				{% if message %}
+					<div class="alert alert-success">{{ message }}</div>
+				{% endif %}
 				{% csrf_token %}
 				<div style="display: none" id="formError" class="alert alert-error">
 					<strong>{% trans "Error!" %}</strong>
-				</div><!-- altert -->
+				</div><!-- alert-->
 				{% for field in thumbnail_form %}
 				<div class="control-group">
 					{% if field.errors %}
@@ -42,7 +48,7 @@
 			</div><!-- tab-pane -->
 			<div class="tab-pane" id="thumblist">
 				{% for thumbnail in thumbs_list %}
-					<div class="span3"><img class="img-rounded" src="{{ thumbnail.0 }}" /><p>{{ thumbnail.1 }}</p></div>
+					<div class="span3"><a href="{{ thumbnail.0 }}"><img class="img-rounded" src="{{ thumbnail.0 }}" /></a><p>{{ thumbnail.1 }}</p></div>
 				{% endfor %}
 			</div><!-- tab-pane -->
 		</div><!-- tab-content -->

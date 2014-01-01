@@ -167,13 +167,23 @@ def upload_thumbnail(request):
     if request.method == 'POST':
         form = ThumbnailForm(request.POST, request.FILES or None)
         if form.is_valid():
-            handle_uploaded_file(request.FILES['file'], form.data['title'])
-            return HttpResponseRedirect('/')
+            if (request.FILES['file'].content_type == 'image/png' or request.FILES['file'].content_type == 'image/jpeg') and not form.data['title'] == '':
+                handle_uploaded_thumbnail(request.FILES['file'], form.data['title'])
+                message = _("The upload of " + form.data['title'] + " was successful")
+                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':thumbnails_list, 'message': message}, context_instance=RequestContext(request))
+            else:
+                error = _("Please upload an image file")
+                form = ThumbnailForm()
+                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':thumbnails_list, 'error': error}, context_instance=RequestContext(request))
+
+        else:
+            form = ThumbnailForm()
+            return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
     else:
         form = ThumbnailForm()
         return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
     
-def handle_uploaded_file(f, filename):
+def handle_uploaded_thumbnail(f, filename):
     destination = open('media/thumbnails/' + filename, 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
