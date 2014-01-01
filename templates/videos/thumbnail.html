@@ -28,30 +28,25 @@
 					</div>
 					{% endif %}
 					<div class="control-label">
-						{{ field.label_tag }}{% if field.field.required %} *{% endif %}
+						{{ field.label_tag }}
 					</div>
 					<div class="controls">
-							{{ field }}
-						</div><!-- controls -->
+						{{ field }} <span class="help-block">{{ field.help_text }}</span>
 					</div>
-					{% endfor %}
-					<div id="progress-indicator">
-						<div class="progress progress-striped active">
-							<div class="bar"></div>
-						</div><!-- progress -->
-						<div class="percent">0%</div>
-					</div><!-- progress-indicator -->
-					<div class="form-actions">
-						<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
-					</div><!-- form-actions -->
+				</div>
+				{% endfor %}
+				<div class="form-actions">
+					<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+				</div><!-- form-actions -->
 				</form>
-		</div><!-- tab-pane -->
-		<div class="tab-pane" id="thumblist">
-			{% for thumbnail in thumbs_list %}
-				<div class="span3"><img class="img-rounded" src="{{ thumbnail.0 }}" /><p>{{ thumbnail.1 }}</p></div>
-			{% endfor %}
-		</div><!-- tab-pane -->
-	</div><!-- tabbable -->	
+			</div><!-- tab-pane -->
+			<div class="tab-pane" id="thumblist">
+				{% for thumbnail in thumbs_list %}
+					<div class="span3"><img class="img-rounded" src="{{ thumbnail.0 }}" /><p>{{ thumbnail.1 }}</p></div>
+				{% endfor %}
+			</div><!-- tab-pane -->
+		</div><!-- tab-content -->
+	</div><!-- tabbable -->
 	</div><!-- span12 -->
 </div><!-- row -->
 {% endblock %}
