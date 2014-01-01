@@ -1,45 +1,59 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block active-upload %}class="active"{% endblock %}
-{% block title %} - {% trans "Upload" %}{% endblock %}
+{% block active-thumb %}class="active"{% endblock %}
+{% block title %} - {% trans "Thumbnails" %}{% endblock %}
 {% block body %}
 <div class="page-header">
-	<h1>{% trans "Upload" %}</h1>
+	<h1>{% trans "Thumbnails" %}</h1>
 </div>
-<div class=row">
-	<div class="span6">
-		<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
-			{% csrf_token %}
-			<div style="display: none" id="formError" class="alert alert-error">
-				<strong>{% trans "Error!" %}</strong>
-			</div>
-			{% for field in thumbnail_form %}
-			<div class="control-group">
-<!--				{% if field.errors %}
-				<div class="alert alert-error">
-					<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
-				</div>
-				{% endif %}
-				<div class="control-label">
-					{{ field.label_tag }}{% if field.field.required %} *{% endif %}
-				</div>-->
-				<div class="controls">
-					{{ field }}
-				</div>
-			</div>
+<div class="row">
+	<div class="span12">
+	<div class="tabbable">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#upload" data-toggle="tab">{% trans "Upload" %}</a></li>
+			<li><a href="#thumblist" data-toggle="tab">{% trans "Thumbnail List" %}</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="upload">
+				<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
+				{% csrf_token %}
+				<div style="display: none" id="formError" class="alert alert-error">
+					<strong>{% trans "Error!" %}</strong>
+				</div><!-- altert -->
+				{% for field in thumbnail_form %}
+				<div class="control-group">
+					{% if field.errors %}
+					<div class="alert alert-error">
+						<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+					</div>
+					{% endif %}
+					<div class="control-label">
+						{{ field.label_tag }}{% if field.field.required %} *{% endif %}
+					</div>
+					<div class="controls">
+							{{ field }}
+						</div><!-- controls -->
+					</div>
+					{% endfor %}
+					<div id="progress-indicator">
+						<div class="progress progress-striped active">
+							<div class="bar"></div>
+						</div><!-- progress -->
+						<div class="percent">0%</div>
+					</div><!-- progress-indicator -->
+					<div class="form-actions">
+						<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+					</div><!-- form-actions -->
+				</form>
+		</div><!-- tab-pane -->
+		<div class="tab-pane" id="thumblist">
+			{% for thumbnail in thumbs_list %}
+				<div class="span3"><img class="img-rounded" src="{{ thumbnail.0 }}" /><p>{{ thumbnail.1 }}</p></div>
 			{% endfor %}
-			<div id="progress-indicator">
-				<div class="progress progress-striped active">
-					<div class="bar"></div >
-				</div>
-				<div class="percent">0%</div >
-			</div>
-			<div class="form-actions">
-				<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
-			</div>
-		</form>
-	</div>
-</div>
+		</div><!-- tab-pane -->
+	</div><!-- tabbable -->	
+	</div><!-- span12 -->
+</div><!-- row -->
 {% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>

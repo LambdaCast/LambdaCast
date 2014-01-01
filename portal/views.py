@@ -162,6 +162,8 @@ def tag_json(request, tag):
 @login_required(login_url='/login/')
 def upload_thumbnail(request):
     page_list = Page.objects.filter(activated=True).order_by('orderid')
+    thumbnails_list = getThumbnails(settings.THUMBNAILS_DIR)
+    del thumbnails_list[0]
     if request.method == 'POST':
         form = ThumbnailForm(request.POST, request.FILES or None)
         if form.is_valid():
@@ -169,7 +171,7 @@ def upload_thumbnail(request):
             return HttpResponseRedirect('/')
     else:
         form = ThumbnailForm()
-        return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
+        return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
     
 def handle_uploaded_file(f, filename):
     destination = open('media/thumbnails/' + filename, 'wb+')

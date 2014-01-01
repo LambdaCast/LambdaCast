@@ -73,7 +73,7 @@
 							<li class="dropdown dropdown-toggle" data-toggle="dropdown"><a href="#"><i class="icon-chevron-down"></i> Menu</a></li>
 							<ul class="dropdown-menu">
 								<li {% block active-upload %}{% endblock %}><a href="/submit/" title="{% trans "Upload" %}"><i class="icon-upload"></i> {% trans "Upload" %}</a></li>
-								<li><a href="/thumbnail/" title="{% trans "Thumbnails" %}"><i class="icon-picture"></i> {% trans "Thumbnails" %}</a></li>
+								<li {% block active-thumb %}{% endblock %}><a href="/thumbnail/" title="{% trans "Thumbnails" %}"><i class="icon-picture"></i> {% trans "Thumbnails" %}</a></li>
 								<li><a href="/admin/" title="{% trans "Admin" %}"><i class="icon-wrench"></i> {% trans "Admin" %}</a></li>
 								<li {% block active-status %}{% endblock %}><a href="/status/" title="{% trans "Status" %}"><i class="icon-ok"></i> {% trans "Status" %}</a></li>
 								<li><a href="/logout/" title="{% trans "Logout" %}"><i class="icon-off"></i> {% trans "Logout" %}</a></li>
