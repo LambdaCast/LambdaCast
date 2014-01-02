@@ -48,7 +48,7 @@
 			</div><!-- tab-pane -->
 			<div class="tab-pane" id="thumblist">
 				{% for thumbnail in thumbs_list %}
-					<div class="span3"><a href="{{ thumbnail.0 }}"><img class="img-rounded" src="{{ thumbnail.0 }}" /></a><p>{{ thumbnail.1 }}</p></div>
+					<div class="video-image-container"><a href="{{ thumbnail.0 }}"><img class="img-rounded" src="{{ thumbnail.0 }}" /></a><p>{{ thumbnail.1 }}</p></div>
 				{% endfor %}
 			</div><!-- tab-pane -->
 		</div><!-- tab-content -->
