@@ -12,8 +12,8 @@ from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
-from portal.models import Video, Comment, Channel, Collection
-from portal.forms import VideoForm, CommentForm, getThumbnails, ThumbnailForm
+from portal.models import Video, Comment, Channel, Collection, Submittal
+from portal.forms import VideoForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
 from transloadit.client import Client
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -158,6 +158,38 @@ def tag_json(request, tag):
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
     data = serializers.serialize('json', videolist)
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
+
+@login_required(login_url='/login/')
+def submittal(request, subm_id):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
+    submittal = get_object_or_404(Submittal, pk = subm_id)
+    if request.method == 'POST':
+        form = SubmittalForm()
+        return render_to_response('videos/thumbnail.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
+    else:
+	tag_string = ""
+	for tag in submittal.media_tags.all():
+            tag_string += (str(tag) + ", ")
+
+        form = SubmittalForm(initial={
+            'media_title': submittal.media_title,
+            'media_description': submittal.media_description,
+            'media_channel': submittal.media_channel,
+            'media_license': submittal.media_license,
+            'media_linkURL': submittal.media_linkURL,
+            'media_kind': submittal.media_kind,
+            'media_torrentURL': submittal.media_torrentURL,
+            'media_mp4URL': submittal.media_mp4URL,
+            'media_webmURL': submittal.media_webmURL,
+            'media_mp3URL': submittal.media_mp3URL,
+            'media_oggURL': submittal.media_oggURL,
+            'media_videoThumbURL': submittal.media_videoThumbURL,
+            'media_audioThumbURL': submittal.media_audioThumbURL,
+            'media_published': submittal.media_published,
+            'media_tags': tag_string,
+            'media_torrentDone': submittal.media_torrentDone,
+        })
+        return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def upload_thumbnail(request):

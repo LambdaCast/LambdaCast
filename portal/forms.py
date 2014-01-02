@@ -5,6 +5,7 @@ from captcha.fields import CaptchaField
 
 from portal.models import Video
 from portal.models import Comment
+from portal.models import Submittal
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -48,6 +49,12 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         exclude = ["ip","moderated","video"]
+
+class SubmittalForm(ModelForm):
+    ''' Used for creating media instances through submittals '''
+    class Meta:
+        model = Submittal
+        exclude = ["title","description","users"]
 
 class ThumbnailForm(forms.Form):
     ''' Used for uploading thumbnails '''
