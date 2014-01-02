@@ -103,8 +103,10 @@
 		</div>
 	</div>
 	{% endif %}
+	{% if not user.is_authenticated %}
 	<div class="span12">
 		<a href="/login/"><i class="icon-user"></i> {% trans "Login" %}</a>
 	</div>
+	{% endif %}
 </div>
 {% endblock %}
