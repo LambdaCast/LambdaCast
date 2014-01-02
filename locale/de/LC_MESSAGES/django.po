@@ -631,7 +631,7 @@ msgstr "Überblick"
 
 #: templates/base.html:87 templates/admin/base_site.html:21
 msgid "Channels"
-msgstr "Kanal"
+msgstr "Kanäle"
 
 #: templates/base.html:88 templates/admin/base_site.html:22
 msgid "Collections"
