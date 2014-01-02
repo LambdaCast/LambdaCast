@@ -18,7 +18,7 @@
 					<div class="video-image-container"><a href="/videos/{{ video.slug }}/"><img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" /></a></div>
 				{% endif %}
 			{% endif %}
-			<a href="/videos/{{ video.slug }}/"><h4>{{ video.title }}</h4></a>
+			<a href="/videos/{{ video.slug }}/"><h4>{{ video.title }}</h4></a>{% if user.is_authenticated %}<a href="/admin/portal/video/{{ video.pk }}"><button class="btn btn-warning btn-mini pull-right"><i class="icon-pencil"></i></button></a>{% endif %}
 			<span><strong>{% trans "Description" %}: </strong>{{ video.markdown_free|truncatechars:150 }}</span><br/>
 			<span><strong></strong><i class="icon-calendar"></i> {{ video.date }}{% if video.duration %} / <strong></strong><i class="icon-time"></i> {{ video.duration|secondstohms }}{% endif %}</span>
 		{% else %}
