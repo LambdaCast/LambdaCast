@@ -6,26 +6,10 @@
 {% block branding %}<b id="site-name" style="line-height: 40px;color: #999;">{{ title }}</b>{% endblock %}
 {% block logs %}{% endblock %}
 {% block nav-global %}
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-chevron-down icon-white"></i> Menu</a>
-	<ul class="dropdown-menu">
-		<li {% block active-upload %}{% endblock %}><a href="/submit/" title="{% trans "Upload" %}"><i class="icon-upload"></i> {% trans "Upload" %}</a></li>
-		<li {% block active-thumb %}{% endblock %}><a href="/thumbnail/" title="{% trans "Thumbnails" %}"><i class="icon-picture"></i> {% trans "Thumbnails" %}</a></li>
-		<li {% block active-status %}{% endblock %}><a href="/status/" title="{% trans "Status" %}"><i class="icon-ok"></i> {% trans "Status" %}</a></li>
-		{% for submittal in submittal_list %}
-		<li><a href="/submittal/{{ submittal.pk }}" title="{{ submittal.title }}"><i class="icon-list-alt"></i> {{ submittal.title }}</a></li>
-		{% endfor %}
-	</ul>
-</li>
-<li class="dropdown"><a href="#"  class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench icon-white"></i> {% trans "Admin" %}</a>
-	<ul class="dropdown-menu">
-		<li><a href="/admin/" title="{% trans "Overview" %}"><i class="icon-wrench"></i> {% trans "Overview" %}</a></li>
-		<li><a href="/admin/portal/video" title="{% trans "Videos" %}"><i class="icon-play"></i> {% trans "Videos" %}</a></li>
-		<li><a href="/admin/portal/channel/" title="{% trans "Channels" %}"><i class="icon-th"></i> {% trans "Channels" %}</a></li>
-		<li><a href="/admin/portal/collection" title="{% trans "Collections" %}"><i class="icon-list"></i> {% trans "Collections" %}</a></li>
-		<li><a href="/admin/portal/comment" title="{% trans "Comments" %}"><i class="icon-comment"></i> {% trans "Comments" %}</a></li>
-	</ul>
-</li>
-<li><a href="/">{% trans "back to frontend" %}</a></li>
-<li><a href="/logout/" title="{% trans "Logout" %}"><i class="icon-off icon-white"></i></a></li>
+<div class="nav-collapse collapse pull-right">
+	<div class="nav">
+		{% include "nav.html" with submittal_list=submittal_list %}
+		<li><a href="/">{% trans "back to frontend" %}</a></li>
+	</div>
+</div>
 {% endblock %}
