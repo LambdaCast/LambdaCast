@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-02 14:19+0100\n"
+"POT-Creation-Date: 2014-01-02 16:35+0100\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -292,7 +292,8 @@ msgstr "Rechte die der Zuhörer/Zuschauer erhält"
 
 #: portal/models.py:60 portal/models.py:351
 msgid "Insert a link to a blog or website that relates to the media"
-msgstr "Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
+msgstr ""
+"Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
 "Inhalt zu tun hat."
 
 #: portal/models.py:61 portal/models.py:320 portal/models.py:352
@@ -405,7 +406,8 @@ msgstr ""
 
 #: portal/models.py:79 portal/models.py:361
 msgid "Insert what the video is about in short terms divided by commas"
-msgstr "Füge kurze Begriffe ein, die den Inhalt beschreiben und trenne sie mit "
+msgstr ""
+"Füge kurze Begriffe ein, die den Inhalt beschreiben und trenne sie mit "
 "Kommatas."
 
 #: portal/models.py:174
@@ -526,7 +528,8 @@ msgstr "Nutzer der Vorlage"
 
 #: portal/models.py:348
 msgid "User who use the submittal and get it shown on frontpage"
-msgstr "Nutzer die, die Vorlage auf der Portalseite auswählen und benutzen können"
+msgstr ""
+"Nutzer die, die Vorlage auf der Portalseite auswählen und benutzen können"
 
 #: portal/views.py:102
 msgid "Your comment will be moderated"
@@ -569,12 +572,14 @@ msgstr "Erstelle eine Torrent-Datei für die Inhalte und biete Bittorrent an"
 
 #: templates/404.html:6
 msgid "The Supercat destroyed it with it's SUPERSCRATCH!"
-msgstr "Die Supercat hat es mithilfe ihrer Heldenfähigkeit SUPERKRATZER kaputt "
+msgstr ""
+"Die Supercat hat es mithilfe ihrer Heldenfähigkeit SUPERKRATZER kaputt "
 "gemacht."
 
 #: templates/404.html:11
 msgid "Supercat does not find anything. Speak Cattish to improve your results."
-msgstr "Supercat hat nichts gefunden. Du musst Katzisch sprechen, damit dir "
+msgstr ""
+"Supercat hat nichts gefunden. Du musst Katzisch sprechen, damit dir "
 "Ergebnisse angezeigt werden."
 
 #: templates/500.html:6
@@ -650,7 +655,7 @@ msgid "Overview"
 msgstr "Überblick"
 
 #: templates/nav.html:20 templates/videos/submittal.html:3
-#: templates/videos/submittal.html.py:6
+#: templates/videos/submittal.html.py:9
 msgid "Submittal"
 msgstr "Vorlage"
 
@@ -704,6 +709,7 @@ msgstr "Die nächsten Streams"
 
 #: templates/pages/page.html:21 templates/videos/channel.html:35
 #: templates/videos/collection.html:23 templates/videos/detail.html:34
+#: templates/videos/submittal.html:7
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -811,8 +817,8 @@ msgid "No comments"
 msgstr "Keine Kommentare"
 
 #: templates/videos/detail.html:127 templates/videos/submit.html:14
-#: templates/videos/submit.html.py:20 templates/videos/submittal.html:19
-#: templates/videos/submittal.html.py:25 templates/videos/thumbnail.html:27
+#: templates/videos/submit.html.py:20 templates/videos/submittal.html:22
+#: templates/videos/submittal.html.py:28 templates/videos/thumbnail.html:27
 #: templates/videos/thumbnail.html.py:33
 msgid "Error!"
 msgstr "Fehler!"
@@ -875,8 +881,7 @@ msgstr "Neuste Inhalte"
 
 #: templates/videos/status.html:9
 msgid "This site shows all media that will be or is transcoded"
-msgstr ""
-"Diese Seite zeigt alle Medien, die transkodiert werden oder es schon sind."
+msgstr "Diese Seite zeigt alle Medien, die transkodiert werden oder es schon sind."
 
 #: templates/videos/status.html:52
 msgid "No tasks"
@@ -888,7 +893,7 @@ msgstr "Es gibt keine Medien die transkodiert werden können"
 
 #: templates/videos/status.html:65
 msgid "Log"
-msgstr ""
+msgstr "Aufzeichungen"
 
 #: templates/videos/status.html:68
 msgid "Loading"
@@ -902,9 +907,9 @@ msgstr "Neu Laden"
 msgid "Close"
 msgstr "Schließen"
 
-#: templates/videos/submittal.html:37
+#: templates/videos/submittal.html:40
 msgid "Add media"
-msgstr ""
+msgstr "Inhalte hinzufügen"
 
 #: templates/videos/thumbnail.html:14
 msgid "Thumbnail List"
@@ -917,4 +922,3 @@ msgstr "Wiedergabeliste"
 #: templates/videos/videolist.html:33
 msgid "No videos are available."
 msgstr "Es sind keine Videos verfügbar"
-
