@@ -219,6 +219,7 @@ def submittal(request, subm_id):
                     model.published=True
                 if form.data['media_torrentDone'] == "on":
                     model.torrentDone = True
+                model.channel = form.cleaned_data['media_channel']
                 media_tags=form.cleaned_data['media_tags']
                 model.full_clean()
                 model.save()
