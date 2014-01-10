@@ -9,6 +9,8 @@ from portal.models import Submittal
 
 from django.utils.translation import ugettext_lazy as _
 
+from taggit.forms import *
+
 import lambdaproject.settings as settings
 import os
 import os.path
@@ -52,6 +54,7 @@ class CommentForm(ModelForm):
 
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
+    media_tags = TagField(label=_("Tags"))
     class Meta:
         model = Submittal
         exclude = ["title","description","users"]

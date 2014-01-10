@@ -227,9 +227,12 @@ def submittal(request, subm_id):
                     model.published=True
                 if form.data['media_torrentDone'] == "on":
                     model.torrentDone = True
+                media_tags=form.cleaned_data['media_tags']
                 model.full_clean()
                 model.save()
-                return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':page_list, 'submittal_list':submittal_list}, context_instance=RequestContext(request))
+                for media_tag in media_tags:
+                    model.tags.add(media_tag)
+                return redirect(list)
         else:
 	    tag_string = ""
             for tag in submittal.media_tags.all():
