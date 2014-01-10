@@ -214,12 +214,10 @@ def submittal(request, subm_id):
                               audioThumbURL=form.data['media_audioThumbURL'],
                               originalFile="None",
                               encodingDone=True,
+                              published=form.cleaned_data['media_published'],
+                              channel=form.cleaned_data['media_channel'],
+                              torrentDone=form.cleaned_data['media_torrentDone'],
                              )
-                if form.data['media_published'] == "on":
-                    model.published=True
-                if form.data['media_torrentDone'] == "on":
-                    model.torrentDone = True
-                model.channel = form.cleaned_data['media_channel']
                 media_tags=form.cleaned_data['media_tags']
                 model.full_clean()
                 model.save()
