@@ -202,8 +202,34 @@ def submittal(request, subm_id):
         submittal = get_object_or_404(Submittal, pk = subm_id)
         submittal_list = Submittal.objects.filter(users=request.user)
         if request.method == 'POST':
-            form = SubmittalForm()
-            return render_to_response('videos/thumbnail.html', {'submittal_form': form, 'submittal': submittal, 'submittal_list':submittal_list, 'settings': settings, 'page_list':page_list}, context_instance=RequestContext(request))
+            form = SubmittalForm(request.POST)
+            if form.is_valid():
+                model = Video(
+                              title=form.data['media_title'],
+                              slug=form.data['media_title'],
+                              date=datetime.date.today(),
+                              description=form.data['media_description'],
+                              user=request.user,
+                              license=form.data['media_license'],
+                              linkURL=form.data['media_linkURL'],
+                              kind=form.data['media_kind'],
+                              torrentURL=form.data['media_torrentURL'],
+                              mp4URL=form.data['media_mp4URL'],
+                              webmURL=form.data['media_webmURL'],
+                              mp3URL=form.data['media_mp3URL'],
+                              oggURL=form.data['media_oggURL'],
+                              videoThumbURL=form.data['media_videoThumbURL'],
+                              audioThumbURL=form.data['media_audioThumbURL'],
+                              originalFile="None",
+                              encodingDone=True,
+                             )
+                if form.data['media_published'] == "on":
+                    model.published=True
+                if form.data['media_torrentDone'] == "on":
+                    model.torrentDone = True
+                model.full_clean()
+                model.save()
+                return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':page_list, 'submittal_list':submittal_list}, context_instance=RequestContext(request))
         else:
 	    tag_string = ""
             for tag in submittal.media_tags.all():
@@ -229,7 +255,7 @@ def submittal(request, subm_id):
             })
             return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':page_list, 'submittal_list':submittal_list}, context_instance=RequestContext(request))
     else:
-        return HttpRedirect('/')
+        return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':page_list, 'submittal_list':submittal_list}, context_instance=RequestContext(request)) 
 
 @login_required(login_url='/login/')
 def upload_thumbnail(request):
@@ -253,6 +279,7 @@ def upload_thumbnail(request):
             form = ThumbnailForm()
             return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':submittal_list, 'page_list':page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
     else:
+        form = ThumbnailForm()
         return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':submittal_list, 'page_list':page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
     
 def handle_uploaded_thumbnail(f, filename):

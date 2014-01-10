@@ -10,7 +10,7 @@
 </div>
 <div class="row">
 	<div class="span6">
-		<form id="submittalForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
+		<form id="submittalForm" enctype="multipart/form-data" class="form-horizontal" action="/submittal/{{ submittal.id }}/" method="post">
 			{% if error %}
 				<div class="alert alert-error">{{ error }}</div>
 			{% endif %}
