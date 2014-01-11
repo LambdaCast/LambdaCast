@@ -205,7 +205,7 @@
 			{% endif %}
 			{% if video.oggURL %}
 			<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
-				<i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggSize_mb }} MB)</a>
+				<i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggURL|get_remote_size }} MB)</a>
 			</dd>
 			{% endif %}
 		</div>
