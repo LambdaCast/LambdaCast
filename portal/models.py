@@ -88,10 +88,6 @@ class Video(models.Model):
     def getClassName(self):
         return self.__class__.__name__
   
-    def mp4Size_mb(self):
-        size = float(self.mp4Size) / 1024 / 1024
-        return round(size, 3)
-
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
         md_free_desc = md_free_desc.replace('</p>', ' | ').replace('</li>', ' | ').replace('<ul>', ' | ')

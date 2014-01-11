@@ -190,7 +190,7 @@
 			<dt>{% trans "Download" %}:</dt>
 			{% if video.mp4URL %}
 			<dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
-				 <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4Size_mb }} MB)</a>
+				 <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4URL|get_remote_size }} MB)</a>
 			</dd>
 			{% endif %}
 			{% if video.webmURL %}
