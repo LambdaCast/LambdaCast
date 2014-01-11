@@ -195,7 +195,7 @@
 			{% endif %}
 			{% if video.webmURL %}
 			<dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm">
-				 <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmSize_mb }} MB)</a>
+				 <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmURL|get_remote_size }} MB)</a>
 			</dd>
 			{% endif %}
 			{% if video.mp3URL %}
