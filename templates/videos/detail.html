@@ -199,9 +199,9 @@
 			</dd>
 			{% endif %}
 			{% if video.mp3URL %}
-			<dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
-				<i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3Size_mb }} MB)</a>
-			</dd>
+                        <dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
+                                <i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3URL|get_remote_size }} MB)</a>
+                        </dd>
 			{% endif %}
 			{% if video.oggURL %}
 			<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
