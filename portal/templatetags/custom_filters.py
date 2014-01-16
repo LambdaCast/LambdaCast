@@ -2,6 +2,10 @@ from django import template
 import datetime
 import urllib
 
+import markdown
+from django.utils.safestring import mark_safe
+
+
 from django.utils.text import normalize_newlines
 
 register = template.Library()
@@ -24,3 +28,8 @@ def get_remote_size(url):
     meta = site.info()
     size_in_mb = float(meta.getheaders("Content-Length")[0]) / 1024 / 1024 
     return round(size_in_mb, 2)
+
+@register.filter(name="render_markdown")
+def render_markdown(text):
+    rendered_md = markdown.markdown(text)
+    return mark_safe(rendered_md)
