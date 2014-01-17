@@ -220,18 +220,21 @@ class Video(models.Model):
         if path.endswith('.mp3'):
             if ((kind == 1) or (kind == 2)):
                 audio_mp3 = MP3(path, ID3=ID3)
-                cover_data = audio_mp3.tags.getall('APIC')[0].data
-                cover_mimetype = audio_mp3.tags.getall('APIC')[0].mime
-                if cover_mimetype == 'image/png':
-                    art_mp3 = open(settings.MEDIA_ROOT + '/thumbnails/' + self.slug + '.png', 'w')
-                    art_mp3.write(cover_data)
-                    art_mp3.close()
-                    self.audioThumbURL = '/media/thumbnails/' + self.slug + '.png'
-                elif cover_mimetype == 'image/jpg':
-                    art_mp3 = open(settings.MEDIA_ROOT + '/thumbnails/' + self.slug + '.jpg', 'w')
-                    art_mp3.write(cover_data)
-                    art_mp3.close()
-                    self.audioThumbURL = '/media/thumbnails/' + self.slug + '.jpg'
+                try:
+                    cover_data = audio_mp3.tags.getall('APIC')[0].data
+                    cover_mimetype = audio_mp3.tags.getall('APIC')[0].mime
+                    if cover_mimetype == 'image/png':
+                        art_mp3 = open(settings.MEDIA_ROOT + '/thumbnails/' + self.slug + '.png', 'w')
+                        art_mp3.write(cover_data)
+                        art_mp3.close()
+                        self.audioThumbURL = '/media/thumbnails/' + self.slug + '.png'
+                    elif cover_mimetype == 'image/jpg':
+                        art_mp3 = open(settings.MEDIA_ROOT + '/thumbnails/' + self.slug + '.jpg', 'w')
+                        art_mp3.write(cover_data)
+                        art_mp3.close()
+                        self.audioThumbURL = '/media/thumbnails/' + self.slug + '.jpg'
+                except:
+                    pass
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT
