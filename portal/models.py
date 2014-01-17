@@ -21,6 +21,8 @@ import datetime
 from types import NoneType
 
 from mutagen import File
+from mutagen.mp3 import MP3
+from mutagen.id3 import ID3, APIC, error
 
 from threading import Event
 
@@ -198,7 +200,7 @@ class Video(models.Model):
             
             while outcode.poll() == None:
                 pass
-    
+
             if outcode.poll() == 0:
                 self.mp3Size = os.path.getsize(outfile_mp3)
                 self.duration = getLength(outfile_mp3)
@@ -215,14 +217,21 @@ class Video(models.Model):
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
                 
-        if (kind == 1 and self.audioThumbURL == "" and self.videoThumbURL == ""):
-            file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
-            if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
-                artwork = file.tags['APIC:'].data # access APIC frame and grab the image
-                with open(outputdir + self.slug + '_cover.jpg', 'wb') as img:
-                    img.write(artwork)
-
-                self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '_cover.jpg'
+        if path.endswith('.mp3'):
+            if ((kind == 1) or (kind == 2)):
+                audio_mp3 = MP3(path, ID3=ID3)
+                cover_data = audio_mp3.tags.getall('APIC')[0].data
+                cover_mimetype = audio_mp3.tags.getall('APIC')[0].mime
+                if cover_mimetype == 'image/png':
+                    art_mp3 = open(settings.MEDIA_ROOT + '/thumbnails/' + self.slug + '.png', 'w')
+                    art_mp3.write(cover_data)
+                    art_mp3.close()
+                    self.audioThumbURL = '/media/thumbnails/' + self.slug + '.png'
+                elif cover_mimetype == 'image/jpg':
+                    art_mp3 = open(settings.MEDIA_ROOT + '/thumbnails/' + self.slug + '.jpg', 'w')
+                    art_mp3.write(cover_data)
+                    art_mp3.close()
+                    self.audioThumbURL = '/media/thumbnails/' + self.slug + '.jpg'
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT
