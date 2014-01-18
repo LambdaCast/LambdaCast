@@ -12,7 +12,7 @@ from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
-from portal.models import Video, Comment, Channel, Collection
+from portal.models import Video, Comment, Channel, Collection, User
 from portal.forms import VideoForm, CommentForm, getThumbnails
 from transloadit.client import Client
 from taggit.models import Tag
@@ -88,6 +88,12 @@ def detail(request, slug):
                     comment = form.save(commit=False)
                     comment.save()
                     message = _(u"Your comment will be moderated")
+                    user_video = video.user
+                    if not user_video.first_name == '':
+                        mail_message = _(u'Hello %s,\n\nsomeone commented under one of your videos/audios. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_video.first_name
+                    else:
+                        mail_message = _(u'Hello %s,\n\nsomeone commented under one of your videos/audios. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_video.username
+                    user_video.email_user(_(u'New Comment: ') + video.title, mail_message)
                     return render_to_response('videos/detail.html', {'page_list':page_list,'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
             else:
                     return render_to_response('videos/detail.html', {'page_list':page_list,'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))

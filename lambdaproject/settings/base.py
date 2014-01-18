@@ -219,6 +219,9 @@ ENABLE_LIVESTREAMS = False
 ENABLE_AUDIO_FEEDS = True
 ENABLE_VIDEO_FEEDS = True
 
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+
 USE_BITTORRENT = False
 # example: "udp://tracker.example.com:80"
 BITTORRENT_TRACKER_ANNOUNCE_URL = ''
