@@ -298,6 +298,9 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.comment
 
+    def get_absolute_url(self):
+        return "/videos/%s/" % self.video.slug
+
 class Channel(models.Model):
     ''' The model for our channels, all channels can hold videos but videos can only be part of one channel'''
     name = models.CharField(_(u"Name"),max_length=30)

@@ -44,9 +44,9 @@ urlpatterns = patterns('',
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/ogg/$', CollectionFeedOGG()),
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/mp3/$', CollectionFeedMP3()),
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/torrent/$', CollectionFeedTorrent()),
+    url(r'^feeds/comments/$', CommentsFeed()),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    
 )
 
 urlpatterns += patterns('',
