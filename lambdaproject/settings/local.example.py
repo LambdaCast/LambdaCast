@@ -56,7 +56,3 @@ LANGUAGE_CODE = 'de-de'
 # Language code for the OpenGraph implementation.
 OG_LANGUAGE_CODE = 'de_DE'
 
-# Host and port for the mail server to send mails for new comments
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
-
