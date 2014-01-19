@@ -2,6 +2,7 @@ from django.contrib.syndication.views import Feed, FeedDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.utils.feedgenerator import *
+from django.http import Http404
 
 from portal.models import Video, Channel, Collection
 
@@ -76,7 +77,7 @@ class MainFeed(Feed):
         elif self.fileformat == 'webm':
             return item.webmURL
         else:
-            return Exception
+            raise Http404
 
     def item_link(self, item):
         if self.fileformat == 'mp3':
@@ -88,7 +89,7 @@ class MainFeed(Feed):
         elif self.fileformat == 'webm':
             return item.webmURL
         else:
-            return Exception
+            raise Http404
 
     def item_enclosure_length(self, item):
         if self.fileformat == 'mp3':
@@ -100,7 +101,7 @@ class MainFeed(Feed):
         elif self.fileformat == 'webm':
             return item.webmSize
         else:
-            return Exception
+            raise Http404
 
     def item_pubdate(self, item):
         return item.created
