@@ -222,6 +222,10 @@ ENABLE_LIVESTREAMS = False
 ENABLE_AUDIO_FEEDS = True
 ENABLE_VIDEO_FEEDS = True
 
+# Host and port for the mail server to send mails for new comments
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+
 USE_BITTORRENT = False
 # example: "udp://tracker.example.com:80"
 BITTORRENT_TRACKER_ANNOUNCE_URL = ''

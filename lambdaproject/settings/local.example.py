@@ -58,3 +58,4 @@ LANGUAGE_CODE = 'de-de'
 
 # Language code for the OpenGraph implementation.
 OG_LANGUAGE_CODE = 'de_DE'
+

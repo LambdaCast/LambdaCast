@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-23 04:37+0200\n"
+"POT-Creation-Date: 2014-01-18 02:43+0100\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,13 +30,13 @@ msgstr "Hier wirst du die nächsten Streams sehen"
 msgid "Stream title"
 msgstr "Stream Titel"
 
-#: livestream/models.py:15 pages/models.py:183 portal/models.py:54
-#: portal/models.py:300 portal/models.py:330
+#: livestream/models.py:15 pages/models.py:183 portal/models.py:55
+#: portal/models.py:304 portal/models.py:334
 msgid "Slug"
 msgstr "Slug"
 
-#: livestream/models.py:15 portal/models.py:54 portal/models.py:300
-#: portal/models.py:330
+#: livestream/models.py:15 portal/models.py:55 portal/models.py:304
+#: portal/models.py:334
 msgid "Slugs are parts of an URL that you can define"
 msgstr "Slugs sind Teile der URL die definiert werden können"
 
@@ -48,14 +48,14 @@ msgstr "Beginn der Veranstaltung"
 msgid "End of the event"
 msgstr "Ende der Veranstaltung"
 
-#: livestream/models.py:18 pages/models.py:185 portal/models.py:56
-#: portal/models.py:301 portal/models.py:318 portal/models.py:329
+#: livestream/models.py:18 pages/models.py:185 portal/models.py:57
+#: portal/models.py:305 portal/models.py:322 portal/models.py:333
 #: templates/livestream/current.html:37 templates/videos/detail.html:89
 #: templates/videos/videolist.html:22 templates/videos/videolist.html.py:27
 msgid "Description"
 msgstr "Beschreibung"
 
-#: livestream/models.py:19 portal/models.py:60
+#: livestream/models.py:19 portal/models.py:61
 #: templates/livestream/current.html:40
 msgid "Link"
 msgstr "Link"
@@ -80,18 +80,18 @@ msgstr "Link nur zu Audioinhalten"
 msgid "iFrame of the Stream"
 msgstr "iFrame des Streams"
 
-#: livestream/models.py:23 portal/models.py:75
+#: livestream/models.py:23 portal/models.py:76
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: livestream/models.py:24 portal/models.py:80 portal/models.py:291
-#: portal/models.py:302 portal/models.py:321 portal/models.py:334
+#: livestream/models.py:24 portal/models.py:81 portal/models.py:295
+#: portal/models.py:306 portal/models.py:325 portal/models.py:338
 msgid "Created"
 msgstr "Erstellt"
 
-#: livestream/models.py:25 pages/models.py:182 portal/models.py:81
-#: portal/models.py:292 portal/models.py:303 portal/models.py:322
-#: portal/models.py:335
+#: livestream/models.py:25 pages/models.py:182 portal/models.py:82
+#: portal/models.py:296 portal/models.py:307 portal/models.py:326
+#: portal/models.py:339
 msgid "Modified"
 msgstr "Geändert"
 
@@ -103,7 +103,7 @@ msgstr "Link zu einer anderen Webseite"
 msgid "display the content of body"
 msgstr "Zeige den Inhalt an"
 
-#: pages/models.py:181 portal/models.py:314
+#: pages/models.py:181 portal/models.py:318
 msgid "Activated"
 msgstr "Aktiviert"
 
@@ -111,8 +111,8 @@ msgstr "Aktiviert"
 msgid "Is part of the URL that you can define"
 msgstr "Ist Teil der URL, die festgelegt werden kann"
 
-#: pages/models.py:184 portal/models.py:53 portal/models.py:317
-#: portal/models.py:328
+#: pages/models.py:184 portal/models.py:54 portal/models.py:321
+#: portal/models.py:332
 msgid "Title"
 msgstr "Titel"
 
@@ -199,284 +199,284 @@ msgstr "Automatisch"
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
-#: portal/models.py:32
+#: portal/models.py:33
 msgid "No License"
 msgstr "Keine Lizenz"
 
-#: portal/models.py:33
+#: portal/models.py:34
 msgid "Public Domain/CC0"
 msgstr ""
 
-#: portal/models.py:34
+#: portal/models.py:35
 msgid "CreativeCommons - Attribution"
 msgstr "CreativeCommons - Namensnennung"
 
-#: portal/models.py:35
+#: portal/models.py:36
 msgid "CreativeCommons - Attribution - NonCommercial"
 msgstr "CreativeCommons - Namensnennung - Nicht-Kommerziell"
 
-#: portal/models.py:36
+#: portal/models.py:37
 msgid "CreativeCommons - Attribution - NonCommercial - NoDerivs"
 msgstr ""
 "CreativeCommons - Namensnennung - Nicht-Kommerziell - Keine Bearbeitung"
 
-#: portal/models.py:37
+#: portal/models.py:38
 msgid "CreativeCommons - Attribution - NoDerivs"
 msgstr "CreativeCommons - Namensnennung - Keine Bearbeitung"
 
-#: portal/models.py:41
+#: portal/models.py:42
 msgid "Video-only"
 msgstr "nur Videoinhalte"
 
-#: portal/models.py:42
+#: portal/models.py:43
 msgid "Audio-only"
 msgstr "nur Audioinhalte"
 
-#: portal/models.py:43
+#: portal/models.py:44
 msgid "Audio and Video"
 msgstr "Audio und Video"
 
-#: portal/models.py:55 portal/models.py:331 templates/videos/detail.html:152
+#: portal/models.py:56 portal/models.py:335 templates/videos/detail.html:152
 #: templates/videos/status.html:17 templates/videos/videolist.html:28
 msgid "Date"
 msgstr "Datum"
 
-#: portal/models.py:55
+#: portal/models.py:56
 msgid "Upload or record date"
 msgstr "Hochlade- oder Aufnahmedatum"
 
-#: portal/models.py:56
+#: portal/models.py:57
 msgid ""
 "Insert a description to the media. You can use Markdown to add formatting"
 msgstr ""
 "Füge eine Beschreibung zu den Inhalten hinzu. Für die Formatierung kann man "
 "Markdown benutzen."
 
-#: portal/models.py:57
+#: portal/models.py:58
 msgid "User"
 msgstr "Benutzer"
 
-#: portal/models.py:57
+#: portal/models.py:58
 msgid "Shows which user made or uploaded the video"
 msgstr "Zeigt an welcher Benutzer den Inhalt hochgeladen oder gemacht hat"
 
-#: portal/models.py:58 portal/models.py:315 templates/videos/detail.html:155
+#: portal/models.py:59 portal/models.py:319 templates/videos/detail.html:155
 msgid "Channel"
 msgstr "Kanal"
 
-#: portal/models.py:58
+#: portal/models.py:59
 msgid "Channels are used to order your media"
 msgstr "Kanäle werden für das Einordnen der Inhalte in Kategorien benutzt"
 
-#: portal/models.py:59 templates/videos/detail.html:180
+#: portal/models.py:60 templates/videos/detail.html:180
 msgid "License"
 msgstr "Lizenz"
 
-#: portal/models.py:59
+#: portal/models.py:60
 msgid "Rights the viewer/listener has"
 msgstr "Rechte die der Zuhörer/Zuschauer erhält"
 
-#: portal/models.py:60
+#: portal/models.py:61
 msgid "Insert a link to a blog or website that relates to the media"
 msgstr ""
 "Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
 "Inhalt zu tun hat."
 
-#: portal/models.py:61 portal/models.py:320
+#: portal/models.py:62 portal/models.py:324
 msgid "Type"
 msgstr "Art des Inhalts"
 
-#: portal/models.py:61
+#: portal/models.py:62
 msgid "The type of the media could be video or audio or both"
 msgstr "Die Art der Inhalte kann Video oder Audio oder beides sein."
 
-#: portal/models.py:62
+#: portal/models.py:63
 msgid "Torrent-URL"
 msgstr ""
 
-#: portal/models.py:62
+#: portal/models.py:63
 msgid "The URL to the torrent-file"
 msgstr "Die URL zur Torrent-Datei"
 
-#: portal/models.py:63
+#: portal/models.py:64
 msgid "MP4-URL"
 msgstr ""
 
-#: portal/models.py:63
+#: portal/models.py:64
 msgid "Add the link of the media folder or any other one with .mp4 ending"
 msgstr "Füge einen Link zu einer Datei dazu, die die Endung .mp4 besitzt."
 
-#: portal/models.py:64
+#: portal/models.py:65
 msgid "MP4 Size in Bytes"
 msgstr "Größe der MP4-Datei in Bytes"
 
-#: portal/models.py:65
+#: portal/models.py:66
 msgid "WEBM-URL"
 msgstr ""
 
-#: portal/models.py:65
+#: portal/models.py:66
 msgid "Add the link of the media folder or any other one with .webm ending"
 msgstr "Füge einen Link zu einer Datei dazu, die die Endung .webm besitzt."
 
-#: portal/models.py:66
+#: portal/models.py:67
 msgid "WEBM Size in Bytes"
 msgstr "Größe der WEBM-Datei in Bytes"
 
-#: portal/models.py:67
+#: portal/models.py:68
 msgid "MP3-URL"
 msgstr ""
 
-#: portal/models.py:67
+#: portal/models.py:68
 msgid "Add the link of the media folder or any other one with .mp3 ending"
 msgstr "Füge einen Link zu einer Datei dazu, die die Endung .mp3 besitzt."
 
-#: portal/models.py:68
+#: portal/models.py:69
 msgid "MP3 Size in Bytes"
 msgstr "Größe der MP3-Datei in Bytes"
 
-#: portal/models.py:69
+#: portal/models.py:70
 msgid "OGG-URL"
 msgstr ""
 
-#: portal/models.py:69
+#: portal/models.py:70
 msgid "Add the link of the media folder or any other one with .ogg ending"
 msgstr "Füge einen Link zu einer Datei dazu, die die Endung .ogg besitzt."
 
-#: portal/models.py:70
+#: portal/models.py:71
 msgid "OGG Size in Bytes"
 msgstr "Größe der OGG-Datei in Bytes"
 
-#: portal/models.py:71
+#: portal/models.py:72
 msgid "Video Thumb-URL"
 msgstr "URL zum Videovorschaubild"
 
-#: portal/models.py:71
+#: portal/models.py:72
 msgid "Use a picture as thumbnail for the media list"
 msgstr "Benutze ein Bild als Vorschaubild für die Auflistung der Inhalte."
 
-#: portal/models.py:72
+#: portal/models.py:73
 msgid "Audio Cover-URL"
 msgstr "Bild-URL für Audio"
 
-#: portal/models.py:72
+#: portal/models.py:73
 msgid "Use a picture as cover for the media list"
 msgstr "Benutze ein Bild als Cover für die Auflistung der Inhalte."
 
-#: portal/models.py:73 templates/videos/detail.html:177
+#: portal/models.py:74 templates/videos/detail.html:177
 msgid "Duration"
 msgstr "Dauer"
 
-#: portal/models.py:73
+#: portal/models.py:74
 msgid "The length of the media"
 msgstr "Die Dauer/Länge des Inhalts."
 
-#: portal/models.py:74 portal/models.py:319
+#: portal/models.py:75 portal/models.py:323
 msgid "Auto-Publish"
 msgstr "Automatisches Veröffentlichen"
 
-#: portal/models.py:76
+#: portal/models.py:77
 msgid "Encoding done"
 msgstr "Umwandlung beendet"
 
-#: portal/models.py:77
+#: portal/models.py:78
 msgid "Torrent done"
 msgstr "Torrent vorhanden"
 
-#: portal/models.py:78
+#: portal/models.py:79
 msgid "Transloadit Result"
 msgstr "Transloadit Ergebnis"
 
-#: portal/models.py:79
+#: portal/models.py:80
 msgid "Tags"
 msgstr ""
 
-#: portal/models.py:79
+#: portal/models.py:80
 msgid "Insert what the video is about in short terms divided by commas"
 msgstr ""
 "Füge kurze Begriffe ein, die den Inhalt beschreiben und trenne sie mit "
 "Kommatas."
 
-#: portal/models.py:82
+#: portal/models.py:83
 msgid "File"
 msgstr "Datei"
 
-#: portal/models.py:174
+#: portal/models.py:178
 msgid "Encoding MP4 Failed"
 msgstr "Umwandlung der MP4-Datei fehlerhaft"
 
-#: portal/models.py:186
+#: portal/models.py:190
 msgid "Encoding WEBM Failed"
 msgstr "Umwandlung der WEBM-Datei fehlerhaft"
 
-#: portal/models.py:196
+#: portal/models.py:200
 msgid "Making Thumb Failed"
 msgstr "Erstellung des Vorschaubilded fehlerhaft"
 
-#: portal/models.py:222
+#: portal/models.py:226
 msgid "Encoding MP3 Failed"
 msgstr "Umwandlung der MP3-Datei fehlerhaft"
 
-#: portal/models.py:232
+#: portal/models.py:236
 msgid "Encoding OGG Failed"
 msgstr "Umwandlung der OGG-Datei fehlerhaft"
 
-#: portal/models.py:270
+#: portal/models.py:274
 msgid "https://creativecommons.org/publicdomain/zero/1.0/"
 msgstr "https://creativecommons.org/publicdomain/zero/1.0/deed.de"
 
-#: portal/models.py:272
+#: portal/models.py:276
 msgid "http://creativecommons.org/licenses/by/3.0/"
 msgstr "https://creativecommons.org/licenses/by/3.0/deed.de"
 
-#: portal/models.py:274
+#: portal/models.py:278
 msgid "http://creativecommons.org/licenses/by-nc/3.0/"
 msgstr "https://creativecommons.org/licenses/by-nc/3.0/deed.de"
 
-#: portal/models.py:276
+#: portal/models.py:280
 msgid "http://creativecommons.org/licenses/by-nc-nd/3.0/"
 msgstr "https://creativecommons.org/licenses/by-nc-nd/3.0/deed.de"
 
-#: portal/models.py:278
+#: portal/models.py:282
 msgid "http://creativecommons.org/licenses/by-nd/3.0/"
 msgstr "https://creativecommons.org/licenses/by-nd/3.0/deed.de"
 
-#: portal/models.py:285 portal/models.py:299 templates/videos/detail.html:102
+#: portal/models.py:289 portal/models.py:303 templates/videos/detail.html:102
 msgid "Name"
 msgstr ""
 
-#: portal/models.py:286
+#: portal/models.py:290
 msgid "The IP of the one who posted the comment"
 msgstr "Die IP des Kommentators"
 
-#: portal/models.py:287
+#: portal/models.py:291
 msgid "Moderated"
 msgstr "Freigegeben"
 
-#: portal/models.py:288
+#: portal/models.py:292
 msgid "Timecode"
 msgstr "Zeitpunkt"
 
-#: portal/models.py:289
+#: portal/models.py:293
 msgid "Comment"
 msgstr "Kommentar"
 
-#: portal/models.py:290 templates/videos/detail.html:64
+#: portal/models.py:294 templates/videos/detail.html:64
 msgid "Video"
 msgstr "Inhalt"
 
-#: portal/models.py:301
+#: portal/models.py:305
 msgid "Describe the topic or content of the channel"
 msgstr "Beschreibe die Themen oder die Inhalte des Kanals"
 
-#: portal/models.py:304
+#: portal/models.py:308
 msgid "Featured"
 msgstr "Hervorgehoben"
 
-#: portal/models.py:315
+#: portal/models.py:319
 msgid "The media in the folder will be added to the channel automatically"
 msgstr "Die Inhalte im Ordner werden automatisch dem Kanal hinzugefügt"
 
-#: portal/models.py:316
+#: portal/models.py:320
 msgid ""
 "Set a folder you can add media in and then get it automatically listed in "
 "LambdaCast"
@@ -484,15 +484,15 @@ msgstr ""
 "Wähle einen Ordner aus dem man Inhalte hinzufügen kann und automatisch in "
 "LambdaCast erscheinen werden."
 
-#: portal/models.py:332
+#: portal/models.py:336
 msgid "Videos"
 msgstr "Inhalte"
 
-#: portal/models.py:332
+#: portal/models.py:336
 msgid "Media you want to add to your collection"
 msgstr "Inhalte die der Sammlung hinzufügt werden"
 
-#: portal/models.py:333
+#: portal/models.py:337
 msgid "Channels you want to add to your collection"
 msgstr "Kanäle die der Sammlung hinzugefügt werden"
 
@@ -500,7 +500,26 @@ msgstr "Kanäle die der Sammlung hinzugefügt werden"
 msgid "Your comment will be moderated"
 msgstr "Dein Kommentar wird freigeschaltet"
 
-#: portal/views.py:328
+#: portal/views.py:93 portal/views.py:95
+#, python-format
+msgid "Hello %s,\n"
+"\n"
+"someone commented under one of your videos/audios. Please check and moderate "
+"it, so others can see the comment.\n"
+"\n"
+"Thank You."
+msgstr "Hallo %s,\n"
+"\n"
+"jemand hat unter einen deiner Videos/Audios kommentiert. Bitte überprüfe das "
+"und moderiere den Kommentar, so dass andere ihn sehen können.\n"
+"\n"
+"Vielen Dank."
+
+#: portal/views.py:96
+msgid "New Comment: "
+msgstr "Neuer Kommentar: "
+
+#: portal/views.py:334
 msgid "Video was updated"
 msgstr "Inhalte wurden aktualisiert"
 
