@@ -41,23 +41,23 @@ class MainFeed(Feed):
     feed_type = iTunesFeed
     description = ''
     subtitle = description
-    author_name = str(settings.AUTHOR_NAME)
+    author_name = settings.AUTHOR_NAME
 
     def items(self):
         return Video.objects.filter(published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
-        extra['iTunes_name'] = str(settings.AUTHOR_NAME)
-        extra['iTunes_email'] = str(settings.CONTACT_EMAIL)
-        extra['iTunes_image_url'] = str(settings.LOGO_URL)
+        extra['iTunes_name'] = settings.AUTHOR_NAME
+        extra['iTunes_email'] = settings.CONTACT_EMAIL
+        extra['iTunes_image_url'] = settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
         return extra
 
     def item_extra_kwargs(self, item):
         extra = {}
         extra['duration'] = str(item.duration)
-        extra['summary'] = str(item.description)
+        extra['summary'] = item.description
         extra['explicit'] = 'no'
         return extra
 
