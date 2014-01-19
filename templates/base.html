@@ -20,6 +20,7 @@
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Audio Files (MP3)" %}" href="/feeds/latest/mp3/" />
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Audio Files (OGG)" %}" href="/feeds/latest/ogg/" />
 		{% endif %}
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Comments-Feed" %}" href="/feeds/comments/" />
 		{% if settings.ENABLE_LIVESTREAMS %}
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Upcoming Events" %}" href="/feeds/stream/upcoming/" />
 		{% endif %}

@@ -2,7 +2,7 @@ from django.contrib.syndication.views import Feed, FeedDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from portal.models import Video, Channel, Collection
+from portal.models import Video, Channel, Collection, Comment
 
 import lambdaproject.settings as settings
 
@@ -475,6 +475,25 @@ class CollectionFeedTorrent(Feed):
 
     def item_enclosure_length(self, item):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
+
+    def item_pubdate(self, item):
+        return item.created
+
+
+class CommentsFeed(Feed):
+    title = _(u"Latest comments from your podcast portal")
+    link = "/"
+    description = _(u"The latest comments from your podcast portal")
+
+    def items(self):
+        return Comment.objects.filter(moderated=True).order_by('-created')
+
+    def item_title(self, item):
+        title = _(u"New comment to %s") % item.video.title
+        return title
+
+    def item_description(self, item):
+        return markdown.markdown(item.comment, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_pubdate(self, item):
         return item.created

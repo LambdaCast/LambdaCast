@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-18 02:43+0100\n"
+"POT-Creation-Date: 2014-01-18 13:14+0100\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,12 +31,12 @@ msgid "Stream title"
 msgstr "Stream Titel"
 
 #: livestream/models.py:15 pages/models.py:183 portal/models.py:55
-#: portal/models.py:304 portal/models.py:334
+#: portal/models.py:307 portal/models.py:337
 msgid "Slug"
 msgstr "Slug"
 
-#: livestream/models.py:15 portal/models.py:55 portal/models.py:304
-#: portal/models.py:334
+#: livestream/models.py:15 portal/models.py:55 portal/models.py:307
+#: portal/models.py:337
 msgid "Slugs are parts of an URL that you can define"
 msgstr "Slugs sind Teile der URL die definiert werden können"
 
@@ -49,7 +49,7 @@ msgid "End of the event"
 msgstr "Ende der Veranstaltung"
 
 #: livestream/models.py:18 pages/models.py:185 portal/models.py:57
-#: portal/models.py:305 portal/models.py:322 portal/models.py:333
+#: portal/models.py:308 portal/models.py:325 portal/models.py:336
 #: templates/livestream/current.html:37 templates/videos/detail.html:89
 #: templates/videos/videolist.html:22 templates/videos/videolist.html.py:27
 msgid "Description"
@@ -85,13 +85,13 @@ msgid "Published"
 msgstr "Veröffentlicht"
 
 #: livestream/models.py:24 portal/models.py:81 portal/models.py:295
-#: portal/models.py:306 portal/models.py:325 portal/models.py:338
+#: portal/models.py:309 portal/models.py:328 portal/models.py:341
 msgid "Created"
 msgstr "Erstellt"
 
 #: livestream/models.py:25 pages/models.py:182 portal/models.py:82
-#: portal/models.py:296 portal/models.py:307 portal/models.py:326
-#: portal/models.py:339
+#: portal/models.py:296 portal/models.py:310 portal/models.py:329
+#: portal/models.py:342
 msgid "Modified"
 msgstr "Geändert"
 
@@ -103,7 +103,7 @@ msgstr "Link zu einer anderen Webseite"
 msgid "display the content of body"
 msgstr "Zeige den Inhalt an"
 
-#: pages/models.py:181 portal/models.py:318
+#: pages/models.py:181 portal/models.py:321
 msgid "Activated"
 msgstr "Aktiviert"
 
@@ -111,8 +111,8 @@ msgstr "Aktiviert"
 msgid "Is part of the URL that you can define"
 msgstr "Ist Teil der URL, die festgelegt werden kann"
 
-#: pages/models.py:184 portal/models.py:54 portal/models.py:321
-#: portal/models.py:332
+#: pages/models.py:184 portal/models.py:54 portal/models.py:324
+#: portal/models.py:335
 msgid "Title"
 msgstr "Titel"
 
@@ -191,6 +191,18 @@ msgstr "LambdaCast: Torrents für den Kanal %s"
 msgid "LambdaCast: Videos in Collection %s"
 msgstr "LambdaCast: Videos in der Sammlung %s"
 
+#: portal/feeds.py:484
+msgid "Latest comments from your podcast portal"
+msgstr ""
+
+#: portal/feeds.py:486
+msgid "The latest comments from your podcast portal"
+msgstr ""
+
+#: portal/feeds.py:492
+msgid "New comment to %s"
+msgstr "Neuer Kommentar zu %s"
+
 #: portal/forms.py:21
 msgid "Automaticly"
 msgstr "Automatisch"
@@ -236,7 +248,7 @@ msgstr "nur Audioinhalte"
 msgid "Audio and Video"
 msgstr "Audio und Video"
 
-#: portal/models.py:56 portal/models.py:335 templates/videos/detail.html:152
+#: portal/models.py:56 portal/models.py:338 templates/videos/detail.html:152
 #: templates/videos/status.html:17 templates/videos/videolist.html:28
 msgid "Date"
 msgstr "Datum"
@@ -282,7 +294,7 @@ msgstr ""
 "Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
 "Inhalt zu tun hat."
 
-#: portal/models.py:62 portal/models.py:324
+#: portal/models.py:62 portal/models.py:327
 msgid "Type"
 msgstr "Art des Inhalts"
 
@@ -370,7 +382,7 @@ msgstr "Dauer"
 msgid "The length of the media"
 msgstr "Die Dauer/Länge des Inhalts."
 
-#: portal/models.py:75 portal/models.py:323
+#: portal/models.py:75 portal/models.py:326
 msgid "Auto-Publish"
 msgstr "Automatisches Veröffentlichen"
 
@@ -440,7 +452,7 @@ msgstr "https://creativecommons.org/licenses/by-nc-nd/3.0/deed.de"
 msgid "http://creativecommons.org/licenses/by-nd/3.0/"
 msgstr "https://creativecommons.org/licenses/by-nd/3.0/deed.de"
 
-#: portal/models.py:289 portal/models.py:303 templates/videos/detail.html:102
+#: portal/models.py:289 portal/models.py:306 templates/videos/detail.html:102
 msgid "Name"
 msgstr ""
 
@@ -464,19 +476,19 @@ msgstr "Kommentar"
 msgid "Video"
 msgstr "Inhalt"
 
-#: portal/models.py:305
+#: portal/models.py:308
 msgid "Describe the topic or content of the channel"
 msgstr "Beschreibe die Themen oder die Inhalte des Kanals"
 
-#: portal/models.py:308
+#: portal/models.py:311
 msgid "Featured"
 msgstr "Hervorgehoben"
 
-#: portal/models.py:319
+#: portal/models.py:322
 msgid "The media in the folder will be added to the channel automatically"
 msgstr "Die Inhalte im Ordner werden automatisch dem Kanal hinzugefügt"
 
-#: portal/models.py:320
+#: portal/models.py:323
 msgid ""
 "Set a folder you can add media in and then get it automatically listed in "
 "LambdaCast"
@@ -484,15 +496,15 @@ msgstr ""
 "Wähle einen Ordner aus dem man Inhalte hinzufügen kann und automatisch in "
 "LambdaCast erscheinen werden."
 
-#: portal/models.py:336
+#: portal/models.py:339
 msgid "Videos"
 msgstr "Inhalte"
 
-#: portal/models.py:336
+#: portal/models.py:339
 msgid "Media you want to add to your collection"
 msgstr "Inhalte die der Sammlung hinzufügt werden"
 
-#: portal/models.py:337
+#: portal/models.py:340
 msgid "Channels you want to add to your collection"
 msgstr "Kanäle die der Sammlung hinzugefügt werden"
 
@@ -742,7 +754,7 @@ msgstr ""
 msgid "OGG-Format"
 msgstr ""
 
-#: templates/videos/channel.html:120 templates/videos/index.html:91
+#: templates/videos/channel.html:120 templates/videos/index.html:95
 #: templates/videos/list.html:50 templates/videos/search_results.html:50
 msgid "Contact"
 msgstr "Kontakt"
@@ -823,6 +835,10 @@ msgstr ""
 #: templates/videos/index.html:18
 msgid "Latest Videos"
 msgstr "Neuste Inhalte"
+
+#: templates/videos/index.html:91
+msgid "Comments-Feed"
+msgstr "Kommentar-Feed"
 
 #: templates/videos/status.html:9
 msgid "This site shows all media that will be or is transcoded"
