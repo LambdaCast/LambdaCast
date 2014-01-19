@@ -57,7 +57,7 @@ class MainFeed(Feed):
     def item_extra_kwargs(self, item):
         extra = {}
         extra['duration'] = str(item.duration)
-        extra['summary'] = item.description
+        extra['summary'] = self.item_description(item)
         extra['explicit'] = 'no'
         return extra
 
