@@ -32,8 +32,6 @@ from sys import argv
 from operator import attrgetter
 import itertools
 
-page_list = Page.objects.filter(activated=True).order_by('orderid')
-
 def list(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available video and
     forwards them to the template. We use Django's Paginator to have pagination '''
@@ -41,6 +39,7 @@ def list(request):
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -61,6 +60,7 @@ def channel_list(request,slug):
     ''' This view is the view for the channels video list it works almost like the index view'''
     channel = get_object_or_404(Channel, slug=slug)
 #    videos_list = Video.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified')
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -83,6 +83,7 @@ def channel_list(request,slug):
 
 def detail(request, slug):
     ''' Handles the detail view of a video (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -112,6 +113,7 @@ def detail(request, slug):
 
 def iframe(request, slug):
     ''' Returns an iframe for a video so that videos can be shared easily '''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -122,6 +124,7 @@ def iframe(request, slug):
 
 def tag(request, tag):
     ''' Gets all videos for a specified tag'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -133,6 +136,7 @@ def tag(request, tag):
 
 def collection(request, slug):
     ''' Gets all videos for a channel'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -144,6 +148,7 @@ def collection(request, slug):
                             
 def search(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -163,6 +168,7 @@ def search(request):
 
 def search_json(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
@@ -180,6 +186,7 @@ def search_json(request):
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
            
 def tag_json(request, tag):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
@@ -190,6 +197,7 @@ def tag_json(request, tag):
 
 @login_required(login_url='/login/')
 def submittal(request, subm_id):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal = get_object_or_404(Submittal, pk = subm_id)
         submittal_list = Submittal.objects.filter(users=request.user)
@@ -253,6 +261,7 @@ def submittal(request, subm_id):
 
 @login_required(login_url='/login/')
 def upload_thumbnail(request):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     submittal_list = Submittal.objects.filter(users=request.user)
     thumbnails_list = getThumbnails(settings.THUMBNAILS_DIR)
     del thumbnails_list[0]
@@ -289,6 +298,7 @@ def submit(request):
     a new task task for encoding this video. If we use bittorrent to distribute our files
     we also use django tasks to make the .torrent files (this can take a few minutes for
     very large files '''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     submittal_list = Submittal.objects.filter(users=request.user)
     if request.user.is_authenticated():
         if request.method == 'POST':
@@ -366,6 +376,7 @@ def submit(request):
 
 @login_required(login_url='/login/')
 def status(request):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     submittal_list = Submittal.objects.filter(users=request.user)
     if settings.USE_BITTORRENT:
         processing_videos = Video.objects.filter(Q(encodingDone=False) | Q(torrentDone=False))
@@ -388,6 +399,7 @@ def encodingdone(request):
     using for example curl but they would need to guess a assembly_id and these are 
     quite long hex strings. To improve the security we could also use the custom header
     option from transloadit but I think this wouldn't really help in a open source project'''
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
     if request.user.is_authenticated():
         submittal_list = Submittal.objects.filter(users=request.user)
     else:
