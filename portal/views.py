@@ -39,10 +39,6 @@ def list(request):
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     page = request.GET.get('page')
     try:
         videos = paginator.page(page)
@@ -52,17 +48,13 @@ def list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         videos = paginator.page(paginator.num_pages)
-    return render_to_response('videos/index.html', {'page_list': get_page_list, 'submittal_list':submittal_list, 'latest_videos_list': videos, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('videos/index.html', {'page_list': get_page_list, 'submittal_list':get_submittal_list(request), 'latest_videos_list': videos, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def channel_list(request,slug):
     ''' This view is the view for the channels video list it works almost like the index view'''
     channel = get_object_or_404(Channel, slug=slug)
 #    videos_list = Video.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified')
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     queryset = itertools.chain(Video.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
@@ -76,15 +68,11 @@ def channel_list(request,slug):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         videos = paginator.page(paginator.num_pages)
-    return render_to_response('videos/channel.html', {'page_list':get_page_list, 'submittal_list':submittal_list, 'videos_list': videos, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('videos/channel.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'videos_list': videos, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def detail(request, slug):
     ''' Handles the detail view of a video (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     if request.method == 'POST':
             comment = Comment(video=Video.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
             video = get_object_or_404(Video, slug=slug)
@@ -97,55 +85,39 @@ def detail(request, slug):
                     comment = form.save(commit=False)
                     comment.save()
                     message = _(u"Your comment will be moderated")
-                    return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':submittal_list, 'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
+                    return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
             else:
-                    return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':submittal_list, 'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
+                    return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
                     
     else:
         video = get_object_or_404(Video, slug=slug)
         form = CommentForm()
         comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
-        return render_to_response('videos/detail.html', {'video': video, 'page_list':get_page_list, 'submittal_list':submittal_list, 'comment_form': form, 'comments': comments, 'settings': settings},
+        return render_to_response('videos/detail.html', {'video': video, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'comment_form': form, 'comments': comments, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def iframe(request, slug):
     ''' Returns an iframe for a video so that videos can be shared easily '''
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     video = get_object_or_404(Video, slug=slug)
-    return render_to_response('videos/iframe.html', {'video': video, 'settings': settings, 'submittal_list':submittal_list, 'page_list':get_page_list}, context_instance=RequestContext(request))
+    return render_to_response('videos/iframe.html', {'video': video, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list}, context_instance=RequestContext(request))
 
 
 def tag(request, tag):
     ''' Gets all videos for a specified tag'''
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
     tag_name = get_object_or_404(Tag, slug=tag)
-    return render_to_response('videos/list.html', {'videos_list': videolist, 'tag':tag_name, 'submittal_list':submittal_list, 'page_list':get_page_list,'settings': settings},
+    return render_to_response('videos/list.html', {'videos_list': videolist, 'tag':tag_name, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'settings': settings},
                             context_instance=RequestContext(request))
 
 def collection(request, slug):
     ''' Gets all videos for a channel'''
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     collection = get_object_or_404(Collection, slug=slug)
     videolist = collection.videos.filter(encodingDone=True, published=True)
-    return render_to_response('videos/collection.html', {'videos_list': videolist, 'submittal_list':submittal_list, 'page_list':get_page_list,'collection':collection, 'settings': settings},
+    return render_to_response('videos/collection.html', {'videos_list': videolist, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'collection':collection, 'settings': settings},
                             context_instance=RequestContext(request))
                             
 def search(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     query_string = ''
     found_entries = None
     if ('q' in request.GET) and request.GET['q'].strip():
@@ -156,15 +128,11 @@ def search(request):
         found_entries = Video.objects.filter(entry_query).order_by('-date')
 
     return render_to_response('videos/search_results.html',
-                          { 'query_string': query_string, 'videos_list': found_entries, 'submittal_list':submittal_list, 'page_list':get_page_list, 'settings': settings},
+                          { 'query_string': query_string, 'videos_list': found_entries, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
                           context_instance=RequestContext(request))
 
 def search_json(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     query_string = ''
     found_entries = None
     if ('q' in request.GET) and request.GET['q'].strip():
@@ -179,10 +147,6 @@ def search_json(request):
            
 def tag_json(request, tag):
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     data = serializers.serialize('json', videolist)
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
 
@@ -190,7 +154,6 @@ def tag_json(request, tag):
 def submittal(request, subm_id):
     if request.user.is_authenticated():
         submittal = get_object_or_404(Submittal, pk = subm_id)
-        submittal_list = Submittal.objects.filter(users=request.user)
         if request.method == 'POST':
             form = SubmittalForm(request.POST)
             if form.is_valid():
@@ -245,13 +208,12 @@ def submittal(request, subm_id):
                 'media_tags': tag_string,
                 'media_torrentDone': submittal.media_torrentDone,
             })
-            return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':submittal_list}, context_instance=RequestContext(request))
+            return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
     else:
-        return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':submittal_list}, context_instance=RequestContext(request)) 
+        return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request)) 
 
 @login_required(login_url='/login/')
 def upload_thumbnail(request):
-    submittal_list = Submittal.objects.filter(users=request.user)
     thumbnails_list = getThumbnails(settings.THUMBNAILS_DIR)
     del thumbnails_list[0]
     if request.method == 'POST':
@@ -260,18 +222,18 @@ def upload_thumbnail(request):
             if (request.FILES['file'].content_type == 'image/png' or request.FILES['file'].content_type == 'image/jpeg') and not form.data['title'] == '':
                 handle_uploaded_thumbnail(request.FILES['file'], form.data['title'])
                 message = _("The upload of %s was successful") % (form.data['title'])
-                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'submittal_list':submittal_list, 'thumbs_list':thumbnails_list, 'message': message}, context_instance=RequestContext(request))
+                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'thumbs_list':thumbnails_list, 'message': message}, context_instance=RequestContext(request))
             else:
                 error = _("Please upload an image file")
                 form = ThumbnailForm()
-                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':submittal_list, 'page_list':get_page_list, 'thumbs_list':thumbnails_list, 'error': error}, context_instance=RequestContext(request))
+                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'thumbs_list':thumbnails_list, 'error': error}, context_instance=RequestContext(request))
 
         else:
             form = ThumbnailForm()
-            return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':submittal_list, 'page_list':get_page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
+            return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
     else:
         form = ThumbnailForm()
-        return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':submittal_list, 'page_list':get_page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
+        return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'thumbs_list':thumbnails_list}, context_instance=RequestContext(request))
     
 def handle_uploaded_thumbnail(f, filename):
     destination = open('media/thumbnails/' + filename, 'wb+')
@@ -287,7 +249,6 @@ def submit(request):
     a new task task for encoding this video. If we use bittorrent to distribute our files
     we also use django tasks to make the .torrent files (this can take a few minutes for
     very large files '''
-    submittal_list = Submittal.objects.filter(users=request.user)
     if request.user.is_authenticated():
         if request.method == 'POST':
             form = VideoForm(request.POST, request.FILES or None)
@@ -351,20 +312,19 @@ def submit(request):
                     return redirect(list)
     
             return render_to_response('videos/submit.html',
-                                    {'submit_form': form, 'settings': settings,'submittal_list':submittal_list, 'page_list':get_page_list},
+                                    {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
                                     context_instance=RequestContext(request))
         else:
             form = VideoForm()
             return render_to_response('videos/submit.html',
-                                    {'submit_form': form, 'settings': settings,'submittal_list':submittal_list, 'page_list':get_page_list},
+                                    {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
                                     context_instance=RequestContext(request))
     else:
-        return render_to_response('videos/nothing.html', {'page_list':get_page_list, 'submittal_list':submittal_list, 'settings': settings},
+        return render_to_response('videos/nothing.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'settings': settings},
                             context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def status(request):
-    submittal_list = Submittal.objects.filter(users=request.user)
     if settings.USE_BITTORRENT:
         processing_videos = Video.objects.filter(Q(encodingDone=False) | Q(torrentDone=False))
     else:
@@ -374,7 +334,7 @@ def status(request):
         tasks = djangotasks.models.Task.objects.filter(model="portal.video", object_id=video.pk)
         running_tasks.append(tasks)
     return render_to_response('videos/status.html',
-                                    {'processing_videos': processing_videos, 'submittal_list':submittal_list, 'page_list':get_page_list, 'running_tasks': running_tasks, 'settings': settings},
+                                    {'processing_videos': processing_videos, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'running_tasks': running_tasks, 'settings': settings},
                                     context_instance=RequestContext(request))
 
 @csrf_exempt
@@ -386,10 +346,6 @@ def encodingdone(request):
     using for example curl but they would need to guess a assembly_id and these are 
     quite long hex strings. To improve the security we could also use the custom header
     option from transloadit but I think this wouldn't really help in a open source project'''
-    if request.user.is_authenticated():
-        submittal_list = Submittal.objects.filter(users=request.user)
-    else:
-        submittal_list = Submittal.objects.filter()
     if request.method == 'POST':
         data = json.loads(request.POST['transloadit'])
         try:
@@ -491,4 +447,7 @@ def get_query(query_string, search_fields):
 
 def get_page_list():
 	return Page.objects.filter(activated=True).order_by('orderid')
+
+def get_submittal_list(request):
+    return Submittal.objects.filter(users=request.user) if request.user.is_authenticated() else []
 
