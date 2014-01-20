@@ -168,18 +168,16 @@ def upload_thumbnail(request):
             if (request.FILES['file'].content_type == 'image/png' or request.FILES['file'].content_type == 'image/jpeg') and not form.data['title'] == '':
                 handle_uploaded_thumbnail(request.FILES['file'], form.data['title'])
                 message = _("The upload of %s was successful") % (form.data['title'])
-                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list, 'message': message}, context_instance=RequestContext(request))
+                form = ThumbnailForm()
+                return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list, 'message': message}, context_instance=RequestContext(request))
             else:
                 error = _("Please upload an image file")
-                form = ThumbnailForm()
                 return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list, 'error': error}, context_instance=RequestContext(request))
 
         else:
-            form = ThumbnailForm()
-            return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+            return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
     else:
-        form = ThumbnailForm()
-        return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+        return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
     
 def handle_uploaded_thumbnail(f, filename):
     suffix = '.png' if (f.content_type == 'image/png') else '.jpg'
