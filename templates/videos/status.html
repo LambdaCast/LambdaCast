@@ -10,17 +10,17 @@
 </div>
 <div class="row">
 	<div class="span12">
-			<table class="table">
-				<thead>
-					<th>Title</th>
-					<th>Date</th>
-					<th>Encoding Done</th>
-					<th>Torrent Created</th>
-					<th>Auto Publish</th>
-					<th>Tasks</th>
-				</thead>
-				<tbody>
-		{% for video in processing_videos %}
+		<table class="table">
+			<thead>
+				<th>Title</th>
+				<th>Date</th>
+				<th>Encoding Done</th>
+				<th>Torrent Created</th>
+				<th>Auto Publish</th>
+				<th>Tasks</th>
+			</thead>
+			<tbody>
+				{% for video in processing_videos %}
 					<tr>
 						<th><a href="/videos/{{ video.slug }}">{{ video.title }}</a></th>
 						<td>{{ video.date }}</td>
@@ -54,10 +54,12 @@
 						</td>
 					</tr>
 				{% empty %}
-				<p>{% trans "There are no media to transcode" %}</p>
+					<tr>
+						<td colspan="6">{% trans "There are no media to transcode" %}</td>
+					</tr>
 				{% endfor %}
-				</tbody>
-			</table>
+			</tbody>
+		</table>
 	</div>
 	<div class="modal hide fade" id="logModal" style="width:800px;margin-left:-400px;">
 		<div class="modal-header">

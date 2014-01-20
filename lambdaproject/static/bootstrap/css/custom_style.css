@@ -40,16 +40,23 @@ body {
 	padding: 0 0 10px;
 }
 
-.video-image-container {
+.video-image-container, .thumbnail-image-container {
 	display: table-cell;
 	padding: 0px 15px;
 	vertical-align: middle;
+}
+.video-image-container {
 	width: 100px;
 }
-
+.thumbnail-image-container {
+	width: 150px;
+}
 .video-image-container img {
 	width: 100px;
 	padding-top:10px;
+}
+.thumbnail-image-container img {
+	width: 150px;
 }
 
 ul.edit-menu {
