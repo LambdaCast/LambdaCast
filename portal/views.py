@@ -182,7 +182,9 @@ def upload_thumbnail(request):
         return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
     
 def handle_uploaded_thumbnail(f, filename):
-    destination = open('media/thumbnails/' + filename, 'wb+')
+    suffix = '.png' if (f.content_type == 'image/png') else '.jpg'
+    suffix = '' if (filename.endswith(suffix)) else suffix
+    destination = open('media/thumbnails/' + filename + suffix, 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
     destination.close()
