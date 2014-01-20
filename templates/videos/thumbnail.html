@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block active-thumb %}class="active"{% endblock %}
+{% block title %} - {% trans "Thumbnails" %}{% endblock %}
+{% block body %}
+<div class="page-header">
+	<h1>{% trans "Thumbnails" %}</h1>
+</div>
+<div class="row">
+	<div class="span12">
+	<div class="tabbable">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#upload" data-toggle="tab">{% trans "Upload" %}</a></li>
+			<li><a href="#thumblist" data-toggle="tab">{% trans "Thumbnail List" %}</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="upload">
+				<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
+				{% if error %}
+					<div class="alert alert-error">{{ error }}</div>
+				{% endif %}
+				{% if message %}
+					<div class="alert alert-success">{{ message }}</div>
+				{% endif %}
+				{% csrf_token %}
+				<div style="display: none" id="formError" class="alert alert-error">
+					<strong>{% trans "Error!" %}</strong>
+				</div><!-- alert-->
+				{% for field in thumbnail_form %}
+				<div class="control-group">
+					{% if field.errors %}
+					<div class="alert alert-error">
+						<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+					</div>
+					{% endif %}
+					<div class="control-label">
+						{{ field.label_tag }}
+					</div>
+					<div class="controls">
+						{{ field }} <span class="help-block">{{ field.help_text }}</span>
+					</div>
+				</div>
+				{% endfor %}
+				<div class="form-actions">
+					<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+				</div><!-- form-actions -->
+				</form>
+			</div><!-- tab-pane -->
+			<div class="tab-pane" id="thumblist">
+				{% for thumbnail in thumbs_list %}
+					<div class="thumbnail-image-container"><a href="{{ thumbnail.0 }}"><img class="img-rounded" src="{{ thumbnail.0 }}" /></a><p>{{ thumbnail.1 }}</p></div>
+				{% endfor %}
+			</div><!-- tab-pane -->
+		</div><!-- tab-content -->
+	</div><!-- tabbable -->
+	</div><!-- span12 -->
+</div><!-- row -->
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}jquery.validate.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}date.format.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}submit.js"></script>
+{% endblock %}

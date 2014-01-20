@@ -111,8 +111,8 @@ msgstr "Aktiviert"
 msgid "Is part of the URL that you can define"
 msgstr "Ist Teil der URL, die festgelegt werden kann"
 
-#: pages/models.py:184 portal/models.py:54 portal/models.py:324
-#: portal/models.py:335
+#: pages/models.py:184 portal/forms.py:54 portal/models.py:53
+#: portal/models.py:317 portal/models.py:328
 msgid "Title"
 msgstr "Titel"
 
@@ -208,7 +208,19 @@ msgstr "Automatisch"
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
-#: portal/models.py:33
+#: portal/forms.py:54
+msgid "The name of the image with file format like \"test.png\""
+msgstr "Der Dateiname des Bildes mit Dateiendung \"test.png\""
+
+#: portal/forms.py:55
+msgid "Only upload image files"
+msgstr "Nur Bilddateien hochladen"
+
+#: portal/forms.py:55 portal/models.py:82
+msgid "File"
+msgstr "Datei"
+
+#: portal/models.py:32
 msgid "No License"
 msgstr "Keine Lizenz"
 
@@ -448,7 +460,7 @@ msgstr "https://creativecommons.org/licenses/by-nd/3.0/deed.de"
 
 #: portal/models.py:289 portal/models.py:306 templates/videos/detail.html:102
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: portal/models.py:290
 msgid "The IP of the one who posted the comment"
@@ -490,7 +502,8 @@ msgstr ""
 "Wähle einen Ordner aus dem man Inhalte hinzufügen kann und automatisch in "
 "LambdaCast erscheinen werden."
 
-#: portal/models.py:339
+#: portal/models.py:332 templates/base.html:86
+#: templates/admin/base_site.html:20
 msgid "Videos"
 msgstr "Inhalte"
 
@@ -525,7 +538,16 @@ msgstr "Hallo %s,\n"
 msgid "New Comment: "
 msgstr "Neuer Kommentar: "
 
-#: portal/views.py:334
+#: portal/views.py:172
+#, python-format
+msgid "The upload of %s was successful"
+msgstr "Das Hochladen der Datei %s war erfolgreich"
+
+#: portal/views.py:175
+msgid "Please upload an image file"
+msgstr "Bitte lade eine Bilddatei hoch"
+
+#: portal/views.py:358
 msgid "Video was updated"
 msgstr "Inhalte wurden aktualisiert"
 
@@ -602,36 +624,59 @@ msgstr ""
 msgid "Live"
 msgstr ""
 
-#: templates/base.html:69
+#: templates/base.html:71
 msgid "Search..."
 msgstr "Suche..."
 
-#: templates/base.html:73 templates/videos/submit.html:4
-#: templates/videos/submit.html.py:7 templates/videos/submit.html:38
+#: templates/base.html:76
+msgid "Menu"
+msgstr "Menü"
+
+#: templates/base.html:78 templates/admin/base_site.html:12
+#: templates/videos/submit.html:4 templates/videos/submit.html.py:7
+#: templates/videos/submit.html:38 templates/videos/thumbnail.html:13
+#: templates/videos/thumbnail.html.py:45
 msgid "Upload"
 msgstr "Hochladen"
 
-#: templates/base.html:74 templates/videos/status.html:4
-#: templates/videos/status.html.py:8
+#: templates/base.html:79 templates/admin/base_site.html:13
+#: templates/videos/thumbnail.html:4 templates/videos/thumbnail.html.py:7
+msgid "Thumbnails"
+msgstr "Vorschaubild"
+
+#: templates/base.html:80 templates/admin/base_site.html:14
+#: templates/videos/status.html:4 templates/videos/status.html.py:8
 msgid "Status"
 msgstr ""
 
-#: templates/base.html:75
+#: templates/base.html:83 templates/admin/base_site.html:17
 msgid "Admin"
 msgstr "Verwaltung"
 
-#: templates/base.html:76
+#: templates/base.html:85 templates/admin/base_site.html:19
+msgid "Overview"
+msgstr "Überblick"
+
+#: templates/base.html:87 templates/admin/base_site.html:21
+msgid "Channels"
+msgstr "Kanäle"
+
+#: templates/base.html:88 templates/admin/base_site.html:22
+msgid "Collections"
+msgstr "Wiedergabelisten"
+
+#: templates/base.html:89 templates/admin/base_site.html:23
+#: templates/videos/detail.html:96
+msgid "Comments"
+msgstr "Kommentare"
+
+#: templates/base.html:92 templates/admin/base_site.html:27
 msgid "Logout"
 msgstr "Abmelden"
 
-#: templates/base.html:78 templates/registration/login.html:7
-#: templates/registration/login.html:36
-msgid "Login"
-msgstr "Anmelden"
-
-#: templates/admin/base_site.html:7
+#: templates/admin/base_site.html:26
 msgid "back to frontend"
-msgstr "zurück zur Hauptseite"
+msgstr "Zurück zur Hauptseite"
 
 #: templates/livestream/current.html:4
 msgid "Livestream"
@@ -665,6 +710,11 @@ msgstr "Die nächsten Streams"
 #: templates/videos/collection.html:23 templates/videos/detail.html:34
 msgid "Edit"
 msgstr "Bearbeiten"
+
+#: templates/registration/login.html:7 templates/registration/login.html:36
+#: templates/videos/index.html:107
+msgid "Login"
+msgstr "Anmelden"
 
 #: templates/registration/login.html:14
 msgid "Warning!"
@@ -756,10 +806,6 @@ msgstr "Kontakt"
 msgid "Audio"
 msgstr ""
 
-#: templates/videos/detail.html:96
-msgid "Comments"
-msgstr "Kommentare"
-
 #: templates/videos/detail.html:102
 msgid "Time"
 msgstr "Zeitpunkt"
@@ -769,7 +815,8 @@ msgid "No comments"
 msgstr "Keine Kommentare"
 
 #: templates/videos/detail.html:127 templates/videos/submit.html:14
-#: templates/videos/submit.html.py:20
+#: templates/videos/submit.html.py:20 templates/videos/thumbnail.html:27
+#: templates/videos/thumbnail.html.py:33
 msgid "Error!"
 msgstr "Fehler!"
 
@@ -835,9 +882,7 @@ msgstr "Kommentar-Feed"
 
 #: templates/videos/status.html:9
 msgid "This site shows all media that will be or is transcoded"
-msgstr "Diese Seite zeigt alle Medien, die transkodiert werden oder es schon "
-"sindDiese Seite zeigt alle Inhalte an die transkodiert werden oder es "
-"bereits sind"
+msgstr "Diese Seite zeigt alle Medien, die transkodiert werden oder es schon sind."
 
 #: templates/videos/status.html:18
 msgid "Transcoding finished"
@@ -878,6 +923,10 @@ msgstr "Neu Laden"
 #: templates/videos/status.html:49
 msgid "Close"
 msgstr "Schließen"
+
+#: templates/videos/thumbnail.html:14
+msgid "Thumbnail List"
+msgstr "Vorschaubild"
 
 #: templates/videos/videolist.html:26
 msgid "Playlist"

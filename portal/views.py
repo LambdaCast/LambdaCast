@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
 from portal.models import Video, Comment, Channel, Collection, User
-from portal.forms import VideoForm, CommentForm, getThumbnails
+from portal.forms import VideoForm, CommentForm, getThumbnails, ThumbnailForm
 from transloadit.client import Client
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -165,6 +165,39 @@ def tag_json(request, tag):
     videolist = Video.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
     data = serializers.serialize('json', videolist)
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
+
+@login_required(login_url='/login/')
+def upload_thumbnail(request):
+    page_list = Page.objects.filter(activated=True).order_by('orderid')
+    if request.method == 'POST':
+        form = ThumbnailForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            if (request.FILES['file'].content_type == 'image/png' or request.FILES['file'].content_type == 'image/jpeg') and not form.data['title'] == '':
+                handle_uploaded_thumbnail(request.FILES['file'], form.data['title'])
+                message = _("The upload of %s was successful") % (form.data['title'])
+                form = ThumbnailForm()
+                return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list, 'message': message}, context_instance=RequestContext(request))
+            else:
+                error = _("Please upload an image file")
+                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list, 'error': error}, context_instance=RequestContext(request))
+
+        else:
+            return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+    else:
+        return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+    
+def handle_uploaded_thumbnail(f, filename):
+    suffix = '.png' if (f.content_type == 'image/png') else '.jpg'
+    suffix = '' if (filename.endswith(suffix)) else suffix
+    destination = open('media/thumbnails/' + filename + suffix, 'wb+')
+    for chunk in f.chunks():
+        destination.write(chunk)
+    destination.close()
+
+def get_thumbnails_list():
+    thumbnails_list = getThumbnails(settings.THUMBNAILS_DIR)
+    del thumbnails_list[0]
+    return thumbnails_list
 
 @login_required(login_url='/login/')
 def submit(request):

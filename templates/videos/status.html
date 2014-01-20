@@ -10,31 +10,56 @@
 </div>
 <div class="row">
 	<div class="span12">
-		{% for video in processing_videos %}
-			<div class="row">
-				<div class="span12 well">
-					<a href="/videos/{{ video.slug }}"><h4>{{ video.title }}</h4></a>
-					<span><strong>{% trans "Date" %}: </strong>{{ video.date }}</span><br/>
-					<span><strong>{% trans "Transcoding finished" %}:</strong>{% if video.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
-					<strong>{% trans "Torrent created" %}:</strong>{% if video.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
-					<strong>{% trans "Publish automatically" %}:</strong>{% if video.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</span><br/>
-					<span><strong>{% trans "Tasks" %}:</strong></span>
-					<ul>
+		<table class="table">
+			<thead>
+				<th>Title</th>
+				<th>Date</th>
+				<th>Encoding Done</th>
+				<th>Torrent Created</th>
+				<th>Auto Publish</th>
+				<th>Tasks</th>
+			</thead>
+			<tbody>
+				{% for video in processing_videos %}
+					<tr>
+						<th><a href="/videos/{{ video.slug }}">{{ video.title }}</a></th>
+						<td>{{ video.date }}</td>
+						<td>{% if video.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<td>{% if video.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
+						<td>{% if video.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<td>
 						{% for task_list in running_tasks %}
 							{% for task in task_list %}
 								{% if task.object_id == video.pk|stringformat:"s" %}
-									<li>{{ task.pid }} &bull; {{ task.method }} &bull; <strong>{{ task.status }}</strong>{% if task.method == "encode_media" %}{% if video.kind == 0 or video.kind == 2 %} &bull; <a id="logMP4_{{ video.pk }}">MP4 Log</a> &bull; <a id="logWEBM_{{ video.pk }}">WEBM Log</a>{% endif %}{% if video.kind == 1 or video.kind == 2 %}&bull; <a id="logMP3_{{ video.pk }}">MP3 Log</a> &bull; <a id="logOGG_{{ video.pk }}">OGG Log</a>{% endif %}{% endif %}</li>
+									<li><a href="/admin/djangotasks/task/{{ task.object_id }}">{{ task.pid }}</a></li>
+									<ul>
+										<li>{{ task.status }}</li>
+										{% if task.method == "encode_media" %}
+											{% if video.kind == 0 or video.kind == 2 %}
+											<li>
+												<a id="logMP4_{{ video.pk }}">MP4 Log</a>,  													<a id="logWEBM_{{ video.pk }}">WEBM Log</a>,
+											{% endif %}
+											{% if video.kind == 1 or video.kind == 2 %}
+												<a id="logMP3_{{ video.pk }}">MP3 Log</a>, 
+												<a id="logOGG_{{ video.pk }}">OGG Log</a>,
+											</li>
+											{% endif %}
+										{% endif %}
+									</ul>
 								{% endif %}
 							{% endfor %}
 						{% empty %}
-						<li>{% trans "No tasks" %}</li>
+						{% trans "No tasks" %}
 						{% endfor %}
-					</ul>
-				</div>
-			</div>
-		{% empty %}
-		<p>{% trans "There are no media to transcode" %}</p>
-		{% endfor %}
+						</td>
+					</tr>
+				{% empty %}
+					<tr>
+						<td colspan="6">{% trans "There are no media to transcode" %}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
 	<div class="modal hide fade" id="logModal" style="width:800px;margin-left:-400px;">
 		<div class="modal-header">
