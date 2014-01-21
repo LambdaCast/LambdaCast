@@ -188,22 +188,22 @@
 			<dd><a href="{{ video.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if video.mp4URL %}
+			{% if video.mp4URL and video.mp4URL|get_remote_size %}
 			<dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
 				 <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4URL|get_remote_size }} MB)</a>
 			</dd>
 			{% endif %}
-			{% if video.webmURL %}
+			{% if video.webmURL and video.webmURL|get_remote_size %}
 			<dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm">
 				 <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmURL|get_remote_size }} MB)</a>
 			</dd>
 			{% endif %}
-			{% if video.mp3URL %}
+			{% if video.mp3URL and video.mp3URL|get_remote_size %}
                         <dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
                                 <i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3URL|get_remote_size }} MB)</a>
                         </dd>
 			{% endif %}
-			{% if video.oggURL %}
+			{% if video.oggURL and video.oggURL|get_remote_size %}
 			<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
 				<i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggURL|get_remote_size }} MB)</a>
 			</dd>
