@@ -1,11 +1,14 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save, pre_save
 
 from autoslug import AutoSlugField
 from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
+
+from portal.signals import get_remote_size
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -354,3 +357,5 @@ def getLength(filename):
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
+
+pre_save.connect(get_remote_filesize, sender=Video)

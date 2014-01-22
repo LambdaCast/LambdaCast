@@ -41,8 +41,8 @@
 		<div class="row">
 			<div class="span8">
 				<video id="player_video" class="projekktor center" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-					{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-					{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+					{% if video.webmSize %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
+					{% if video.mp4Size %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
 				</video>
 			</div>
 		</div>
@@ -51,8 +51,8 @@
 		<div class="row">
 			<div class="span8">
 				<audio id="player_audio" class="projekktor center" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-					{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-					{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+					{% if video.mp3Size %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
+					{% if video.oggSize %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
 				</audio>
 			</div>
 		</div>
@@ -188,24 +188,24 @@
 			<dd><a href="{{ video.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if video.mp4URL|get_remote_size %}
+			{% if video.mp4Size %}
 			<dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
-				 <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4URL|get_remote_size }} MB)</a>
+				 <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4Size|in_mb }} MB)</a>
 			</dd>
 			{% endif %}
-			{% if video.webmURL|get_remote_size %}
+			{% if video.webmSize %}
 			<dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm">
-				 <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmURL|get_remote_size }} MB)</a>
+				 <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmSize|in_mb }} MB)</a>
 			</dd>
 			{% endif %}
-			{% if video.mp3URL|get_remote_size %}
+			{% if video.mp3Size %}
                         <dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
-                                <i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3URL|get_remote_size }} MB)</a>
+                                <i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3Size|in_mb }} MB)</a>
                         </dd>
 			{% endif %}
-			{% if video.oggURL|get_remote_size %}
+			{% if video.oggSize %}
 			<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
-				<i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggURL|get_remote_size }} MB)</a>
+				<i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggSize|in_mb }} MB)</a>
 			</dd>
 			{% endif %}
 		</div>

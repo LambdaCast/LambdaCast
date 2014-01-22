@@ -1,9 +1,7 @@
 from django import template
 import datetime
-import urllib
 
 from django.utils.text import normalize_newlines
-from django.core.validators import URLValidator
 
 register = template.Library()
 
@@ -19,14 +17,7 @@ def remove_newlines(text):
     normalized_text = normalize_newlines(text)
     return normalized_text.replace('\n', ' ')
 
-@register.filter(name="get_remote_size")
-def get_remote_size(url):
-    url_val = URLValidator(verify_exists=True)
-    try:
-        url_val(url)
-        site = urllib.urlopen(url)
-        meta = site.info()
-        size_in_mb = float(meta.getheaders("Content-Length")[0]) / 1024 / 1024 
-        return round(size_in_mb, 2)
-    except Exception:
-        return False
+@register.filter(name="in_mb")
+def in_mb(number_bytes):
+    size_in_mb = float(number_bytes) / 1024 / 1024 
+    return round(size_in_mb, 2)
