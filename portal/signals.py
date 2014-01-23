@@ -1,28 +1,14 @@
 from django.db.models.signals import pre_save
-from django.core.validators import URLValidator
-
-import urllib
-
-def url_validator(url):
-    if url.endswith('.mp3') or url.endswith('.mp4') or url.endswith('.ogg') or url.endswith('.webm'):
-        url_val = URLValidator(verify_exists=True)
-        try:
-            url_val(url)
-            return url
-        except Exception:
-            print "url is not verified"
-    else:
-        raise Exception
+import urllib2
 
 def get_remote_filesize(sender, instance, **kwargs):
     format_list = [instance.mp3URL, instance.mp4URL, instance.webmURL, instance.oggURL]
     size_list = []
-    for url in format_list:
-        try: 
-            url_validator(url)
-            site = urllib.urlopen(url)
+    for url in format_list: 
+        try:
+            site = urllib2.urlopen(url)
             meta = site.info()
-            size_in_bytes = meta.getheaders("Content-Length")[0]
+            size_in_bytes = meta.getheader('content-length')
             size_list.append(size_in_bytes)
         except:
             size_list.append(0)
