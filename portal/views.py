@@ -74,20 +74,19 @@ def channel_list(request,slug):
 def detail(request, slug):
     ''' Handles the detail view of a video (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
     if request.method == 'POST':
-            comment = Comment(video=Video.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
-            video = get_object_or_404(Video, slug=slug)
-            emptyform = CommentForm()
-            form = CommentForm(request.POST, instance=comment)
-            comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
+        comment = Comment(video=Video.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
+        video = get_object_or_404(Video, slug=slug)
+        emptyform = CommentForm()
+        form = CommentForm(request.POST, instance=comment)
+        comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
 
-            if form.is_valid():
-                    human = True
-                    comment = form.save(commit=False)
-                    comment.save()
-                    message = _(u"Your comment will be moderated")
-                    return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
-            else:
-                    return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.save()
+            message = _(u"Your comment will be moderated")
+            return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
+        else:
+            return render_to_response('videos/detail.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
                     
     else:
         video = get_object_or_404(Video, slug=slug)
@@ -152,65 +151,64 @@ def tag_json(request, tag):
 
 @login_required(login_url='/login/')
 def submittal(request, subm_id):
-    if request.user.is_authenticated():
-        submittal = get_object_or_404(Submittal, pk = subm_id)
-        if request.method == 'POST':
-            form = SubmittalForm(request.POST)
-            if form.is_valid():
-                model = Video(
-                              title=form.data['media_title'],
-                              slug=form.data['media_title'],
-                              date=datetime.date.today(),
-                              description=form.data['media_description'],
-                              user=request.user,
-                              license=form.data['media_license'],
-                              linkURL=form.data['media_linkURL'],
-                              kind=form.data['media_kind'],
-                              torrentURL=form.data['media_torrentURL'],
-                              mp4URL=form.data['media_mp4URL'],
-                              webmURL=form.data['media_webmURL'],
-                              mp3URL=form.data['media_mp3URL'],
-                              oggURL=form.data['media_oggURL'],
-                              videoThumbURL=form.data['media_videoThumbURL'],
-                              audioThumbURL=form.data['media_audioThumbURL'],
-                              originalFile="None",
-                              encodingDone=True,
-                              published=form.cleaned_data['media_published'],
-                              channel=form.cleaned_data['media_channel'],
-                              torrentDone=form.cleaned_data['media_torrentDone'],
-                             )
-                media_tags=form.cleaned_data['media_tags']
-                model.full_clean()
-                model.save()
-                for media_tag in media_tags:
-                    model.tags.add(media_tag)
-                return redirect(list)
+    submittal = get_object_or_404(Submittal, pk = subm_id)
+    if request.method == 'POST':
+        form = SubmittalForm(request.POST)
+        if form.is_valid():
+            model = Video(
+                          title=form.data['media_title'],
+                          slug=form.data['media_title'],
+                          date=datetime.date.today(),
+                          description=form.data['media_description'],
+                          user=request.user,
+                          license=form.data['media_license'],
+                          linkURL=form.data['media_linkURL'],
+                          kind=form.data['media_kind'],
+                          torrentURL=form.data['media_torrentURL'],
+                          mp4URL=form.data['media_mp4URL'],
+                          webmURL=form.data['media_webmURL'],
+                          mp3URL=form.data['media_mp3URL'],
+                          oggURL=form.data['media_oggURL'],
+                          videoThumbURL=form.data['media_videoThumbURL'],
+                          audioThumbURL=form.data['media_audioThumbURL'],
+                          originalFile="None",
+                          encodingDone=True,
+                          published=form.cleaned_data['media_published'],
+                          channel=form.cleaned_data['media_channel'],
+                          torrentDone=form.cleaned_data['media_torrentDone'],
+                         )
+            media_tags=form.cleaned_data['media_tags']
+            model.full_clean()
+            model.save()
+            for media_tag in media_tags:
+                model.tags.add(media_tag)
+            return redirect(list)
         else:
-	    tag_string = ""
-            for tag in submittal.media_tags.all():
-                tag_string += (str(tag) + ", ")
-
-            form = SubmittalForm(initial={
-                'media_title': submittal.media_title,
-                'media_description': submittal.media_description,
-                'media_channel': submittal.media_channel,
-                'media_license': submittal.media_license,
-                'media_linkURL': submittal.media_linkURL,
-                'media_kind': submittal.media_kind,
-                'media_torrentURL': submittal.media_torrentURL,
-                'media_mp4URL': submittal.media_mp4URL,
-                'media_webmURL': submittal.media_webmURL,
-                'media_mp3URL': submittal.media_mp3URL,
-                'media_oggURL': submittal.media_oggURL,
-                'media_videoThumbURL': submittal.media_videoThumbURL,
-                'media_audioThumbURL': submittal.media_audioThumbURL,
-                'media_published': submittal.media_published,
-                'media_tags': tag_string,
-                'media_torrentDone': submittal.media_torrentDone,
-            })
             return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
     else:
-        return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request)) 
+        tag_string = ""
+        for tag in submittal.media_tags.all():
+            tag_string += (str(tag) + ", ")
+
+        form = SubmittalForm(initial={
+            'media_title': submittal.media_title,
+            'media_description': submittal.media_description,
+            'media_channel': submittal.media_channel,
+            'media_license': submittal.media_license,
+            'media_linkURL': submittal.media_linkURL,
+            'media_kind': submittal.media_kind,
+            'media_torrentURL': submittal.media_torrentURL,
+            'media_mp4URL': submittal.media_mp4URL,
+            'media_webmURL': submittal.media_webmURL,
+            'media_mp3URL': submittal.media_mp3URL,
+            'media_oggURL': submittal.media_oggURL,
+            'media_videoThumbURL': submittal.media_videoThumbURL,
+            'media_audioThumbURL': submittal.media_audioThumbURL,
+            'media_published': submittal.media_published,
+            'media_tags': tag_string,
+            'media_torrentDone': submittal.media_torrentDone,
+        })
+        return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def upload_thumbnail(request):
