@@ -33,7 +33,7 @@ class VideoForm(ModelForm):
 
     class Meta:
         model = Video
-        exclude = ["slug","mp4URL","mp4Size","flashURL","flashSize","webmURL","webmSize","mp3URL","mp3Size","oggURL","oggSize","ogvURL","ogvSize","duration","published","encodingDone","assemblyid","torrentURL","user","autoPublish", "torrentDone", "videoThumbURL", "audioThumbURL"]
+        exclude = ["slug","mp4URL","mp4Size","webmURL","webmSize","mp3URL","mp3Size","oggURL","oggSize","duration","published","encodingDone","assemblyid","torrentURL","user","autoPublish", "torrentDone","videoThumbURL","audioThumbURL"]
 
     def __init__(self, *args, **kwargs):
         super(VideoForm, self).__init__(*args, **kwargs)
@@ -54,10 +54,16 @@ class CommentForm(ModelForm):
 
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
-    media_tags = TagField(label=_("Tags"))
     class Meta:
-        model = Submittal
-        exclude = ["title","description","users"]
+        model = Video
+        exclude = ["slug","mp4Size","webmSize","mp3Size","oggSize","assemblyid","user","autoPublish","originalFile"]
+
+    def __init__(self, *args, **kwargs):
+        super(SubmittalForm, self).__init__(*args, **kwargs)
+        for fieldName in self.fields:
+            field = self.fields[fieldName]
+            if field.required:
+                field.widget.attrs['class'] = 'required'
 
 class ThumbnailForm(forms.Form):
     ''' Used for uploading thumbnails '''

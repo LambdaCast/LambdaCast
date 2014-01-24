@@ -155,58 +155,30 @@ def submittal(request, subm_id):
     if request.method == 'POST':
         form = SubmittalForm(request.POST)
         if form.is_valid():
-            model = Video(
-                          title=form.data['media_title'],
-                          slug=form.data['media_title'],
-                          date=datetime.date.today(),
-                          description=form.data['media_description'],
-                          user=request.user,
-                          license=form.data['media_license'],
-                          linkURL=form.data['media_linkURL'],
-                          kind=form.data['media_kind'],
-                          torrentURL=form.data['media_torrentURL'],
-                          mp4URL=form.data['media_mp4URL'],
-                          webmURL=form.data['media_webmURL'],
-                          mp3URL=form.data['media_mp3URL'],
-                          oggURL=form.data['media_oggURL'],
-                          videoThumbURL=form.data['media_videoThumbURL'],
-                          audioThumbURL=form.data['media_audioThumbURL'],
-                          originalFile="None",
-                          encodingDone=True,
-                          published=form.cleaned_data['media_published'],
-                          channel=form.cleaned_data['media_channel'],
-                          torrentDone=form.cleaned_data['media_torrentDone'],
-                         )
-            media_tags=form.cleaned_data['media_tags']
-            model.full_clean()
-            model.save()
-            for media_tag in media_tags:
-                model.tags.add(media_tag)
+            cmodel = form.save()
+            cmodel.user = request.user
+            cmodel.save()
             return redirect(list)
         else:
             return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
     else:
-        tag_string = ""
-        for tag in submittal.media_tags.all():
-            tag_string += (str(tag) + ", ")
-
         form = SubmittalForm(initial={
-            'media_title': submittal.media_title,
-            'media_description': submittal.media_description,
-            'media_channel': submittal.media_channel,
-            'media_license': submittal.media_license,
-            'media_linkURL': submittal.media_linkURL,
-            'media_kind': submittal.media_kind,
-            'media_torrentURL': submittal.media_torrentURL,
-            'media_mp4URL': submittal.media_mp4URL,
-            'media_webmURL': submittal.media_webmURL,
-            'media_mp3URL': submittal.media_mp3URL,
-            'media_oggURL': submittal.media_oggURL,
-            'media_videoThumbURL': submittal.media_videoThumbURL,
-            'media_audioThumbURL': submittal.media_audioThumbURL,
-            'media_published': submittal.media_published,
-            'media_tags': tag_string,
-            'media_torrentDone': submittal.media_torrentDone,
+            'title': submittal.media_title,
+            'description': submittal.media_description,
+            'channel': submittal.media_channel,
+            'license': submittal.media_license,
+            'linkURL': submittal.media_linkURL,
+            'kind': submittal.media_kind,
+            'torrentURL': submittal.media_torrentURL,
+            'mp4URL': submittal.media_mp4URL,
+            'webmURL': submittal.media_webmURL,
+            'mp3URL': submittal.media_mp3URL,
+            'oggURL': submittal.media_oggURL,
+            'videoThumbURL': submittal.media_videoThumbURL,
+            'audioThumbURL': submittal.media_audioThumbURL,
+            'published': submittal.media_published,
+            'tags': ", ".join(str(x) for x in  submittal.media_tags.all()),
+            'torrentDone': submittal.media_torrentDone,
         })
         return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
 
@@ -250,63 +222,63 @@ def submit(request):
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES or None)
         if form.is_valid():
-                cmodel = form.save()
-                cmodel.audioThumbURL = form.data['thumbURL']
-                cmodel.videoThumbURL = form.data['thumbURL']
-                if cmodel.originalFile:
-                    if settings.USE_TRANLOADIT:
-                        client = Client(settings.TRANSLOAD_AUTH_KEY, settings.TRANSLOAD_AUTH_SECRET)
-                        params = None
-                        if (cmodel.kind==0):
-                            params = {
-                                'steps': {
-                                    ':original': {
-                                        'robot': '/http/import',
-                                        'url': cmodel.originalFile.url,
-                                    }
-                                },
-                                'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_ID,
-                                'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                            }
-                        if (cmodel.kind==1):
-                            params = {
-                                'steps': {
-                                    ':original': {
-                                        'robot': '/http/import',
-                                        'url': cmodel.originalFile.url,
-                                    }
-                                },
-                                'template_id': settings.TRANSLOAD_TEMPLATE_AUDIO_ID,
-                                'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                            }
-                        if (cmodel.kind==2):
-                            params = {
-                                'steps': {
-                                    ':original': {
-                                        'robot': '/http/import',
-                                        'url': cmodel.originalFile.url,
-                                    }
-                                },
-                                'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_AUDIO_ID,
-                                'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                            }
-                        result = client.request(**params)
-                        cmodel.assemblyid = result['assembly_id']
-                        cmodel.published = cmodel.autoPublish
-                        cmodel.encodingDone = False
-                        cmodel.save()
-                    else:
-                        cmodel.save()
-                        djangotasks.register_task(cmodel.encode_media, "Encode the files using ffmpeg")
-                        encoding_task = djangotasks.task_for_object(cmodel.encode_media)
-                        djangotasks.run_task(encoding_task)
-                if settings.USE_BITTORRENT:
-                    djangotasks.register_task(cmodel.create_bittorrent, "Create Bittorrent file for video and serve it")
-                    torrent_task = djangotasks.task_for_object(cmodel.create_bittorrent)
-                    djangotasks.run_task(torrent_task)
-                cmodel.user = request.user
-                cmodel.save()
-                return redirect(list)
+            cmodel = form.save()
+            cmodel.audioThumbURL = form.data['thumbURL']
+            cmodel.videoThumbURL = form.data['thumbURL']
+            if cmodel.originalFile:
+                if settings.USE_TRANLOADIT:
+                    client = Client(settings.TRANSLOAD_AUTH_KEY, settings.TRANSLOAD_AUTH_SECRET)
+                    params = None
+                    if (cmodel.kind==0):
+                        params = {
+                            'steps': {
+                                ':original': {
+                                    'robot': '/http/import',
+                                    'url': cmodel.originalFile.url,
+                                }
+                            },
+                            'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_ID,
+                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
+                        }
+                    if (cmodel.kind==1):
+                        params = {
+                            'steps': {
+                                ':original': {
+                                    'robot': '/http/import',
+                                    'url': cmodel.originalFile.url,
+                                }
+                            },
+                            'template_id': settings.TRANSLOAD_TEMPLATE_AUDIO_ID,
+                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
+                        }
+                    if (cmodel.kind==2):
+                        params = {
+                            'steps': {
+                                ':original': {
+                                    'robot': '/http/import',
+                                    'url': cmodel.originalFile.url,
+                                }
+                            },
+                            'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_AUDIO_ID,
+                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
+                        }
+                    result = client.request(**params)
+                    cmodel.assemblyid = result['assembly_id']
+                    cmodel.published = cmodel.autoPublish
+                    cmodel.encodingDone = False
+                    cmodel.save()
+                else:
+                    cmodel.save()
+                    djangotasks.register_task(cmodel.encode_media, "Encode the files using ffmpeg")
+                    encoding_task = djangotasks.task_for_object(cmodel.encode_media)
+                    djangotasks.run_task(encoding_task)
+            if settings.USE_BITTORRENT:
+                djangotasks.register_task(cmodel.create_bittorrent, "Create Bittorrent file for video and serve it")
+                torrent_task = djangotasks.task_for_object(cmodel.create_bittorrent)
+                djangotasks.run_task(torrent_task)
+            cmodel.user = request.user
+            cmodel.save()
+            return redirect(list)
 
         return render_to_response('videos/submit.html',
                                 {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
