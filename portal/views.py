@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django import forms
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -334,7 +334,7 @@ def status(request):
 @csrf_exempt
 def encodingdone(request):
     ''' This is a somewhat special view: It is called by transloadit to tell
-    OwnTube that the encoding process is done. The view then parses the
+    LambdaCast that the encoding process is done. The view then parses the
     JSON data in the POST request send by transloadit and than get this information
     into our video model. Of course it can be possible for attackers to alter videos
     using for example curl but they would need to guess a assembly_id and these are 
@@ -399,10 +399,8 @@ def encodingdone(request):
         except Video.DoesNotExist:
             raise Http404
         return HttpResponse(_(u"Video was updated"))
-
     else:
-        return render_to_response('videos/nothing.html', {'settings': settings, 'page_list':get_page_list},
-                            context_instance=RequestContext(request))
+        raise Http404
     
 
 def normalize_query(query_string,
