@@ -185,6 +185,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+LOGIN_URL = '/login/'
+
 
 # ehemalig "portal/appsettings.py"
 # Transloadit.com Settings
