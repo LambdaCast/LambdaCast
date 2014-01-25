@@ -6,9 +6,11 @@ def get_remote_filesize(sender, instance, **kwargs):
     size_list = []
     for url in format_list: 
         try:
-            site = urllib2.urlopen(url)
-            meta = site.info()
-            size_in_bytes = meta.getheader('content-length')
+            request = urllib2.Request(url)
+            request.get_method = lambda: 'HEAD'
+
+            response = urllib2.urlopen(request)
+            size_in_bytes = response.info().getheader('content-length')
             size_list.append(size_in_bytes)
         except:
             size_list.append(0)
