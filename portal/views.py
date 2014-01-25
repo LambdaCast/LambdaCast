@@ -22,7 +22,7 @@ import djangotasks
 
 import simplejson as json
 import urllib2
-import datetime
+from datetime import datetime
 import os
 import shutil
 import re
@@ -164,6 +164,7 @@ def submittal(request, subm_id):
     else:
         form = SubmittalForm(initial={
             'title': submittal.media_title,
+            'date': datetime.now(),
             'description': submittal.media_description,
             'channel': submittal.media_channel,
             'license': submittal.media_license,
@@ -179,6 +180,7 @@ def submittal(request, subm_id):
             'published': submittal.media_published,
             'tags': ", ".join(str(x) for x in  submittal.media_tags.all()),
             'torrentDone': submittal.media_torrentDone,
+            'encodingDone': True,
         })
         return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
 

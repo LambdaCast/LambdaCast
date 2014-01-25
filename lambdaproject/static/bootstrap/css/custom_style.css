@@ -57,7 +57,11 @@ ul.edit-menu {
 	margin-left: 10px;
 }
 
-#videoForm .control-label label { float: left; }
+#videoForm .control-label label,
+#submittalForm .control-label label {
+	float: left;
+	text-align: left;
+}
 
 .center {
      float: none;
