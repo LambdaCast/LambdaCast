@@ -19,5 +19,4 @@ def remove_newlines(text):
 
 @register.filter(name="in_mb")
 def in_mb(number_bytes):
-    size_in_mb = float(number_bytes) / 1024 / 1024 
-    return round(size_in_mb, 2)
+    return round(float(number_bytes) / 1024 / 1024, 2) if number_bytes is not None else 0
