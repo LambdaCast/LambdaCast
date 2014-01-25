@@ -120,25 +120,25 @@ class Video(models.Model):
         wp_code = ""
     	if self.oggURL or self.mp3URL or self.mp4URL or self.webmURL:
           if self.kind == 0 or self.kind == 2:
-            if self.webmSize:
+            if self.webmURL:
               wp_code = wp_code + '[video src="%s"]\n' % (self.webmURL)
-            elif self.mp4Size:
+            elif self.mp4URL:
               wp_code = wp_code + '[video src="%s"]\n' % (self.mp4URL)
           if self.kind == 1 or self.kind == 2:
-            if self.oggSize:
+            if self.oggURL:
               wp_code = wp_code + '[audio src="%s"]\n' % (self.oggURL)
-            elif self.mp3Size:
+            elif self.mp3URL:
               wp_code = wp_code + '[audio src="%s"]\n' % (self.mp3URL)
           wp_code = wp_code + '\nDownload: '
           if self.kind == 0 or self.kind == 2:
-            if self.webmSize:
+            if self.webmURL:
               wp_code = wp_code + '<a title="%s WebM" href="%s" target="_blank">WebM</a>, ' % (self.title,self.webmURL)
-            if self.mp4Size:
+            if self.mp4URL:
               wp_code = wp_code + '<a title="%s MP4" href="%s" target="_blank">MP4</a>, ' % (self.title,self.mp4URL)
           if self.kind == 1 or self.kind == 2:
-            if self.oggSize:
+            if self.oggURL:
               wp_code = wp_code + '<a title="%s OGG" href="%s" target="_blank">OGG</a>, ' % (self.title,self.oggURL)
-            if self.mp3Size:
+            if self.mp3URL:
               wp_code = wp_code + '<a title="%s MP3" href="%s" target="_blank">MP3</a>, ' % (self.title,self.mp3URL)
           if self.description:
             wp_code = wp_code + '\n\n<!--more-->\n%s' % ((markdown.markdown(self.description)))
