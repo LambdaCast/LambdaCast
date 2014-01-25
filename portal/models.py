@@ -347,6 +347,29 @@ class Collection(models.Model):
     def get_absolute_url(self):
         return "/collection/%s/" % self.slug
 
+class Submittal(models.Model):
+    title = models.CharField(_(u"Title of the submittal"),max_length=200)
+    description = models.TextField(_(u"Description of the submittal"),blank=True,help_text=_(u"Insert a sample description to the media. You can use Markdown to add formatting"))
+    media_title = models.CharField(_(u"Title"),max_length=200)
+    media_description = models.TextField(_(u"Description"),blank=True,help_text=_(u"Insert a sample description to the media. You can use Markdown to add formatting"))
+    users = models.ManyToManyField(User,verbose_name=_(u"Users of the submittal"), blank=True, null=True, help_text=_(u"User who use the submittal and get it shown on frontpage"))
+    media_channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
+    media_license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
+    media_linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
+    media_kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
+    media_torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
+    media_mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of the media folder or any other one with .mp4 ending"))
+    media_webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .webm ending"))
+    media_mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .mp3 ending"))
+    media_oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .ogg ending"))
+    media_videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the media list"))
+    media_audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as cover for the media list"))
+    media_published = models.BooleanField(verbose_name=_(u"Published"))
+    media_tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the video is about in short terms divided by commas"))
+    media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
+    def __unicode__(self):
+        return self.title
+
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a video file using ffmpeg '''
     process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

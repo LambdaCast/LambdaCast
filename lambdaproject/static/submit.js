@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 	$('#videoForm').ajaxForm({
 		beforeSend: function(xhr) {
-			var validator = $("#videoForm").validate({errorClass: "text-error",})
+			var validator = $("#videoForm").validate({errorClass: "text-error",});
 			if (!validator.form()) {
 				$("#formError").show();
 				xhr.abort();
