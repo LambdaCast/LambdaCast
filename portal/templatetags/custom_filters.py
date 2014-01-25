@@ -16,3 +16,7 @@ def remove_newlines(text):
     ''' Removes all newline characters from a block of text.'''
     normalized_text = normalize_newlines(text)
     return normalized_text.replace('\n', ' ')
+
+@register.filter(name="in_mb")
+def in_mb(number_bytes):
+    return round(float(number_bytes) / 1024 / 1024, 2) if number_bytes is not None else 0

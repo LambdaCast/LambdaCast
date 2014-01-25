@@ -2,11 +2,15 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
+from django.core.exceptions import ValidationError
 
 from autoslug import AutoSlugField
 from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
+
+from portal.signals import get_remote_filesize
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -44,6 +48,22 @@ KIND_CHOICES = (
     (2, _(u'Audio and Video')),
 )
 
+def validate_mp3URL(url):
+    if not url.endswith('.mp3'):
+        raise ValidationError(_(u"File doesn't end with .mp3"))
+
+def validate_mp4URL(url):
+    if not url.endswith('.mp4'):
+        raise ValidationError(_(u"File doesn't end with .mp4"))
+
+def validate_oggURL(url):
+    if not url.endswith('.ogg'):
+        raise ValidationError(_(u"File doesn't end with .ogg"))
+
+def validate_webmURL(url):
+    if not url.endswith('.webm'):
+        raise ValidationError(_(u"File doesn't end with .webm"))
+
 class Video(models.Model):
     ''' The model for our videos. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
     everything else is quite standard. The sizes fields are used in the feeds to make enclosures
@@ -61,13 +81,13 @@ class Video(models.Model):
     linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
     kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
     torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
-    mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of the media folder or any other one with .mp4 ending"))
+    mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,validators=[validate_mp4URL],help_text=_(u"Add the link of a .mp4-file"))
     mp4Size = models.BigIntegerField(_(u"MP4 Size in Bytes"),null=True,blank=True)
-    webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .webm ending"))
+    webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, validators=[validate_webmURL],help_text=_(u"Add the link of a .webm-file"))
     webmSize = models.BigIntegerField(_(u"WEBM Size in Bytes"),null=True,blank=True)
-    mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .mp3 ending"))
+    mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, validators=[validate_mp3URL],help_text=_(u"Add the link of a .mp3-file"))
     mp3Size = models.BigIntegerField(_(u"MP3 Size in Bytes"),null=True,blank=True)
-    oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .ogg ending"))
+    oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False,validators=[validate_oggURL], help_text=_(u"Add the link of a .ogg-file"))
     oggSize = models.BigIntegerField(_(u"OGG Size in Bytes"),null=True,blank=True)
     videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the media list"))
     audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as cover for the media list"))
@@ -91,22 +111,6 @@ class Video(models.Model):
     
     def comments_number(self):
         return Comment.objects.filter(moderated=True, video=self.pk).count()  
-
-    def oggSize_mb(self):
-        size = float(self.oggSize) / 1024 / 1024
-        return round(size, 3)
-    
-    def mp3Size_mb(self):
-        size = float(self.mp3Size) / 1024 / 1024
-        return round(size, 3)
-
-    def mp4Size_mb(self):
-        size = float(self.mp4Size) / 1024 / 1024
-        return round(size, 3)
-
-    def webmSize_mb(self):
-        size = float(self.webmSize) / 1024 / 1024
-        return round(size, 3)
 
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
@@ -377,3 +381,5 @@ def getLength(filename):
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
+
+pre_save.connect(get_remote_filesize, sender=Video)

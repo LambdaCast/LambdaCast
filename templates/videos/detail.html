@@ -189,23 +189,35 @@
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
 			{% if video.mp4URL %}
-			<dd><a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
-				 <i class="icon-film"></i> {% trans "Download MP4 Video" %} ({{ video.mp4Size_mb }} MB)</a>
+			<dd>
+				<a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
+					<i class="icon-film"></i>
+					{% trans "Download MP4 Video" %} {% if video.mp4Size %}({{ video.mp4Size|in_mb }} MB){% endif %}
+				</a>
 			</dd>
 			{% endif %}
 			{% if video.webmURL %}
-			<dd><a href="{{ video.webmURL }}" download="{{video.title}}.webm">
-				 <i class="icon-film"></i> {% trans "Download WEBM Video" %} ({{ video.webmSize_mb }} MB)</a>
+			<dd>
+				<a href="{{ video.webmURL }}" download="{{video.title}}.webm">
+					<i class="icon-film"></i>
+					{% trans "Download WEBM Video" %} {% if video.webmSize %}({{ video.webmSize|in_mb }} MB){% endif %}
+				</a>
 			</dd>
 			{% endif %}
 			{% if video.mp3URL %}
-			<dd><a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
-				<i class="icon-headphones"></i> {% trans "Download MP3 Audio" %} ({{ video.mp3Size_mb }} MB)</a>
+			<dd>
+				<a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
+					<i class="icon-headphones"></i>
+					{% trans "Download MP3 Audio" %} {% if video.mp3Size %}({{ video.mp3Size|in_mb }} MB){% endif %}
+				</a>
 			</dd>
 			{% endif %}
 			{% if video.oggURL %}
-			<dd><a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
-				<i class="icon-headphones"></i> {% trans "Download OGG Audio" %} ({{ video.oggSize_mb }} MB)</a>
+			<dd>
+				<a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
+					<i class="icon-headphones"></i>
+					{% trans "Download OGG Audio" %} {% if video.oggSize %}({{ video.oggSize|in_mb }} MB){% endif %}
+				</a>
 			</dd>
 			{% endif %}
 		</div>

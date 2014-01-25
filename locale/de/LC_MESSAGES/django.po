@@ -900,7 +900,7 @@ msgstr "Download WEBM Video"
 
 #: templates/videos/detail.html:203
 msgid "Download MP3 Audio"
-msgstr "Downloadf MP3 Audio"
+msgstr "Download MP3 Audio"
 
 #: templates/videos/detail.html:208
 msgid "Download OGG Audio"
