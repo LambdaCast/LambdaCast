@@ -2,20 +2,20 @@
 {% load i18n %}
 {% load custom_filters %}
 {% load simple_open_graph %}
-{% block title %} - {{ video.title }}{% endblock %}
+{% block title %} - {{ mediaitem.title }}{% endblock %}
 {% block extra_meta %}
-		<meta property="og:title" content="{{ video.title }}"></meta>
+		<meta property="og:title" content="{{ mediaitem.title }}"></meta>
 		<meta property="og:type" content="article"></meta>
-		{% if video.videoThumbURL %}
-		<meta property="og:image" content="{{ video.videoThumbURL }}"></meta>
-		{% elif video.audioThumbURL %}
-		<meta property="og:image" content="{{ video.audioThumbURL }}"></meta>
+		{% if mediaitem.videoThumbURL %}
+		<meta property="og:image" content="{{ mediaitem.videoThumbURL }}"></meta>
+		{% elif mediaitem.audioThumbURL %}
+		<meta property="og:image" content="{{ mediaitem.audioThumbURL }}"></meta>
 		{% else %}
 		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
 		{% endif %}
-		<meta property="og:url" content="{{ settings.DOMAIN }}/videos/{{ video.slug }}/"></meta>
-		{% if video.description %}
-		<meta property="og:description" content="{{ video.markdown_free|truncatechars:150|remove_newlines }}"></meta>
+		<meta property="og:url" content="{{ settings.DOMAIN }}/item/{{ mediaitem.slug }}/"></meta>
+		{% if mediaitem.description %}
+		<meta property="og:description" content="{{ mediaitem.markdown_free|truncatechars:150|remove_newlines }}"></meta>
 		{% else %}
 		<meta property="og:description" content="{{ settings.SITE_NAME }}"></meta>
 		{% endif %}
@@ -29,34 +29,34 @@
 {% block active-home %}class="active"{% endblock %}
 {% block body %}
 <div class="page-header">
-	{% if perms.portal.change_video and user.is_staff %}
-		<a href="/admin/portal/video/{{ video.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+	{% if perms.portal.change_mediaitem and user.is_staff %}
+		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
-	<h1>{{ video.title }}</h1>
+	<h1>{{ mediaitem.title }}</h1>
 </div>
 <div class="row">
 	<div class="span8">
-		{% if video.kind == 0 %}
+		{% if mediaitem.kind == 0 %}
 		<div class="row">
 			<div class="span8">
-				<video id="player_video" class="projekktor center" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-					{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-					{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+				<video id="player_video" class="projekktor center" poster="{{ mediaitem.videoThumbURL }}" title="{{ mediaitem.title }}" width="640" height="360" controls>
+					{% if mediaitem.webmURL %}<source src="{{ mediaitem.webmURL }}" type="video/webm" />{% endif %}
+					{% if mediaitem.mp4URL %}<source src="{{ mediaitem.mp4URL }}" type="video/mp4" />{% endif %}
 				</video>
 			</div>
 		</div>
 		{% endif %}
-		{% if video.kind == 1 %}
+		{% if mediaitem.kind == 1 %}
 		<div class="row">
 			<div class="span8">
-				<audio id="player_audio" class="projekktor center" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-					{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-					{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+				<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+					{% if mediaitem.mp3URL %}<source src="{{ mediaitem.mp3URL }}" type="audio/mp3" />{% endif %}
+					{% if mediaitem.oggURL %}<source src="{{ mediaitem.oggURL }}" type="application/ogg" />{% endif %}
 				</audio>
 			</div>
 		</div>
 		{% endif %}
-		{% if video.kind == 2 %}
+		{% if mediaitem.kind == 2 %}
 		<div class="row">
 			<div class="span8">
 				<ul class="nav nav-tabs">
@@ -65,15 +65,15 @@
 				</ul>
 				<div id="player_container">
 					<div id="video_player">
-						<video id="player_video" class="projekktor center" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-							{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-							{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+						<video id="player_video" class="projekktor center" poster="{{ mediaitem.videoThumbURL }}" title="{{ mediaitem.title }}" width="640" height="360" controls>
+							{% if mediaitem.webmURL %}<source src="{{ mediaitem.webmURL }}" type="video/webm" />{% endif %}
+							{% if mediaitem.mp4URL %}<source src="{{ mediaitem.mp4URL }}" type="video/mp4" />{% endif %}
 						</video>
 					</div>
 					<div id="audio_player" style="display:none;">
-						<audio id="player_audio" class="projekktor center" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-							{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-							{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+							{% if mediaitem.mp3URL %}<source src="{{ mediaitem.mp3URL }}" type="audio/mp3" />{% endif %}
+							{% if mediaitem.oggURL %}<source src="{{ mediaitem.oggURL }}" type="application/ogg" />{% endif %}
 						</audio>'
 					</div>
 				</div>
@@ -82,12 +82,12 @@
 		{% endif %}
 		<div class="row">
 			<div class="span8">
-				{% if video.description %}
+				{% if mediaitem.description %}
 				<div class="row">
 					<div class="span8">
 						<p><dt>{% trans "Description" %}:</dt></p>
 						<div class="well">
-							<dd><div style="max-height:200px; overflow-y: auto;">{{ video.description|render_markdown }}</div></dd>
+							<dd><div style="max-height:200px; overflow-y: auto;">{{ mediaitem.description|render_markdown }}</div></dd>
 						</div>
 					</div>
 				</div>
@@ -118,7 +118,7 @@
 					{{ message }}
 				</div>
 				{% endif %}
-				<form enctype="multipart/form-data" class="form-horizontal" action="/videos/{{ video.slug }}/" method="post">{% csrf_token %}
+				<form enctype="multipart/form-data" class="form-horizontal" action="/item/{{ mediaitem.slug }}/" method="post">{% csrf_token %}
 					{% for field in comment_form %}
 					<div class="control-group">
 						{% if field.errors %}
@@ -149,81 +149,81 @@
 	<div class="span4">
 		<div class="well">
 			<dt>{% trans "Date" %}:</dt>
-			<dd><i class="icon-calendar"></i> {{ video.date }}</dd>
-			{% if video.channel %}
+			<dd><i class="icon-calendar"></i> {{ mediaitem.date }}</dd>
+			{% if mediaitem.channel %}
 			<dt>{% trans "Channel" %}:</dt>
-			<dd><i class="icon-th"></i> <a href="/videos/channel/{{ video.channel.slug }}/">{{ video.channel.name }}</a>
+			<dd><i class="icon-th"></i> <a href="/channel/{{ mediaitem.channel.slug }}/">{{ mediaitem.channel.name }}</a>
 			{% endif %}
-			{% if video.user %}
+			{% if mediaitem.user %}
 			<dt>{% trans "Uploaded by" %}:</dt>
-			{% if video.user.first_name %}
-			<dd><i class="icon-user"></i> {{ video.user.first_name }} {{ video.user.last_name }}</dd>
+			{% if mediaitem.user.first_name %}
+			<dd><i class="icon-user"></i> {{ mediaitem.user.first_name }} {{ mediaitem.user.last_name }}</dd>
 			{% else %}
-			<dd><i class="icon-user"></i> {{ video.user }}
+			<dd><i class="icon-user"></i> {{ mediaitem.user }}
 			{% endif %}
 			{% endif %}
-			{% if video.linkURL %}
+			{% if mediaitem.linkURL %}
 			<dt>Link:</dt>
-			<dd><a href="{{ video.linkURL }}" target="_Blank">{{ video.linkURL|truncatechars:40 }}</a></dd>
+			<dd><a href="{{ mediaitem.linkURL }}" target="_Blank">{{ mediaitem.linkURL|truncatechars:40 }}</a></dd>
 			{% endif %}
 			<dt>{% trans "Embedding" %}:</dt>
-			<dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/videos/iframe/{{ video.slug }}/" frameborder="0"></iframe>'></dd>
+			<dd><input type="text" readonly="readonly" value='<iframe width="640" height="360" src="{{ settings.DOMAIN }}/item/iframe/{{ mediaitem.slug }}/" frameborder="0"></iframe>'></dd>
 			{% if user.is_authenticated %}
 			<dt>{% trans "Wordpress Embed Code" %}:<dt>
-			<dd><textarea readonly="readonly">{{ video.get_wp_code }}</textarea></dd>
+			<dd><textarea readonly="readonly">{{ mediaitem.get_wp_code }}</textarea></dd>
 			{% endif %}
-			{% if video.duration %}
+			{% if mediaitem.duration %}
 			<dt>{% trans "Duration" %}:</dt>
-			<dd><i class="icon-time"></i> {{ video.duration|secondstohms }}</dd>
+			<dd><i class="icon-time"></i> {{ mediaitem.duration|secondstohms }}</dd>
 			{% endif %}
 			<dt>{% trans "License" %}:</dt>
-			{% if video.license == "None" %}
+			{% if mediaitem.license == "None" %}
 			<dd><i class="icon-book"></i> {% trans "None" %}</a></dd>
 			{% else %}
-			<dd><i class="icon-book"></i> <a href="{{ video.get_license_link }}">{{ video.license }}</a></dd>
+			<dd><i class="icon-book"></i> <a href="{{ mediaitem.get_license_link }}">{{ mediaitem.license }}</a></dd>
 			{% endif %}
-			{% if video.torrentURL %}
+			{% if mediaitem.torrentURL %}
 			<dt>{% trans "Torrent" %}:</dt>
-			<dd><a href="{{ video.torrentURL }}">{% trans "Download Original" %}</a></dd>
+			<dd><a href="{{ mediaitem.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if video.mp4URL %}
+			{% if mediaitem.mp4URL %}
 			<dd>
-				<a href="{{ video.mp4URL }}" download="{{video.title}}.mp4">
+				<a href="{{ mediaitem.mp4URL }}" download="{{mediaitem.title}}.mp4">
 					<i class="icon-film"></i>
-					{% trans "Download MP4 Video" %} {% if video.mp4Size %}({{ video.mp4Size|in_mb }} MB){% endif %}
+					{% trans "Download MP4 Video" %} {% if mediaitem.mp4Size %}({{ mediaitem.mp4Size|in_mb }} MB){% endif %}
 				</a>
 			</dd>
 			{% endif %}
-			{% if video.webmURL %}
+			{% if mediaitem.webmURL %}
 			<dd>
-				<a href="{{ video.webmURL }}" download="{{video.title}}.webm">
+				<a href="{{ mediaitem.webmURL }}" download="{{mediaitem.title}}.webm">
 					<i class="icon-film"></i>
-					{% trans "Download WEBM Video" %} {% if video.webmSize %}({{ video.webmSize|in_mb }} MB){% endif %}
+					{% trans "Download WEBM Video" %} {% if mediaitem.webmSize %}({{ mediaitem.webmSize|in_mb }} MB){% endif %}
 				</a>
 			</dd>
 			{% endif %}
-			{% if video.mp3URL %}
+			{% if mediaitem.mp3URL %}
 			<dd>
-				<a href="{{ video.mp3URL }}" download="{{video.title}}.mp3">
+				<a href="{{ mediaitem.mp3URL }}" download="{{mediaitem.title}}.mp3">
 					<i class="icon-headphones"></i>
-					{% trans "Download MP3 Audio" %} {% if video.mp3Size %}({{ video.mp3Size|in_mb }} MB){% endif %}
+					{% trans "Download MP3 Audio" %} {% if mediaitem.mp3Size %}({{ mediaitem.mp3Size|in_mb }} MB){% endif %}
 				</a>
 			</dd>
 			{% endif %}
-			{% if video.oggURL %}
+			{% if mediaitem.oggURL %}
 			<dd>
-				<a href="{{ video.oggURL }}" download="{{video.title}}.ogg">
+				<a href="{{ mediaitem.oggURL }}" download="{{mediaitem.title}}.ogg">
 					<i class="icon-headphones"></i>
-					{% trans "Download OGG Audio" %} {% if video.oggSize %}({{ video.oggSize|in_mb }} MB){% endif %}
+					{% trans "Download OGG Audio" %} {% if mediaitem.oggSize %}({{ mediaitem.oggSize|in_mb }} MB){% endif %}
 				</a>
 			</dd>
 			{% endif %}
 		</div>
-		{% if video.tags.all %}
+		{% if mediaitem.tags.all %}
 		<div class="well">
 			<ul>
-			{% for tag in video.tags.all %}
+			{% for tag in mediaitem.tags.all %}
 				<li><a href="/tags/{{ tag.name }}/">{{ tag.name }}</a></li>
 			{% endfor %}
 			</ul>
@@ -248,7 +248,7 @@ $(document).ready(function() {
 	var timeListener = function(value) {	
 		$('#id_timecode').val( value.toFixed(2) )
 	}
-	{% if video.kind == 0 or video.kind == 2 %}
+	{% if mediaitem.kind == 0 or mediaitem.kind == 2 %}
 	var video_player = projekktor('#player_video', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
@@ -260,7 +260,7 @@ $(document).ready(function() {
 
 	video_player.addListener('time', timeListener);
 	{% endif %}
-	{% if video.kind == 1 or video.kind == 2 %}
+	{% if mediaitem.kind == 1 or mediaitem.kind == 2 %}
 	var audio_player = projekktor('#player_audio', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
