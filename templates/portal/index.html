@@ -19,7 +19,7 @@
 			</li>
 			{% for channel in channel_list %}
 			{% if channel.featured %}
-			<li><a href="/videos/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
+			<li><a href="/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
 			{% endif %}
 			{% endfor %}
 			<li class="dropdown">
@@ -29,21 +29,21 @@
 				</a>
 				<ul class="dropdown-menu">
 					{% for channel in channel_list %}
-					<li><a href="/videos/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
+					<li><a href="/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
 					{% endfor %}
 				</ul>
 			</li>
 		</ul>
-		{% include "videos/videolist.html" with video_list=latest_videos_list %}
+		{% include "portal/items/listitem.html" with mediaitem_list=latest_mediaitems_list %}
 		<ul class="pager">
-			{% if latest_videos_list.has_previous %}
+			{% if latest_mediaitems_list.has_previous %}
 			<li class="previous">
-				<a href="?page={{ latest_videos_list.previous_page_number }}">&larr; Neuer</a>
+				<a href="?page={{ latest_mediaitems_list.previous_page_number }}">&larr; Neuer</a>
 			</li>
 			{% endif %}
-			{% if latest_videos_list.has_next %}
+			{% if latest_mediaitems_list.has_next %}
 			<li class="next">
-				<a href="?page={{ latest_videos_list.next_page_number }}">&Auml;lter &rarr;</a>
+				<a href="?page={{ latest_mediaitems_list.next_page_number }}">&Auml;lter &rarr;</a>
 			</li>
 			{% endif %}
 		</ul>
@@ -54,7 +54,7 @@
 		</div>
 		<div class=well>
 			<ul class="nav nav-list">
-				{% include "videos/inc/latest-feeds.html" %}
+				{% include "portal/inc/latest-feeds.html" %}
 				<li>
 					<a href="/feeds/comments/"><i class="icon-comment"></i> {% trans "Comments-Feed" %}</a>
 				</li>
@@ -65,7 +65,7 @@
 			</ul>
 		</div>
 	</div>
-	{% get_tagcloud as tags for 'portal.Video' %}
+	{% get_tagcloud as tags for 'portal.MediaItem' %}
 	{% if tags %}
 	<div class="span4">
 		<div class="well">
