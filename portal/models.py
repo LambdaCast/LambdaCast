@@ -217,7 +217,7 @@ class Video(models.Model):
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
 
-            if path.endswith('.mp3') and kind == 1:
+            if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":
                 audio_mp3 = MP3(path, ID3=ID3)
                 apic = audio_mp3.tags.getall('APIC')
                 if apic:
