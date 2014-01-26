@@ -32,7 +32,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # If you use an virtualenv (you schould) enter it here
-VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/pythons2-7/site-packages'
+VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/python2.7/site-packages'
 
 # The guys who will get an email if something is wrong
 ADMINS = (
