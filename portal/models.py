@@ -219,21 +219,19 @@ class Video(models.Model):
 
             if path.endswith('.mp3') and kind == 1:
                 audio_mp3 = MP3(path, ID3=ID3)
-                try:
-                    cover_data = audio_mp3.tags.getall('APIC')[0].data
-                    cover_mimetype = audio_mp3.tags.getall('APIC')[0].mime
+                apic = audio_mp3.tags.getall('APIC')
+                if apic:
+                    cover_data = apic[0].data
+                    cover_mimetype = apic[0].mime
+                    filename = ''
                     if cover_mimetype == 'image/png':
-                        art_mp3 = open(outputdir + self.slug + '_cover.png', 'w')
-                        art_mp3.write(cover_data)
-                        art_mp3.close()
-                        self.audioThumbURL = outputdir + self.slug + '_cover.png'
+                        filename = self.slug + '_cover.png'
                     elif cover_mimetype == 'image/jpg':
-                        art_mp3 = open(outputdir + self.slug + '_cover.jpg', 'w')
-                        art_mp3.write(cover_data)
-                        art_mp3.close()
-                        self.audioThumbURL = outputdir + self.slug + '_cover.jpg'
-                except:
-                    pass
+                        filename = self.slug + '_cover.jpg'
+                    art_mp3 = open(outputdir + filename, 'w')
+                    art_mp3.write(cover_data)
+                    art_mp3.close()
+                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT
