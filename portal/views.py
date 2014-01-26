@@ -49,7 +49,7 @@ def list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return render_to_response('portal/index.html', {'page_list': get_page_list, 'submittal_list':get_submittal_list(request), 'latest_mediaitem_list': mediaitems, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('portal/index.html', {'page_list': get_page_list, 'submittal_list':get_submittal_list(request), 'latest_mediaitems_list': mediaitems, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def channel_list(request,slug):
@@ -69,7 +69,7 @@ def channel_list(request,slug):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return render_to_response('portal/channel.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'mediaitems_list': mediitems, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('portal/channel.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def detail(request, slug):
