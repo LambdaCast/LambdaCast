@@ -13,16 +13,16 @@
 	</head>
 	<body>
 
-		{% if video.kind == 0 or video.kind == 2 %}
-		<video class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-			{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-			{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+		{% if mediaitem.kind == 0 or mediaitem.kind == 2 %}
+		<video class="projekktor" poster="{{ mediaitem.videoThumbURL }}" title="{{ mediaitem.title }}" width="640" height="360" controls>
+			{% if mediaitem.webmURL %}<source src="{{ mediaitem.webmURL }}" type="video/webm" />{% endif %}
+			{% if mediaitem.mp4URL %}<source src="{{ mediaitem.mp4URL }}" type="video/mp4" />{% endif %}
 		</video>
 		{% endif %}
-		{% if video.kind == 1 %}
-		<audio class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-			{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-			{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+		{% if mediaitem.kind == 1 %}
+		<audio class="projekktor" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+			{% if mediaitem.mp3URL %}<source src="{{ mediaitem.mp3URL }}" type="audio/mp3" />{% endif %}
+			{% if mediaitem.oggURL %}<source src="{{ mediaitem.oggURL }}" type="application/ogg" />{% endif %}
 		</audio>
 		{% endif %}
 		<script type="text/javascript">
