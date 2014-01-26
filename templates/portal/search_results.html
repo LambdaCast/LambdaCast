@@ -8,12 +8,12 @@
 </div>
 <div class="row">
 	<div class="span8">
-		{% include "videos/videolist.html" with video_list=videos_list %}
+		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 	</div>
 	<div class="span4">
 		<div class=well>
 			<ul class="nav nav-list">
-				{% include "videos/inc/latest-feeds.html" %}
+				{% include "portal/inc/latest-feeds.html" %}
 				<li>
 					<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
 				</li>
