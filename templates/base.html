@@ -20,6 +20,7 @@
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Audio Files (MP3)" %}" href="/feeds/latest/mp3/" />
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Audio Files (OGG)" %}" href="/feeds/latest/ogg/" />
 		{% endif %}
+		<link rel="alternate" type="application/rss+xml" title="{% trans "Comments-Feed" %}" href="/feeds/comments/" />
 		{% if settings.ENABLE_LIVESTREAMS %}
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Upcoming Events" %}" href="/feeds/stream/upcoming/" />
 		{% endif %}
@@ -68,21 +69,13 @@
 						</ul>
 						<ul class="nav pull-right">
 							<li>
-								<form class="navbar-search" action="/search/" method="GET">
-									<input type="text" class="search-query" name="q" placeholder="{% trans "Search..." %}">
+								<form class="navbar-search" method="GET" action="/search/">
+									<input class="search-query" type="text" placeholder="{% trans "Search" %}" name="q"></input>
 								</form>
 							</li>
-							{% if user.is_authenticated %}
-							<li {% block active-upload %}{% endblock %}><a href="/submit/" title="{% trans "Upload" %}"><i class="icon-upload"></i></a></li>
-							<li><a href="/admin/portal/video/add/" title="{% trans "Add Video" %}"><i class="icon-plus-sign"></i></a></li>
-							<li {% block active-status %}{% endblock %}><a href="/status/" title="{% trans "Status" %}"><i class="icon-ok"></i></a></li>
-							<li><a href="/admin/" title="{% trans "Admin" %}"><i class="icon-wrench"></i></a></li>
-							<li><a href="/logout/" title="{% trans "Logout" %}"><i class="icon-off"></i></a></li>
-							{% else %}
-							<li {% block active-login %}{% endblock %}><a href="/login/"><i class="icon-user"></i> {% trans "Login" %}</a></li>
-							{% endif %}
-						</ul>
-					</div><!--/.nav-collapse -->
+							{% include "nav.html" %}
+						</ul><!-- nav -->
+					</div><!-- .nav-collapse -->
 				</div>
 			</div>
 		</div>

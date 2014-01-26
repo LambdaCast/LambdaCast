@@ -3,6 +3,7 @@ from portal.models import Comment
 from portal.models import Channel
 from portal.models import Hotfolder
 from portal.models import Collection
+from portal.models import Submittal
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
@@ -59,3 +60,8 @@ class CollectionAdmin(admin.ModelAdmin):
     ordering = ['-date','-created']
 
 admin.site.register(Collection,CollectionAdmin)
+
+class SubmittalAdmin(admin.ModelAdmin):
+    list_display = ['title','description']
+
+admin.site.register(Submittal,SubmittalAdmin)

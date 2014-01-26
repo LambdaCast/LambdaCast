@@ -32,7 +32,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # If you use an virtualenv (you schould) enter it here
-VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/pythons2-7/site-packages'
+VIRTUALENV = ABSOLUTE_PATH + '/.venv/lib/python2.7/site-packages'
 
 # The guys who will get an email if something is wrong
 ADMINS = (
@@ -43,7 +43,7 @@ ADMINS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'lambda.sql',            # Or path to database file if using sqlite3.
+        'NAME': 'test.sql',              # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -167,8 +167,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django_admin_bootstrapped',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    'django.contrib.admindocs',
     'django.contrib.markup',
     'taggit',
     'portal',
@@ -184,6 +182,8 @@ INSTALLED_APPS = (
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+
+LOGIN_URL = '/login/'
 
 
 # ehemalig "portal/appsettings.py"
@@ -218,6 +218,10 @@ ENABLE_LIVESTREAMS = False
 
 ENABLE_AUDIO_FEEDS = True
 ENABLE_VIDEO_FEEDS = True
+
+# Host and port for the mail server to send mails for new comments
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
 
 USE_BITTORRENT = False
 # example: "udp://tracker.example.com:80"

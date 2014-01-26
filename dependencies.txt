@@ -1,6 +1,7 @@
 Django==1.4.8
 Markdown==2.2.0
 South==0.7.5
+Pillow==2.3
 django-autoslug==1.5.0
 django-taggit==0.9.3
 django-taggit-templatetags==0.4.6dev

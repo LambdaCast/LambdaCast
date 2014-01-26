@@ -2,11 +2,15 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
+from django.core.exceptions import ValidationError
 
 from autoslug import AutoSlugField
 from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
+
+from portal.signals import get_remote_filesize
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -22,6 +26,8 @@ import datetime
 from types import NoneType
 
 from mutagen import File
+from mutagen.mp3 import MP3
+from mutagen.id3 import ID3, APIC, error
 
 from threading import Event
 
@@ -42,6 +48,22 @@ KIND_CHOICES = (
     (1, _(u'Audio-only')),
 )
 
+def validate_mp3URL(url):
+    if not url.endswith('.mp3'):
+        raise ValidationError(_(u"File doesn't end with .mp3"))
+
+def validate_mp4URL(url):
+    if not url.endswith('.mp4'):
+        raise ValidationError(_(u"File doesn't end with .mp4"))
+
+def validate_oggURL(url):
+    if not url.endswith('.ogg'):
+        raise ValidationError(_(u"File doesn't end with .ogg"))
+
+def validate_webmURL(url):
+    if not url.endswith('.webm'):
+        raise ValidationError(_(u"File doesn't end with .webm"))
+
 class Video(models.Model):
     ''' The model for our videos. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
     everything else is quite standard. The sizes fields are used in the feeds to make enclosures
@@ -59,13 +81,13 @@ class Video(models.Model):
     linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
     kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
     torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
-    mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of the media folder or any other one with .mp4 ending"))
+    mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,validators=[validate_mp4URL],help_text=_(u"Add the link of a .mp4-file"))
     mp4Size = models.BigIntegerField(_(u"MP4 Size in Bytes"),null=True,blank=True)
-    webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .webm ending"))
+    webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, validators=[validate_webmURL],help_text=_(u"Add the link of a .webm-file"))
     webmSize = models.BigIntegerField(_(u"WEBM Size in Bytes"),null=True,blank=True)
-    mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .mp3 ending"))
+    mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, validators=[validate_mp3URL],help_text=_(u"Add the link of a .mp3-file"))
     mp3Size = models.BigIntegerField(_(u"MP3 Size in Bytes"),null=True,blank=True)
-    oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .ogg ending"))
+    oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False,validators=[validate_oggURL], help_text=_(u"Add the link of a .ogg-file"))
     oggSize = models.BigIntegerField(_(u"OGG Size in Bytes"),null=True,blank=True)
     videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the media list"))
     audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as cover for the media list"))
@@ -90,22 +112,6 @@ class Video(models.Model):
     def comments_number(self):
         return Comment.objects.filter(moderated=True, video=self.pk).count()  
 
-    def oggSize_mb(self):
-        size = float(self.oggSize) / 1024 / 1024
-        return round(size, 3)
-    
-    def mp3Size_mb(self):
-        size = float(self.mp3Size) / 1024 / 1024
-        return round(size, 3)
-
-    def mp4Size_mb(self):
-        size = float(self.mp4Size) / 1024 / 1024
-        return round(size, 3)
-
-    def webmSize_mb(self):
-        size = float(self.webmSize) / 1024 / 1024
-        return round(size, 3)
-
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
         md_free_desc = md_free_desc.replace('</p>', ' | ').replace('</li>', ' | ').replace('<ul>', ' | ')
@@ -116,7 +122,7 @@ class Video(models.Model):
 
     def get_wp_code(self):
         wp_code = ""
-    	if self.oggURL or self.mp3URL or self.mp4URL or self.webmURL:
+        if self.oggURL or self.mp3URL or self.mp4URL or self.webmURL:
           if self.kind == 0 or self.kind == 2:
             if self.webmURL:
               wp_code = wp_code + '[video src="%s"]\n' % (self.webmURL)
@@ -203,44 +209,51 @@ class Video(models.Model):
             outfile_mp3 = outputdir + self.slug + '.mp3'
             # Create the command line
             cl_mp3 = ffmpeg(path, outfile_mp3, logfile, NULL_VIDEO , MP3_AUDIO).build_command_line()
-            
+
             logfile = outputdir + 'encoding_ogg_log.txt'
             outfile_ogg = outputdir + self.slug + '.ogg'
 
             cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
-            
+
             self.mp3URL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
             self.oggURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
-            
+
             outcode = subprocess.Popen(cl_mp3, shell=True)
-            
+
             while outcode.poll() == None:
                 pass
-    
+
             if outcode.poll() == 0:
                 self.mp3Size = os.path.getsize(outfile_mp3)
                 self.duration = getLength(outfile_mp3)
             else:
                 raise StandardError(_(u"Encoding MP3 Failed"))
-                
+
             outcode = subprocess.Popen(cl_ogg, shell=True)
-            
+
             while outcode.poll() == None:
                 pass
-    
+
             if outcode.poll() == 0:
                 self.oggSize = os.path.getsize(outfile_ogg)
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
-                
-        if (kind == 1 and self.audioThumbURL == "" and self.videoThumbURL == ""):
-            file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
-            if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
-                artwork = file.tags['APIC:'].data # access APIC frame and grab the image
-                with open(outputdir + self.slug + '_cover.jpg', 'wb') as img:
-                    img.write(artwork)
 
-                self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '_cover.jpg'
+            if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":
+                audio_mp3 = MP3(path, ID3=ID3)
+                apic = audio_mp3.tags.getall('APIC')
+                if apic:
+                    cover_data = apic[0].data
+                    cover_mimetype = apic[0].mime
+                    filename = ''
+                    if cover_mimetype == 'image/png':
+                        filename = self.slug + '_cover.png'
+                    elif cover_mimetype == 'image/jpg':
+                        filename = self.slug + '_cover.jpg'
+                    art_mp3 = open(outputdir + filename, 'w')
+                    art_mp3.write(cover_data)
+                    art_mp3.close()
+                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT
@@ -296,6 +309,9 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.comment
 
+    def get_absolute_url(self):
+        return "/videos/%s/" % self.video.slug
+
 class Channel(models.Model):
     ''' The model for our channels, all channels can hold videos but videos can only be part of one channel'''
     name = models.CharField(_(u"Name"),max_length=30)
@@ -342,6 +358,29 @@ class Collection(models.Model):
     def get_absolute_url(self):
         return "/collection/%s/" % self.slug
 
+class Submittal(models.Model):
+    title = models.CharField(_(u"Title of the submittal"),max_length=200)
+    description = models.TextField(_(u"Description of the submittal"),blank=True,help_text=_(u"Insert a sample description to the media. You can use Markdown to add formatting"))
+    media_title = models.CharField(_(u"Title"),max_length=200)
+    media_description = models.TextField(_(u"Description"),blank=True,help_text=_(u"Insert a sample description to the media. You can use Markdown to add formatting"))
+    users = models.ManyToManyField(User,verbose_name=_(u"Users of the submittal"), blank=True, null=True, help_text=_(u"User who use the submittal and get it shown on frontpage"))
+    media_channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
+    media_license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
+    media_linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
+    media_kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
+    media_torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
+    media_mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of the media folder or any other one with .mp4 ending"))
+    media_webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .webm ending"))
+    media_mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .mp3 ending"))
+    media_oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .ogg ending"))
+    media_videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the media list"))
+    media_audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as cover for the media list"))
+    media_published = models.BooleanField(verbose_name=_(u"Published"))
+    media_tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the video is about in short terms divided by commas"))
+    media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
+    def __unicode__(self):
+        return self.title
+
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a video file using ffmpeg '''
     process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -349,3 +388,5 @@ def getLength(filename):
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
+
+pre_save.connect(get_remote_filesize, sender=Video)
