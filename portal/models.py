@@ -26,6 +26,8 @@ import datetime
 from types import NoneType
 
 from mutagen import File
+from mutagen.mp3 import MP3
+from mutagen.id3 import ID3, APIC, error
 
 from threading import Event
 
@@ -122,7 +124,7 @@ class Video(models.Model):
 
     def get_wp_code(self):
         wp_code = ""
-    	if self.oggURL or self.mp3URL or self.mp4URL or self.webmURL:
+        if self.oggURL or self.mp3URL or self.mp4URL or self.webmURL:
           if self.kind == 0 or self.kind == 2:
             if self.webmURL:
               wp_code = wp_code + '[video src="%s"]\n' % (self.webmURL)
@@ -209,44 +211,51 @@ class Video(models.Model):
             outfile_mp3 = outputdir + self.slug + '.mp3'
             # Create the command line
             cl_mp3 = ffmpeg(path, outfile_mp3, logfile, NULL_VIDEO , MP3_AUDIO).build_command_line()
-            
+
             logfile = outputdir + 'encoding_ogg_log.txt'
             outfile_ogg = outputdir + self.slug + '.ogg'
 
             cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
-            
+
             self.mp3URL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
             self.oggURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
-            
+
             outcode = subprocess.Popen(cl_mp3, shell=True)
-            
+
             while outcode.poll() == None:
                 pass
-    
+
             if outcode.poll() == 0:
                 self.mp3Size = os.path.getsize(outfile_mp3)
                 self.duration = getLength(outfile_mp3)
             else:
                 raise StandardError(_(u"Encoding MP3 Failed"))
-                
+
             outcode = subprocess.Popen(cl_ogg, shell=True)
-            
+
             while outcode.poll() == None:
                 pass
-    
+
             if outcode.poll() == 0:
                 self.oggSize = os.path.getsize(outfile_ogg)
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
-                
-        if (kind == 1 and self.audioThumbURL == "" and self.videoThumbURL == ""):
-            file = File(self.originalFile.path) # mutagen can automatically detect format and type of tags
-            if not isinstance(file, NoneType) and file.tags and 'APIC:' in file.tags and file.tags['APIC:']:
-                artwork = file.tags['APIC:'].data # access APIC frame and grab the image
-                with open(outputdir + self.slug + '_cover.jpg', 'wb') as img:
-                    img.write(artwork)
 
-                self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '_cover.jpg'
+            if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":
+                audio_mp3 = MP3(path, ID3=ID3)
+                apic = audio_mp3.tags.getall('APIC')
+                if apic:
+                    cover_data = apic[0].data
+                    cover_mimetype = apic[0].mime
+                    filename = ''
+                    if cover_mimetype == 'image/png':
+                        filename = self.slug + '_cover.png'
+                    elif cover_mimetype == 'image/jpg':
+                        filename = self.slug + '_cover.jpg'
+                    art_mp3 = open(outputdir + filename, 'w')
+                    art_mp3.write(cover_data)
+                    art_mp3.close()
+                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT
