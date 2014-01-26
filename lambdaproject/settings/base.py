@@ -48,9 +48,6 @@ DATABASES = {
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        'STORAGE_ENGINE': 'INNODB',
-        'CHARACTER_SET_CONNECTION': 'utf8',
-        'COLLATION_CONNECTION': 'utf8_unicode_ci',
     }
 }
 
@@ -170,8 +167,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django_admin_bootstrapped',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    'django.contrib.admindocs',
     'django.contrib.markup',
     'taggit',
     'portal',
