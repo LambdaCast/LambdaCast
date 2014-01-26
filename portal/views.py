@@ -134,7 +134,7 @@ def search(request):
         
         found_entries = MediaItem.objects.filter(entry_query).order_by('-date')
 
-    return render_to_response('portal/items/search_results.html',
+    return render_to_response('portal/search_results.html',
                           { 'query_string': query_string, 'mediaitems_list': found_entries, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
                           context_instance=RequestContext(request))
 
