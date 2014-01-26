@@ -258,7 +258,7 @@ class CollectionFeedTorrent(Feed):
 class CommentsFeed(Feed):
     title = _(u"Latest comments from your podcast portal")
     link = "/"
-    description = _(u"The latest comments from your podcast portal")
+    description = _(u"Latest comments from your podcast portal")
 
     def items(self):
         return Comment.objects.filter(moderated=True).order_by('-created')
