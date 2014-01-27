@@ -349,7 +349,7 @@ class Collection(models.Model):
     description = models.TextField(_(u"Description"), max_length=1000)
     slug = AutoSlugField(populate_from='title',unique=True,verbose_name=_(u"Slug"),help_text=_(u"Slugs are parts of an URL that you can define"))
     date = models.DateField(_("Date"),null=True)
-    videos = models.ManyToManyField('portal.MediaItem',verbose_name=_(u"Media Item"),help_text=_(u"Media you want to add to your collection"))
+    items = models.ManyToManyField(MediaItem,verbose_name=_(u"Media Item"),help_text=_(u"Media you want to add to your collection"))
     channel = models.ForeignKey('portal.Channel',blank=True,null=True,help_text=_(u"Channels you want to add to your collection"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)

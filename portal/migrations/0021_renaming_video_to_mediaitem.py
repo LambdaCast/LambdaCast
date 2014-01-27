@@ -8,17 +8,40 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'Video'
         db.rename_table('portal_video', 'portal_mediaitem')
 
         # Changing field 'Comment.video'
         db.alter_column('portal_comment', 'video_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem']))
+
+        # Removing M2M table for field videos on 'Collection'
+        db.delete_table('portal_collection_videos')
+
+        # Adding M2M table for field items on 'Collection'
+        db.create_table('portal_collection_items', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('collection', models.ForeignKey(orm['portal.collection'], null=False)),
+            ('mediaitem', models.ForeignKey(orm['portal.mediaitem'], null=False))
+        ))
+        db.create_unique('portal_collection_items', ['collection_id', 'mediaitem_id'])
+
 
     def backwards(self, orm):
         db.rename_table('portal_mediaitem', 'portal_video')
 
         # Changing field 'Comment.video'
         db.alter_column('portal_comment', 'video_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.Video']))
+
+        # Adding M2M table for field videos on 'Collection'
+        db.create_table('portal_collection_videos', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('collection', models.ForeignKey(orm['portal.collection'], null=False)),
+            ('video', models.ForeignKey(orm['portal.video'], null=False))
+        ))
+        db.create_unique('portal_collection_videos', ['collection_id', 'video_id'])
+
+        # Removing M2M table for field items on 'Collection'
+        db.delete_table('portal_collection_items')
+
 
     models = {
         'auth.group': {
@@ -74,10 +97,10 @@ class Migration(SchemaMigration):
             'date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'items': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['portal.MediaItem']", 'symmetrical': 'False'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'videos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['portal.MediaItem']", 'symmetrical': 'False'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '40'})
         },
         'portal.comment': {
             'Meta': {'object_name': 'Comment'},
