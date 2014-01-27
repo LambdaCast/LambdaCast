@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         db.rename_table('portal_video', 'portal_mediaitem')
 
         # Renaming field 'Comment.video'
-        db.rename_column('portal_comment','portal_comment_video', 'portal_comment_item')
+        db.rename_column('portal_comment', 'video_id', 'item_id')
 
         # Changing field 'Comment.item'
         db.alter_column('portal_comment', 'item_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem']))
@@ -23,7 +23,7 @@ class Migration(SchemaMigration):
         db.rename_table('portal_mediaitem', 'portal_video')
 
         # Renaming field 'Comment.item'
-        db.rename_column('portal_comment', 'portal_comment_item', 'portal_comment_video')
+        db.rename_column('portal_comment', 'item_id', 'video_id')
 
         # Changing field 'Comment.video'
         db.alter_column('portal_comment', 'video_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.Video']))
@@ -100,7 +100,7 @@ class Migration(SchemaMigration):
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'timecode': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2', 'blank': 'True'}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']"})
+            'item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']"})
         },
         'portal.hotfolder': {
             'Meta': {'object_name': 'Hotfolder'},
