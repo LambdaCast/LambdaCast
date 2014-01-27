@@ -67,17 +67,17 @@ def validate_webmURL(url):
         raise ValidationError(_(u"File doesn't end with .webm"))
 
 class MediaItem(models.Model):
-    ''' The model for our videos. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
+    ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
     everything else is quite standard. The sizes fields are used in the feeds to make enclosures
     possible. The videoThumbURL is the URL for Projekktor's "poster" and assemblyid is just a storage
-    for the result we get back from transloadit so that we know which video just triggered the "encoding_done"
+    for the result we get back from transloadit so that we know which item just triggered the "encoding_done"
     view. Why are there URL fields and not file fields? Because you maybe want to use external storage
     (like Amazon S3) to store your files '''
     title = models.CharField(_(u"Title"),max_length=200)
     slug = AutoSlugField(populate_from='title',unique=True,verbose_name=_(u"Slug"),help_text=_(u"Slugs are parts of an URL that you can define"))
     date = models.DateField(_(u"Date"),help_text=_(u"Upload or record date"))
     description = models.TextField(_(u"Description"),blank=True,help_text=_(u"Insert a description to the media. You can use Markdown to add formatting"))
-    user = models.ForeignKey(User,verbose_name=_(u"User"), blank=True, null=True, help_text=_(u"Shows which user made or uploaded the video"))
+    user = models.ForeignKey(User,verbose_name=_(u"User"), blank=True, null=True, help_text=_(u"Shows which user made or uploaded the media item"))
     channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
     license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
     linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
@@ -99,7 +99,7 @@ class MediaItem(models.Model):
     encodingDone = models.BooleanField(verbose_name=_(u"Encoding done"))
     torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
     assemblyid = models.CharField(_(u"Transloadit Result"),max_length=100,blank=True)
-    tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the video is about in short terms divided by commas"))
+    tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the item is about in short terms divided by commas"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     originalFile = models.FileField(_(u"File"),upload_to="raw/%Y/%m/%d/",max_length=2048)
@@ -107,12 +107,12 @@ class MediaItem(models.Model):
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
-        return "/videos/%s/" % self.slug
+        return "/item/%s/" % self.slug
     def getClassName(self):
         return self.__class__.__name__
     
     def comments_number(self):
-        return Comment.objects.filter(moderated=True, video=self.pk).count()  
+        return Comment.objects.filter(moderated=True, item=self.pk).count()  
 
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
@@ -304,7 +304,7 @@ class Comment(models.Model):
     moderated = models.BooleanField(verbose_name=_(u"Moderated"))
     timecode = models.DecimalField(null=True,max_digits=10, decimal_places=2,blank=True,verbose_name=_(u"Timecode"))
     comment = models.TextField(_(u"Comment"),max_length=1000)
-    video = models.ForeignKey(MediaItem,verbose_name=_(u"Media Item"))
+    item = models.ForeignKey(MediaItem,verbose_name=_(u"Media Item"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     
@@ -312,10 +312,10 @@ class Comment(models.Model):
         return self.comment
 
     def get_absolute_url(self):
-        return "/videos/%s/" % self.video.slug
+        return "/item/%s/" % self.item.slug
 
 class Channel(models.Model):
-    ''' The model for our channels, all channels can hold videos but videos can only be part of one channel'''
+    ''' The model for our channels, all channels can hold items but items can only be part of one channel'''
     name = models.CharField(_(u"Name"),max_length=30)
     slug = AutoSlugField(verbose_name=_(u"Slug"),populate_from='name',unique=True,help_text=_(u"Slugs are parts of an URL that you can define"))
     description = models.TextField(_(u"Description"), max_length=1000, null=True, blank=True,help_text=_(u"Describe the topic or content of the channel"))
@@ -327,7 +327,7 @@ class Channel(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return "/videos/channel/%s/" % self.slug
+        return "/channel/%s/" % self.slug
 
 class Hotfolder(models.Model):
     ''' This is used for hotfolder support. Files in one of these will be added to LambdaCast automagicly using a cron job and a manage task '''
@@ -378,13 +378,13 @@ class Submittal(models.Model):
     media_videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the media list"))
     media_audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as cover for the media list"))
     media_published = models.BooleanField(verbose_name=_(u"Published"))
-    media_tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the video is about in short terms divided by commas"))
+    media_tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the media item is about in short terms divided by commas"))
     media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
     def __unicode__(self):
         return self.title
 
 def getLength(filename):
-    ''' Just a little helper to get the duration (in seconds) from a video file using ffmpeg '''
+    ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
     process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, stderr = process.communicate()
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()

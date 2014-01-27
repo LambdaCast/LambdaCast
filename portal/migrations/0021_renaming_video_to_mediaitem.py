@@ -10,38 +10,26 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         db.rename_table('portal_video', 'portal_mediaitem')
 
-        # Changing field 'Comment.video'
-        db.alter_column('portal_comment', 'video_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem']))
+        # Renaming field 'Comment.video'
+        db.rename_column('portal_comment','portal_comment_video', 'portal_comment_item')
 
-        # Removing M2M table for field videos on 'Collection'
-        db.delete_table('portal_collection_videos')
+        # Changing field 'Comment.item'
+        db.alter_column('portal_comment', 'item_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem']))
 
-        # Adding M2M table for field items on 'Collection'
-        db.create_table('portal_collection_items', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('collection', models.ForeignKey(orm['portal.collection'], null=False)),
-            ('mediaitem', models.ForeignKey(orm['portal.mediaitem'], null=False))
-        ))
-        db.create_unique('portal_collection_items', ['collection_id', 'mediaitem_id'])
-
+        # Renaming field 'Collection.items'
+        db.rename_table('portal_collection_videos', 'portal_collection_items')
 
     def backwards(self, orm):
         db.rename_table('portal_mediaitem', 'portal_video')
 
+        # Renaming field 'Comment.item'
+        db.rename_column('portal_comment', 'portal_comment_item', 'portal_comment_video')
+
         # Changing field 'Comment.video'
         db.alter_column('portal_comment', 'video_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.Video']))
 
-        # Adding M2M table for field videos on 'Collection'
-        db.create_table('portal_collection_videos', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('collection', models.ForeignKey(orm['portal.collection'], null=False)),
-            ('video', models.ForeignKey(orm['portal.video'], null=False))
-        ))
-        db.create_unique('portal_collection_videos', ['collection_id', 'video_id'])
-
-        # Removing M2M table for field items on 'Collection'
-        db.delete_table('portal_collection_items')
-
+        # Renaming field 'Collection.items'
+        db.rename_table('portal_collection_items', 'portal_collection_videos')
 
     models = {
         'auth.group': {
