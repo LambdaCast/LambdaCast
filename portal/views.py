@@ -119,7 +119,7 @@ def tag(request, tag):
 def collection(request, slug):
     ''' Gets all media items for a channel'''
     collection = get_object_or_404(Collection, slug=slug)
-    mediaitemslist = collection.videos.filter(encodingDone=True, published=True)
+    mediaitemslist = collection.items.filter(encodingDone=True, published=True)
     return render_to_response('portal/collection.html', {'mediaitems_list': mediaitemslist, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'collection':collection, 'settings': settings},
                             context_instance=RequestContext(request))
                             
