@@ -37,7 +37,7 @@ def make_moderated(modeladmin,request, queryset):
 make_moderated.short_description = _(u"Moderate marked comments")
 
 class CommentAdmin (admin.ModelAdmin):
-    list_display = ['comment','video','created','name','ip','moderated']
+    list_display = ['comment','item','created','name','ip','moderated']
     ordering = ['-created']
     actions = [make_moderated]
 

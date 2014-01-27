@@ -75,11 +75,11 @@ def channel_list(request,slug):
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
     if request.method == 'POST':
-        comment = Comment(video=MediaItem.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
+        comment = Comment(item=MediaItem.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
         mediaitem = get_object_or_404(MediaItem, slug=slug)
         emptyform = CommentForm()
         form = CommentForm(request.POST, instance=comment)
-        comments = Comment.objects.filter(moderated=True, video=mediaitem).order_by('-created')
+        comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
 
         if form.is_valid():
             comment = form.save(commit=False)
@@ -99,7 +99,7 @@ def detail(request, slug):
     else:
         mediaitem = get_object_or_404(MediaItem, slug=slug)
         form = CommentForm()
-        comments = Comment.objects.filter(moderated=True, video=mediaitem).order_by('-created')
+        comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
         return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'comment_form': form, 'comments': comments, 'settings': settings},
                             context_instance=RequestContext(request))
 
