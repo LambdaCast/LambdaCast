@@ -91,7 +91,10 @@ def detail(request, slug):
                     mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.first_name
                 else:
                     mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.username
-                user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
+                try:
+                    user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
+                except:
+                    pass
             return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
         else:
             return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
