@@ -99,7 +99,7 @@ class MediaItem(models.Model):
     encodingDone = models.BooleanField(verbose_name=_(u"Encoding done"))
     torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
     assemblyid = models.CharField(_(u"Transloadit Result"),max_length=100,blank=True)
-    tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the item is about in short terms divided by commas"))
+    tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the media item is about in short terms divided by commas"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     originalFile = models.FileField(_(u"File"),upload_to="raw/%Y/%m/%d/",max_length=2048)

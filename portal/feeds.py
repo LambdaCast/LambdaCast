@@ -226,7 +226,7 @@ class CollectionFeedTorrent(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"Torrents for videos in Collection %s") % obj.title
+        return _(u"Torrents for items in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
