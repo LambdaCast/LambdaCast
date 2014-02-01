@@ -15,6 +15,7 @@ class Migration(SchemaMigration):
 
         # Renaming field 'Collection.items'
         db.rename_table('portal_collection_videos', 'portal_collection_items')
+        db.rename_column('portal_collection_items', 'video_id', 'mediaitem_id')
 
     def backwards(self, orm):
         db.rename_table('portal_mediaitem', 'portal_video')
@@ -23,6 +24,7 @@ class Migration(SchemaMigration):
         db.rename_column('portal_comment', 'item_id', 'video_id')
 
         # Renaming field 'Collection.items'
+        db.rename_column('portal_collection_items', 'mediaitem_id', 'video_id')
         db.rename_table('portal_collection_items', 'portal_collection_videos')
 
     models = {
