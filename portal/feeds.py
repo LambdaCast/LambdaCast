@@ -263,8 +263,8 @@ class CommentsFeed(Feed):
     def items(self):
         return Comment.objects.filter(moderated=True).order_by('-created')
 
-    def item_title(self, item):
-        title = _(u"New comment to %s") % item.video.title
+    def item_title(self, comment):
+        title = _(u"New comment to %s") % comment.item.title
         return title
 
     def item_description(self, item):
