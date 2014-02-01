@@ -217,7 +217,7 @@ class CollectionFeed(MainFeed):
         return obj.description
 
     def items(self, obj):
-        return obj.videos.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return obj.items.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
 
 class CollectionFeedTorrent(Feed):
@@ -237,7 +237,7 @@ class CollectionFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return obj.videos.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-created')
+        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-created')
 
     def item_title(self, item):
         return item.title
