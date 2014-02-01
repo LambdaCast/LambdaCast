@@ -50,7 +50,7 @@ class CommentForm(ModelForm):
     captcha = CaptchaField()
     class Meta:
         model = Comment
-        exclude = ["ip","moderated","video"]
+        exclude = ["ip","moderated","item"]
 
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
