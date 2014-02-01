@@ -13,9 +13,6 @@ class Migration(SchemaMigration):
         # Renaming field 'Comment.video'
         db.rename_column('portal_comment', 'video_id', 'item_id')
 
-        # Changing field 'Comment.item'
-        db.alter_column('portal_comment', 'item_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem']))
-
         # Renaming field 'Collection.items'
         db.rename_table('portal_collection_videos', 'portal_collection_items')
 
@@ -24,9 +21,6 @@ class Migration(SchemaMigration):
 
         # Renaming field 'Comment.item'
         db.rename_column('portal_comment', 'item_id', 'video_id')
-
-        # Changing field 'Comment.video'
-        db.alter_column('portal_comment', 'video_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.Video']))
 
         # Renaming field 'Collection.items'
         db.rename_table('portal_collection_items', 'portal_collection_videos')
