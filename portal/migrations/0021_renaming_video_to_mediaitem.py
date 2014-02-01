@@ -17,6 +17,13 @@ class Migration(SchemaMigration):
         db.rename_table('portal_collection_videos', 'portal_collection_items')
         db.rename_column('portal_collection_items', 'video_id', 'mediaitem_id')
 
+        db.execute("UPDATE django_content_type SET name = 'media item', model = 'mediaitem' WHERE name='video' AND app_label='portal'");
+        db.execute("UPDATE auth_permission SET name = 'Can add media item', codename = 'add_mediaitem' WHERE content_type_id IN (SELECT id FROM django_content_type WHERE name='media item' AND app_label='portal') AND codename='add_video'");
+        db.execute("UPDATE auth_permission SET name = 'Can change media item', codename = 'change_mediaitem' WHERE content_type_id IN (SELECT id FROM django_content_type WHERE name='media item' AND app_label='portal') AND codename='change_video'");
+        db.execute("UPDATE auth_permission SET name = 'Can delete media item', codename = 'delete_mediaitem' WHERE content_type_id IN (SELECT id FROM django_content_type WHERE name='media item' AND app_label='portal') AND codename='delete_video'");
+
+        db.send_create_signal('portal', ['MediaItem'])
+
     def backwards(self, orm):
         db.rename_table('portal_mediaitem', 'portal_video')
 
@@ -24,8 +31,15 @@ class Migration(SchemaMigration):
         db.rename_column('portal_comment', 'item_id', 'video_id')
 
         # Renaming field 'Collection.items'
-        db.rename_column('portal_collection_items', 'mediaitem_id', 'video_id')
         db.rename_table('portal_collection_items', 'portal_collection_videos')
+        db.rename_column('portal_collection_videos', 'mediaitem_id', 'video_id')
+
+        db.execute("UPDATE django_content_type SET name = 'video', model = 'video' WHERE name='media item' AND app_label='portal'");
+        db.execute("UPDATE auth_permission SET name = 'Can add video', codename = 'add_video' WHERE content_type_id IN (SELECT id FROM django_content_type WHERE name='video' AND app_label='portal') AND codename='add_mediaitem'");
+        db.execute("UPDATE auth_permission SET name = 'Can change video', codename = 'change_video' WHERE content_type_id IN (SELECT id FROM django_content_type WHERE name='video' AND app_label='portal') AND codename='change_mediaitem'");
+        db.execute("UPDATE auth_permission SET name = 'Can delete video', codename = 'delete_video' WHERE content_type_id IN (SELECT id FROM django_content_type WHERE name='video' AND app_label='portal') AND codename='delete_mediaitem'");
+
+        db.send_create_signal('portal', ['Video'])
 
     models = {
         'auth.group': {
