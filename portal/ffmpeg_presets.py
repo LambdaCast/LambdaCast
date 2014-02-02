@@ -17,6 +17,7 @@ MP4_AUDIO = {'acodec':'libfaac',
                   'rate':'128k'}
 
 WEBM_VIDEO = {'format':'webm',
+                  'vcodec':'libvpx',
                   'vf':'"scale=-1:360"',
                   'bitrate':'700k'}
 
