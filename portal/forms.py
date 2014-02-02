@@ -3,7 +3,7 @@ from django import forms
 
 from captcha.fields import CaptchaField
 
-from portal.models import Video
+from portal.models import MediaItem
 from portal.models import Comment
 from portal.models import Submittal
 
@@ -28,15 +28,15 @@ def getThumbnails(thumbssettings):
     return thumb_list
 
 
-class VideoForm(ModelForm):
+class MediaItemForm(ModelForm):
     ''' Used for the uploading form '''
 
     class Meta:
-        model = Video
+        model = MediaItem
         exclude = ["slug","mp4URL","mp4Size","webmURL","webmSize","mp3URL","mp3Size","oggURL","oggSize","duration","published","encodingDone","assemblyid","torrentURL","user","autoPublish", "torrentDone","videoThumbURL","audioThumbURL"]
 
     def __init__(self, *args, **kwargs):
-        super(VideoForm, self).__init__(*args, **kwargs)
+        super(MediaItemForm, self).__init__(*args, **kwargs)
         THUMBNAILS_LIST = getThumbnails(settings.THUMBNAILS_DIR)
         for fieldName in self.fields:
             field = self.fields[fieldName]
@@ -50,12 +50,12 @@ class CommentForm(ModelForm):
     captcha = CaptchaField()
     class Meta:
         model = Comment
-        exclude = ["ip","moderated","video"]
+        exclude = ["ip","moderated","item"]
 
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
     class Meta:
-        model = Video
+        model = MediaItem
         exclude = ["slug","mp4Size","webmSize","mp3Size","oggSize","assemblyid","user","autoPublish","originalFile"]
 
     def __init__(self, *args, **kwargs):

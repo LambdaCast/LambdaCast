@@ -48,9 +48,9 @@
 			{% for aChannel in channel_list %}
 			{% if aChannel.featured %}
 				{% if channel.slug == aChannel.slug %}
-					<li class="active"><a href="/videos/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
+					<li class="active"><a href="/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
 				{% else %}
-					<li><a href="/videos/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
+					<li><a href="/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
 				{% endif %}
 			{% endif %}
 			{% endfor %}
@@ -61,21 +61,21 @@
 				</a>
 				<ul class="dropdown-menu">
 					{% for aChannel in channel_list %}
-						<li><a href="/videos/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
+						<li><a href="/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
 					{% endfor %}
 				</ul>
 			</li>
 		</ul>
-		{% include "videos/videolist.html" with video_list=videos_list %}
+		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 		<ul class="pager">
-		{% if videos_list.has_previous %}
+		{% if mediaitems_list.has_previous %}
 			<li class="previous">
-				<a href="?page={{ videos_list.previous_page_number }}">&larr; {% trans "Later" %}</a>
+				<a href="?page={{ mediaitems_list.previous_page_number }}">&larr; {% trans "Later" %}</a>
 			</li>
 		{% endif %}
-		{% if videos_list.has_next %}
+		{% if mediaitems_list.has_next %}
 			<li class="next">
-				<a href="?page={{ videos_list.next_page_number }}">{% trans "Earlier" %} &rarr;</a>
+				<a href="?page={{ mediaitems_list.next_page_number }}">{% trans "Earlier" %} &rarr;</a>
 			</li>
 		{% endif %}
 		</ul>

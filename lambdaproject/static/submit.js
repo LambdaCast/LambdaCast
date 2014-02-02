@@ -6,9 +6,9 @@ $(document).ready(function() {
 	var bar = $('.bar');
 	var percent = $('.percent');
 
-	$('#videoForm').ajaxForm({
+	$('#mediaitemForm').ajaxForm({
 		beforeSend: function(xhr) {
-			var validator = $("#videoForm").validate({errorClass: "text-error",});
+			var validator = $("#mediaitemForm").validate({errorClass: "text-error",});
 			if (!validator.form()) {
 				$("#formError").show();
 				xhr.abort();

@@ -20,28 +20,28 @@
 				<th>Tasks</th>
 			</thead>
 			<tbody>
-				{% for video in processing_videos %}
+				{% for mediaitem in processing_items %}
 					<tr>
-						<th><a href="/videos/{{ video.slug }}">{{ video.title }}</a></th>
-						<td>{{ video.date }}</td>
-						<td>{% if video.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
-						<td>{% if video.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
-						<td>{% if video.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<th><a href="/item/{{ mediaitem.slug }}">{{ mediaitem.title }}</a></th>
+						<td>{{ mediaitem.date }}</td>
+						<td>{% if mediaitem.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<td>{% if mediaitem.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
+						<td>{% if mediaitem.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
 						<td>
 						{% for task_list in running_tasks %}
 							{% for task in task_list %}
-								{% if task.object_id == video.pk|stringformat:"s" %}
+								{% if task.object_id == mediaitem.pk|stringformat:"s" %}
 									<li><a href="/admin/djangotasks/task/{{ task.object_id }}">{{ task.pid }}</a></li>
 									<ul>
 										<li>{{ task.status }}</li>
 										{% if task.method == "encode_media" %}
-											{% if video.kind == 0 or video.kind == 2 %}
+											{% if mediaitem.kind == 0 or mediaitem.kind == 2 %}
 											<li>
-												<a id="logMP4_{{ video.pk }}">MP4 Log</a>,  													<a id="logWEBM_{{ video.pk }}">WEBM Log</a>,
+												<a id="logMP4_{{ mediaitem.pk }}">MP4 Log</a>,  													<a id="logWEBM_{{ mediaitem.pk }}">WEBM Log</a>,
 											{% endif %}
-											{% if video.kind == 1 or video.kind == 2 %}
-												<a id="logMP3_{{ video.pk }}">MP3 Log</a>, 
-												<a id="logOGG_{{ video.pk }}">OGG Log</a>,
+											{% if mediaitem.kind == 1 or mediaitem.kind == 2 %}
+												<a id="logMP3_{{ mediaitem.pk }}">MP3 Log</a>, 
+												<a id="logOGG_{{ mediaitem.pk }}">OGG Log</a>,
 											</li>
 											{% endif %}
 										{% endif %}
@@ -78,18 +78,18 @@
 {% endblock %}
 {% block javascript %}
 <script>
-{% for video in processing_videos %}
+{% for mediaitem in processing_items %}
 	{% for task_list in running_tasks %}
 		{% for task in task_list %}
-			{% if task.object_id == video.pk|stringformat:"s" %}
-				{% if video.kind == 0 or video.kind == 2 %}
-				$("#logMP4_{{video.pk}}").click(function() {
+			{% if task.object_id == mediaitem.pk|stringformat:"s" %}
+				{% if mediaitem.kind == 0 or mediaitem.kind == 2 %}
+				$("#logMP4_{{mediaitem.pk}}").click(function() {
 				$('#logModal').modal('show')
-				$.get("/media/encoded/{{ video.slug }}/encoding_mp4_log.txt", function(data){
+				$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp4_log.txt", function(data){
 					$('#logviewer').val(data);
 				});
 				$("#reloadLog").click(function() {
-					$.get("/media/encoded/{{ video.slug }}/encoding_mp4_log.txt", function(data){
+					$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp4_log.txt", function(data){
 						$('#logviewer').val(data);
 						$("#logviewer").animate({
 							scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
@@ -97,13 +97,13 @@
 					});
 				});
 				});
-				$("#logWEBM_{{video.pk}}").click(function() {
+				$("#logWEBM_{{mediaitem.pk}}").click(function() {
 					$('#logModal').modal('show');
-					$.get("/media/encoded/{{ video.slug }}/encoding_webm_log.txt", function(data){
+					$.get("/media/encoded/{{ mediaitem.slug }}/encoding_webm_log.txt", function(data){
 						$('#logviewer').val(data);
 					});
 					$("#reloadLog").click(function() {
-						$.get("/media/encoded/{{ video.slug }}/encoding_webm_log.txt", function(data){
+						$.get("/media/encoded/{{ mediaitem.slug }}/encoding_webm_log.txt", function(data){
 							$('#logviewer').val(data);
 							$("#logviewer").animate({
 								scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
@@ -112,14 +112,14 @@
 					});
 				});
 				{% endif %}
-				{% if video.kind == 1 or video.kind == 2 %}
-					$("#logMP3_{{video.pk}}").click(function() {
+				{% if mediaitem.kind == 1 or mediaitem.kind == 2 %}
+					$("#logMP3_{{mediaitem.pk}}").click(function() {
 						$('#logModal').modal('show')
-						$.get("/media/encoded/{{ video.slug }}/encoding_mp3_log.txt", function(data){
+						$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp3_log.txt", function(data){
 							$('#logviewer').val(data);
 						});
 						$("#reloadLog").click(function() {
-							$.get("/media/encoded/{{ video.slug }}/encoding_mp3_log.txt", function(data){
+							$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp3_log.txt", function(data){
 								$('#logviewer').val(data);
 								$("#logviewer").animate({
 									scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
@@ -127,13 +127,13 @@
 							});
 						});
 					});
-					$("#logOGG_{{video.pk}}").click(function() {
+					$("#logOGG_{{mediaitem.pk}}").click(function() {
 						$('#logModal').modal('show')
-						$.get("/media/encoded/{{ video.slug }}/encoding_ogg_log.txt", function(data){
+						$.get("/media/encoded/{{ mediaitem.slug }}/encoding_ogg_log.txt", function(data){
 							$('#logviewer').val(data);
 						});
 						$("#reloadLog").click(function() {
-							$.get("/media/encoded/{{ video.slug }}/encoding_ogg_log.txt", function(data){
+							$.get("/media/encoded/{{ mediaitem.slug }}/encoding_ogg_log.txt", function(data){
 								$('#logviewer').val(data);
 								$("#logviewer").animate({
 									scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()

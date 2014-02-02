@@ -1,0 +1,42 @@
+{% load custom_filters %}
+{% load i18n %}
+{% load markup %}
+{% for mediaitem in mediaitem_list %}
+	<div class="row">
+		<div class="span8 well video-container">
+		{% if mediaitem.getClassName == 'MediaItem' %}
+			<div class="video-image-container"><a href="/item/{{ mediaitem.slug }}/">
+				{% if mediaitem.kind != 1 %}
+					{% if mediaitem.videoThumbURL %}
+						<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
+					{% else %}
+						<img src="{{ STATIC_URL }}default-video.png" alt="videoThumb" />
+					{% endif %}
+				{% else %}
+					{% if mediaitem.audioThumbURL %}
+						<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
+					{% else %}
+						<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
+					{% endif %}
+				{% endif %}
+			</a></div>
+			{% if user.is_authenticated %}
+				<a href="/admin/portal/mediaitem/{{ mediaitem.pk }}"><button class="btn btn-warning btn-mini pull-right btn-mini-edit"><i class="icon-pencil"></i></button></a>
+			{% endif %}
+			<a href="/item/{{ mediaitem.slug }}/"><h4>{{ mediaitem.title }}</h4></a>
+			<span><strong>{% trans "Description" %}: </strong>{{ mediaitem.markdown_free|truncatechars:150 }}</span><br/>
+			<span><strong></strong><i class="icon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %} / <strong></strong><i class="icon-time"></i> {{ mediaitem.duration|secondstohms }}{% endif %} / <strong></strong><i class="icon-comment"></i> {{ mediaitem.comments_number }}</span>
+		{% else %}
+			<div class="video-image-container"><a href="/collection/{{ mediaitem.slug }}/"><img src="{{ STATIC_URL }}default-playlist.png"/></a></div>
+			{% if user.is_authenticated %}
+				<a href="/admin/portal/collection/{{ collection.pk }}"><button class="btn btn-warning btn-mini pull-right btn-mini-edit"><i class="icon-pencil"></i></button></a>
+			{% endif %}
+			<a href="/collection/{{ mediaitem.slug }}/"><h4>{% trans "Playlist" %}: {{ mediaitem.title }}</h4></a>
+			<span><strong>{% trans "Description" %}: </strong>{{ mediaitem.description|truncatechars:100 }}</span><br/>
+			<span><strong>{% trans "Date" %}: </strong>{{ mediaitem.date }}</span>
+		{% endif %}
+		</div>
+	</div>
+{% empty %}
+	<p>{% trans "No media is available." %}</p>
+{% endfor %}

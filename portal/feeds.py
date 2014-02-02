@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.feedgenerator import *
 from django.http import Http404
 
-from portal.models import Video, Channel, Collection, Comment
+from portal.models import MediaItem, Channel, Collection, Comment
 
 from django.utils.feedgenerator import Rss201rev2Feed
 
@@ -44,7 +44,7 @@ class MainFeed(Feed):
     author_name = settings.AUTHOR_NAME
 
     def items(self):
-        return Video.objects.filter(published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return MediaItem.objects.filter(published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
@@ -116,7 +116,7 @@ class MainFeed(Feed):
             return 'audio/%s' % self.fileformat
 
 
-class LatestVideos(MainFeed):
+class LatestMedia(MainFeed):
     title = _("Latest Episodes")
     link = "/"
     description = _(u"The newest episodes from your beloved podcast")
@@ -132,7 +132,7 @@ class TorrentFeed(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 	
     def items(self):
-        return Video.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')
+        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')
 
     def item_title(self, item):
         return item.title
@@ -165,7 +165,7 @@ class ChannelFeed(MainFeed):
         return obj.description
     
     def items(self, obj):
-        return Video.objects.filter(encodingDone=True, published=True, channel=obj).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return MediaItem.objects.filter(encodingDone=True, published=True, channel=obj).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
 
 class ChannelFeedTorrent(Feed):
@@ -185,7 +185,7 @@ class ChannelFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return Video.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-created')
+        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-created')
 
     def item_title(self, item):
         return item.title
@@ -208,7 +208,7 @@ class CollectionFeed(MainFeed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"Videos in Collection %s") % obj.title
+        return _(u"Media Items in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -217,7 +217,7 @@ class CollectionFeed(MainFeed):
         return obj.description
 
     def items(self, obj):
-        return obj.videos.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return obj.items.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
 
 class CollectionFeedTorrent(Feed):
@@ -226,7 +226,7 @@ class CollectionFeedTorrent(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"Torrents for videos in Collection %s") % obj.title
+        return _(u"Torrents for items in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -237,7 +237,7 @@ class CollectionFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return obj.videos.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-created')
+        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-created')
 
     def item_title(self, item):
         return item.title
@@ -263,8 +263,8 @@ class CommentsFeed(Feed):
     def items(self):
         return Comment.objects.filter(moderated=True).order_by('-created')
 
-    def item_title(self, item):
-        title = _(u"New comment to %s") % item.video.title
+    def item_title(self, comment):
+        title = _(u"New comment to %s") % comment.item.title
         return title
 
     def item_description(self, item):

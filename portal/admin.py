@@ -1,4 +1,4 @@
-from portal.models import Video
+from portal.models import MediaItem
 from portal.models import Comment
 from portal.models import Channel
 from portal.models import Hotfolder
@@ -16,7 +16,7 @@ def make_torrent_done(modeladmin, request, queryset):
     queryset.update(torrentDone=True)
 make_torrent_done.short_description = _(u"Marked media all get a torrent")
 
-class VideoAdmin (admin.ModelAdmin):
+class MediaItemAdmin (admin.ModelAdmin):
     list_display = ['title','published','encodingDone', 'channel' ,'date']
     ordering = ['-date','-created']
     actions = [make_published,make_torrent_done]
@@ -30,14 +30,14 @@ class VideoAdmin (admin.ModelAdmin):
             'fields': ('kind','user','torrentURL','mp4URL','webmURL','mp3URL','oggURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
         }),
     )
-admin.site.register(Video,VideoAdmin)
+admin.site.register(MediaItem,MediaItemAdmin)
 
 def make_moderated(modeladmin,request, queryset):
     queryset.update(moderated=True)
 make_moderated.short_description = _(u"Moderate marked comments")
 
 class CommentAdmin (admin.ModelAdmin):
-    list_display = ['comment','video','created','name','ip','moderated']
+    list_display = ['comment','item','created','name','ip','moderated']
     ordering = ['-created']
     actions = [make_moderated]
 
