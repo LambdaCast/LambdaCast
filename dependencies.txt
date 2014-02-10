@@ -9,7 +9,6 @@ django-templatetag-sugar==0.1
 django-admin-bootstrapped==0.3.2
 django-simple-open-graph==0.3
 django-simple-captcha==0.4.0
-elementtree==1.2.7-20070827-preview
 mutagen==1.20
 simplejson==2.6.2
 -e git://github.com/joestump/python-transloadit.git#egg=transloadit-dev
