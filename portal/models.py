@@ -50,6 +50,15 @@ KIND_CHOICES = (
     (2, _(u'Audio and Video')),
 )
 
+FILE_FORMATS = (
+    ("MP3", "MP3"),
+    ("MP4", "MP4"),
+    ("VORBIS", "Vorbis"),
+    ("THEORA", "Theora"),
+    ("WEBM", "WEBM"),
+    ("OPUS", "Opus"),
+)
+
 def validate_mp3URL(url):
     if not url.endswith('.mp3'):
         raise ValidationError(_(u"File doesn't end with .mp3"))
@@ -295,7 +304,14 @@ class MediaItem(models.Model):
             return _(u"http://creativecommons.org/licenses/by-nd/3.0/")
         elif self.license == "None":
             return ""
-        
+
+class MediaFile(models.Model):
+    ''' The model only for the media files '''
+    title = models.CharField(_(u"Title"),max_length=200)
+    url = models.URLField(_(u"URL to Transcoded File"),blank=True,verify_exists=False, help_text=_(u"Insert the link to the media file"))
+    file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"))
+    size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
+    media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
  
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''

@@ -4,6 +4,7 @@ from portal.models import Channel
 from portal.models import Hotfolder
 from portal.models import Collection
 from portal.models import Submittal
+from portal.models import MediaFile
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
@@ -65,3 +66,8 @@ class SubmittalAdmin(admin.ModelAdmin):
     list_display = ['title','description']
 
 admin.site.register(Submittal,SubmittalAdmin)
+
+class MediaFileAdmin(admin.ModelAdmin):
+    list_display = ['title','url','size','file_format','media_item']
+
+admin.site.register(MediaFile,MediaFileAdmin)
