@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
 
-from portal.signals import get_remote_filesize, validate_url
+from portal.signals import get_remote_filesize, validate_url, define_mediatype
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -66,6 +66,7 @@ class MediaFile(models.Model):
     file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"))
     size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
     media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
+    mediatype = models.CharField(_(u"Media Type"),max_length=20,help_text=_(u"File format of the media file"),null=True,blank=True)
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -84,13 +85,13 @@ class MediaItem(models.Model):
     linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
     kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
     torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
-    mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,validators=[validate_mp4URL],help_text=_(u"Add the link of a .mp4-file"))
+    mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of a .mp4-file"))
     mp4Size = models.BigIntegerField(_(u"MP4 Size in Bytes"),null=True,blank=True)
-    webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, validators=[validate_webmURL],help_text=_(u"Add the link of a .webm-file"))
+    webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of a .webm-file"))
     webmSize = models.BigIntegerField(_(u"WEBM Size in Bytes"),null=True,blank=True)
-    mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, validators=[validate_mp3URL],help_text=_(u"Add the link of a .mp3-file"))
+    mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of a .mp3-file"))
     mp3Size = models.BigIntegerField(_(u"MP3 Size in Bytes"),null=True,blank=True)
-    oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False,validators=[validate_oggURL], help_text=_(u"Add the link of a .ogg-file"))
+    oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of a .ogg-file"))
     oggSize = models.BigIntegerField(_(u"OGG Size in Bytes"),null=True,blank=True)
     videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the media list"))
     audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as cover for the media list"))
@@ -410,3 +411,4 @@ def getLength(filename):
 
 pre_save.connect(get_remote_filesize, sender=MediaFile)
 pre_save.connect(validate_url, sender=MediaFile)
+pre_save.connect(define_mediatype, sender=MediaFile)
