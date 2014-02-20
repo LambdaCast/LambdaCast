@@ -2,10 +2,7 @@ from django.db.models.signals import pre_save
 import urllib2
 
 def get_remote_filesize(sender, instance, **kwargs):
-    instance.mp3Size = _get_remote_filesize_for_url(instance.mp3URL)
-    instance.oggSize = _get_remote_filesize_for_url(instance.oggURL)
-    instance.mp4Size = _get_remote_filesize_for_url(instance.mp4URL)
-    instance.webmSize = _get_remote_filesize_for_url(instance.webmURL)
+    instance.size = _get_remote_filesize_for_url(instance.url)
 
 def _get_remote_filesize_for_url(url):
     try:
@@ -16,3 +13,18 @@ def _get_remote_filesize_for_url(url):
         return response.info().getheader('content-length')
     except:
         return 0
+
+def validate_url(sender, instance, **kwargs):
+    fileformat_list = (
+        ("MP3", ".mp3"),
+        ("MP4", ".mp4"),
+        ("VORBIS", ".ogg"),
+        ("THEORA", ".ogg"),
+        ("WEBM", ".webm"),
+        ("OPUS", ".opus"),
+    )
+    for tuple in fileformat_list:
+        if instance.file_format == tuple[0]:
+            if not instance.url.endswith(tuple[1]):
+                raise ValidationError(_(u"URL doesn't end with %s" % tuple[1]))
+

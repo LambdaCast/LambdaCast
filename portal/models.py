@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
 
-from portal.signals import get_remote_filesize
+from portal.signals import get_remote_filesize, validate_url
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -51,29 +51,21 @@ KIND_CHOICES = (
 )
 
 FILE_FORMATS = (
-    ("MP3", "MP3"),
-    ("MP4", "MP4"),
-    ("VORBIS", "Vorbis"),
-    ("THEORA", "Theora"),
-    ("WEBM", "WEBM"),
+    ("MP3", "mp3"),
+    ("MP4", "mp4"),
+    ("VORBIS", "OGG (Vorbis)"),
+    ("THEORA", "OGG (Theora)"),
+    ("WEBM", "WebM"),
     ("OPUS", "Opus"),
 )
 
-def validate_mp3URL(url):
-    if not url.endswith('.mp3'):
-        raise ValidationError(_(u"File doesn't end with .mp3"))
-
-def validate_mp4URL(url):
-    if not url.endswith('.mp4'):
-        raise ValidationError(_(u"File doesn't end with .mp4"))
-
-def validate_oggURL(url):
-    if not url.endswith('.ogg'):
-        raise ValidationError(_(u"File doesn't end with .ogg"))
-
-def validate_webmURL(url):
-    if not url.endswith('.webm'):
-        raise ValidationError(_(u"File doesn't end with .webm"))
+class MediaFile(models.Model):
+    ''' The model only for the media files '''
+    title = models.CharField(_(u"Title"),max_length=200)
+    url = models.URLField(_(u"URL to Transcoded File"),blank=True,verify_exists=False, help_text=_(u"Insert the link to the media file"))
+    file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"))
+    size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
+    media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -168,18 +160,24 @@ class MediaItem(models.Model):
             os.makedirs(outputdir)
         outputdir = outputdir + '/'
         if ((kind == 0) or (kind == 2)):
+            # Create the command line (MP4)
             logfile = outputdir + 'encoding_mp4_log.txt'
             outfile_mp4 = outputdir + self.slug + '.mp4'
-            # Create the command line
             cl_mp4 = ffmpeg(path, outfile_mp4, logfile, MP4_VIDEO, MP4_AUDIO).build_command_line()
-            
+
+            # Create the command line (WEBM)
             logfile = outputdir + 'encoding_webm_log.txt'
             outfile_webm = outputdir + self.slug + '.webm'
-    
             cl_webm = ffmpeg(path, outfile_webm, logfile, WEBM_VIDEO, WEBM_AUDIO).build_command_line()
             
-            self.mp4URL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.mp4'
-            self.webmURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.webm' 
+            # Create URLs
+            mp4_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.mp4'
+            webm_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.webm'
+
+            # Create MediaFiles
+            mediafile_mp4 = MediaFile.objects.create(title=self.slug,url=mp4_url,file_format="MP4",media_item=self)
+            mediafile_webm = MediaFile.objects.create(title=self.slug,url=webm_url,file_format="WEBM",media_item=self)
+
             self.videoThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.jpg'
             outcode = subprocess.Popen(cl_mp4, shell=True)
             
@@ -187,7 +185,8 @@ class MediaItem(models.Model):
                 pass
     
             if outcode.poll() == 0:
-                self.mp4Size = os.path.getsize(outfile_mp4)
+                mediafile_mp4.size = os.path.getsize(outfile_mp4)
+                mediafile_mp4.save()
                 self.duration = getLength(outfile_mp4)
             else:
                 raise StandardError(_(u"Encoding MP4 Failed"))
@@ -200,7 +199,8 @@ class MediaItem(models.Model):
                 pass
     
             if outcode.poll() == 0:
-                self.wembSize = os.path.getsize(outfile_webm)
+                mediafile_webm.size = os.path.getsize(outfile_webm)
+                mediafile_webm.save()
             else:
                 raise StandardError(_(u"Encoding WEBM Failed"))
     
@@ -216,18 +216,21 @@ class MediaItem(models.Model):
             
             
         if((kind == 1) or (kind == 2)):
+            # Create the command line (MP3)
             logfile = outputdir + 'encoding_mp3_log.txt'
             outfile_mp3 = outputdir + self.slug + '.mp3'
-            # Create the command line
             cl_mp3 = ffmpeg(path, outfile_mp3, logfile, NULL_VIDEO , MP3_AUDIO).build_command_line()
 
+            # Create the command line (OGG)
             logfile = outputdir + 'encoding_ogg_log.txt'
             outfile_ogg = outputdir + self.slug + '.ogg'
-
             cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
 
-            self.mp3URL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
-            self.oggURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
+            mp3_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
+            ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
+
+            mediafile_mp3 = MediaFile.objects.create(title=self.slug,url=mp3_url,file_format="MP3",media_item=self)
+            mediafile_ogg = MediaFile.objects.create(title=self.slug,url=ogg_url,file_format="VORBIS",media_item=self)
 
             outcode = subprocess.Popen(cl_mp3, shell=True)
 
@@ -235,7 +238,8 @@ class MediaItem(models.Model):
                 pass
 
             if outcode.poll() == 0:
-                self.mp3Size = os.path.getsize(outfile_mp3)
+                mediafile_mp3.size = os.path.getsize(outfile_mp3)
+                mediafile_mp3.save()
                 self.duration = getLength(outfile_mp3)
             else:
                 raise StandardError(_(u"Encoding MP3 Failed"))
@@ -246,25 +250,30 @@ class MediaItem(models.Model):
                 pass
 
             if outcode.poll() == 0:
-                self.oggSize = os.path.getsize(outfile_ogg)
+                mediafile_ogg.size = os.path.getsize(outfile_ogg)
+                mediafile_ogg.save()
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
 
+            # Get cover of mp3-file
             if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":
                 audio_mp3 = MP3(path, ID3=ID3)
-                apic = audio_mp3.tags.getall('APIC')
-                if apic:
-                    cover_data = apic[0].data
-                    cover_mimetype = apic[0].mime
-                    filename = ''
-                    if cover_mimetype == 'image/png':
-                        filename = self.slug + '_cover.png'
-                    elif cover_mimetype == 'image/jpg':
-                        filename = self.slug + '_cover.jpg'
-                    art_mp3 = open(outputdir + filename, 'w')
-                    art_mp3.write(cover_data)
-                    art_mp3.close()
-                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
+                try: 
+                    apic = audio_mp3.tags.getall('APIC')
+                    if apic:
+                        cover_data = apic[0].data
+                        cover_mimetype = apic[0].mime
+                        filename = ''
+                        if cover_mimetype == 'image/png':
+                            filename = self.slug + '_cover.png'
+                        elif cover_mimetype == 'image/jpg':
+                            filename = self.slug + '_cover.jpg'
+                        art_mp3 = open(outputdir + filename, 'w')
+                        art_mp3.write(cover_data)
+                        art_mp3.close()
+                        self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
+                except:
+                      pass
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT
@@ -305,14 +314,6 @@ class MediaItem(models.Model):
         elif self.license == "None":
             return ""
 
-class MediaFile(models.Model):
-    ''' The model only for the media files '''
-    title = models.CharField(_(u"Title"),max_length=200)
-    url = models.URLField(_(u"URL to Transcoded File"),blank=True,verify_exists=False, help_text=_(u"Insert the link to the media file"))
-    file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"))
-    size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
-    media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
- 
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''
     name = models.CharField(_(u"Name"),max_length=30)
@@ -407,4 +408,5 @@ def getLength(filename):
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
 
-pre_save.connect(get_remote_filesize, sender=MediaItem)
+pre_save.connect(get_remote_filesize, sender=MediaFile)
+pre_save.connect(validate_url, sender=MediaFile)

@@ -12,7 +12,7 @@ from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
-from portal.models import MediaItem, Comment, Channel, Collection, User, Submittal
+from portal.models import MediaItem, Comment, Channel, Collection, User, Submittal, MediaFile
 from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
 
 from transloadit.client import Client
@@ -80,6 +80,7 @@ def detail(request, slug):
         emptyform = CommentForm()
         form = CommentForm(request.POST, instance=comment)
         comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
+        downloadlinks = MediaFile.objects.filter(moderated=True, mediaitem=mediaitem).all()
 
         if form.is_valid():
             comment = form.save(commit=False)
@@ -95,9 +96,9 @@ def detail(request, slug):
                     user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
                 except:
                     pass
-            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
+            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings, 'downloadlinks': downloadlinks}, context_instance=RequestContext(request))
         else:
-            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
+            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': form, 'comments': comments, 'settings': settings, 'downloadlinks':downloalinks}, context_instance=RequestContext(request))
                     
     else:
         mediaitem = get_object_or_404(MediaItem, slug=slug)
@@ -233,62 +234,63 @@ def submit(request):
     if request.method == 'POST':
         form = MediaItemForm(request.POST, request.FILES or None)
         if form.is_valid():
-            cmodel = form.save()
-            cmodel.audioThumbURL = form.data['thumbURL']
-            cmodel.videoThumbURL = form.data['thumbURL']
-            if cmodel.originalFile:
+            itemform = form.save()
+            if not form.data['thumbURL'] == '':
+                itemform.audioThumbURL = form.data['thumbURL']
+                itemform.videoThumbURL = form.data['thumbURL']
+            if itemform.originalFile:
                 if settings.USE_TRANLOADIT:
                     client = Client(settings.TRANSLOAD_AUTH_KEY, settings.TRANSLOAD_AUTH_SECRET)
                     params = None
-                    if (cmodel.kind==0):
+                    if (itemform.kind==0):
                         params = {
                             'steps': {
                                 ':original': {
                                     'robot': '/http/import',
-                                    'url': cmodel.originalFile.url,
+                                    'url': itemform.originalFile.url,
                                 }
                             },
                             'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_ID,
                             'notify_url': settings.TRANSLOAD_NOTIFY_URL
                         }
-                    if (cmodel.kind==1):
+                    if (itemform.kind==1):
                         params = {
                             'steps': {
                                 ':original': {
                                     'robot': '/http/import',
-                                    'url': cmodel.originalFile.url,
+                                    'url': itemform.originalFile.url,
                                 }
                             },
                             'template_id': settings.TRANSLOAD_TEMPLATE_AUDIO_ID,
                             'notify_url': settings.TRANSLOAD_NOTIFY_URL
                         }
-                    if (cmodel.kind==2):
+                    if (itemform.kind==2):
                         params = {
                             'steps': {
                                 ':original': {
                                     'robot': '/http/import',
-                                    'url': cmodel.originalFile.url,
+                                    'url': itemform.originalFile.url,
                                 }
                             },
                             'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_AUDIO_ID,
                             'notify_url': settings.TRANSLOAD_NOTIFY_URL
                         }
                     result = client.request(**params)
-                    cmodel.assemblyid = result['assembly_id']
-                    cmodel.published = cmodel.autoPublish
-                    cmodel.encodingDone = False
-                    cmodel.save()
+                    itemform.assemblyid = result['assembly_id']
+                    itemform.published = itemform.autoPublish
+                    itemform.encodingDone = False
+                    itemform.save()
                 else:
-                    cmodel.save()
-                    djangotasks.register_task(cmodel.encode_media, "Encode the files using ffmpeg")
-                    encoding_task = djangotasks.task_for_object(cmodel.encode_media)
+                    itemform.save()
+                    djangotasks.register_task(itemform.encode_media, "Encode the files using ffmpeg")
+                    encoding_task = djangotasks.task_for_object(itemform.encode_media)
                     djangotasks.run_task(encoding_task)
             if settings.USE_BITTORRENT:
-                djangotasks.register_task(cmodel.create_bittorrent, "Create Bittorrent file for item and serve it")
-                torrent_task = djangotasks.task_for_object(cmodel.create_bittorrent)
+                djangotasks.register_task(itemform.create_bittorrent, "Create Bittorrent file for item and serve it")
+                torrent_task = djangotasks.task_for_object(itemform.create_bittorrent)
                 djangotasks.run_task(torrent_task)
-            cmodel.user = request.user
-            cmodel.save()
+            itemform.user = request.user
+            itemform.save()
             return redirect(list)
 
         return render_to_response('portal/submit.html',
@@ -329,54 +331,110 @@ def encodingdone(request):
             mediaitem = MediaItem.objects.get(assemblyid=data['assembly_id'])
             if (mediaitem.kind == 0):
                 results = data['results']
+                # creating MediaFile for MP4
                 resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
                 resultFirst = resultItem[0]
-                mediaitem.mp4URL = resultFirst['url']
-                mediaitem.mp4Size = resultFirst['size']
+                mediafile_mp4 = MediaFile.create(title=mediaitem.slug, 
+                                                 url=resultFirst['url'],
+                                                 size=resultFirst['size'],
+                                                 file_format="MP4",
+                                                 media_item = mediaitem)
+                mediafile_mp4.save()
+                # defining duration
                 resultMeta = resultFirst['meta']
                 mediaitem.duration = str(resultMeta['duration'])
+                # creating MediaFile for WEBM
                 resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
                 resultFirst = resultItem[0]
-                mediaitem.webmURL = resultFirst['url']
-                mediaitem.webmSize = resultFirst['size']
+                mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
+                                                          url=resultFirst['url'],
+                                                          size=resultFirst['size'],
+                                                          file_format="WEBM",
+                                                          media_item = mediaitem)
+                mediafile_webm.save()
+                # defining thumbnail
                 resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
                 resultFirst = resultItem[0]
-                mediaitem.videoThumbURL = resultFirst['url']
+                if mediaitem.videoThumbURL == '':
+                    mediaitem.videoThumbURL = resultFirst['url']
             elif (mediaitem.kind == 1):
                 results = data['results']
+                # creating MediaFile for WEBM
                 resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
                 resultFirst = resultItem[0]
-                mediaitem.mp3URL = resultFirst['url']
-                mediaitem.mp3Size = resultFirst['size']
+                mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
+                                                         url=resultFirst['url'],
+                                                         size=resultFirst['size'],
+                                                         file_format="MP3",
+                                                         media_item = mediaitem)
+                #mediafile_mp3.save()
+                # defining duration
                 resultMeta = resultFirst['meta']
                 mediaitem.duration = str(resultMeta['duration'])
+                # creating MediaFile for OGG
                 resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
                 resultFirst = resultItem[0]
-                mediaitem.oggURL = resultFirst['url']
-                mediaitem.oggSize = resultFirst['size']
-            elif (mediaitem.kind == 2):
-                results = data['results']
-                resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
-                resultFirst = resultItem[0]
-                mediaitem.mp4URL = resultFirst['url']
-                mediaitem.mp4Size = resultFirst['size']
-                resultMeta = resultFirst['meta']
-                mediaitem.duration = str(resultMeta['duration'])
-                resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
-                resultFirst = resultItem[0]
-                mediaitem.webmURL = resultFirst['url']
-                mediaitem.webmSize = resultFirst['size']
-                resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
-                resultFirst = resultItem[0]
-                mediaitem.mp3URL = resultFirst['url']
-                mediaitem.mp3Size = resultFirst['size']
-                resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
-                resultFirst = resultItem[0]
-                mediaitem.oggURL = resultFirst['url']
-                mediaitem.oggSize = resultFirst['size']
+                mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug+" OGG",
+                                                         url=resultFirst['url'],
+                                                         size=resultFirst['size'],
+                                                         file_format="VORBIS",
+                                                         media_item = mediaitem)
+                #mediafile_ogg.save()
                 resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
                 resultFirst = resultItem[0]
-                mediaitem.videoThumbURL = resultFirst['url']
+                if mediaitem.audioThumbURL == '':
+                    mediaitem.audioThumbURL = resultFirst['url']
+            elif (mediaitem.kind == 2):
+                results = data['results']
+                # creating MediaFile for MP3
+                resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
+                resultFirst = resultItem[0]
+                mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
+                                                         url=resultFirst['url'],
+                                                         size=resultFirst['size'],
+                                                         file_format="MP3",
+                                                         media_item = mediaitem)
+                mediafile_mp3.save()
+                # defining duration
+                resultMeta = resultFirst['meta']
+                mediaitem.duration = str(resultMeta['duration'])
+                # creating MediaFile for VORBIS
+                resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
+                resultFirst = resultItem[0]
+                resultMeta = resultFirst['meta']
+                mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug,
+                                                         url=resultFirst['url'],
+                                                         size=resultFirst['size'],
+                                                         file_format="VORBIS",
+                                                         media_item = mediaitem)
+                mediafile_ogg.save()
+                # creating MediaFile for MP4
+                resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
+                resultFirst = resultItem[0]
+                resultMeta = resultFirst['meta']
+                mediafile_mp4 = MediaFile.objects.create(title=mediaitem.slug,
+                                                         url=resultFirst['url'],
+                                                         size=resultFirst['size'],
+                                                         file_format="MP4",
+                                                         media_item = mediaitem)
+                mediafile_mp4.save()
+                # creating MediaFile for WEBM
+                resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
+                resultFirst = resultItem[0]
+                resultMeta = resultFirst['meta']
+                mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
+                                                          url=resultFirst['url'],
+                                                          size=resultFirst['size'],
+                                                          file_format="WEBM",
+                                                          media_item = mediaitem)
+                mediafile_webm.save()
+                # defining thumbnail
+                resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
+                resultFirst = resultItem[0]
+                if mediaitem.videoThumbURL == '':
+                    mediaitem.videoThumbURL = resultFirst['url']
+                if mediaitem.audioThumbURL == '':
+                    mediaitem.audioThumbURL = resultFirst['url']
             mediaitem.encodingDone = True
             mediaitem.save()
         except MediaItem.DoesNotExist:
