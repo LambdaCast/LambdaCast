@@ -140,7 +140,7 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']", 'blank': 'True', 'null': 'True'}),
-            'mediatype': ('django.db.models.fields.CharField', [], {'max_length': '200'}, 'blank': 'True', 'null': 'True')
+            'mediatype': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True', 'null': 'True'})
         },
         'portal.mediaitem': {
             'Meta': {'object_name': 'MediaItem'},
