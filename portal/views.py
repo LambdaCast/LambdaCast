@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, get_object_or_404, redirect, get_list_or_404
 from django import forms
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -74,13 +74,28 @@ def channel_list(request,slug):
 
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
+    mediaitem = get_object_or_404(MediaItem, slug=slug)
+    downloads_audio = MediaFile.objects.filter(media_item=mediaitem)
+    list = []
+    for audio in downloads_audio:
+        mediatype = audio.mediatype()
+        if mediatype == "audio":
+            list.append(audio)
+        downloads_audio = list
+        
+    downloads_video = MediaFile.objects.filter(media_item=mediaitem)
+    list = []
+    for video in downloads_video:
+        mediatype = video.mediatype()
+        if mediatype == "video":
+            list.append(video)
+        downloads_video = list
+
     if request.method == 'POST':
         comment = Comment(item=MediaItem.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
-        mediaitem = get_object_or_404(MediaItem, slug=slug)
         emptyform = CommentForm()
         form = CommentForm(request.POST, instance=comment)
         comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
-        downloadlinks = MediaFile.objects.filter(moderated=True, mediaitem=mediaitem).all()
 
         if form.is_valid():
             comment = form.save(commit=False)
@@ -96,16 +111,37 @@ def detail(request, slug):
                     user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
                 except:
                     pass
-            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings, 'downloadlinks': downloadlinks}, context_instance=RequestContext(request))
+            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+                                                                   'mediaitem': mediaitem,
+                                                                   'comment_form': emptyform,
+                                                                   'comments': comments,
+                                                                   'message': message,
+                                                                   'settings': settings,
+                                                                   'downloads_video': downloads_video,
+                                                                   'downloads_audio': downloads_audio,
+                                                                  }, context_instance=RequestContext(request))
         else:
-            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,'mediaitem': mediaitem, 'comment_form': form, 'comments': comments, 'settings': settings, 'downloadlinks':downloalinks}, context_instance=RequestContext(request))
+            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+                                                                   'mediaitem': mediaitem,
+                                                                   'comment_form': form,
+                                                                   'comments': comments,
+                                                                   'settings': settings,
+                                                                   'downloads_video': downloads_video,
+                                                                   'downloads_audio': downloads_audio,
+                                                                  }, context_instance=RequestContext(request))
                     
     else:
-        mediaitem = get_object_or_404(MediaItem, slug=slug)
         form = CommentForm()
         comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
-        return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'comment_form': form, 'comments': comments, 'settings': settings},
-                            context_instance=RequestContext(request))
+        return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem,
+                                                               'page_list':get_page_list,
+                                                               'submittal_list':get_submittal_list(request),
+                                                               'comment_form': form,
+                                                               'comments': comments,
+                                                               'settings': settings,
+                                                               'downloads_video': downloads_video,
+                                                               'downloads_audio': downloads_audio,
+                                                              },context_instance=RequestContext(request))
 
 def iframe(request, slug):
     ''' Returns an iframe for a item so that media items can be shared easily '''

@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
 
-from portal.signals import get_remote_filesize, validate_url, define_mediatype
+from portal.signals import get_remote_filesize
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -59,6 +59,16 @@ FILE_FORMATS = (
     ("OPUS", "Opus"),
 )
 
+FORMATINFO_LIST = (
+#   format0     ending1   mediatype2  html_type3
+    ("MP3",     ".mp3",   "audio",    "audio/mp3"),
+    ("MP4",     ".mp4",   "video",    "video/mp4"),
+    ("VORBIS",  ".ogg",   "audio",    "audio/ogg"),
+    ("THEORA",  ".ogg",   "audio",    "audio/ogg"),
+    ("WEBM",    ".webm",  "video",    "video/webm"),
+    ("OPUS",    ".opus",  "audio",    "application/ogg"),
+)
+
 class MediaFile(models.Model):
     ''' The model only for the media files '''
     title = models.CharField(_(u"Title"),max_length=200)
@@ -66,7 +76,27 @@ class MediaFile(models.Model):
     file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"))
     size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
     media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
-    mediatype = models.CharField(_(u"Media Type"),max_length=20,help_text=_(u"File format of the media file"),null=True,blank=True)
+
+    def mediatype(self):
+        for list_row in FORMATINFO_LIST:
+            if self.file_format == list_row[0]:
+                return list_row[2]
+
+    def file_ending(self):
+        for list_row in FORMATINFO_LIST:
+            if self.file_format == list_row[0]:
+                return list_row[1]
+    
+    def html_type(self):
+        for list_row in FORMATINFO_LIST:
+            if self.file_format == list_row[0]:
+                return list_row[3]
+
+    def clean(self):
+        for tuple in FORMATINFO_LIST:
+            if self.file_format == tuple[0]:
+                if not self.url.endswith(tuple[1]):
+                    raise ValidationError(_(u"URL doesn't end with %s" % (tuple[1])))
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -410,5 +440,3 @@ def getLength(filename):
     return duration
 
 pre_save.connect(get_remote_filesize, sender=MediaFile)
-pre_save.connect(validate_url, sender=MediaFile)
-pre_save.connect(define_mediatype, sender=MediaFile)

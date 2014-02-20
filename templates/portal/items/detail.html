@@ -36,50 +36,36 @@
 </div>
 <div class="row">
 	<div class="span8">
-		{% if mediaitem.kind == 0 %}
 		<div class="row">
 			<div class="span8">
-				<video id="player_video" class="projekktor center" poster="{{ mediaitem.videoThumbURL }}" title="{{ mediaitem.title }}" width="640" height="360" controls>
-					{% if mediaitem.webmURL %}<source src="{{ mediaitem.webmURL }}" type="video/webm" />{% endif %}
-					{% if mediaitem.mp4URL %}<source src="{{ mediaitem.mp4URL }}" type="video/mp4" />{% endif %}
-				</video>
-			</div>
-		</div>
-		{% endif %}
-		{% if mediaitem.kind == 1 %}
-		<div class="row">
-			<div class="span8">
-				<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-					{% if mediaitem.mp3URL %}<source src="{{ mediaitem.mp3URL }}" type="audio/mp3" />{% endif %}
-					{% if mediaitem.oggURL %}<source src="{{ mediaitem.oggURL }}" type="application/ogg" />{% endif %}
-				</audio>
-			</div>
-		</div>
-		{% endif %}
-		{% if mediaitem.kind == 2 %}
-		<div class="row">
-			<div class="span8">
+				{% if downloads_video and downloads_audio %}
 				<ul class="nav nav-tabs">
 					<li class="active" id="video_tab"><a>{% trans "Video" %}</a></li>
-					<li	id="audio_tab"><a>{% trans "Audio" %}</a></li>
+					<li id="audio_tab"><a>{% trans "Audio" %}</a></li>
 				</ul>
+				{% endif %}
 				<div id="player_container">
+					{% if downloads_video %}
 					<div id="video_player">
-						<video id="player_video" class="projekktor center" poster="{{ mediaitem.videoThumbURL }}" title="{{ mediaitem.title }}" width="640" height="360" controls>
-							{% if mediaitem.webmURL %}<source src="{{ mediaitem.webmURL }}" type="video/webm" />{% endif %}
-							{% if mediaitem.mp4URL %}<source src="{{ mediaitem.mp4URL }}" type="video/mp4" />{% endif %}
+						<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+						{% for video in downloads_video %}
+							<source src="{{ video.url }}" width="640" height="360" type="{{ video.html_type }}" />
+						{% endfor %}
 						</video>
 					</div>
-					<div id="audio_player" style="display:none;">
+					{% endif %}
+					{% if downloads_audio %}
+					<div id="audio_player" {% if downloads_video and downloads_audio %}style="display:none;"{% endif %}>
 						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-							{% if mediaitem.mp3URL %}<source src="{{ mediaitem.mp3URL }}" type="audio/mp3" />{% endif %}
-							{% if mediaitem.oggURL %}<source src="{{ mediaitem.oggURL }}" type="application/ogg" />{% endif %}
-						</audio>'
+						{% for audio in downloads_audio %}
+							<source src="{{ audio.url }}" width="640" height="360" type="{{ audio.html_type }}" />
+						{% endfor %}
+						</audio>
 					</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-		{% endif %}
 		<div class="row">
 			<div class="span8">
 				{% if mediaitem.description %}
@@ -187,37 +173,25 @@
 			<dd><a href="{{ mediaitem.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if mediaitem.mp4URL %}
+			{% if downloads_audio %}
+                        {% for audio in downloads_audio %}
 			<dd>
-				<a href="{{ mediaitem.mp4URL }}" download="{{mediaitem.title}}.mp4">
+				<a href="{{ audio.url }}" download="{{mediaitem.title}}{{ audio.file_ending }}">
 					<i class="icon-film"></i>
-					{% trans "Download MP4 Video" %} {% if mediaitem.mp4Size %}({{ mediaitem.mp4Size|in_mb }} MB){% endif %}
+					{% trans "Download" %} {{ audio.file_ending }} ({{ audio.size|in_mb }} MB)
 				</a>
 			</dd>
+			{% endfor %}
 			{% endif %}
-			{% if mediaitem.webmURL %}
+			{% if downloads_video %}
+			{% for video in downloads_video %}
 			<dd>
-				<a href="{{ mediaitem.webmURL }}" download="{{mediaitem.title}}.webm">
+				<a href="{{ video.url }}" download="{{mediaitem.title}}{{ video.file_ending }}">
 					<i class="icon-film"></i>
-					{% trans "Download WEBM Video" %} {% if mediaitem.webmSize %}({{ mediaitem.webmSize|in_mb }} MB){% endif %}
+					{% trans "Download" %} {{ video.file_ending }} ({{ video.size|in_mb }} MB)
 				</a>
 			</dd>
-			{% endif %}
-			{% if mediaitem.mp3URL %}
-			<dd>
-				<a href="{{ mediaitem.mp3URL }}" download="{{mediaitem.title}}.mp3">
-					<i class="icon-headphones"></i>
-					{% trans "Download MP3 Audio" %} {% if mediaitem.mp3Size %}({{ mediaitem.mp3Size|in_mb }} MB){% endif %}
-				</a>
-			</dd>
-			{% endif %}
-			{% if mediaitem.oggURL %}
-			<dd>
-				<a href="{{ mediaitem.oggURL }}" download="{{mediaitem.title}}.ogg">
-					<i class="icon-headphones"></i>
-					{% trans "Download OGG Audio" %} {% if mediaitem.oggSize %}({{ mediaitem.oggSize|in_mb }} MB){% endif %}
-				</a>
-			</dd>
+			{% endfor %}
 			{% endif %}
 		</div>
 		{% if mediaitem.tags.all %}
