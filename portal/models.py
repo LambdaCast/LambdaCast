@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
 
-from portal.signals import get_remote_filesize
+from portal.signals import get_remote_filesize, set_mediatype
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -60,13 +60,13 @@ FILE_FORMATS = (
 )
 
 FORMATINFO_LIST = (
-#   format0     ending1   mediatype2  html_type3
-    ("MP3",     ".mp3",   "audio",    "audio/mp3"),
-    ("MP4",     ".mp4",   "video",    "video/mp4"),
-    ("VORBIS",  ".ogg",   "audio",    "audio/ogg"),
-    ("THEORA",  ".ogg",   "audio",    "audio/ogg"),
-    ("WEBM",    ".webm",  "video",    "video/webm"),
-    ("OPUS",    ".opus",  "audio",    "application/ogg"),
+#   format0     ending1  mediatype2  html_type3
+    ("MP3",     ".mp3",  "audio",    "audio/mp3"),
+    ("MP4",     ".mp4",  "video",    "video/mp4"),
+    ("VORBIS",  ".ogg",  "audio",    "audio/ogg"),
+    ("THEORA",  ".ogg",  "audio",    "audio/ogg"),
+    ("WEBM",    ".webm", "video",    "video/webm"),
+    ("OPUS",    ".opus", "audio",    "application/ogg"),
 )
 
 class MediaFile(models.Model):
@@ -76,11 +76,7 @@ class MediaFile(models.Model):
     file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"))
     size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
     media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
-
-    def mediatype(self):
-        for list_row in FORMATINFO_LIST:
-            if self.file_format == list_row[0]:
-                return list_row[2]
+    mediatype = models.CharField(_(u"Media Type"),max_length=20,default="MP3",help_text=_(u"File type of the media file"),null=True,blank=True)
 
     def file_ending(self):
         for list_row in FORMATINFO_LIST:
@@ -155,30 +151,20 @@ class MediaItem(models.Model):
         return md_free_desc
 
     def get_wp_code(self):
+        downloads_audio = MediaFile.objects.filter(media_item=self,mediatype='audio')
+        downloads_video = MediaFile.objects.filter(media_item=self, mediatype='video')
+
         wp_code = ""
-        if self.oggURL or self.mp3URL or self.mp4URL or self.webmURL:
-          if self.kind == 0 or self.kind == 2:
-            if self.webmURL:
-              wp_code = wp_code + '[video src="%s"]\n' % (self.webmURL)
-            elif self.mp4URL:
-              wp_code = wp_code + '[video src="%s"]\n' % (self.mp4URL)
-          if self.kind == 1 or self.kind == 2:
-            if self.oggURL:
-              wp_code = wp_code + '[audio src="%s"]\n' % (self.oggURL)
-            elif self.mp3URL:
-              wp_code = wp_code + '[audio src="%s"]\n' % (self.mp3URL)
-          wp_code = wp_code + '\nDownload: '
-          if self.kind == 0 or self.kind == 2:
-            if self.webmURL:
-              wp_code = wp_code + '<a title="%s WebM" href="%s" target="_blank">WebM</a>, ' % (self.title,self.webmURL)
-            if self.mp4URL:
-              wp_code = wp_code + '<a title="%s MP4" href="%s" target="_blank">MP4</a>, ' % (self.title,self.mp4URL)
-          if self.kind == 1 or self.kind == 2:
-            if self.oggURL:
-              wp_code = wp_code + '<a title="%s OGG" href="%s" target="_blank">OGG</a>, ' % (self.title,self.oggURL)
-            if self.mp3URL:
-              wp_code = wp_code + '<a title="%s MP3" href="%s" target="_blank">MP3</a>, ' % (self.title,self.mp3URL)
-          if self.description:
+        if downloads_video:
+            wp_code = wp_code + '[video src="%s"]\n' % (downloads_video[0].url)
+        if downloads_audio:
+            wp_code = wp_code + '[audio src="%s"]\n' % (downloads_audio[0].url)
+        wp_code = wp_code + '\nDownload: '
+        for mediafile in downloads_video:
+            wp_code = wp_code + '<a title="%s %s" href="%s" target="_blank">%s</a>, ' % (self.title,mediafile.file_ending(),mediafile.url,mediafile.file_ending())
+        for mediafile in downloads_audio:
+            wp_code = wp_code + '<a title="%s %s" href="%s" target="_blank">%s</a>, ' % (self.title,mediafile.file_ending(),mediafile.url,mediafile.file_ending())
+        if self.description:
             wp_code = wp_code + '\n\n<!--more-->\n%s' % ((markdown.markdown(self.description)))
         return unicode(wp_code)
 
@@ -438,5 +424,5 @@ def getLength(filename):
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
-
+pre_save.connect(set_mediatype, sender=MediaFile)
 pre_save.connect(get_remote_filesize, sender=MediaFile)

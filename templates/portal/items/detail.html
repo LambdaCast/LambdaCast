@@ -176,7 +176,7 @@
 			{% if downloads_audio %}
                         {% for audio in downloads_audio %}
 			<dd>
-				<a href="{{ audio.url }}" download="{{mediaitem.title}}{{ audio.file_ending }}">
+				<a href="{{ audio.url }}" download="{{mediaitem.slug}}{{ audio.file_ending }}">
 					<i class="icon-film"></i>
 					{% trans "Download" %} {{ audio.file_ending }} ({{ audio.size|in_mb }} MB)
 				</a>
@@ -186,7 +186,7 @@
 			{% if downloads_video %}
 			{% for video in downloads_video %}
 			<dd>
-				<a href="{{ video.url }}" download="{{mediaitem.title}}{{ video.file_ending }}">
+				<a href="{{ video.url }}" download="{{mediaitem.slug}}{{ video.file_ending }}">
 					<i class="icon-film"></i>
 					{% trans "Download" %} {{ video.file_ending }} ({{ video.size|in_mb }} MB)
 				</a>

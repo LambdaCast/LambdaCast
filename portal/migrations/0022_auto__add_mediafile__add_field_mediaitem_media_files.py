@@ -15,6 +15,7 @@ class Migration(SchemaMigration):
             ('file_format', self.gf('django.db.models.fields.CharField')(default='MP3', max_length=20)),
             ('size', self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True)),
             ('media_item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem'],null=True, blank=True)),
+            ('mediatype', self.gf('django.db.models.fields.CharField')(max_length=20,null=True, blank=True)),
         ))
 
         db.send_create_signal('portal', ['MediaFile'])
@@ -138,7 +139,8 @@ class Migration(SchemaMigration):
             'size': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']", 'blank': 'True', 'null': 'True'})
+            'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']", 'blank': 'True', 'null': 'True'}),
+            'file_format': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True', 'null': 'True'})
         },
         'portal.mediaitem': {
             'Meta': {'object_name': 'MediaItem'},

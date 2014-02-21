@@ -75,21 +75,8 @@ def channel_list(request,slug):
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
     mediaitem = get_object_or_404(MediaItem, slug=slug)
-    downloads_audio = MediaFile.objects.filter(media_item=mediaitem)
-    list = []
-    for audio in downloads_audio:
-        mediatype = audio.mediatype()
-        if mediatype == "audio":
-            list.append(audio)
-        downloads_audio = list
-        
-    downloads_video = MediaFile.objects.filter(media_item=mediaitem)
-    list = []
-    for video in downloads_video:
-        mediatype = video.mediatype()
-        if mediatype == "video":
-            list.append(video)
-        downloads_video = list
+    downloads_audio = MediaFile.objects.filter(media_item=mediaitem, mediatype='audio')
+    downloads_video = MediaFile.objects.filter(media_item=mediaitem, mediatype='video')
 
     if request.method == 'POST':
         comment = Comment(item=MediaItem.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])

@@ -14,3 +14,8 @@ def _get_remote_filesize_for_url(url):
         return response.info().getheader('content-length')
     except:
         pass
+
+def set_mediatype(sender, instance, **kwargs):
+    for mediatype in models.FORMATINFO_LIST:
+        if instance.file_format == mediatype[0]:
+            instance.mediatype = mediatype[2]
