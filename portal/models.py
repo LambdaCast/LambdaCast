@@ -53,8 +53,7 @@ KIND_CHOICES = (
 FILE_FORMATS = (
     ("MP3", "mp3"),
     ("MP4", "mp4"),
-    ("VORBIS", "OGG (Vorbis)"),
-    ("THEORA", "OGG (Theora)"),
+    ("OGG", "ogg"),
     ("WEBM", "WebM"),
     ("OPUS", "Opus"),
 )
@@ -63,8 +62,7 @@ FORMATINFO_LIST = (
 #   format0     ending1  mediatype2  html_type3
     ("MP3",     ".mp3",  "audio",    "audio/mp3"),
     ("MP4",     ".mp4",  "video",    "video/mp4"),
-    ("VORBIS",  ".ogg",  "audio",    "audio/ogg"),
-    ("THEORA",  ".ogg",  "audio",    "audio/ogg"),
+    ("OGG",     ".ogg",  "audio",    "audio/ogg"),
     ("WEBM",    ".webm", "video",    "video/webm"),
     ("OPUS",    ".opus", "audio",    "application/ogg"),
 )
@@ -138,6 +136,9 @@ class MediaItem(models.Model):
         return "/item/%s/" % self.slug
     def getClassName(self):
         return self.__class__.__name__
+
+    def mediafiles(self):
+        return MediaFile.objects.all()
     
     def comments_number(self):
         return Comment.objects.filter(moderated=True, item=self.pk).count()  
@@ -247,7 +248,7 @@ class MediaItem(models.Model):
             ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
 
             mediafile_mp3 = MediaFile.objects.create(title=self.slug,url=mp3_url,file_format="MP3",media_item=self)
-            mediafile_ogg = MediaFile.objects.create(title=self.slug,url=ogg_url,file_format="VORBIS",media_item=self)
+            mediafile_ogg = MediaFile.objects.create(title=self.slug,url=ogg_url,file_format="OGG",media_item=self)
 
             outcode = subprocess.Popen(cl_mp3, shell=True)
 

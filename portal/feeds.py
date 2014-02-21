@@ -4,7 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.feedgenerator import *
 from django.http import Http404
 
+from string import upper
+
 from portal.models import MediaItem, Channel, Collection, Comment
+import models
 
 from django.utils.feedgenerator import Rss201rev2Feed
 
@@ -44,7 +47,7 @@ class MainFeed(Feed):
     author_name = settings.AUTHOR_NAME
 
     def items(self):
-        return MediaItem.objects.filter(published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return MediaItem.objects.filter(published=True).order_by('-created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
@@ -68,40 +71,28 @@ class MainFeed(Feed):
         return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_enclosure_url(self, item):
-        if self.fileformat == 'mp3':
-            return item.mp3URL
-        elif self.fileformat == 'mp4':
-            return item.mp4URL
-        elif self.fileformat == 'ogg':
-            return item.oggURL
-        elif self.fileformat == 'webm':
-            return item.webmURL
-        else:
-            raise Http404
+        mediafiles = item.mediafiles()
+        output_link = ""
+        for mediafile in mediafiles:
+            if mediafile.file_format == self.fileformat:
+                output_link = mediafile.url
+        return output_link
 
     def item_link(self, item):
-        if self.fileformat == 'mp3':
-            return item.mp3URL
-        elif self.fileformat == 'mp4':
-            return item.mp4URL
-        elif self.fileformat == 'ogg':
-            return item.oggURL
-        elif self.fileformat == 'webm':
-            return item.webmURL
-        else:
-            raise Http404
+        mediafiles = item.mediafiles()
+        output_link = ""
+        for mediafile in mediafiles:
+            if mediafile.file_format == self.fileformat:
+                output_link = mediafile.url
+        return output_link
 
     def item_enclosure_length(self, item):
-        if self.fileformat == 'mp3':
-            return item.mp3Size
-        elif self.fileformat == 'mp4':
-           return item.mp4Size
-        elif self.fileformat == 'ogg':
-            return item.oggSize
-        elif self.fileformat == 'webm':
-            return item.webmSize
-        else:
-            raise Http404
+        mediafiles = item.mediafiles()
+        output_length = 0
+        for mediafile in mediafiles:
+            if mediafile.file_format == self.fileformat:
+                output_length = mediafile.size
+        return output_length
 
     def item_pubdate(self, item):
         return item.created
@@ -109,12 +100,13 @@ class MainFeed(Feed):
     def item_enclosure_length(self, item):
         return item.duration
 
-    def item_enclosure_mime_type(self):
-        if self.fileformat == 'mp4' or self.fileformat == 'webm':
-            return 'video/%s' % self.fileformat
-        else:
-            return 'audio/%s' % self.fileformat
-
+    def item_enclosure_mime_type(self, item):
+        mediafiles = item.mediafiles()
+        output_htmltype = ""
+        for mediafile in mediafiles:
+            if mediafile.file_format == self.fileformat:
+                output_htmltype = mediafile.html_type()
+        return output_htmltype
 
 class LatestMedia(MainFeed):
     title = _("Latest Episodes")
@@ -122,8 +114,11 @@ class LatestMedia(MainFeed):
     description = _(u"The newest episodes from your beloved podcast")
   
     def get_object(self, request, fileformat):
-        self.fileformat = fileformat
-
+        fileformat = upper(fileformat)
+        self.fileformat = ""
+        for list_row in models.FORMATINFO_LIST:
+            if list_row[0] == fileformat:
+                self.fileformat = fileformat
 
 class TorrentFeed(Feed):
     title = _(u"TorrentFeed")
@@ -152,7 +147,11 @@ class TorrentFeed(Feed):
 class ChannelFeed(MainFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
     def get_object(self, request, channel_slug, fileformat):
-        self.fileformat = fileformat
+        fileformat = upper(fileformat)
+        self.fileformat = ""
+        for list_row in models.FORMATINFO_LIST:
+            if list_row[0] == fileformat:
+                self.fileformat = fileformat
         return get_object_or_404(Channel, slug=channel_slug)
 
     def title(self, obj):
@@ -165,7 +164,7 @@ class ChannelFeed(MainFeed):
         return obj.description
     
     def items(self, obj):
-        return MediaItem.objects.filter(encodingDone=True, published=True, channel=obj).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return MediaItem.objects.filter(encodingDone=True, published=True, channel=obj).order_by('-created')
 
 
 class ChannelFeedTorrent(Feed):
@@ -204,7 +203,11 @@ class ChannelFeedTorrent(Feed):
 
 class CollectionFeed(MainFeed):
     def get_object(self, request, collection_slug, fileformat):
-        self.fileformat = fileformat
+        fileformat = upper(fileformat)
+        self.fileformat = ""
+        for list_row in models.FORMATINFO_LIST:
+            if list_row[0] == fileformat:
+                self.fileformat = fileformat
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
@@ -217,7 +220,7 @@ class CollectionFeed(MainFeed):
         return obj.description
 
     def items(self, obj):
-        return obj.items.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return obj.items.filter(encodingDone=True, published=True).order_by('-created')
 
 
 class CollectionFeedTorrent(Feed):
