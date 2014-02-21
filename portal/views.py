@@ -400,7 +400,7 @@ def encodingdone(request):
                 mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug+" OGG",
                                                          url=resultFirst['url'],
                                                          size=resultFirst['size'],
-                                                         file_format="VORBIS",
+                                                         file_format="OGG",
                                                          media_item = mediaitem)
                 #mediafile_ogg.save()
                 resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
@@ -428,7 +428,7 @@ def encodingdone(request):
                 mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug,
                                                          url=resultFirst['url'],
                                                          size=resultFirst['size'],
-                                                         file_format="VORBIS",
+                                                         file_format="OGG",
                                                          media_item = mediaitem)
                 mediafile_ogg.save()
                 # creating MediaFile for MP4
