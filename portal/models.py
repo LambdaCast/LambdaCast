@@ -187,10 +187,11 @@ class MediaItem(models.Model):
             logfile = outputdir + 'encoding_webm_log.txt'
             outfile_webm = outputdir + self.slug + '.webm'
             cl_webm = ffmpeg(path, outfile_webm, logfile, WEBM_VIDEO, WEBM_AUDIO).build_command_line()
-            
+
             # Create URLs
             mp4_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.mp4'
             webm_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.webm'
+
 
             # Create MediaFiles
             mediafile_mp4 = MediaFile.objects.create(title=self.slug,url=mp4_url,file_format="MP4",media_item=self)
@@ -221,7 +222,12 @@ class MediaItem(models.Model):
                 mediafile_webm.save()
             else:
                 raise StandardError(_(u"Encoding WEBM Failed"))
-    
+
+            outcode = subprocess.Popen(cl_mp4, shell=True)
+
+            while outcode.poll() == None:
+                pass
+
             outcode = subprocess.Popen(['ffmpeg -i '+ self.originalFile.path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
             
             while outcode.poll() == None:
@@ -244,11 +250,17 @@ class MediaItem(models.Model):
             outfile_ogg = outputdir + self.slug + '.ogg'
             cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
 
+            # Create the command line (OPUS)
+            logfile = outputdir + 'encoding_opus_log.txt'
+            outfile_opus = outputdir + self.slug + '.opus'
+
             mp3_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
             ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
+            opus_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.opus'
 
             mediafile_mp3 = MediaFile.objects.create(title=self.slug,url=mp3_url,file_format="MP3",media_item=self)
             mediafile_ogg = MediaFile.objects.create(title=self.slug,url=ogg_url,file_format="OGG",media_item=self)
+            mediafile_opus = MediaFile.objects.create(title=self.slug,url=opus_url,file_format="OPUS",media_item=self)
 
             outcode = subprocess.Popen(cl_mp3, shell=True)
 
@@ -272,6 +284,17 @@ class MediaItem(models.Model):
                 mediafile_ogg.save()
             else:
                 raise StandardError(_(u"Encoding OGG Failed"))
+
+            outcode = subprocess.Popen(['ffmpeg -i "'+ path + '" -acodec libopus -ab 128k -ar 48000 -ac 2 ' + outfile_opus + ' 2> ' + logfile],shell=True)
+
+            while outcode.poll() == None:
+                pass
+
+            if outcode.poll() == 0:
+                mediafile_opus.size = os.path.getsize(outfile_opus)
+                mediafile_opus.save()
+            else:
+                raise StandardError(_(u"Encoding OPUS Failed %s") % outcode.poll())
 
             # Get cover of mp3-file
             if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":

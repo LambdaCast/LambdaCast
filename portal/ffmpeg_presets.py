@@ -37,11 +37,4 @@ OGG_AUDIO = {'format':'ogg',
                   'channels':'2',
                   'disablevideo':'',}
 
-OPUS_AUDIO = {'format':'opus',
-                  'acodec':'libopus',
-                  'rate':'128k',
-                  'freq':'44100',
-                  'channels':'2',
-                  'disablevideo':'',}
-
 NULL_VIDEO = {}
