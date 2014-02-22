@@ -6,7 +6,7 @@ from django.http import Http404
 
 from string import upper
 
-from portal.models import MediaItem, Channel, Collection, Comment
+from portal.models import MediaItem, Channel, Collection, Comment, MediaFile
 import models
 
 from django.utils.feedgenerator import Rss201rev2Feed
@@ -47,7 +47,13 @@ class MainFeed(Feed):
     author_name = settings.AUTHOR_NAME
 
     def items(self):
-        return MediaItem.objects.filter(published=True).order_by('-created')
+        mediaitems = MediaItem.objects.filter(published=True).order_by('-created')
+        returneditems = []
+        for mediaitem in mediaitems:
+            mediafiles = MediaFile.objects.filter(media_item=mediaitem,file_format=self.fileformat)
+            for mediafile in mediafiles:
+                returneditems.append(mediafile.media_item)
+        return returneditems
 
     def feed_extra_kwargs(self, obj):
         extra = {}

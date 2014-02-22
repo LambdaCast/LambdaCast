@@ -138,7 +138,7 @@ class MediaItem(models.Model):
         return self.__class__.__name__
 
     def mediafiles(self):
-        return MediaFile.objects.all()
+        return MediaFile.objects.filter(media_item=self)
     
     def comments_number(self):
         return Comment.objects.filter(moderated=True, item=self.pk).count()  
