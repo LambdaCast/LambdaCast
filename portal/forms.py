@@ -6,6 +6,7 @@ from captcha.fields import CaptchaField
 from portal.models import MediaItem
 from portal.models import Comment
 from portal.models import Submittal
+import models
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -42,8 +43,8 @@ class MediaItemForm(ModelForm):
             field = self.fields[fieldName]
             if field.required:
                 field.widget.attrs['class'] = 'required'
-        self.fields['thumbURL'] = forms.ChoiceField(choices=THUMBNAILS_LIST, required=False, label=_("Thumbnail")) 
-
+        self.fields['thumbURL'] = forms.ChoiceField(choices=THUMBNAILS_LIST, required=False, label=_("Thumbnail"))
+        self.fields['fileFormats'] = forms.MultipleChoiceField(choices=models.FILE_FORMATS, required=True, label=_("File Formats"))
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''

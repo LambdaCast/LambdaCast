@@ -55,7 +55,6 @@ def list(request):
 def channel_list(request,slug):
     ''' This view is the view for the channel's list it works almost like the index view'''
     channel = get_object_or_404(Channel, slug=slug)
-#    mediaitems_list = MediaItem.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified')
     queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
@@ -305,8 +304,8 @@ def submit(request):
                     itemform.save()
                 else:
                     itemform.save()
-                    djangotasks.register_task(itemform.encode_media, "Encode the files using ffmpeg")
-                    encoding_task = djangotasks.task_for_object(itemform.encode_media)
+                    djangotasks.register_task(itemform.encode_media, "Encode the files using ffmpeg") 
+                    encoding_task = djangotasks.task_for_object(itemform.encode_media(form.data['fileFormats']))
                     djangotasks.run_task(encoding_task)
             if settings.USE_BITTORRENT:
                 djangotasks.register_task(itemform.create_bittorrent, "Create Bittorrent file for item and serve it")

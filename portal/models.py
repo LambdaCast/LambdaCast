@@ -71,10 +71,10 @@ class MediaFile(models.Model):
     ''' The model only for the media files '''
     title = models.CharField(_(u"Title"),max_length=200)
     url = models.URLField(_(u"URL to Transcoded File"),blank=True,verify_exists=False, help_text=_(u"Insert the link to the media file"))
-    file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"))
+    file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"),null=True)
     size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
     media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
-    mediatype = models.CharField(_(u"Media Type"),max_length=20,default="MP3",help_text=_(u"File type of the media file"),null=True,blank=True)
+    mediatype = models.CharField(_(u"Media Type"),max_length=20,help_text=_(u"File type of the media file"),null=True,blank=True)
 
     def file_ending(self):
         for list_row in FORMATINFO_LIST:
@@ -107,7 +107,7 @@ class MediaItem(models.Model):
     channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
     license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
     linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
-    kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
+    kind = models.CharField(_(u"Type"),max_length=5, choices=FILE_FORMATS,help_text=_(u"The type of the media could be video or audio or both"))
     torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
     mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of a .mp4-file"))
     mp4Size = models.BigIntegerField(_(u"MP4 Size in Bytes"),null=True,blank=True)
@@ -169,7 +169,7 @@ class MediaItem(models.Model):
             wp_code = wp_code + '\n\n<!--more-->\n%s' % ((markdown.markdown(self.description)))
         return unicode(wp_code)
 
-    def encode_media(self):
+    def encode_media(self, requested_formats):
         ''' This is used to tell ffmpeg what to do '''
         kind = self.kind
         path = self.originalFile.path
@@ -258,9 +258,9 @@ class MediaItem(models.Model):
             ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
             opus_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.opus'
 
-            mediafile_mp3 = MediaFile.objects.create(title=self.slug,url=mp3_url,file_format="MP3",media_item=self)
-            mediafile_ogg = MediaFile.objects.create(title=self.slug,url=ogg_url,file_format="OGG",media_item=self)
-            mediafile_opus = MediaFile.objects.create(title=self.slug,url=opus_url,file_format="OPUS",media_item=self)
+            mediafile_mp3 = MediaFile.objects.create(title=self.slug+requested_format[0],url=mp3_url,file_format="MP3",media_item=self)
+            mediafile_ogg = MediaFile.objects.create(title=self.slug+requested_format[0],url=ogg_url,file_format="OGG",media_item=self)
+            mediafile_opus = MediaFile.objects.create(title=self.slug+requested_format[0],url=opus_url,file_format="OPUS",media_item=self)
 
             outcode = subprocess.Popen(cl_mp3, shell=True)
 

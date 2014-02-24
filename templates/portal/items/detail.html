@@ -222,7 +222,7 @@ $(document).ready(function() {
 	var timeListener = function(value) {	
 		$('#id_timecode').val( value.toFixed(2) )
 	}
-	{% if mediaitem.kind == 0 or mediaitem.kind == 2 %}
+        {% if downloads_video %}
 	var video_player = projekktor('#player_video', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
@@ -231,21 +231,21 @@ $(document).ready(function() {
 		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 		streamType: 'http',
 	});
-
-	video_player.addListener('time', timeListener);
-	{% endif %}
-	{% if mediaitem.kind == 1 or mediaitem.kind == 2 %}
+        video_player.addListener('time', timeListener);
+        {% endif %}
+        {% if downloads_audio %}
 	var audio_player = projekktor('#player_audio', {
 		/* path to the MP4 Flash-player fallback component */
-		playerFlashMP4:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
+		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 
 		/* path to the MP3 Flash-player fallback component */
-		playerFlashMP3:		'{{ STATIC_URL }}projekktor/jarisplayer.swf',
+		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 		streamType: 'http',
 	});
-	 
 	audio_player.addListener('time', timeListener);
-	{% endif %}
+        {% endif %}
+
+
 	$('.timecode').click(function(){
 		if (typeof(video_player) !== 'undefined') { video_player.setPlayhead(parseFloat(this.text)); }
 		if (typeof(audio_player) !== 'undefined') { audio_player.setPlayhead(parseFloat(this.text)); }

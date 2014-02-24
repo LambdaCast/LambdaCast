@@ -4,49 +4,18 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'MediaFile'
-        db.create_table('portal_mediafile', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('file_format', self.gf('django.db.models.fields.CharField')(max_length=20, null=True)),
-            ('size', self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True)),
-            ('media_item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem'],null=True, blank=True)),
-            ('mediatype', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
-        ))
 
-        db.send_create_signal('portal', ['MediaFile'])
-
-        # Copying 'mp3URL' and etc in 'MediaFile' instances
-        if not db.dry_run:
-            for mediaitem_object in orm['portal.MediaItem'].objects.all():
-                # MP3
-                if not mediaitem_object.mp3URL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" MP3", url=mediaitem_object.mp3URL, size=mediaitem_object.mp3Size, file_format="MP3", media_item = mediaitem_object)
-                    portal.save()
-
-                # MP4
-                if not mediaitem_object.mp4URL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" MP4", url=mediaitem_object.mp4URL, size=mediaitem_object.mp4Size, file_format="MP4", media_item = mediaitem_object)
-                    portal.save()
-
-                # OGG/Vorbis
-                if not mediaitem_object.oggURL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" OGG", url=mediaitem_object.oggURL, size=mediaitem_object.oggSize, file_format="VORBIS", media_item = mediaitem_object)
-                    portal.save()
-
-                # WEBM
-                if not mediaitem_object.webmURL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" WEBM", url=mediaitem_object.webmURL, size=mediaitem_object.webmSize, file_format="WEBM", media_item = mediaitem_object)
-                    portal.save()
-
+        # Changing field 'MediaItem.kind'
+        db.alter_column('portal_mediaitem', 'kind', self.gf('django.db.models.fields.CharField')(max_length=5))
 
     def backwards(self, orm):
-        # Deleting model 'MediaFile'
-        db.delete_table('portal_mediafile')
+
+        # Changing field 'MediaItem.kind'
+        db.alter_column('portal_mediaitem', 'kind', self.gf('django.db.models.fields.IntegerField')(max_length=1))
 
     models = {
         'auth.group': {
@@ -134,13 +103,13 @@ class Migration(SchemaMigration):
         },
         'portal.mediafile': {
             'Meta': {'object_name': 'MediaFile'},
-            'file_format': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),
+            'file_format': ('django.db.models.fields.CharField', [], {'default': "'MP3'", 'max_length': '20', 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']", 'null': 'True', 'blank': 'True'}),
+            'mediatype': ('django.db.models.fields.CharField', [], {'default': "'MP3'", 'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'size': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']", 'blank': 'True', 'null': 'True'}),
-            'mediatype': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
         },
         'portal.mediaitem': {
             'Meta': {'object_name': 'MediaItem'},
@@ -154,7 +123,7 @@ class Migration(SchemaMigration):
             'duration': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2', 'blank': 'True'}),
             'encodingDone': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'kind': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'kind': ('django.db.models.fields.CharField', [], {'max_length': '5'}),
             'license': ('django.db.models.fields.CharField', [], {'default': "'CC-BY'", 'max_length': '200'}),
             'linkURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
