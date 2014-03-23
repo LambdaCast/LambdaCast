@@ -242,6 +242,11 @@ TRANSMISSION_PORT = 9091
 HOTFOLDER_BASE_DIR = ''
 HOTFOLDER_MOVE_TO_DIR = MEDIA_ROOT + '/raw/'
 
+# django-simple-captcha
+CAPTCHA_LETTER_ROTATION = None
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+CAPTCHA_NOISE_FUNCTIONS = None
+CAPTCHA_FILTER_FUNCTIONS = None
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
