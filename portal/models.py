@@ -2,7 +2,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_delete
 from django.core.exceptions import ValidationError
 
 from autoslug import AutoSlugField
@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
 
-from portal.signals import get_remote_filesize, set_mediatype
+from portal.signals import get_remote_filesize, set_mediatype, purge_encoded_files
 
 from pytranscode.ffmpeg import *
 from pytranscode.runner import *
@@ -388,3 +388,4 @@ def getLength(filename):
     return duration
 pre_save.connect(set_mediatype, sender=MediaFile)
 pre_save.connect(get_remote_filesize, sender=MediaFile)
+post_delete.connect(purge_encoded_files, sender=MediaItem)
