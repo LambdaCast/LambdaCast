@@ -28,7 +28,7 @@ class MediaItemAdmin (admin.ModelAdmin):
         }),
         (_(u'Advanced options'), {
             'classes': ('collapse',),
-            'fields': ('kind','user','torrentURL','mp4URL','webmURL','mp3URL','oggURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
+            'fields': ('user','torrentURL','mp4URL','webmURL','mp3URL','oggURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
         }),
     )
 admin.site.register(MediaItem,MediaItemAdmin)

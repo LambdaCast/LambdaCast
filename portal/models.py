@@ -178,9 +178,6 @@ class MediaItem(models.Model):
             os.makedirs(outputdir)
         outputdir = outputdir + '/'
 
-        # defining Video Thumbnail
-        self.videoThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.jpg'
-
         # Create the command line (MP3)
         logfile = outputdir + 'encoding_mp3_log.txt'
         outfile_mp3 = outputdir + self.slug + '.mp3'
@@ -238,7 +235,7 @@ class MediaItem(models.Model):
             raise StandardError(_(u"Encoding OPUS Failed %s") % outcode.poll())
 
         # Get cover of mp3-file
-        if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":
+        if path.endswith('.mp3') and self.audioThumbURL == "":
             audio_mp3 = MP3(path, ID3=ID3)
             try: 
                 apic = audio_mp3.tags.getall('APIC')
@@ -253,9 +250,9 @@ class MediaItem(models.Model):
                     art_mp3 = open(outputdir + filename, 'w')
                     art_mp3.write(cover_data)
                     art_mp3.close()
-                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
+                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + filename
             except:
-                self.videoThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.jpg'
+                pass
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT

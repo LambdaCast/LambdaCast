@@ -6,18 +6,12 @@
 		<div class="span8 well video-container">
 		{% if mediaitem.getClassName == 'MediaItem' %}
 			<div class="video-image-container"><a href="/item/{{ mediaitem.slug }}/">
-				{% if mediaitem.kind != 1 %}
-					{% if mediaitem.videoThumbURL %}
-						<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
-					{% else %}
-						<img src="{{ STATIC_URL }}default-video.png" alt="videoThumb" />
-					{% endif %}
+				{% if mediaitem.videoThumbURL %}
+			      		<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
+				{% elif mediaitem.audioThumbURL %}
+					<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
 				{% else %}
-					{% if mediaitem.audioThumbURL %}
-						<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
-					{% else %}
-						<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
-					{% endif %}
+					<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
 				{% endif %}
 			</a></div>
 			{% if user.is_authenticated %}
