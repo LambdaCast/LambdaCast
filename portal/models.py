@@ -55,7 +55,7 @@ FILE_FORMATS = (
     ("MP4", "mp4"),
     ("OGG", "ogg"),
     ("WEBM", "WebM"),
-    ("OPUS", "Opus"),
+#    ("OPUS", "Opus"),
 )
 
 FORMATINFO_LIST = (
@@ -64,7 +64,7 @@ FORMATINFO_LIST = (
     ("MP4",     ".mp4",  "video",    "video/mp4"),
     ("OGG",     ".ogg",  "audio",    "audio/ogg"),
     ("WEBM",    ".webm", "video",    "video/webm"),
-    ("OPUS",    ".opus", "audio",    "application/ogg"),
+#    ("OPUS",    ".opus", "audio",    "application/ogg"),
 )
 
 class MediaFile(models.Model):
@@ -169,7 +169,7 @@ class MediaItem(models.Model):
             wp_code = wp_code + '\n\n<!--more-->\n%s' % ((markdown.markdown(self.description)))
         return unicode(wp_code)
 
-    def encode_media(self, requested_formats):
+    def encode_media(self):
         ''' This is used to tell ffmpeg what to do '''
         kind = self.kind
         path = self.originalFile.path
@@ -177,144 +177,143 @@ class MediaItem(models.Model):
         if not os.path.exists(outputdir):
             os.makedirs(outputdir)
         outputdir = outputdir + '/'
-        if ((kind == 0) or (kind == 2)):
-            # Create the command line (MP4)
-            logfile = outputdir + 'encoding_mp4_log.txt'
-            outfile_mp4 = outputdir + self.slug + '.mp4'
-            cl_mp4 = ffmpeg(path, outfile_mp4, logfile, MP4_VIDEO, MP4_AUDIO).build_command_line()
 
-            # Create the command line (WEBM)
-            logfile = outputdir + 'encoding_webm_log.txt'
-            outfile_webm = outputdir + self.slug + '.webm'
-            cl_webm = ffmpeg(path, outfile_webm, logfile, WEBM_VIDEO, WEBM_AUDIO).build_command_line()
+        # Create the command line (MP4)
+#        logfile = outputdir + 'encoding_mp4_log.txt'
+#        outfile_mp4 = outputdir + self.slug + '.mp4'
+#        cl_mp4 = ffmpeg(path, outfile_mp4, logfile, MP4_VIDEO, MP4_AUDIO).build_command_line()
 
-            # Create URLs
-            mp4_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.mp4'
-            webm_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.webm'
+        # Create the command line (WEBM)
+#        logfile = outputdir + 'encoding_webm_log.txt'
+#        outfile_webm = outputdir + self.slug + '.webm'
+#        cl_webm = ffmpeg(path, outfile_webm, logfile, WEBM_VIDEO, WEBM_AUDIO).build_command_line()
+
+        # Create URLs
+#        mp4_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.mp4'
+#        webm_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.webm'
 
 
-            # Create MediaFiles
-            mediafile_mp4 = MediaFile.objects.create(title=self.slug,url=mp4_url,file_format="MP4",media_item=self)
-            mediafile_webm = MediaFile.objects.create(title=self.slug,url=webm_url,file_format="WEBM",media_item=self)
+        # Create MediaFiles
+#        mediafile_mp4 = MediaFile.objects.create(title=self.slug,url=mp4_url,file_format="MP4",media_item=self)
+#        mediafile_webm = MediaFile.objects.create(title=self.slug,url=webm_url,file_format="WEBM",media_item=self)
 
-            self.videoThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.jpg'
-            outcode = subprocess.Popen(cl_mp4, shell=True)
-            
-            while outcode.poll() == None:
-                pass
-    
-            if outcode.poll() == 0:
-                mediafile_mp4.size = os.path.getsize(outfile_mp4)
-                mediafile_mp4.save()
-                self.duration = getLength(outfile_mp4)
-            else:
-                raise StandardError(_(u"Encoding MP4 Failed"))
-            
-            print(cl_mp4)
-            print(cl_webm)    
-            outcode = subprocess.Popen(cl_webm, shell=True)
-            
-            while outcode.poll() == None:
-                pass
-    
-            if outcode.poll() == 0:
-                mediafile_webm.size = os.path.getsize(outfile_webm)
-                mediafile_webm.save()
-            else:
-                raise StandardError(_(u"Encoding WEBM Failed"))
+        self.videoThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.jpg'
+#        outcode = subprocess.Popen(cl_mp4, shell=True)
+        
+#        while outcode.poll() == None:
+#            pass
 
-            outcode = subprocess.Popen(cl_mp4, shell=True)
+#        if outcode.poll() == 0:
+#            mediafile_mp4.size = os.path.getsize(outfile_mp4)
+#            mediafile_mp4.save()
+#            self.duration = getLength(outfile_mp4)
+#        else:
+#            raise StandardError(_(u"Encoding MP4 Failed"))
+        
+#        print(cl_mp4)
+#        print(cl_webm)    
+#        outcode = subprocess.Popen(cl_webm, shell=True)
+        
+#        while outcode.poll() == None:
+#            pass
 
-            while outcode.poll() == None:
-                pass
+#        if outcode.poll() == 0:
+#            mediafile_webm.size = os.path.getsize(outfile_webm)
+#            mediafile_webm.save()
+#        else:
+#            raise StandardError(_(u"Encoding WEBM Failed"))
 
-            outcode = subprocess.Popen(['ffmpeg -i '+ self.originalFile.path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
-            
-            while outcode.poll() == None:
-                pass
-    
-            if outcode.poll() == 0:
-                pass 
-            else:
-                raise StandardError(_(u"Making Thumb Failed"))
-            
-            
-        if((kind == 1) or (kind == 2)):
-            # Create the command line (MP3)
-            logfile = outputdir + 'encoding_mp3_log.txt'
-            outfile_mp3 = outputdir + self.slug + '.mp3'
-            cl_mp3 = ffmpeg(path, outfile_mp3, logfile, NULL_VIDEO , MP3_AUDIO).build_command_line()
+#        outcode = subprocess.Popen(cl_mp4, shell=True)
 
-            # Create the command line (OGG)
-            logfile = outputdir + 'encoding_ogg_log.txt'
-            outfile_ogg = outputdir + self.slug + '.ogg'
-            cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
+#        while outcode.poll() == None:
+#            pass
 
-            # Create the command line (OPUS)
-            logfile = outputdir + 'encoding_opus_log.txt'
-            outfile_opus = outputdir + self.slug + '.opus'
+#        outcode = subprocess.Popen(['ffmpeg -i '+ self.originalFile.path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
+        
+#        while outcode.poll() == None:
+#            pass
 
-            mp3_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
-            ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
-            opus_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.opus'
+#        if outcode.poll() == 0:
+#            pass 
+#        else:
+#            raise StandardError(_(u"Making Thumb Failed"))
+        
+        
+        # Create the command line (MP3)
+        logfile = outputdir + 'encoding_mp3_log.txt'
+        outfile_mp3 = outputdir + self.slug + '.mp3'
+        cl_mp3 = ffmpeg(path, outfile_mp3, logfile, NULL_VIDEO , MP3_AUDIO).build_command_line()
 
-            mediafile_mp3 = MediaFile.objects.create(title=self.slug+requested_format[0],url=mp3_url,file_format="MP3",media_item=self)
-            mediafile_ogg = MediaFile.objects.create(title=self.slug+requested_format[0],url=ogg_url,file_format="OGG",media_item=self)
-            mediafile_opus = MediaFile.objects.create(title=self.slug+requested_format[0],url=opus_url,file_format="OPUS",media_item=self)
+        # Create the command line (OGG)
+        logfile = outputdir + 'encoding_ogg_log.txt'
+        outfile_ogg = outputdir + self.slug + '.ogg'
+        cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
 
-            outcode = subprocess.Popen(cl_mp3, shell=True)
+        # Create the command line (OPUS)
+#        logfile = outputdir + 'encoding_opus_log.txt'
+#        outfile_opus = outputdir + self.slug + '.opus'
 
-            while outcode.poll() == None:
-                pass
+        mp3_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
+        ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
+#        opus_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.opus'
 
-            if outcode.poll() == 0:
-                mediafile_mp3.size = os.path.getsize(outfile_mp3)
-                mediafile_mp3.save()
-                self.duration = getLength(outfile_mp3)
-            else:
-                raise StandardError(_(u"Encoding MP3 Failed"))
+        mediafile_mp3 = MediaFile.objects.create(title=self.slug+kind[0],url=mp3_url,file_format="MP3",media_item=self)
+        mediafile_ogg = MediaFile.objects.create(title=self.slug+kind[0],url=ogg_url,file_format="OGG",media_item=self)
+#        mediafile_opus = MediaFile.objects.create(title=self.slug+kind[0],url=opus_url,file_format="OPUS",media_item=self)
 
-            outcode = subprocess.Popen(cl_ogg, shell=True)
+        outcode = subprocess.Popen(cl_mp3, shell=True)
 
-            while outcode.poll() == None:
-                pass
+        while outcode.poll() == None:
+            pass
 
-            if outcode.poll() == 0:
-                mediafile_ogg.size = os.path.getsize(outfile_ogg)
-                mediafile_ogg.save()
-            else:
-                raise StandardError(_(u"Encoding OGG Failed"))
+        if outcode.poll() == 0:
+            mediafile_mp3.size = os.path.getsize(outfile_mp3)
+            mediafile_mp3.save()
+            self.duration = getLength(outfile_mp3)
+        else:
+            raise StandardError(_(u"Encoding MP3 Failed"))
 
-            outcode = subprocess.Popen(['ffmpeg -i "'+ path + '" -acodec libopus -ab 128k -ar 48000 -ac 2 ' + outfile_opus + ' 2> ' + logfile],shell=True)
+        outcode = subprocess.Popen(cl_ogg, shell=True)
 
-            while outcode.poll() == None:
-                pass
+        while outcode.poll() == None:
+            pass
 
-            if outcode.poll() == 0:
-                mediafile_opus.size = os.path.getsize(outfile_opus)
-                mediafile_opus.save()
-            else:
-                raise StandardError(_(u"Encoding OPUS Failed %s") % outcode.poll())
+        if outcode.poll() == 0:
+            mediafile_ogg.size = os.path.getsize(outfile_ogg)
+            mediafile_ogg.save()
+        else:
+            raise StandardError(_(u"Encoding OGG Failed"))
 
-            # Get cover of mp3-file
-            if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":
-                audio_mp3 = MP3(path, ID3=ID3)
-                try: 
-                    apic = audio_mp3.tags.getall('APIC')
-                    if apic:
-                        cover_data = apic[0].data
-                        cover_mimetype = apic[0].mime
-                        filename = ''
-                        if cover_mimetype == 'image/png':
-                            filename = self.slug + '_cover.png'
-                        elif cover_mimetype == 'image/jpg':
-                            filename = self.slug + '_cover.jpg'
-                        art_mp3 = open(outputdir + filename, 'w')
-                        art_mp3.write(cover_data)
-                        art_mp3.close()
-                        self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
-                except:
-                      pass
+#        outcode = subprocess.Popen(['ffmpeg -i "'+ path + '" -acodec libopus -ab 128k -ar 48000 -ac 2 ' + outfile_opus + ' 2> ' + logfile],shell=True)
+
+#        while outcode.poll() == None:
+#            pass
+#
+#        if outcode.poll() == 0:
+#            mediafile_opus.size = os.path.getsize(outfile_opus)
+#            mediafile_opus.save()
+#        else:
+#            raise StandardError(_(u"Encoding OPUS Failed %s") % outcode.poll())
+
+        # Get cover of mp3-file
+        if path.endswith('.mp3') and kind == 1 and self.audioThumbURL == "":
+            audio_mp3 = MP3(path, ID3=ID3)
+            try: 
+                apic = audio_mp3.tags.getall('APIC')
+                if apic:
+                    cover_data = apic[0].data
+                    cover_mimetype = apic[0].mime
+                    filename = ''
+                    if cover_mimetype == 'image/png':
+                        filename = self.slug + '_cover.png'
+                    elif cover_mimetype == 'image/jpg':
+                        filename = self.slug + '_cover.jpg'
+                    art_mp3 = open(outputdir + filename, 'w')
+                    art_mp3.write(cover_data)
+                    art_mp3.close()
+                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + filename
+            except:
+                  pass
 
         self.encodingDone = True
         self.torrentDone = settings.USE_BITTORRENT

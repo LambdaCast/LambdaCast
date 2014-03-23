@@ -257,6 +257,8 @@ def submit(request):
         form = MediaItemForm(request.POST, request.FILES or None)
         if form.is_valid():
             itemform = form.save()
+            itemform.title = itemform.title
+            itemform.kind = form.data['fileFormats']
             if not form.data['thumbURL'] == '':
                 itemform.audioThumbURL = form.data['thumbURL']
                 itemform.videoThumbURL = form.data['thumbURL']
@@ -305,7 +307,7 @@ def submit(request):
                 else:
                     itemform.save()
                     djangotasks.register_task(itemform.encode_media, "Encode the files using ffmpeg") 
-                    encoding_task = djangotasks.task_for_object(itemform.encode_media(form.data['fileFormats']))
+                    encoding_task = djangotasks.task_for_object(itemform.encode_media)
                     djangotasks.run_task(encoding_task)
             if settings.USE_BITTORRENT:
                 djangotasks.register_task(itemform.create_bittorrent, "Create Bittorrent file for item and serve it")

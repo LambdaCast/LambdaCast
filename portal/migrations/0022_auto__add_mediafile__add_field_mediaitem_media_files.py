@@ -25,22 +25,22 @@ class Migration(SchemaMigration):
             for mediaitem_object in orm['portal.MediaItem'].objects.all():
                 # MP3
                 if not mediaitem_object.mp3URL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" MP3", url=mediaitem_object.mp3URL, size=mediaitem_object.mp3Size, file_format="MP3", media_item = mediaitem_object)
+                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" MP3", url=mediaitem_object.mp3URL, size=mediaitem_object.mp3Size, file_format="MP3", media_item = mediaitem_object, mediatype = 'audio')
                     portal.save()
 
                 # MP4
                 if not mediaitem_object.mp4URL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" MP4", url=mediaitem_object.mp4URL, size=mediaitem_object.mp4Size, file_format="MP4", media_item = mediaitem_object)
+                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" MP4", url=mediaitem_object.mp4URL, size=mediaitem_object.mp4Size, file_format="MP4", media_item = mediaitem_object, mediatype = 'video')
                     portal.save()
 
-                # OGG/Vorbis
+                # OGG
                 if not mediaitem_object.oggURL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" OGG", url=mediaitem_object.oggURL, size=mediaitem_object.oggSize, file_format="VORBIS", media_item = mediaitem_object)
+                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" OGG", url=mediaitem_object.oggURL, size=mediaitem_object.oggSize, file_format="OGG", media_item = mediaitem_object, mediatype = 'audio')
                     portal.save()
 
                 # WEBM
                 if not mediaitem_object.webmURL == '':
-                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" WEBM", url=mediaitem_object.webmURL, size=mediaitem_object.webmSize, file_format="WEBM", media_item = mediaitem_object)
+                    portal, is_created = orm['portal.MediaFile'].objects.get_or_create(title=mediaitem_object.slug+" WEBM", url=mediaitem_object.webmURL, size=mediaitem_object.webmSize, file_format="WEBM", media_item = mediaitem_object, mediatype = 'video')
                     portal.save()
 
 
