@@ -192,6 +192,7 @@ def submittal(request, subm_id):
             cmodel = form.save()
             cmodel.user = request.user
             cmodel.save()
+            form.create_mediafiles(cmodel)
             return redirect(list)
         else:
             return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
@@ -205,10 +206,9 @@ def submittal(request, subm_id):
             'linkURL': submittal.media_linkURL,
             'kind': submittal.media_kind,
             'torrentURL': submittal.media_torrentURL,
-            'mp4URL': submittal.media_mp4URL,
-            'webmURL': submittal.media_webmURL,
-            'mp3URL': submittal.media_mp3URL,
-            'oggURL': submittal.media_oggURL,
+            'media_mp3URL': submittal.media_mp3URL,
+            'media_oggURL': submittal.media_oggURL,
+            'media_opusURL':  submittal.media_opusURL,
             'videoThumbURL': submittal.media_videoThumbURL,
             'audioThumbURL': submittal.media_audioThumbURL,
             'published': submittal.media_published,

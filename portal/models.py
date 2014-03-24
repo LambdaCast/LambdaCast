@@ -371,6 +371,7 @@ class Submittal(models.Model):
     media_webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .webm ending"))
     media_mp3URL = models.URLField(_(u"MP3-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .mp3 ending"))
     media_oggURL = models.URLField(_(u"OGG-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .ogg ending"))
+    media_opusURL = models.URLField(_(u"OPUS-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .opus ending"))
     media_videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the media list"))
     media_audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as cover for the media list"))
     media_published = models.BooleanField(verbose_name=_(u"Published"))
@@ -378,6 +379,20 @@ class Submittal(models.Model):
     media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
     def __unicode__(self):
         return self.title
+
+    def create_mediafiles(self, mediaitem):
+        mediaitem_slug = mediaitem.slug
+        if media_mp4URL:
+            mediafile_mp4 = MediaFile.objects.create(title=mediaitem_slug+' MP4',url=mp3_url,file_format="MP4",media_item=mediaitem,mediatype="video")
+        if media_webmURL:
+            mediafile_webm = MediaFile.objects.create(title=mediaitem_slug+' WEBM',url=mp3_url,file_format="WEBM",media_item=mediaitem,mediatype="video")
+        if media_mp3URL:
+            mediafile_mp3 = MediaFile.objects.create(title=mediaitem_slug+' MP3',url=mp3_url,file_format="MP3",media_item=mediaitem,mediatype="audio")
+        if media_oggURL:
+            mediafile_ogg = MediaFile.objects.create(title=mediaitem_slug+' OGG',url=ogg_url,file_format="OGG",media_item=mediaitem,mediatype="audio")
+        if media_opusURL:
+            mediafile_opus = MediaFile.objects.create(title=mediaitem_slug+' OPUS',url=opus_url,file_format="OPUS",media_item=mediaitem,mediatype="audio")
+        
 
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''

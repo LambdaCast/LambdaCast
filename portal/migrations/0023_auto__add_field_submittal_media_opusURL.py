@@ -8,14 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'Submittal.media_opusURL'
+        db.add_column('portal_submittal', 'media_opusURL',
+                      self.gf('django.db.models.fields.URLField')(default='', max_length=200, blank=True),
+                      keep_default=False)
 
-        # Changing field 'MediaItem.kind'
-        db.alter_column('portal_mediaitem', 'kind', self.gf('django.db.models.fields.CharField')(max_length=5))
 
     def backwards(self, orm):
+        # Deleting field 'Submittal.media_opusURL'
+        db.delete_column('portal_submittal', 'media_opusURL')
 
-        # Changing field 'MediaItem.kind'
-        db.alter_column('portal_mediaitem', 'kind', self.gf('django.db.models.fields.IntegerField')(max_length=1))
 
     models = {
         'auth.group': {
@@ -106,7 +108,7 @@ class Migration(SchemaMigration):
             'file_format': ('django.db.models.fields.CharField', [], {'default': "'MP3'", 'max_length': '20', 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']", 'null': 'True', 'blank': 'True'}),
-            'mediatype': ('django.db.models.fields.CharField', [], {'default': "'MP3'", 'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'mediatype': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'size': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
@@ -157,6 +159,7 @@ class Migration(SchemaMigration):
             'media_mp3URL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'media_mp4URL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'media_oggURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
+            'media_opusURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'media_published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'media_title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'media_torrentDone': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),

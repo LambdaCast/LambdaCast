@@ -6,6 +6,7 @@ from captcha.fields import CaptchaField
 from portal.models import MediaItem
 from portal.models import Comment
 from portal.models import Submittal
+from portal.models import MediaFile
 import models
 
 from django.utils.translation import ugettext_lazy as _
@@ -55,9 +56,15 @@ class CommentForm(ModelForm):
 
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
+    media_mp4URL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("MP4-URL"),required=False)
+    media_webmURL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("WEBM-URL"),required=False)
+    media_mp3URL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("MP3-URL"),required=False)
+    media_oggURL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("OGG-URL"),required=False)
+    media_opusURL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("OPUS-URL"),required=False)
+
     class Meta:
         model = MediaItem
-        exclude = ["slug","mp4Size","webmSize","mp3Size","oggSize","assemblyid","user","autoPublish","originalFile"]
+        exclude = ["kind","slug","mp4URL", "mp3URL", "webmURL", "oggURL", "mp4Size","webmSize","mp3Size","oggSize","assemblyid","user","autoPublish","originalFile"]
 
     def __init__(self, *args, **kwargs):
         super(SubmittalForm, self).__init__(*args, **kwargs)
@@ -65,6 +72,19 @@ class SubmittalForm(ModelForm):
             field = self.fields[fieldName]
             if field.required:
                 field.widget.attrs['class'] = 'required'
+
+    def create_mediafiles(self, mediaitem):
+        if not self.data['media_webmURL'] == "":
+            mediafile_webm = MediaFile.objects.create(title=mediaitem.slug+' WEBM',url=self.data['media_webmURL'],file_format="WEBM",media_item=mediaitem, mediatype='video')
+        if not self.data['media_mp4URL'] == "":
+            mediafile_mp4 = MediaFile.objects.create(title=mediaitem.slug+' MP4',url=self.data['media_mp4URL'],file_format="MP4",media_item=mediaitem, mediatype='video')
+        if not self.data['media_mp3URL'] == "":
+            mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug+' MP3',url=self.data['media_mp3URL'],file_format="MP3",media_item=mediaitem, mediatype='audio')
+        if not self.data['media_oggURL'] == "":
+            mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug+' OGG',url=self.data['media_oggURL'],file_format="OGG",media_item=mediaitem, mediatype='audio')
+        if not self.data['media_opusURL'] == "":
+            mediafile_opus = MediaFile.objects.create(title=mediaitem.slug+' OPUS',url=self.data['media_opusURL'],file_format="OPUS",media_item=mediaitem, mediatype='audio')
+ 
 
 class ThumbnailForm(forms.Form):
     ''' Used for uploading thumbnails '''

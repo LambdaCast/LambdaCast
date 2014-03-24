@@ -23,4 +23,7 @@ def set_mediatype(sender, instance, **kwargs):
             instance.mediatype = mediatype[2]
 
 def purge_encoded_files(sender, instance, **kwargs):
-    shutil.rmtree(settings.ENCODING_OUTPUT_DIR + instance.slug)
+    try:
+        shutil.rmtree(settings.ENCODING_OUTPUT_DIR + instance.slug)
+    except:
+        pass
