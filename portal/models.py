@@ -380,20 +380,6 @@ class Submittal(models.Model):
     def __unicode__(self):
         return self.title
 
-    def create_mediafiles(self, mediaitem):
-        mediaitem_slug = mediaitem.slug
-        if media_mp4URL:
-            mediafile_mp4 = MediaFile.objects.create(title=mediaitem_slug+' MP4',url=mp3_url,file_format="MP4",media_item=mediaitem,mediatype="video")
-        if media_webmURL:
-            mediafile_webm = MediaFile.objects.create(title=mediaitem_slug+' WEBM',url=mp3_url,file_format="WEBM",media_item=mediaitem,mediatype="video")
-        if media_mp3URL:
-            mediafile_mp3 = MediaFile.objects.create(title=mediaitem_slug+' MP3',url=mp3_url,file_format="MP3",media_item=mediaitem,mediatype="audio")
-        if media_oggURL:
-            mediafile_ogg = MediaFile.objects.create(title=mediaitem_slug+' OGG',url=ogg_url,file_format="OGG",media_item=mediaitem,mediatype="audio")
-        if media_opusURL:
-            mediafile_opus = MediaFile.objects.create(title=mediaitem_slug+' OPUS',url=opus_url,file_format="OPUS",media_item=mediaitem,mediatype="audio")
-        
-
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
     process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
