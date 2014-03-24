@@ -318,6 +318,7 @@ class Channel(models.Model):
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     featured = models.BooleanField(verbose_name=_(u"Featured"))
+    channelThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,verify_exists=False, help_text=_(u"Use a picture as thumbnail for the RSS-Feed"))
 
     def __unicode__(self):
         return self.name

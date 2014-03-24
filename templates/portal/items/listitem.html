@@ -10,6 +10,8 @@
 			      		<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
 				{% elif mediaitem.audioThumbURL %}
 					<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
+                                {% elif mediaitem.channel.channelThumbURL %}
+                                        <img src="{{ mediaitem.channel.channelThumbURL }}" alt="videoThumb" />
 				{% else %}
 					<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
 				{% endif %}
