@@ -160,6 +160,14 @@ class ChannelFeed(MainFeed):
                 self.fileformat = fileformat
         return get_object_or_404(Channel, slug=channel_slug)
 
+    def feed_extra_kwargs(self, obj):
+        extra = {}
+        extra['iTunes_name'] = settings.AUTHOR_NAME
+        extra['iTunes_email'] = settings.CONTACT_EMAIL
+        extra['iTunes_image_url'] = obj.channelThumbURL
+        extra['iTunes_explicit'] = 'no'
+        return extra
+
     def title(self, obj):
         return "%s: %s" % (settings.AUTHOR_NAME, obj.name)
 
