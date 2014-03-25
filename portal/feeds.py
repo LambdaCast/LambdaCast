@@ -32,13 +32,13 @@ class iTunesFeed(Rss201rev2Feed):
         handler.addQuickElement(u'itunes:email', self.feed['iTunes_email'])
         handler.endElement(u"itunes:owner")
         handler.addQuickElement(u'itunes:image', self.feed['iTunes_image_url'])
-        
 
     def add_item_elements(self,  handler, item):
         super(iTunesFeed, self).add_item_elements(handler, item)
         handler.addQuickElement(u'itunes:summary',item['summary'])
         handler.addQuickElement(u'itunes:duration',item['duration'])
         handler.addQuickElement(u'itunes:explicit',item['explicit'])
+        handler.addQuickElement(u'itunes:image', item['item_thumb'])
 
 class MainFeed(Feed):
     feed_type = iTunesFeed
@@ -68,6 +68,14 @@ class MainFeed(Feed):
         extra['duration'] = str(item.duration)
         extra['summary'] = self.item_description(item)
         extra['explicit'] = 'no'
+        if item.videoThumbURL:
+            extra['item_thumb'] = item.videoThumbURL
+        elif item.audioThumbURL:
+            extra['item_thumb'] = item.audioThumbURL
+        elif item.channel.channelThumbURL:
+            extra['item_thumb'] = item.channel.channelThumbURL
+        else:
+            extra['item_thumb'] = ''
         return extra
 
     def item_title(self, item):
