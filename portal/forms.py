@@ -56,11 +56,11 @@ class CommentForm(ModelForm):
 
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
-    media_mp4URL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("MP4-URL"),required=False)
-    media_webmURL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("WEBM-URL"),required=False)
-    media_mp3URL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("MP3-URL"),required=False)
-    media_oggURL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("OGG-URL"),required=False)
-    media_opusURL = forms.URLField(help_text=_('The name of the image with file format like "test.png"'), label=_("OPUS-URL"),required=False)
+    media_mp4URL = forms.URLField(help_text=_('Enter the URL to the mp4 file'), label=_("MP4-URL"),required=False)
+    media_webmURL = forms.URLField(help_text=_('Enter the URL to the webm file'), label=_("WEBM-URL"),required=False)
+    media_mp3URL = forms.URLField(help_text=_('Enter the URL to the mp3 file'), label=_("MP3-URL"),required=False)
+    media_oggURL = forms.URLField(help_text=_('Enter the URL to the ogg file'), label=_("OGG-URL"),required=False)
+    media_opusURL = forms.URLField(help_text=_('Enter the URL to the opus file'), label=_("OPUS-URL"),required=False)
 
     class Meta:
         model = MediaItem
