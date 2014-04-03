@@ -44,12 +44,6 @@ LICENSE_CHOICES = (
     ("CC-BY-ND", _(u"CreativeCommons - Attribution - NoDerivs")),
 ) 
 
-KIND_CHOICES = (
-    (0, _(u'Video-only')),
-    (1, _(u'Audio-only')),
-    (2, _(u'Audio and Video')),
-)
-
 FILE_FORMATS = (
     ("MP3", "mp3"),
     ("MP4", "mp4"),
@@ -324,7 +318,6 @@ class Hotfolder(models.Model):
     defaultName = models.CharField(_(u"Title"),max_length=30, blank=True)
     description = models.TextField(_(u"Description"), max_length=1000, null=True, blank=True)
     autoPublish = models.BooleanField(_(u"Auto-Publish"))
-    kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES)
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
 
@@ -356,7 +349,6 @@ class Submittal(models.Model):
     media_channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
     media_license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
     media_linkURL = models.URLField(_(u"Link"),blank=True,verify_exists=False, help_text=_(u"Insert a link to a blog or website that relates to the media"))
-    media_kind = models.IntegerField(_(u"Type"),max_length=1, choices=KIND_CHOICES,help_text=_(u"The type of the media could be video or audio or both"))
     media_torrentURL = models.URLField(_(u"Torrent-URL"),blank=True,verify_exists=False,help_text=_(u"The URL to the torrent-file"))
     media_mp4URL = models.URLField(_(u"MP4-URL"),blank=True,verify_exists=False,help_text=_(u"Add the link of the media folder or any other one with .mp4 ending"))
     media_webmURL = models.URLField(_(u"WEBM-URL"),blank=True,verify_exists=False, help_text=_(u"Add the link of the media folder or any other one with .webm ending"))

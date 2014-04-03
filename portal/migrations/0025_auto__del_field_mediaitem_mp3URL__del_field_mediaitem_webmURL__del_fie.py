@@ -35,6 +35,11 @@ class Migration(SchemaMigration):
         # Deleting field 'MediaItem.kind'
         db.delete_column('portal_mediaitem', 'kind')
 
+        # Deleting field 'Hotfolder.kind'
+        db.delete_column('portal_hotfolder', 'kind')
+
+        # Deleting field 'Submittal.media_kind'
+        db.delete_column('portal_submittal', 'media_kind')
 
     def backwards(self, orm):
         # Adding field 'MediaItem.mp3URL'
@@ -82,7 +87,15 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True),
                       keep_default=False)
 
+        # Adding field 'Hotfolder.kind'
+        db.add_column('portal_hotfolder', 'kind',
+                      self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
+                      keep_default=False)
 
+        # Adding field 'Submittals.media_kind'
+        db.add_column('portal_submittal', 'media_kind',
+                      self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
+                      keep_default=False)
 
     models = {
         'auth.group': {
@@ -166,7 +179,6 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
             'folderName': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'kind': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         'portal.mediafile': {
@@ -210,7 +222,6 @@ class Migration(SchemaMigration):
             'media_audioThumbURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'media_channel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.Channel']", 'null': 'True', 'blank': 'True'}),
             'media_description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'media_kind': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             'media_license': ('django.db.models.fields.CharField', [], {'default': "'CC-BY'", 'max_length': '200'}),
             'media_linkURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'media_mp3URL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),

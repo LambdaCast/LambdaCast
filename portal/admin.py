@@ -51,7 +51,7 @@ class ChannelAdmin (admin.ModelAdmin):
 admin.site.register(Channel,ChannelAdmin)
 
 class HotfolderAdmin (admin.ModelAdmin):
-    list_display = ['folderName','activated','autoPublish','kind','channel']
+    list_display = ['folderName','activated','autoPublish','channel']
     ordering = ['-created']
 
 admin.site.register(Hotfolder,HotfolderAdmin)
