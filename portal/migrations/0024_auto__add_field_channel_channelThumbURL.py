@@ -126,7 +126,7 @@ class Migration(SchemaMigration):
             'duration': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2', 'blank': 'True'}),
             'encodingDone': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'kind': ('django.db.models.fields.CharField', [], {'max_length': '5'}),
+            'kind': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             'license': ('django.db.models.fields.CharField', [], {'default': "'CC-BY'", 'max_length': '200'}),
             'linkURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),

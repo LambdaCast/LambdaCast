@@ -32,6 +32,9 @@ class Migration(SchemaMigration):
         # Deleting field 'MediaItem.mp3Size'
         db.delete_column('portal_mediaitem', 'mp3Size')
 
+        # Deleting field 'MediaItem.kind'
+        db.delete_column('portal_mediaitem', 'kind')
+
 
     def backwards(self, orm):
         # Adding field 'MediaItem.mp3URL'
@@ -73,6 +76,12 @@ class Migration(SchemaMigration):
         db.add_column('portal_mediaitem', 'mp3Size',
                       self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True),
                       keep_default=False)
+
+        # Adding field 'MediaItem.kind'
+        db.add_column('portal_mediaitem', 'kind',
+                      self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True),
+                      keep_default=False)
+
 
 
     models = {
@@ -182,7 +191,6 @@ class Migration(SchemaMigration):
             'duration': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2', 'blank': 'True'}),
             'encodingDone': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'kind': ('django.db.models.fields.CharField', [], {'max_length': '5'}),
             'license': ('django.db.models.fields.CharField', [], {'default': "'CC-BY'", 'max_length': '200'}),
             'linkURL': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),

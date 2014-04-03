@@ -163,7 +163,6 @@ class MediaItem(models.Model):
 
     def encode_media(self):
         ''' This is used to tell ffmpeg what to do '''
-        kind = self.kind
         path = self.originalFile.path
         outputdir = settings.ENCODING_OUTPUT_DIR + self.slug
         if not os.path.exists(outputdir):
@@ -188,9 +187,9 @@ class MediaItem(models.Model):
         ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
         opus_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.opus'
 
-        mediafile_mp3 = MediaFile.objects.create(title=self.slug+kind[0],url=mp3_url,file_format="MP3",media_item=self)
-        mediafile_ogg = MediaFile.objects.create(title=self.slug+kind[0],url=ogg_url,file_format="OGG",media_item=self)
-        mediafile_opus = MediaFile.objects.create(title=self.slug+kind[0],url=opus_url,file_format="OPUS",media_item=self)
+        mediafile_mp3 = MediaFile.objects.create(title=self.slug+" mp3",url=mp3_url,file_format="MP3",media_item=self)
+        mediafile_ogg = MediaFile.objects.create(title=self.slug+" ogg",url=ogg_url,file_format="OGG",media_item=self)
+        mediafile_opus = MediaFile.objects.create(title=self.slug+" opus",url=opus_url,file_format="OPUS",media_item=self)
 
         outcode = subprocess.Popen(cl_mp3, shell=True)
 

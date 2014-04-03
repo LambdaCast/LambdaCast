@@ -258,57 +258,14 @@ def submit(request):
         if form.is_valid():
             itemform = form.save()
             itemform.title = itemform.title
-            itemform.kind = form.data['fileFormats']
             if not form.data['thumbURL'] == '':
                 itemform.audioThumbURL = form.data['thumbURL']
                 itemform.videoThumbURL = form.data['thumbURL']
             if itemform.originalFile:
-                if settings.USE_TRANLOADIT:
-                    client = Client(settings.TRANSLOAD_AUTH_KEY, settings.TRANSLOAD_AUTH_SECRET)
-                    params = None
-                    if (itemform.kind==0):
-                        params = {
-                            'steps': {
-                                ':original': {
-                                    'robot': '/http/import',
-                                    'url': itemform.originalFile.url,
-                                }
-                            },
-                            'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_ID,
-                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                        }
-                    if (itemform.kind==1):
-                        params = {
-                            'steps': {
-                                ':original': {
-                                    'robot': '/http/import',
-                                    'url': itemform.originalFile.url,
-                                }
-                            },
-                            'template_id': settings.TRANSLOAD_TEMPLATE_AUDIO_ID,
-                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                        }
-                    if (itemform.kind==2):
-                        params = {
-                            'steps': {
-                                ':original': {
-                                    'robot': '/http/import',
-                                    'url': itemform.originalFile.url,
-                                }
-                            },
-                            'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_AUDIO_ID,
-                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                        }
-                    result = client.request(**params)
-                    itemform.assemblyid = result['assembly_id']
-                    itemform.published = itemform.autoPublish
-                    itemform.encodingDone = False
-                    itemform.save()
-                else:
-                    itemform.save()
-                    djangotasks.register_task(itemform.encode_media, "Encode the files using ffmpeg") 
-                    encoding_task = djangotasks.task_for_object(itemform.encode_media)
-                    djangotasks.run_task(encoding_task)
+                itemform.save()
+                djangotasks.register_task(itemform.encode_media, "Encode the files using ffmpeg") 
+                encoding_task = djangotasks.task_for_object(itemform.encode_media)
+                djangotasks.run_task(encoding_task)
             if settings.USE_BITTORRENT:
                 djangotasks.register_task(itemform.create_bittorrent, "Create Bittorrent file for item and serve it")
                 torrent_task = djangotasks.task_for_object(itemform.create_bittorrent)
