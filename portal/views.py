@@ -15,7 +15,6 @@ from pages.models import Page
 from portal.models import MediaItem, Comment, Channel, Collection, User, Submittal, MediaFile
 from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
 
-from transloadit.client import Client
 from taggit.models import Tag
 import lambdaproject.settings as settings
 
@@ -247,11 +246,9 @@ def handle_uploaded_thumbnail(f, filename):
 @login_required
 def submit(request):
     ''' The view for uploading the items. Only authenticated users can upload media items!
-    If we use transloadit to encode the items we use the more or less official python
-    "API" to ask transloadit to transcode our files otherwise we use django tasks to make
-    a new task task for encoding this items. If we use bittorrent to distribute our files
-    we also use django tasks to make the .torrent files (this can take a few minutes for
-    very large files '''
+    We use django tasks to make a new task task for encoding this items. If we use 
+    bittorrent to distribute our files we also use django tasks to make the .torrent 
+    files (this can take a few minutes for very large files '''
     if request.method == 'POST':
         form = MediaItemForm(request.POST, request.FILES or None)
         if form.is_valid():
@@ -295,131 +292,6 @@ def status(request):
     return render_to_response('portal/status.html',
                                     {'processing_items': processing_items, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'running_tasks': running_tasks, 'settings': settings},
                                     context_instance=RequestContext(request))
-
-@csrf_exempt
-def encodingdone(request):
-    ''' This is a somewhat special view: It is called by transloadit to tell
-    LambdaCast that the encoding process is done. The view then parses the
-    JSON data in the POST request send by transloadit and than get this information
-    into our media item model. Of course it can be possible for attackers to alter items
-    using for example curl but they would need to guess a assembly_id and these are 
-    quite long hex strings. To improve the security we could also use the custom header
-    option from transloadit but I think this wouldn't really help in a open source project'''
-    if request.method == 'POST':
-        data = json.loads(request.POST['transloadit'])
-        try:
-            mediaitem = MediaItem.objects.get(assemblyid=data['assembly_id'])
-            results = data['results']
-            # creating MediaFile for MP4
-            resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
-            resultFirst = resultItem[0]
-            mediafile_mp4 = MediaFile.create(title=mediaitem.slug, 
-                                             url=resultFirst['url'],
-                                             size=resultFirst['size'],
-                                             file_format="MP4",
-                                             media_item = mediaitem)
-            mediafile_mp4.save()
-            # defining duration
-            resultMeta = resultFirst['meta']
-            mediaitem.duration = str(resultMeta['duration'])
-            # creating MediaFile for WEBM
-            resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
-            resultFirst = resultItem[0]
-            mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
-                                                      url=resultFirst['url'],
-                                                      size=resultFirst['size'],
-                                                      file_format="WEBM",
-                                                      media_item = mediaitem)
-            mediafile_webm.save()
-            # defining thumbnail
-            resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-            resultFirst = resultItem[0]
-            if mediaitem.videoThumbURL == '':
-                mediaitem.videoThumbURL = resultFirst['url']
-            results = data['results']
-            # creating MediaFile for WEBM
-            resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
-            resultFirst = resultItem[0]
-            mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
-                                                     url=resultFirst['url'],
-                                                     size=resultFirst['size'],
-                                                     file_format="MP3",
-                                                     media_item = mediaitem)
-            #mediafile_mp3.save()
-            # defining duration
-            resultMeta = resultFirst['meta']
-            mediaitem.duration = str(resultMeta['duration'])
-            # creating MediaFile for OGG
-            resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
-            resultFirst = resultItem[0]
-            mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug+" OGG",
-                                                     url=resultFirst['url'],
-                                                     size=resultFirst['size'],
-                                                     file_format="OGG",
-                                                     media_item = mediaitem)
-            #mediafile_ogg.save()
-            resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-            resultFirst = resultItem[0]
-            if mediaitem.audioThumbURL == '':
-                mediaitem.audioThumbURL = resultFirst['url']
-            results = data['results']
-            # creating MediaFile for MP3
-            resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
-            resultFirst = resultItem[0]
-            mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
-                                                     url=resultFirst['url'],
-                                                     size=resultFirst['size'],
-                                                     file_format="MP3",
-                                                     media_item = mediaitem)
-            mediafile_mp3.save()
-            # defining duration
-            resultMeta = resultFirst['meta']
-            mediaitem.duration = str(resultMeta['duration'])
-            # creating MediaFile for VORBIS
-            resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
-            resultFirst = resultItem[0]
-            resultMeta = resultFirst['meta']
-            mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug,
-                                                     url=resultFirst['url'],
-                                                     size=resultFirst['size'],
-                                                     file_format="OGG",
-                                                     media_item = mediaitem)
-            mediafile_ogg.save()
-            # creating MediaFile for MP4
-            resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
-            resultFirst = resultItem[0]
-            resultMeta = resultFirst['meta']
-            mediafile_mp4 = MediaFile.objects.create(title=mediaitem.slug,
-                                                     url=resultFirst['url'],
-                                                     size=resultFirst['size'],
-                                                     file_format="MP4",
-                                                     media_item = mediaitem)
-            mediafile_mp4.save()
-            # creating MediaFile for WEBM
-            resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
-            resultFirst = resultItem[0]
-            resultMeta = resultFirst['meta']
-            mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
-                                                      url=resultFirst['url'],
-                                                      size=resultFirst['size'],
-                                                      file_format="WEBM",
-                                                      media_item = mediaitem)
-            mediafile_webm.save()
-            # defining thumbnail
-            resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-            resultFirst = resultItem[0]
-            if mediaitem.videoThumbURL == '':
-                mediaitem.videoThumbURL = resultFirst['url']
-            if mediaitem.audioThumbURL == '':
-                mediaitem.audioThumbURL = resultFirst['url']
-            mediaitem.encodingDone = True
-            mediaitem.save()
-        except MediaItem.DoesNotExist:
-            raise Http404
-        return HttpResponse(_(u"Media was updated"))
-    else:
-        raise Http404
-    
 
 def normalize_query(query_string,
                     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,

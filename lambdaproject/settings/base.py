@@ -187,27 +187,6 @@ LOGIN_URL = '/login/'
 
 
 # ehemalig "portal/appsettings.py"
-# Transloadit.com Settings
-
-# Should we use transloadit? Otherwise we will try ffmpeg
-USE_TRANLOADIT = False
-
-# Our transloadit auth key and secret
-TRANSLOAD_AUTH_KEY = ''
-TRANSLOAD_AUTH_SECRET = ''
-TRANSLOAD_TEMPLATE_VIDEO_ID = ''
-TRANSLOAD_TEMPLATE_AUDIO_ID = ''
-TRANSLOAD_TEMPLATE_VIDEO_AUDIO_ID = ''
-
-# The URL Transloadit should notify if it was done (please remember the trailing slash)
-TRANSLOAD_NOTIFY_URL = DOMAIN + '/encodingdone/'
-
-TRANSLOAD_MP4_ENCODE = 'encode_iphone'
-TRANSLOAD_WEBM_ENCODE = 'encode_webm'
-TRANSLOAD_MP3_ENCODE = 'encode_mp3'
-TRANSLOAD_OGG_ENCODE = 'encode_ogg'
-TRANSLOAD_THUMB_ENCODE = 'create_thumb'
-
 ENCODING_OUTPUT_DIR = MEDIA_ROOT + '/encoded/'
 # How can we reach this files (public access is needed)
 ENCODING_VIDEO_BASE_URL = DOMAIN + '/media/encoded/'
