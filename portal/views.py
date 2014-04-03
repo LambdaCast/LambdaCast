@@ -310,112 +310,109 @@ def encodingdone(request):
         data = json.loads(request.POST['transloadit'])
         try:
             mediaitem = MediaItem.objects.get(assemblyid=data['assembly_id'])
-            if (mediaitem.kind == 0):
-                results = data['results']
-                # creating MediaFile for MP4
-                resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
-                resultFirst = resultItem[0]
-                mediafile_mp4 = MediaFile.create(title=mediaitem.slug, 
-                                                 url=resultFirst['url'],
-                                                 size=resultFirst['size'],
-                                                 file_format="MP4",
-                                                 media_item = mediaitem)
-                mediafile_mp4.save()
-                # defining duration
-                resultMeta = resultFirst['meta']
-                mediaitem.duration = str(resultMeta['duration'])
-                # creating MediaFile for WEBM
-                resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
-                resultFirst = resultItem[0]
-                mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
-                                                          url=resultFirst['url'],
-                                                          size=resultFirst['size'],
-                                                          file_format="WEBM",
-                                                          media_item = mediaitem)
-                mediafile_webm.save()
-                # defining thumbnail
-                resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-                resultFirst = resultItem[0]
-                if mediaitem.videoThumbURL == '':
-                    mediaitem.videoThumbURL = resultFirst['url']
-            elif (mediaitem.kind == 1):
-                results = data['results']
-                # creating MediaFile for WEBM
-                resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
-                resultFirst = resultItem[0]
-                mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
-                                                         url=resultFirst['url'],
-                                                         size=resultFirst['size'],
-                                                         file_format="MP3",
-                                                         media_item = mediaitem)
-                #mediafile_mp3.save()
-                # defining duration
-                resultMeta = resultFirst['meta']
-                mediaitem.duration = str(resultMeta['duration'])
-                # creating MediaFile for OGG
-                resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
-                resultFirst = resultItem[0]
-                mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug+" OGG",
-                                                         url=resultFirst['url'],
-                                                         size=resultFirst['size'],
-                                                         file_format="OGG",
-                                                         media_item = mediaitem)
-                #mediafile_ogg.save()
-                resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-                resultFirst = resultItem[0]
-                if mediaitem.audioThumbURL == '':
-                    mediaitem.audioThumbURL = resultFirst['url']
-            elif (mediaitem.kind == 2):
-                results = data['results']
-                # creating MediaFile for MP3
-                resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
-                resultFirst = resultItem[0]
-                mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
-                                                         url=resultFirst['url'],
-                                                         size=resultFirst['size'],
-                                                         file_format="MP3",
-                                                         media_item = mediaitem)
-                mediafile_mp3.save()
-                # defining duration
-                resultMeta = resultFirst['meta']
-                mediaitem.duration = str(resultMeta['duration'])
-                # creating MediaFile for VORBIS
-                resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
-                resultFirst = resultItem[0]
-                resultMeta = resultFirst['meta']
-                mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug,
-                                                         url=resultFirst['url'],
-                                                         size=resultFirst['size'],
-                                                         file_format="OGG",
-                                                         media_item = mediaitem)
-                mediafile_ogg.save()
-                # creating MediaFile for MP4
-                resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
-                resultFirst = resultItem[0]
-                resultMeta = resultFirst['meta']
-                mediafile_mp4 = MediaFile.objects.create(title=mediaitem.slug,
-                                                         url=resultFirst['url'],
-                                                         size=resultFirst['size'],
-                                                         file_format="MP4",
-                                                         media_item = mediaitem)
-                mediafile_mp4.save()
-                # creating MediaFile for WEBM
-                resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
-                resultFirst = resultItem[0]
-                resultMeta = resultFirst['meta']
-                mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
-                                                          url=resultFirst['url'],
-                                                          size=resultFirst['size'],
-                                                          file_format="WEBM",
-                                                          media_item = mediaitem)
-                mediafile_webm.save()
-                # defining thumbnail
-                resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-                resultFirst = resultItem[0]
-                if mediaitem.videoThumbURL == '':
-                    mediaitem.videoThumbURL = resultFirst['url']
-                if mediaitem.audioThumbURL == '':
-                    mediaitem.audioThumbURL = resultFirst['url']
+            results = data['results']
+            # creating MediaFile for MP4
+            resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
+            resultFirst = resultItem[0]
+            mediafile_mp4 = MediaFile.create(title=mediaitem.slug, 
+                                             url=resultFirst['url'],
+                                             size=resultFirst['size'],
+                                             file_format="MP4",
+                                             media_item = mediaitem)
+            mediafile_mp4.save()
+            # defining duration
+            resultMeta = resultFirst['meta']
+            mediaitem.duration = str(resultMeta['duration'])
+            # creating MediaFile for WEBM
+            resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
+            resultFirst = resultItem[0]
+            mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
+                                                      url=resultFirst['url'],
+                                                      size=resultFirst['size'],
+                                                      file_format="WEBM",
+                                                      media_item = mediaitem)
+            mediafile_webm.save()
+            # defining thumbnail
+            resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
+            resultFirst = resultItem[0]
+            if mediaitem.videoThumbURL == '':
+                mediaitem.videoThumbURL = resultFirst['url']
+            results = data['results']
+            # creating MediaFile for WEBM
+            resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
+            resultFirst = resultItem[0]
+            mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
+                                                     url=resultFirst['url'],
+                                                     size=resultFirst['size'],
+                                                     file_format="MP3",
+                                                     media_item = mediaitem)
+            #mediafile_mp3.save()
+            # defining duration
+            resultMeta = resultFirst['meta']
+            mediaitem.duration = str(resultMeta['duration'])
+            # creating MediaFile for OGG
+            resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
+            resultFirst = resultItem[0]
+            mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug+" OGG",
+                                                     url=resultFirst['url'],
+                                                     size=resultFirst['size'],
+                                                     file_format="OGG",
+                                                     media_item = mediaitem)
+            #mediafile_ogg.save()
+            resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
+            resultFirst = resultItem[0]
+            if mediaitem.audioThumbURL == '':
+                mediaitem.audioThumbURL = resultFirst['url']
+            results = data['results']
+            # creating MediaFile for MP3
+            resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
+            resultFirst = resultItem[0]
+            mediafile_mp3 = MediaFile.objects.create(title=mediaitem.slug,
+                                                     url=resultFirst['url'],
+                                                     size=resultFirst['size'],
+                                                     file_format="MP3",
+                                                     media_item = mediaitem)
+            mediafile_mp3.save()
+            # defining duration
+            resultMeta = resultFirst['meta']
+            mediaitem.duration = str(resultMeta['duration'])
+            # creating MediaFile for VORBIS
+            resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
+            resultFirst = resultItem[0]
+            resultMeta = resultFirst['meta']
+            mediafile_ogg = MediaFile.objects.create(title=mediaitem.slug,
+                                                     url=resultFirst['url'],
+                                                     size=resultFirst['size'],
+                                                     file_format="OGG",
+                                                     media_item = mediaitem)
+            mediafile_ogg.save()
+            # creating MediaFile for MP4
+            resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
+            resultFirst = resultItem[0]
+            resultMeta = resultFirst['meta']
+            mediafile_mp4 = MediaFile.objects.create(title=mediaitem.slug,
+                                                     url=resultFirst['url'],
+                                                     size=resultFirst['size'],
+                                                     file_format="MP4",
+                                                     media_item = mediaitem)
+            mediafile_mp4.save()
+            # creating MediaFile for WEBM
+            resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
+            resultFirst = resultItem[0]
+            resultMeta = resultFirst['meta']
+            mediafile_webm = MediaFile.objects.create(title=mediaitem.slug,
+                                                      url=resultFirst['url'],
+                                                      size=resultFirst['size'],
+                                                      file_format="WEBM",
+                                                      media_item = mediaitem)
+            mediafile_webm.save()
+            # defining thumbnail
+            resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
+            resultFirst = resultItem[0]
+            if mediaitem.videoThumbURL == '':
+                mediaitem.videoThumbURL = resultFirst['url']
+            if mediaitem.audioThumbURL == '':
+                mediaitem.audioThumbURL = resultFirst['url']
             mediaitem.encodingDone = True
             mediaitem.save()
         except MediaItem.DoesNotExist:

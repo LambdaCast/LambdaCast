@@ -21,7 +21,7 @@ class MediaItemAdmin (admin.ModelAdmin):
     list_display = ['title','published','encodingDone', 'channel' ,'date']
     ordering = ['-date','-created']
     actions = [make_published,make_torrent_done]
-    list_filter = ('kind', 'published', 'channel')
+    list_filter = ('published', 'channel')
     fieldsets = (
         (None, {
             'fields': ('title', 'date', 'description', 'channel', 'license', 'linkURL', 'tags', 'published')
