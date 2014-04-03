@@ -204,7 +204,6 @@ def submittal(request, subm_id):
             'channel': submittal.media_channel,
             'license': submittal.media_license,
             'linkURL': submittal.media_linkURL,
-            'kind': submittal.media_kind,
             'torrentURL': submittal.media_torrentURL,
             'media_mp3URL': submittal.media_mp3URL,
             'media_oggURL': submittal.media_oggURL,
