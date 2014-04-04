@@ -424,10 +424,6 @@ msgstr "Umwandlung beendet"
 msgid "Torrent done"
 msgstr "Torrent vorhanden"
 
-#: portal/models.py:101
-msgid "Transloadit Result"
-msgstr "Transloadit Ergebnis"
-
 #: portal/models.py:102 portal/models.py:381
 msgid "Tags"
 msgstr "Tags"

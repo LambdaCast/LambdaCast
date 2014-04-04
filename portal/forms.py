@@ -35,7 +35,7 @@ class MediaItemForm(ModelForm):
 
     class Meta:
         model = MediaItem
-        exclude = ["slug","duration","published","encodingDone","assemblyid","torrentURL","user","autoPublish", "torrentDone","videoThumbURL","audioThumbURL"]
+        exclude = ["slug","duration","published","encodingDone","torrentURL","user","autoPublish", "torrentDone","videoThumbURL","audioThumbURL"]
 
     def __init__(self, *args, **kwargs):
         super(MediaItemForm, self).__init__(*args, **kwargs)
@@ -64,7 +64,7 @@ class SubmittalForm(ModelForm):
 
     class Meta:
         model = MediaItem
-        exclude = ["slug","assemblyid","user","autoPublish","originalFile"]
+        exclude = ["slug","user","autoPublish","originalFile"]
 
     def __init__(self, *args, **kwargs):
         super(SubmittalForm, self).__init__(*args, **kwargs)

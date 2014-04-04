@@ -78,10 +78,9 @@ class MediaFile(models.Model):
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
     everything else is quite standard. The sizes fields are used in the feeds to make enclosures
-    possible. The videoThumbURL is the URL for Projekktor's "poster" and assemblyid is just a storage
-    for the result we get back from transloadit so that we know which item just triggered the "encoding_done"
-    view. Why are there URL fields and not file fields? Because you maybe want to use external storage
-    (like Amazon S3) to store your files '''
+    possible. The videoThumbURL is the URL for Projekktor's "poster". Why are there URL fields
+    and not file fields? Because you maybe want to use external storage (like Amazon S3) to
+    store your files '''
     title = models.CharField(_(u"Title"),max_length=200)
     slug = AutoSlugField(populate_from='title',unique=True,verbose_name=_(u"Slug"),help_text=_(u"Slugs are parts of an URL that you can define"))
     date = models.DateField(_(u"Date"),help_text=_(u"Upload or record date"))
@@ -98,7 +97,6 @@ class MediaItem(models.Model):
     published = models.BooleanField(verbose_name=_(u"Published"))
     encodingDone = models.BooleanField(verbose_name=_(u"Encoding done"))
     torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
-    assemblyid = models.CharField(_(u"Transloadit Result"),max_length=100,blank=True)
     tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the media item is about in short terms divided by commas"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
