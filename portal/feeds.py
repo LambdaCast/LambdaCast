@@ -1,15 +1,12 @@
-from django.contrib.syndication.views import Feed, FeedDoesNotExist
+from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from django.utils.feedgenerator import *
-from django.http import Http404
+from django.utils.feedgenerator import Rss201rev2Feed
 
 from string import upper
 
 from portal.models import MediaItem, Channel, Collection, Comment, MediaFile
 import models
-
-from django.utils.feedgenerator import Rss201rev2Feed
 
 import lambdaproject.settings as settings
 
@@ -84,49 +81,38 @@ class MainFeed(Feed):
     def item_description(self, item):
         return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
-    def item_enclosure_url(self, item):
-        mediafiles = item.mediafiles()
-        output_link = ""
-        for mediafile in mediafiles:
-            if mediafile.file_format == self.fileformat:
-                output_link = mediafile.url
-        return output_link
-
     def item_link(self, item):
         mediafiles = item.mediafiles()
-        output_link = ""
         for mediafile in mediafiles:
             if mediafile.file_format == self.fileformat:
-                output_link = mediafile.url
-        return output_link
-
-    def item_enclosure_length(self, item):
-        mediafiles = item.mediafiles()
-        output_length = 0
-        for mediafile in mediafiles:
-            if mediafile.file_format == self.fileformat:
-                output_length = mediafile.size
-        return output_length
+                return mediafile.url
+        return ""
 
     def item_pubdate(self, item):
         return item.created
 
+    def item_enclosure_url(self, item):
+        return self.item_link(item)
+
     def item_enclosure_length(self, item):
-        return item.duration
+        mediafiles = item.mediafiles()
+        for mediafile in mediafiles:
+            if mediafile.file_format == self.fileformat:
+                return mediafile.size
+        return 0
 
     def item_enclosure_mime_type(self, item):
         mediafiles = item.mediafiles()
-        output_htmltype = ""
         for mediafile in mediafiles:
             if mediafile.file_format == self.fileformat:
-                output_htmltype = mediafile.html_type()
-        return output_htmltype
+                return mediafile.html_type()
+        return ""
 
 class LatestMedia(MainFeed):
     title = _("Latest Episodes")
     link = "/"
     description = _(u"The newest episodes from your beloved podcast")
-  
+
     def get_object(self, request, fileformat):
         fileformat = upper(fileformat)
         self.fileformat = ""
@@ -139,7 +125,7 @@ class TorrentFeed(Feed):
     link = "/"
     description = _("Torrent files from your beloved podcast")
     item_enclosure_mime_type = "application/x-bittorrent"
-	
+
     def items(self):
         return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')
 
@@ -148,15 +134,15 @@ class TorrentFeed(Feed):
 
     def item_description(self, item):
         return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
-        
+
     def item_enclosure_url(self, item):
-    	return item.torrentURL
-    	
+        return item.torrentURL
+
     def item_enclosure_length(self, item):
-    	return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
-    	
+        return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
+
     def item_pubdate(self, item):
-    	return item.created
+        return item.created
 
 class ChannelFeed(MainFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
@@ -184,7 +170,7 @@ class ChannelFeed(MainFeed):
 
     def description(self, obj):
         return obj.description
-    
+
     def items(self, obj):
         return MediaItem.objects.filter(encodingDone=True, published=True, channel=obj).order_by('-created')
 
