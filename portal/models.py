@@ -12,28 +12,23 @@ import lambdaproject.settings as settings
 
 from portal.signals import get_remote_filesize, set_mediatype, purge_encoded_files
 
-from pytranscode.ffmpeg import *
-from pytranscode.runner import *
-from ffmpeg_presets import *
+from pytranscode.ffmpeg import ffmpeg
+from ffmpeg_presets import MP3_AUDIO, OGG_AUDIO, NULL_VIDEO
 
-import os
 import subprocess
-import re
 import decimal
-import urllib2
-import datetime
 
-from types import NoneType
-
-from mutagen import File
 from mutagen.mp3 import MP3
-from mutagen.id3 import ID3, APIC, error
+from mutagen.id3 import ID3
 
 from threading import Event
 
 import markdown
 
-from BitTornadoABC.btmakemetafile import calcsize, make_meta_file, ignore
+import os
+import re
+
+from BitTornadoABC.btmakemetafile import make_meta_file
 
 LICENSE_CHOICES = (
     ("None", _(u"No License")),
@@ -58,7 +53,7 @@ FORMATINFO_LIST = (
     ("MP4",     ".mp4",  "video",    "video/mp4"),
     ("OGG",     ".ogg",  "audio",    "audio/ogg"),
     ("WEBM",    ".webm", "video",    "video/webm"),
-    ("OPUS",    ".opus", "audio",    "application/ogg"),
+    ("OPUS",    ".opus", "audio",    "audio/ogg"),
 )
 
 class MediaFile(models.Model):
@@ -79,12 +74,6 @@ class MediaFile(models.Model):
         for list_row in FORMATINFO_LIST:
             if self.file_format == list_row[0]:
                 return list_row[3]
-
-    def clean(self):
-        for tuple in FORMATINFO_LIST:
-            if self.file_format == tuple[0]:
-                if not self.url.endswith(tuple[1]):
-                    raise ValidationError(_(u"URL doesn't end with %s" % (tuple[1])))
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -287,7 +276,7 @@ class Comment(models.Model):
     item = models.ForeignKey(MediaItem,verbose_name=_(u"Media Item"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
-    
+
     def __unicode__(self):
         return self.comment
 
@@ -366,10 +355,11 @@ class Submittal(models.Model):
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
     process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout, stderr = process.communicate()
+    stdout = process.communicate()
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
+
 pre_save.connect(set_mediatype, sender=MediaFile)
 pre_save.connect(get_remote_filesize, sender=MediaFile)
 post_delete.connect(purge_encoded_files, sender=MediaItem)
