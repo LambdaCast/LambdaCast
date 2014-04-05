@@ -1,18 +1,14 @@
-from django.shortcuts import render_to_response, get_object_or_404, redirect, get_list_or_404
-from django import forms
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.core.urlresolvers import reverse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.views.generic.list_detail import object_list
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
-from portal.models import MediaItem, Comment, Channel, Collection, User, Submittal, MediaFile
+from portal.models import MediaItem, Comment, Channel, Collection, Submittal, MediaFile
 from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
 
 from taggit.models import Tag
@@ -20,19 +16,12 @@ import lambdaproject.settings as settings
 
 import djangotasks
 
-import simplejson as json
-import urllib2
 from datetime import datetime
-import os
-import shutil
 import re
-from threading import Event
-from traceback import print_exc
-from sys import argv
 from operator import attrgetter
 import itertools
 
-def list(request):
+def index(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available media items and
     forwards them to the template. We use Django's Paginator to have pagination '''
     queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
@@ -114,7 +103,6 @@ def detail(request, slug):
                                                                    'downloads_video': downloads_video,
                                                                    'downloads_audio': downloads_audio,
                                                                   }, context_instance=RequestContext(request))
-                    
     else:
         form = CommentForm()
         comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
@@ -133,7 +121,6 @@ def iframe(request, slug):
     mediaitem = get_object_or_404(MediaItem, slug=slug)
     return render_to_response('portal/items/iframe.html', {'mediaitem': mediaitem, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list}, context_instance=RequestContext(request))
 
-
 def tag(request, tag):
     ''' Gets all media items for a specified tag'''
     mediaitemslist = MediaItem.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
@@ -147,7 +134,7 @@ def collection(request, slug):
     mediaitemslist = collection.items.filter(encodingDone=True, published=True)
     return render_to_response('portal/collection.html', {'mediaitems_list': mediaitemslist, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'collection':collection, 'settings': settings},
                             context_instance=RequestContext(request))
-                            
+
 def search(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
     query_string = ''
@@ -302,14 +289,12 @@ def normalize_query(query_string,
         
         >>> normalize_query('  some random  words "with   quotes  " and   spaces')
         ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
-    
     '''
     return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
 
 def get_query(query_string, search_fields):
     ''' Returns a query, that is a combination of Q objects. That combination
         aims to search keywords within a model by testing the given search fields.
-    
     '''
     query = None # Query to search for every search term        
     terms = normalize_query(query_string)
@@ -333,7 +318,7 @@ def get_thumbnails_list():
     return thumbnails_list
 
 def get_page_list():
-	return Page.objects.filter(activated=True).order_by('orderid')
+    return Page.objects.filter(activated=True).order_by('orderid')
 
 def get_submittal_list(request):
     return Submittal.objects.filter(users=request.user) if request.user.is_authenticated() else []

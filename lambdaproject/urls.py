@@ -1,15 +1,15 @@
 from django.conf.urls import patterns, include, url
-from portal.feeds import *
+from portal.feeds import LatestMedia, TorrentFeed, ChannelFeed, ChannelFeedTorrent, CollectionFeed, CollectionFeedTorrent, CommentsFeed
 from livestream.feeds import UpcomingEvents
-from django.conf import settings
+
+import lambdaproject.settings as settings
 
 from django.contrib import admin
 admin.autodiscover()
 
-
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'portal.views.list'),
+    url(r'^$', 'portal.views.index'),
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/favicon.ico'}),
     url(r'^item/(?P<slug>[-\w]+)/$', 'portal.views.detail'),
     url(r'^tags/(?P<tag>[\w|\W]+)/$', 'portal.views.tag'),
