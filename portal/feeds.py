@@ -70,7 +70,7 @@ class MainFeed(Feed):
             extra['item_thumb'] = item.videoThumbURL
         elif item.audioThumbURL:
             extra['item_thumb'] = item.audioThumbURL
-        elif item.channel.channelThumbURL:
+        elif item.channel and item.channel.channelThumbURL:
             extra['item_thumb'] = item.channel.channelThumbURL
         else:
             extra['item_thumb'] = ''
