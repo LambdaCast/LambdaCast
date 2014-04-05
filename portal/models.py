@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_delete
+from django.contrib.auth.models import User
 
 from autoslug import AutoSlugField
 from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
 
-from portal.signals import get_remote_filesize, set_mediatype, purge_encoded_files
-
 from pytranscode.ffmpeg import ffmpeg
 from ffmpeg_presets import MP3_AUDIO, OGG_AUDIO, NULL_VIDEO
 
+from signals import get_remote_filesize, set_mediatype, purge_encoded_files
+from licenses import LICENSE_CHOICES, LICENSE_URLS
+
 import subprocess
 import decimal
+import os
+import re
 
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3
@@ -24,19 +27,7 @@ from threading import Event
 
 import markdown
 
-import os
-import re
-
 from BitTornadoABC.btmakemetafile import make_meta_file
-
-LICENSE_CHOICES = (
-    ("None", _(u"No License")),
-    ("CC0", _(u"Public Domain/CC0")),
-    ("CC-BY", _(u"CreativeCommons - Attribution")),
-    ("CC-BY-NC", _(u"CreativeCommons - Attribution - NonCommercial")),
-    ("CC-BY-NC-ND", _(u"CreativeCommons - Attribution - NonCommercial - NoDerivs")),
-    ("CC-BY-ND", _(u"CreativeCommons - Attribution - NoDerivs")),
-) 
 
 FILE_FORMATS = (
     ("MP3", "mp3"),
@@ -250,18 +241,7 @@ class MediaItem(models.Model):
         self.save()
 
     def get_license_link(self):
-        if self.license == "CC0":
-            return _(u"https://creativecommons.org/publicdomain/zero/1.0/")
-        elif self.license == "CC-BY":
-            return _(u"http://creativecommons.org/licenses/by/3.0/")
-        elif self.license == "CC-BY-NC":
-            return _(u"http://creativecommons.org/licenses/by-nc/3.0/")
-        elif self.license == "CC-BY-NC-ND":
-            return _(u"http://creativecommons.org/licenses/by-nc-nd/3.0/")
-        elif self.license == "CC-BY-ND":
-            return _(u"http://creativecommons.org/licenses/by-nd/3.0/")
-        elif self.license == "None":
-            return ""
+        return LICENSE_URLS[self.license]
 
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''
