@@ -51,7 +51,7 @@
 					<div id="video_player">
 						<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
 						{% for video in downloads_video %}
-							<source src="{{ video.url }}" width="640" height="360" type="{{ video.html_type }}" />
+							<source src="{{ video.url }}" width="640" height="360" type="{{ video.mime_type }}" />
 						{% endfor %}
 						</video>
 					</div>
@@ -60,7 +60,7 @@
 					<div id="audio_player" {% if downloads_video and downloads_audio %}style="display:none;"{% endif %}>
 						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }}{% elif mediaitem.channel.channelThumbURL %}{{ mediaitem.channel.channelThumbURL }}{% else %}{{ STATIC_URL }}audio_cover.png{% endif %}" controls>
 						{% for audio in downloads_audio %}
-							<source src="{{ audio.url }}" width="640" height="360" type="{{ audio.html_type }}" />
+							<source src="{{ audio.url }}" width="640" height="360" type="{{ audio.mime_type }}" />
 						{% endfor %}
 						</audio>
 					</div>
@@ -178,9 +178,9 @@
 			{% if downloads_audio %}
                         {% for audio in downloads_audio %}
 			<dd>
-				<a href="{{ audio.url }}" download="{{mediaitem.slug}}{{ audio.file_ending }}">
+				<a href="{{ audio.url }}" download="{{mediaitem.slug}}{{ audio.get_file_format_display }}">
 					<i class="icon-film"></i>
-					{% trans "Download" %} {{ audio.file_ending }} ({{ audio.size|in_mb }} MB)
+					{% trans "Download" %} {{ audio.get_file_format_display }} ({{ audio.size|in_mb }} MB)
 				</a>
 			</dd>
 			{% endfor %}
@@ -188,9 +188,9 @@
 			{% if downloads_video %}
 			{% for video in downloads_video %}
 			<dd>
-				<a href="{{ video.url }}" download="{{mediaitem.slug}}{{ video.file_ending }}">
+				<a href="{{ video.url }}" download="{{mediaitem.slug}}{{ video.get_file_format_display }}">
 					<i class="icon-film"></i>
-					{% trans "Download" %} {{ video.file_ending }} ({{ video.size|in_mb }} MB)
+					{% trans "Download" %} {{ video.get_file_format_display }} ({{ video.size|in_mb }} MB)
 				</a>
 			</dd>
 			{% endfor %}

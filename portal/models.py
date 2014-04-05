@@ -10,10 +10,11 @@ from taggit.managers import TaggableManager
 import lambdaproject.settings as settings
 
 from pytranscode.ffmpeg import ffmpeg
-from ffmpeg_presets import MP3_AUDIO, OGG_AUDIO, NULL_VIDEO
+from portal.ffmpeg_presets import MP3_AUDIO, OGG_AUDIO, NULL_VIDEO
 
-from signals import get_remote_filesize, set_mediatype, purge_encoded_files
-from licenses import LICENSE_CHOICES, LICENSE_URLS
+from portal.signals import get_remote_filesize, set_mediatype, purge_encoded_files
+from portal.licenses import LICENSE_CHOICES, LICENSE_URLS
+from portal.media_formats import FILE_FORMATS, MEDIA_TYPES, MEDIA_FORMATS
 
 import subprocess
 import decimal
@@ -29,41 +30,17 @@ import markdown
 
 from BitTornadoABC.btmakemetafile import make_meta_file
 
-FILE_FORMATS = (
-    ("MP3", "mp3"),
-    ("MP4", "mp4"),
-    ("OGG", "ogg"),
-    ("WEBM", "WebM"),
-    ("OPUS", "Opus"),
-)
-
-FORMATINFO_LIST = (
-#   format0     ending1  mediatype2  html_type3
-    ("MP3",     ".mp3",  "audio",    "audio/mp3"),
-    ("MP4",     ".mp4",  "video",    "video/mp4"),
-    ("OGG",     ".ogg",  "audio",    "audio/ogg"),
-    ("WEBM",    ".webm", "video",    "video/webm"),
-    ("OPUS",    ".opus", "audio",    "audio/ogg"),
-)
-
 class MediaFile(models.Model):
     ''' The model only for the media files '''
     title = models.CharField(_(u"Title"),max_length=200)
-    url = models.URLField(_(u"URL to Transcoded File"),blank=True,verify_exists=False, help_text=_(u"Insert the link to the media file"))
-    file_format = models.CharField(_(u"File Format"),max_length=20,choices=FILE_FORMATS,default="MP3",help_text=_(u"File format of the media file"),null=True)
-    size = models.BigIntegerField(_(u"File Size in Bytes"),null=True,blank=True)
-    media_item = models.ForeignKey('portal.MediaItem',help_text=_(u"Media Item the file is connected to"),null=True, blank=True)
-    mediatype = models.CharField(_(u"Media Type"),max_length=20,help_text=_(u"File type of the media file"),null=True,blank=True)
+    url = models.URLField(_(u"URL to Transcoded File"), verify_exists=False, max_length=512, help_text=_(u"Insert the link to the media file"))
+    file_format = models.CharField(_(u"File Format"), max_length=20, choices=FILE_FORMATS,default="MP3", help_text=_(u"File format of the media file"))
+    size = models.BigIntegerField(_(u"File Size in Bytes"), null=True, blank=True)
+    media_item = models.ForeignKey('portal.MediaItem', help_text=_(u"Media Item the file is connected to"))
+    mediatype = models.CharField(_(u"Media Type"), max_length=20, choices=MEDIA_TYPES, default="audio", help_text=_(u"File type of the media file (audio or video)"))
 
-    def file_ending(self):
-        for list_row in FORMATINFO_LIST:
-            if self.file_format == list_row[0]:
-                return list_row[1]
-    
-    def html_type(self):
-        for list_row in FORMATINFO_LIST:
-            if self.file_format == list_row[0]:
-                return list_row[3]
+    def mime_type(self):
+        return MEDIA_FORMATS[self.file_format].mime_type
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -124,9 +101,9 @@ class MediaItem(models.Model):
             wp_code = wp_code + '[audio src="%s"]\n' % (downloads_audio[0].url)
         wp_code = wp_code + '\nDownload: '
         for mediafile in downloads_video:
-            wp_code = wp_code + '<a title="%s %s" href="%s" target="_blank">%s</a>, ' % (self.title,mediafile.file_ending(),mediafile.url,mediafile.file_ending())
+            wp_code = wp_code + '<a title="%s %s" href="%s" target="_blank">%s</a>, ' % (self.title,mediafile.get_file_format_display(),mediafile.url,mediafile.get_file_format_display())
         for mediafile in downloads_audio:
-            wp_code = wp_code + '<a title="%s %s" href="%s" target="_blank">%s</a>, ' % (self.title,mediafile.file_ending(),mediafile.url,mediafile.file_ending())
+            wp_code = wp_code + '<a title="%s %s" href="%s" target="_blank">%s</a>, ' % (self.title,mediafile.get_file_format_display(),mediafile.url,mediafile.get_file_format_display())
         if self.description:
             wp_code = wp_code + '\n\n<!--more-->\n%s' % ((markdown.markdown(self.description)))
         return unicode(wp_code)

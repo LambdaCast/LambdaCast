@@ -11,11 +11,11 @@ class Migration(SchemaMigration):
         db.create_table('portal_mediafile', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('file_format', self.gf('django.db.models.fields.CharField')(max_length=20, null=True)),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=512, blank=True)),
+            ('file_format', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('size', self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True)),
-            ('media_item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem'],null=True, blank=True)),
-            ('mediatype', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
+            ('media_item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['portal.MediaItem'])),
+            ('mediatype', self.gf('django.db.models.fields.CharField')(max_length=20)),
         ))
 
         db.send_create_signal('portal', ['MediaFile'])
@@ -134,13 +134,13 @@ class Migration(SchemaMigration):
         },
         'portal.mediafile': {
             'Meta': {'object_name': 'MediaFile'},
-            'file_format': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),
+            'file_format': ('django.db.models.fields.CharField', [], {'default': "'MP3'", 'max_length': '20'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']"}),
+            'mediatype': ('django.db.models.fields.CharField', [], {'default': "'audio'", 'max_length': '20'}),
             'size': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'media_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['portal.MediaItem']", 'blank': 'True', 'null': 'True'}),
-            'mediatype': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '512'})
         },
         'portal.mediaitem': {
             'Meta': {'object_name': 'MediaItem'},

@@ -1,8 +1,8 @@
-from django.db.models.signals import pre_save, post_delete
 import urllib2
-import models
 import shutil
 import lambdaproject.settings as settings
+
+from portal.media_formats import MEDIA_FORMATS
 
 def get_remote_filesize(sender, instance, **kwargs):
     instance.size = _get_remote_filesize_for_url(instance.url)
@@ -18,9 +18,8 @@ def _get_remote_filesize_for_url(url):
         pass
 
 def set_mediatype(sender, instance, **kwargs):
-    for mediatype in models.FORMATINFO_LIST:
-        if instance.file_format == mediatype[0]:
-            instance.mediatype = mediatype[2]
+    # TODO: remove, redundant information
+    instance.mediatype = MEDIA_FORMATS[instance.file_format]
 
 def purge_encoded_files(sender, instance, **kwargs):
     try:

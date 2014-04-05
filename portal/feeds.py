@@ -2,11 +2,12 @@ from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.utils.feedgenerator import Rss201rev2Feed
+from django.http import Http404
 
 from string import upper
 
 from portal.models import MediaItem, Channel, Collection, Comment, MediaFile
-import models
+from portal.media_formats import MEDIA_FORMATS
 
 import lambdaproject.settings as settings
 
@@ -105,7 +106,7 @@ class MainFeed(Feed):
         mediafiles = item.mediafiles()
         for mediafile in mediafiles:
             if mediafile.file_format == self.fileformat:
-                return mediafile.html_type()
+                return mediafile.mime_type()
         return ""
 
 class LatestMedia(MainFeed):
@@ -115,10 +116,9 @@ class LatestMedia(MainFeed):
 
     def get_object(self, request, fileformat):
         fileformat = upper(fileformat)
-        self.fileformat = ""
-        for list_row in models.FORMATINFO_LIST:
-            if list_row[0] == fileformat:
-                self.fileformat = fileformat
+        if fileformat not in MEDIA_FORMATS:
+            raise Http404
+        self.fileformat = fileformat
 
 class TorrentFeed(Feed):
     title = _(u"TorrentFeed")
@@ -148,10 +148,9 @@ class ChannelFeed(MainFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
     def get_object(self, request, channel_slug, fileformat):
         fileformat = upper(fileformat)
-        self.fileformat = ""
-        for list_row in models.FORMATINFO_LIST:
-            if list_row[0] == fileformat:
-                self.fileformat = fileformat
+        if fileformat not in MEDIA_FORMATS:
+            raise Http404
+        self.fileformat = fileformat
         return get_object_or_404(Channel, slug=channel_slug)
 
     def feed_extra_kwargs(self, obj):
@@ -212,10 +211,9 @@ class ChannelFeedTorrent(Feed):
 class CollectionFeed(MainFeed):
     def get_object(self, request, collection_slug, fileformat):
         fileformat = upper(fileformat)
-        self.fileformat = ""
-        for list_row in models.FORMATINFO_LIST:
-            if list_row[0] == fileformat:
-                self.fileformat = fileformat
+        if fileformat not in MEDIA_FORMATS:
+            raise Http404
+        self.fileformat = fileformat
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
