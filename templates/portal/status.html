@@ -31,7 +31,7 @@
 						{% for task_list in running_tasks %}
 							{% for task in task_list %}
 								{% if task.object_id == mediaitem.pk|stringformat:"s" %}
-									<li><a href="/admin/djangotasks/task/{{ task.id }}">{{ task.pid }}</a></li>
+									<li><a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a></li>
 									<ul>
 										<li>{{ task.status }}</li>
 										{% if task.method == "encode_media" %}
