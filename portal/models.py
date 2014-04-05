@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_delete
-from django.core.exceptions import ValidationError
 
 from autoslug import AutoSlugField
 from taggit.managers import TaggableManager
@@ -353,7 +352,7 @@ class Submittal(models.Model):
 def getLength(filename):
     ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
     process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout = process.communicate()
+    stdout, _ = process.communicate()
     matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
