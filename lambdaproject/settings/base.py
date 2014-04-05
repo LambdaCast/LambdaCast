@@ -189,7 +189,7 @@ LOGIN_URL = '/login/'
 # ehemalig "portal/appsettings.py"
 ENCODING_OUTPUT_DIR = MEDIA_ROOT + '/encoded/'
 # How can we reach this files (public access is needed)
-ENCODING_VIDEO_BASE_URL = DOMAIN + '/media/encoded/'
+ENCODED_BASE_URL = DOMAIN + '/media/encoded/'
 
 THUMBNAILS_DIR = MEDIA_ROOT + '/thumbnails/'
 

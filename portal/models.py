@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models.signals import pre_save, post_delete
 from django.contrib.auth.models import User
 
+import djangotasks
+
 from autoslug import AutoSlugField
 from taggit.managers import TaggableManager
 
@@ -20,6 +22,7 @@ import subprocess
 import decimal
 import os
 import re
+import time
 
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3
@@ -41,6 +44,9 @@ class MediaFile(models.Model):
 
     def mime_type(self):
         return MEDIA_FORMATS[self.file_format].mime_type
+
+    def encode_media(self):
+        self.save()
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -130,9 +136,9 @@ class MediaItem(models.Model):
         logfile = outputdir + 'encoding_opus_log.txt'
         outfile_opus = outputdir + self.slug + '.opus'
 
-        mp3_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
-        ogg_url = settings.ENCODING_VIDEO_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
-        opus_url = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + self.slug + '.opus'
+        mp3_url = settings.ENCODED_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
+        ogg_url = settings.ENCODED_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
+        opus_url = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '.opus'
 
         mediafile_mp3 = MediaFile.objects.create(title=self.slug+" mp3",url=mp3_url,file_format="MP3",media_item=self)
         mediafile_ogg = MediaFile.objects.create(title=self.slug+" ogg",url=ogg_url,file_format="OGG",media_item=self)
@@ -172,9 +178,31 @@ class MediaItem(models.Model):
         else:
             raise StandardError(_(u"Encoding OPUS Failed %s") % outcode.poll())
 
+        self.published = self.autoPublish
+        self.save()
+
+
+    def get_cover(self):
+        ''' get the covers from the original file '''
+        original_path = self.originalFile.path
+
+        outputdir = settings.ENCODING_OUTPUT_DIR + self.slug + '/'
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+
+        # try to get a video thumbnail
+        outcode = subprocess.Popen(['ffmpeg -i '+ original_path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
+
+        while outcode.poll() == None:
+            time.sleep(1);
+
+        if outcode.poll() == 0:
+            # safe if successful, else ignore it
+            self.videoThumbURL = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '.jpg'
+
         # Get cover of mp3-file
-        if path.endswith('.mp3') and self.audioThumbURL == "":
-            audio_mp3 = MP3(path, ID3=ID3)
+        if original_path.endswith('.mp3') and not self.audioThumbURL:
+            audio_mp3 = MP3(original_path, ID3=ID3)
             try: 
                 apic = audio_mp3.tags.getall('APIC')
                 if apic:
@@ -188,18 +216,12 @@ class MediaItem(models.Model):
                     art_mp3 = open(outputdir + filename, 'w')
                     art_mp3.write(cover_data)
                     art_mp3.close()
-                    self.audioThumbURL = settings.ENCODING_VIDEO_BASE_URL + self.slug + '/' + filename
+                    self.audioThumbURL = settings.ENCODED_BASE_URL + self.slug + '/' + filename
             except:
                 pass
 
-        self.encodingDone = True
-        self.torrentDone = settings.USE_BITTORRENT
-        if settings.USE_BITTORRENT:
-            self.torrentURL = settings.BITTORRENT_FILES_BASE_URL + self.slug + '.torrent'
-            
-        self.published = self.autoPublish
         self.save()
-        
+
     def create_bittorrent(self):
         ''' This is where the bittorrent files are created and transmission is controlled'''
         flag = Event()
@@ -317,3 +339,7 @@ def getLength(filename):
 pre_save.connect(set_mediatype, sender=MediaFile)
 pre_save.connect(get_remote_filesize, sender=MediaFile)
 post_delete.connect(purge_encoded_files, sender=MediaItem)
+
+djangotasks.register_task(MediaItem.encode_media, "Encode the file using ffmpeg")
+djangotasks.register_task(MediaItem.get_cover, "Get the cover from the original file")
+djangotasks.register_task(MediaItem.create_bittorrent, "Create Bittorrent file for item and serve it")

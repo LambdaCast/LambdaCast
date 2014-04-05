@@ -239,22 +239,20 @@ def submit(request):
     if request.method == 'POST':
         form = MediaItemForm(request.POST, request.FILES or None)
         if form.is_valid():
-            itemform = form.save()
-            itemform.title = itemform.title
-            if not form.data['thumbURL'] == '':
-                itemform.audioThumbURL = form.data['thumbURL']
-                itemform.videoThumbURL = form.data['thumbURL']
-            if itemform.originalFile:
-                itemform.save()
-                djangotasks.register_task(itemform.encode_media, "Encode the files using ffmpeg") 
-                encoding_task = djangotasks.task_for_object(itemform.encode_media)
+            mediaitem = form.save()
+            if form.data['thumbURL']:
+                mediaitem.audioThumbURL = form.data['thumbURL']
+                mediaitem.videoThumbURL = form.data['thumbURL']
+            mediaitem.user = request.user
+            mediaitem.save()
+            if mediaitem.originalFile:
+                encoding_task = djangotasks.task_for_object(mediaitem.encode_media)
                 djangotasks.run_task(encoding_task)
+                cover_task = djangotasks.task_for_object(mediaitem.get_cover)
+                djangotasks.run_task(cover_task)
             if settings.USE_BITTORRENT:
-                djangotasks.register_task(itemform.create_bittorrent, "Create Bittorrent file for item and serve it")
-                torrent_task = djangotasks.task_for_object(itemform.create_bittorrent)
+                torrent_task = djangotasks.task_for_object(mediaitem.create_bittorrent)
                 djangotasks.run_task(torrent_task)
-            itemform.user = request.user
-            itemform.save()
             return redirect(index)
 
         return render_to_response('portal/submit.html',
