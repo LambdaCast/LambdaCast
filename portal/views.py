@@ -179,7 +179,7 @@ def submittal(request, subm_id):
             cmodel.user = request.user
             cmodel.save()
             form.create_mediafiles(cmodel)
-            return redirect(list)
+            return redirect(index)
         else:
             return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
     else:
@@ -255,7 +255,7 @@ def submit(request):
                 djangotasks.run_task(torrent_task)
             itemform.user = request.user
             itemform.save()
-            return redirect(list)
+            return redirect(index)
 
         return render_to_response('portal/submit.html',
                                 {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
