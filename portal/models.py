@@ -64,7 +64,6 @@ class MediaFile(models.Model):
         if outcode.poll() != 0:
             raise StandardError("Encoding " + media_format.text + " Failed")
 
-        self.size = os.path.getsize(outfile)
         self.save()
         self.media_item.finish_encoding()
 
