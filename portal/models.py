@@ -19,7 +19,6 @@ from portal.media_formats import FILE_FORMATS, MEDIA_TYPES, MEDIA_FORMATS
 
 import subprocess
 import decimal
-import os
 import re
 import time
 
@@ -193,6 +192,16 @@ class MediaItem(models.Model):
         self.published = self.autoPublish
         self.save()
 
+    def get_and_save_duration(self):
+        ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
+        filepath = self.originalFile.path if self.originalFile else (self.mediafiles()[0].url if self.mediafiles() else None)
+        if filepath:
+            process = subprocess.Popen(['ffmpeg',  '-i', filepath], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            stdout, _ = process.communicate()
+            matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
+            self.duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
+            self.save()
+
     def get_license_link(self):
         return LICENSE_URLS[self.license]
 
@@ -281,14 +290,6 @@ class Submittal(models.Model):
     media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
     def __unicode__(self):
         return self.title
-
-def getLength(filename):
-    ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
-    process = subprocess.Popen(['ffmpeg',  '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout, _ = process.communicate()
-    matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
-    duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
-    return duration
 
 pre_save.connect(get_remote_filesize, sender=MediaFile)
 post_delete.connect(purge_encoded_files, sender=MediaItem)

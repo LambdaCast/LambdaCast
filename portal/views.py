@@ -177,10 +177,11 @@ def submittal(request, subm_id):
     if request.method == 'POST':
         form = SubmittalForm(request.POST)
         if form.is_valid():
-            cmodel = form.save()
-            cmodel.user = request.user
-            cmodel.save()
-            form.create_mediafiles(cmodel)
+            mediaitem = form.save()
+            mediaitem.user = request.user
+            mediaitem.save()
+            form.create_mediafiles(mediaitem)
+            mediaitem.get_and_save_duration()
             return redirect(index)
         else:
             return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
@@ -247,6 +248,7 @@ def submit(request):
                 media_item.videoThumbURL = form.cleaned_data['thumbURL']
             media_item.user = request.user
             media_item.save()
+            media_item.get_and_save_duration()
 
             outputdir = settings.ENCODING_OUTPUT_DIR + media_item.slug
             if not os.path.exists(outputdir):
