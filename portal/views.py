@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from pages.models import Page
 from portal.models import MediaItem, Comment, Channel, Collection, Submittal, MediaFile
 from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
+from portal.media_formats import MEDIA_FORMATS
 
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -17,6 +18,7 @@ import lambdaproject.settings as settings
 import djangotasks
 
 from datetime import datetime
+import os
 import re
 from operator import attrgetter
 import itertools
@@ -239,19 +241,31 @@ def submit(request):
     if request.method == 'POST':
         form = MediaItemForm(request.POST, request.FILES or None)
         if form.is_valid():
-            mediaitem = form.save()
-            if form.data['thumbURL']:
-                mediaitem.audioThumbURL = form.data['thumbURL']
-                mediaitem.videoThumbURL = form.data['thumbURL']
-            mediaitem.user = request.user
-            mediaitem.save()
-            if mediaitem.originalFile:
-                encoding_task = djangotasks.task_for_object(mediaitem.encode_media)
+            media_item = form.save()
+            if form.cleaned_data['thumbURL']:
+                media_item.audioThumbURL = form.cleaned_data['thumbURL']
+                media_item.videoThumbURL = form.cleaned_data['thumbURL']
+            media_item.user = request.user
+            media_item.save()
+
+            outputdir = settings.ENCODING_OUTPUT_DIR + media_item.slug
+            if not os.path.exists(outputdir):
+                os.makedirs(outputdir)
+
+            for target_format in form.cleaned_data['fileFormats']:
+                media_format = MEDIA_FORMATS[target_format]
+                url = settings.ENCODED_BASE_URL + media_item.slug + '/' + media_item.slug + media_format.extension
+                media_file = MediaFile.objects.create(title=media_item.title + " " + media_format.text,
+                                                      url=url, file_format=media_format.format_key,
+                                                      media_item=media_item, mediatype=media_format.mediatype)
+                encoding_task = djangotasks.task_for_object(media_file.encode_media)
                 djangotasks.run_task(encoding_task)
-                cover_task = djangotasks.task_for_object(mediaitem.get_cover)
-                djangotasks.run_task(cover_task)
+
+            cover_task = djangotasks.task_for_object(media_item.get_cover)
+            djangotasks.run_task(cover_task)
+
             if settings.USE_BITTORRENT:
-                torrent_task = djangotasks.task_for_object(mediaitem.create_bittorrent)
+                torrent_task = djangotasks.task_for_object(media_item.create_bittorrent)
                 djangotasks.run_task(torrent_task)
             return redirect(index)
 

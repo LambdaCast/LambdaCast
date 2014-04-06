@@ -12,9 +12,8 @@ from taggit.managers import TaggableManager
 import lambdaproject.settings as settings
 
 from pytranscode.ffmpeg import ffmpeg
-from portal.ffmpeg_presets import MP3_AUDIO, OGG_AUDIO, NULL_VIDEO
 
-from portal.signals import get_remote_filesize, set_mediatype, purge_encoded_files
+from portal.signals import get_remote_filesize, purge_encoded_files
 from portal.licenses import LICENSE_CHOICES, LICENSE_URLS
 from portal.media_formats import FILE_FORMATS, MEDIA_TYPES, MEDIA_FORMATS
 
@@ -46,7 +45,28 @@ class MediaFile(models.Model):
         return MEDIA_FORMATS[self.file_format].mime_type
 
     def encode_media(self):
-        self.save()
+        ''' This is used to tell ffmpeg what to do '''
+        media_format = MEDIA_FORMATS[self.file_format]
+
+        path = self.media_item.originalFile.path
+        outputdir = settings.ENCODING_OUTPUT_DIR + self.media_item.slug + '/'
+
+        # Create the command line (MP3)
+        logfile = outputdir + 'encoding_' + media_format.format_key + '_log.txt'
+        outfile = outputdir + self.media_item.slug + media_format.extension
+        cl = ffmpeg(path, outfile, logfile, media_format.video_options , media_format.audio_options).build_command_line()
+        print cl
+
+        outcode = subprocess.Popen(cl, shell=True)
+
+        while outcode.poll() == None:
+            time.sleep(1)
+
+        if outcode.poll() == 0:
+            self.size = os.path.getsize(outfile)
+            self.save()
+        else:
+            raise StandardError("Encoding " + media_format.text + " Failed")
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -113,74 +133,6 @@ class MediaItem(models.Model):
         if self.description:
             wp_code = wp_code + '\n\n<!--more-->\n%s' % ((markdown.markdown(self.description)))
         return unicode(wp_code)
-
-    def encode_media(self):
-        ''' This is used to tell ffmpeg what to do '''
-        path = self.originalFile.path
-        outputdir = settings.ENCODING_OUTPUT_DIR + self.slug
-        if not os.path.exists(outputdir):
-            os.makedirs(outputdir)
-        outputdir = outputdir + '/'
-
-        # Create the command line (MP3)
-        logfile = outputdir + 'encoding_mp3_log.txt'
-        outfile_mp3 = outputdir + self.slug + '.mp3'
-        cl_mp3 = ffmpeg(path, outfile_mp3, logfile, NULL_VIDEO , MP3_AUDIO).build_command_line()
-
-        # Create the command line (OGG)
-        logfile = outputdir + 'encoding_ogg_log.txt'
-        outfile_ogg = outputdir + self.slug + '.ogg'
-        cl_ogg = ffmpeg(path, outfile_ogg, logfile, NULL_VIDEO, OGG_AUDIO).build_command_line()
-
-        # Create the command line (OPUS)
-        logfile = outputdir + 'encoding_opus_log.txt'
-        outfile_opus = outputdir + self.slug + '.opus'
-
-        mp3_url = settings.ENCODED_BASE_URL + self.slug +  '/' + self.slug + '.mp3'
-        ogg_url = settings.ENCODED_BASE_URL + self.slug +  '/' + self.slug + '.ogg'
-        opus_url = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '.opus'
-
-        mediafile_mp3 = MediaFile.objects.create(title=self.slug+" mp3",url=mp3_url,file_format="MP3",media_item=self)
-        mediafile_ogg = MediaFile.objects.create(title=self.slug+" ogg",url=ogg_url,file_format="OGG",media_item=self)
-        mediafile_opus = MediaFile.objects.create(title=self.slug+" opus",url=opus_url,file_format="OPUS",media_item=self)
-
-        outcode = subprocess.Popen(cl_mp3, shell=True)
-
-        while outcode.poll() == None:
-            pass
-
-        if outcode.poll() == 0:
-            mediafile_mp3.size = os.path.getsize(outfile_mp3)
-            mediafile_mp3.save()
-            self.duration = getLength(outfile_mp3)
-        else:
-            raise StandardError(_(u"Encoding MP3 Failed"))
-
-        outcode = subprocess.Popen(cl_ogg, shell=True)
-
-        while outcode.poll() == None:
-            pass
-
-        if outcode.poll() == 0:
-            mediafile_ogg.size = os.path.getsize(outfile_ogg)
-            mediafile_ogg.save()
-        else:
-            raise StandardError(_(u"Encoding OGG Failed"))
-
-        outcode = subprocess.Popen(['ffmpeg -i "'+ path + '" -acodec libopus -ab 128k -ar 48000 -ac 2 ' + outfile_opus + ' 2> ' + logfile],shell=True)
-
-        while outcode.poll() == None:
-            pass
-
-        if outcode.poll() == 0:
-            mediafile_opus.size = os.path.getsize(outfile_opus)
-            mediafile_opus.save()
-        else:
-            raise StandardError(_(u"Encoding OPUS Failed %s") % outcode.poll())
-
-        self.published = self.autoPublish
-        self.save()
-
 
     def get_cover(self):
         ''' get the covers from the original file '''
@@ -336,10 +288,9 @@ def getLength(filename):
     duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
     return duration
 
-pre_save.connect(set_mediatype, sender=MediaFile)
 pre_save.connect(get_remote_filesize, sender=MediaFile)
 post_delete.connect(purge_encoded_files, sender=MediaItem)
 
-djangotasks.register_task(MediaItem.encode_media, "Encode the file using ffmpeg")
+djangotasks.register_task(MediaFile.encode_media, "Encode the file using ffmpeg")
 djangotasks.register_task(MediaItem.get_cover, "Get the cover from the original file")
 djangotasks.register_task(MediaItem.create_bittorrent, "Create Bittorrent file for item and serve it")

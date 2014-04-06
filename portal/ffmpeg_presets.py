@@ -42,7 +42,7 @@ OGG_AUDIO =      {'format':'ogg',
 OPUS_AUDIO =     {'format':'ogg',
                   'acodec':'libopus',
                   'rate':'96k',
-                  'freq':'44100',
+                  'freq':'48000',
                   'channels':'2',
                   'disablevideo':'',}
 
