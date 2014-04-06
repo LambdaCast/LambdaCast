@@ -254,6 +254,9 @@ def submit(request):
             if not os.path.exists(outputdir):
                 os.makedirs(outputdir)
 
+            cover_task = djangotasks.task_for_object(media_item.get_and_save_cover)
+            djangotasks.run_task(cover_task)
+
             for target_format in form.cleaned_data['fileFormats']:
                 media_format = MEDIA_FORMATS[target_format]
                 url = settings.ENCODED_BASE_URL + media_item.slug + '/' + media_item.slug + media_format.extension
@@ -262,9 +265,6 @@ def submit(request):
                                                       media_item=media_item, mediatype=media_format.mediatype)
                 encoding_task = djangotasks.task_for_object(media_file.encode_media)
                 djangotasks.run_task(encoding_task)
-
-            cover_task = djangotasks.task_for_object(media_item.get_cover)
-            djangotasks.run_task(cover_task)
 
             if settings.USE_BITTORRENT:
                 torrent_task = djangotasks.task_for_object(media_item.create_bittorrent)

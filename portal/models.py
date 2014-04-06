@@ -16,6 +16,7 @@ from pytranscode.ffmpeg import ffmpeg
 from portal.signals import get_remote_filesize, purge_encoded_files
 from portal.licenses import LICENSE_CHOICES, LICENSE_URLS
 from portal.media_formats import FILE_FORMATS, MEDIA_TYPES, MEDIA_FORMATS
+from portal.model_helpers import *
 
 import subprocess
 import decimal
@@ -141,13 +142,6 @@ class MediaItem(models.Model):
         # try to get a video thumbnail
         outcode = subprocess.Popen(['ffmpeg -i '+ original_path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
 
-        while outcode.poll() == None:
-            time.sleep(1);
-
-        if outcode.poll() == 0:
-            # safe if successful, else ignore it
-            self.videoThumbURL = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '.jpg'
-
         # Get cover of mp3-file
         if original_path.endswith('.mp3') and not self.audioThumbURL:
             audio_mp3 = MP3(original_path, ID3=ID3)
@@ -168,12 +162,23 @@ class MediaItem(models.Model):
             except:
                 pass
 
-        self.save()
+        while outcode.poll() == None:
+            time.sleep(0.1);
+
+        if outcode.poll() == 0:
+            # safe if successful, else ignore it
+            self.videoThumbURL = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '.jpg'
+
+        # TODO: use update_fields after update to django 1.5
+        update(self, audioThumbURL=self.audioThumbURL, videoThumbURL=self.videoThumbURL).save()
 
     def finish_encoding(self):
-        self.encodingDone = bool(self.mediafiles())
-        self.published = self.autoPublish and self.encodingDone
-        self.save()
+        mediaitem = refresh(self)
+        if not mediaitem.published:
+            mediaitem.encodingDone = bool(mediaitem.mediafiles())
+            mediaitem.published = mediaitem.autoPublish and mediaitem.encodingDone
+            # TODO: use update_fields after update to django 1.5
+            mediaitem.save()
 
     def create_bittorrent(self):
         ''' This is where the bittorrent files are created and transmission is controlled'''
