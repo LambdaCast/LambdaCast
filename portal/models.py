@@ -133,7 +133,7 @@ class MediaItem(models.Model):
             wp_code = wp_code + '\n\n<!--more-->\n%s' % ((markdown.markdown(self.description)))
         return unicode(wp_code)
 
-    def get_cover(self):
+    def get_and_save_cover(self):
         ''' get the covers from the original file '''
         original_path = self.originalFile.path
 
@@ -300,5 +300,5 @@ pre_save.connect(get_remote_filesize, sender=MediaFile)
 post_delete.connect(purge_encoded_files, sender=MediaItem)
 
 djangotasks.register_task(MediaFile.encode_media, "Encode the file using ffmpeg")
-djangotasks.register_task(MediaItem.get_cover, "Get the cover from the original file")
+djangotasks.register_task(MediaItem.get_and_save_cover, "Get the cover from the original file")
 djangotasks.register_task(MediaItem.create_bittorrent, "Create Bittorrent file for item and serve it")
