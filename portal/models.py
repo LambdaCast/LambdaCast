@@ -197,7 +197,7 @@ class MediaItem(models.Model):
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''
     name = models.CharField(_(u"Name"),max_length=30)
-    ip = models.IPAddressField("IP",blank=True,null=True,help_text=_(u"The IP of the one who posted the comment"))
+    ip = models.GenericIPAddressField("IP",blank=True,null=True,help_text=_(u"The IP of the one who posted the comment"))
     moderated = models.BooleanField(verbose_name=_(u"Moderated"))
     timecode = models.DecimalField(null=True,max_digits=10, decimal_places=2,blank=True,verbose_name=_(u"Timecode"))
     comment = models.TextField(_(u"Comment"),max_length=1000)

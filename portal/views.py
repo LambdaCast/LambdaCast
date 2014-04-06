@@ -68,10 +68,10 @@ def detail(request, slug):
     downloads_video = MediaFile.objects.filter(media_item=mediaitem, mediatype='video')
 
     if request.method == 'POST':
-        comment = Comment(item=MediaItem.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
+        comment = Comment(item=mediaitem,ip=request.META["REMOTE_ADDR"])
         emptyform = CommentForm()
         form = CommentForm(request.POST, instance=comment)
-        comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
+        comments = mediaitem.comment_set.filter(moderated=True).order_by('-created')
 
         if form.is_valid():
             comment = form.save(commit=False)
@@ -107,7 +107,7 @@ def detail(request, slug):
                                                                   }, context_instance=RequestContext(request))
     else:
         form = CommentForm()
-        comments = Comment.objects.filter(moderated=True, item=mediaitem).order_by('-created')
+        comments = mediaitem.comment_set.filter(moderated=True).order_by('-created')
         return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem,
                                                                'page_list':get_page_list,
                                                                'submittal_list':get_submittal_list(request),
