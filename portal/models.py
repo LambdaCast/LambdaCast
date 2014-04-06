@@ -104,8 +104,8 @@ class MediaItem(models.Model):
     def mediafiles(self):
         return self.mediafile_set.exclude(size__isnull=True)
     
-    def comments_number(self):
-        return Comment.objects.filter(moderated=True, item=self.pk).count()  
+    def comments_count(self):
+        return self.comment_set.filter(moderated=True).count()
 
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
@@ -209,6 +209,21 @@ class MediaItem(models.Model):
 
     def get_license_link(self):
         return LICENSE_URLS[self.license]
+
+    audio_files = None
+    def get_audio_files(self):
+        if not self.audio_files: self.audio_files = self.mediafiles().filter(mediatype='audio')
+        return self.audio_files
+
+    video_files = None
+    def get_video_files(self):
+        if not self.video_files: self.video_files = self.mediafiles().filter(mediatype='video')
+        return self.video_files
+
+    comments = None
+    def get_comments(self):
+        if not self.comments: self.comments = self.comment_set.filter(moderated=True).order_by('-created')
+        return self.comments
 
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''

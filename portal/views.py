@@ -64,14 +64,11 @@ def channel_list(request,slug):
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
     mediaitem = get_object_or_404(MediaItem, slug=slug)
-    downloads_audio = MediaFile.objects.filter(media_item=mediaitem, mediatype='audio')
-    downloads_video = MediaFile.objects.filter(media_item=mediaitem, mediatype='video')
 
     if request.method == 'POST':
         comment = Comment(item=mediaitem,ip=request.META["REMOTE_ADDR"])
         emptyform = CommentForm()
         form = CommentForm(request.POST, instance=comment)
-        comments = mediaitem.comment_set.filter(moderated=True).order_by('-created')
 
         if form.is_valid():
             comment = form.save(commit=False)
@@ -90,32 +87,22 @@ def detail(request, slug):
             return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
                                                                    'mediaitem': mediaitem,
                                                                    'comment_form': emptyform,
-                                                                   'comments': comments,
                                                                    'message': message,
                                                                    'settings': settings,
-                                                                   'downloads_video': downloads_video,
-                                                                   'downloads_audio': downloads_audio,
                                                                   }, context_instance=RequestContext(request))
         else:
             return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
                                                                    'mediaitem': mediaitem,
                                                                    'comment_form': form,
-                                                                   'comments': comments,
                                                                    'settings': settings,
-                                                                   'downloads_video': downloads_video,
-                                                                   'downloads_audio': downloads_audio,
                                                                   }, context_instance=RequestContext(request))
     else:
         form = CommentForm()
-        comments = mediaitem.comment_set.filter(moderated=True).order_by('-created')
         return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem,
                                                                'page_list':get_page_list,
                                                                'submittal_list':get_submittal_list(request),
                                                                'comment_form': form,
-                                                               'comments': comments,
                                                                'settings': settings,
-                                                               'downloads_video': downloads_video,
-                                                               'downloads_audio': downloads_audio,
                                                               },context_instance=RequestContext(request))
 
 def iframe(request, slug):

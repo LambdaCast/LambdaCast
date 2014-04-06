@@ -10,8 +10,8 @@
 		<meta property="og:image" content="{{ mediaitem.videoThumbURL }}"></meta>
 		{% elif mediaitem.audioThumbURL %}
 		<meta property="og:image" content="{{ mediaitem.audioThumbURL }}"></meta>
-                {% elif mediaitem.channel.channelThumbURL %}
-                <meta property="og:image" content="{{ mediaitem.channel.channelThumbURL }}"></meta>
+		{% elif mediaitem.channel.channelThumbURL %}
+		<meta property="og:image" content="{{ mediaitem.channel.channelThumbURL }}"></meta>
 		{% else %}
 		<meta property="og:image" content="{{ settings.LOGO_URL }}"></meta>
 		{% endif %}
@@ -40,26 +40,26 @@
 	<div class="span8">
 		<div class="row">
 			<div class="span8">
-				{% if downloads_video and downloads_audio %}
+				{% if mediaitem.get_video_files and mediaitem.get_audio_files %}
 				<ul class="nav nav-tabs">
 					<li class="active" id="video_tab"><a>{% trans "Video" %}</a></li>
 					<li id="audio_tab"><a>{% trans "Audio" %}</a></li>
 				</ul>
 				{% endif %}
 				<div id="player_container">
-					{% if downloads_video %}
+					{% if mediaitem.get_video_files %}
 					<div id="video_player">
 						<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-						{% for video in downloads_video %}
+						{% for video in mediaitem.get_video_files %}
 							<source src="{{ video.url }}" width="640" height="360" type="{{ video.mime_type }}" />
 						{% endfor %}
 						</video>
 					</div>
 					{% endif %}
-					{% if downloads_audio %}
-					<div id="audio_player" {% if downloads_video and downloads_audio %}style="display:none;"{% endif %}>
+					{% if mediaitem.get_audio_files %}
+					<div id="audio_player" {% if mediaitem.get_video_files and mediaitem.get_audio_files %}style="display:none;"{% endif %}>
 						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }}{% elif mediaitem.channel.channelThumbURL %}{{ mediaitem.channel.channelThumbURL }}{% else %}{{ STATIC_URL }}audio_cover.png{% endif %}" controls>
-						{% for audio in downloads_audio %}
+						{% for audio in mediaitem.get_audio_files %}
 							<source src="{{ audio.url }}" width="640" height="360" type="{{ audio.mime_type }}" />
 						{% endfor %}
 						</audio>
@@ -81,8 +81,8 @@
 				</div>
 				{% endif %}
 				<h2>{% trans "Comments" %}</h2>
-				{% if comments %}
-				{% for comment in comments %}
+				{% if mediaitem.get_comments %}
+				{% for comment in mediaitem.get_comments %}
 				<div class="row">
 					<div class="span8">
 						<div class="well">
@@ -175,25 +175,25 @@
 			<dd><a href="{{ mediaitem.torrentURL }}">{% trans "Download Original" %}</a></dd>
 			{% endif %}
 			<dt>{% trans "Download" %}:</dt>
-			{% if downloads_audio %}
-                        {% for audio in downloads_audio %}
-			<dd>
-				<a href="{{ audio.url }}" download="{{mediaitem.slug}}{{ audio.get_file_format_display }}">
-					<i class="icon-film"></i>
-					{% trans "Download" %} {{ audio.get_file_format_display }} ({{ audio.size|in_mb }} MB)
-				</a>
-			</dd>
-			{% endfor %}
+			{% if mediaitem.get_video_files %}
+				{% for video in mediaitem.get_video_files %}
+					<dd>
+						<a href="{{ video.url }}" download="{{mediaitem.slug}}{{ video.get_file_format_display }}">
+							<i class="icon-film"></i>
+							{% trans "Download" %} {{ video.get_file_format_display }} ({{ video.size|in_mb }} MB)
+						</a>
+					</dd>
+				{% endfor %}
 			{% endif %}
-			{% if downloads_video %}
-			{% for video in downloads_video %}
-			<dd>
-				<a href="{{ video.url }}" download="{{mediaitem.slug}}{{ video.get_file_format_display }}">
-					<i class="icon-film"></i>
-					{% trans "Download" %} {{ video.get_file_format_display }} ({{ video.size|in_mb }} MB)
-				</a>
-			</dd>
-			{% endfor %}
+			{% if mediaitem.get_audio_files %}
+				{% for audio in mediaitem.get_audio_files %}
+					<dd>
+						<a href="{{ audio.url }}" download="{{mediaitem.slug}}{{ audio.get_file_format_display }}">
+							<i class="icon-headphones"></i>
+							{% trans "Download" %} {{ audio.get_file_format_display }} ({{ audio.size|in_mb }} MB)
+						</a>
+					</dd>
+				{% endfor %}
 			{% endif %}
 		</div>
 		{% if mediaitem.tags.all %}
@@ -224,7 +224,7 @@ $(document).ready(function() {
 	var timeListener = function(value) {	
 		$('#id_timecode').val( value.toFixed(2) )
 	}
-        {% if downloads_video %}
+	{% if mediaitem.get_video_files %}
 	var video_player = projekktor('#player_video', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
@@ -233,9 +233,9 @@ $(document).ready(function() {
 		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 		streamType: 'http',
 	});
-        video_player.addListener('time', timeListener);
-        {% endif %}
-        {% if downloads_audio %}
+	video_player.addListener('time', timeListener);
+	{% endif %}
+	{% if mediaitem.get_audio_files %}
 	var audio_player = projekktor('#player_audio', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
@@ -245,8 +245,7 @@ $(document).ready(function() {
 		streamType: 'http',
 	});
 	audio_player.addListener('time', timeListener);
-        {% endif %}
-
+	{% endif %}
 
 	$('.timecode').click(function(){
 		if (typeof(video_player) !== 'undefined') { video_player.setPlayhead(parseFloat(this.text)); }

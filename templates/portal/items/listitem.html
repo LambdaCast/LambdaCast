@@ -7,11 +7,11 @@
 		{% if mediaitem.getClassName == 'MediaItem' %}
 			<div class="video-image-container"><a href="/item/{{ mediaitem.slug }}/">
 				{% if mediaitem.videoThumbURL %}
-			      		<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
+					<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
 				{% elif mediaitem.audioThumbURL %}
 					<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
-                                {% elif mediaitem.channel.channelThumbURL %}
-                                        <img src="{{ mediaitem.channel.channelThumbURL }}" alt="videoThumb" />
+				{% elif mediaitem.channel.channelThumbURL %}
+					<img src="{{ mediaitem.channel.channelThumbURL }}" alt="videoThumb" />
 				{% else %}
 					<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
 				{% endif %}
@@ -21,7 +21,7 @@
 			{% endif %}
 			<a href="/item/{{ mediaitem.slug }}/"><h4>{{ mediaitem.title }}</h4></a>
 			<span><strong>{% trans "Description" %}: </strong>{{ mediaitem.markdown_free|truncatechars:150 }}</span><br/>
-			<span><strong></strong><i class="icon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %} / <strong></strong><i class="icon-time"></i> {{ mediaitem.duration|secondstohms }}{% endif %} / <strong></strong><i class="icon-comment"></i> {{ mediaitem.comments_number }}</span>
+			<span><strong></strong><i class="icon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %} / <strong></strong><i class="icon-time"></i> {{ mediaitem.duration|secondstohms }}{% endif %} / <strong></strong><i class="icon-comment"></i> {{ mediaitem.comments_count }}</span>
 		{% else %}
 			<div class="video-image-container"><a href="/collection/{{ mediaitem.slug }}/"><img src="{{ STATIC_URL }}default-playlist.png"/></a></div>
 			{% if user.is_authenticated %}
