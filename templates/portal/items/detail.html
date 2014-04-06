@@ -51,7 +51,7 @@
 					<div id="video_player">
 						<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
 						{% for video in mediaitem.get_video_files %}
-							<source src="{{ video.url }}" width="640" height="360" type="{{ video.mime_type }}" />
+							<source src="{{ video.url }}" type="{{ video.mime_type }}" />
 						{% endfor %}
 						</video>
 					</div>
@@ -60,7 +60,7 @@
 					<div id="audio_player" {% if mediaitem.get_video_files and mediaitem.get_audio_files %}style="display:none;"{% endif %}>
 						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }}{% elif mediaitem.channel.channelThumbURL %}{{ mediaitem.channel.channelThumbURL }}{% else %}{{ STATIC_URL }}audio_cover.png{% endif %}" controls>
 						{% for audio in mediaitem.get_audio_files %}
-							<source src="{{ audio.url }}" width="640" height="360" type="{{ audio.mime_type }}" />
+							<source src="{{ audio.url }}" type="{{ audio.mime_type }}" />
 						{% endfor %}
 						</audio>
 					</div>
