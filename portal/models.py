@@ -55,18 +55,18 @@ class MediaFile(models.Model):
         logfile = outputdir + 'encoding_' + media_format.format_key + '_log.txt'
         outfile = outputdir + self.media_item.slug + media_format.extension
         cl = ffmpeg(path, outfile, logfile, media_format.video_options , media_format.audio_options).build_command_line()
-        print cl
 
         outcode = subprocess.Popen(cl, shell=True)
 
         while outcode.poll() == None:
             time.sleep(1)
 
-        if outcode.poll() == 0:
-            self.size = os.path.getsize(outfile)
-            self.save()
-        else:
+        if outcode.poll() != 0:
             raise StandardError("Encoding " + media_format.text + " Failed")
+
+        self.size = os.path.getsize(outfile)
+        self.save()
+        self.media_item.finish_encoding()
 
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
@@ -103,7 +103,7 @@ class MediaItem(models.Model):
         return self.__class__.__name__
 
     def mediafiles(self):
-        return MediaFile.objects.filter(media_item=self)
+        return self.mediafile_set.exclude(size__isnull=True)
     
     def comments_number(self):
         return Comment.objects.filter(moderated=True, item=self.pk).count()  
@@ -139,8 +139,6 @@ class MediaItem(models.Model):
         original_path = self.originalFile.path
 
         outputdir = settings.ENCODING_OUTPUT_DIR + self.slug + '/'
-        if not os.path.exists(outputdir):
-            os.makedirs(outputdir)
 
         # try to get a video thumbnail
         outcode = subprocess.Popen(['ffmpeg -i '+ original_path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
@@ -172,6 +170,11 @@ class MediaItem(models.Model):
             except:
                 pass
 
+        self.save()
+
+    def finish_encoding(self):
+        self.encodingDone = True if self.mediafiles() else False
+        self.published = self.autoPublish and self.encodingDone
         self.save()
 
     def create_bittorrent(self):
