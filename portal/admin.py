@@ -69,5 +69,10 @@ admin.site.register(Submittal,SubmittalAdmin)
 
 class MediaFileAdmin(admin.ModelAdmin):
     list_display = ['title','url','size','file_format','media_item']
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'url')
+        }),
+    )
 
 admin.site.register(MediaFile,MediaFileAdmin)
