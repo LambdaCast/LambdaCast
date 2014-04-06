@@ -174,7 +174,6 @@ class MediaItem(models.Model):
     def finish_encoding(self):
         self.encodingDone = bool(self.mediafiles())
         self.published = self.autoPublish and self.encodingDone
-        print self.encodingDone
         self.save()
 
     def create_bittorrent(self):
