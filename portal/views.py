@@ -22,6 +22,7 @@ import os
 import re
 from operator import attrgetter
 import itertools
+from sets import Set
 
 def index(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available media items and
@@ -269,16 +270,19 @@ def submit(request):
 
 @login_required
 def status(request):
-    if settings.USE_BITTORRENT:
-        processing_items = MediaItem.objects.filter(Q(encodingDone=False) | Q(torrentDone=False))
-    else:
-        processing_items = MediaItem.objects.filter(encodingDone=False)
-    running_tasks = []
-    for mediaitem in processing_items:
-        tasks = djangotasks.models.Task.objects.filter(model="portal.mediaitem", object_id=mediaitem.pk)
-        running_tasks.append(tasks)
+    tasks_mediaitem = djangotasks.models.Task.objects.filter(model="portal.mediaitem").exclude(status="successful")
+    tasks_mediafile = djangotasks.models.Task.objects.filter(model="portal.mediafile").exclude(status="successful")
+
+    mediaitem_ids = Set(map((lambda mediaitem: mediaitem.object_id), tasks_mediaitem))
+    for mediafile in tasks_mediafile:
+        try:
+            mediaitem_ids.add(MediaFile.objects.get(pk=mediafile.object_id).media_item.pk)
+        except MediaFile.DoesNotExist:
+            pass
+
+    mediaitems = MediaItem.objects.filter(pk__in=mediaitem_ids)
     return render_to_response('portal/status.html',
-                                    {'processing_items': processing_items, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'running_tasks': running_tasks, 'settings': settings},
+                                    {'mediaitems': mediaitems, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
                                     context_instance=RequestContext(request))
 
 def normalize_query(query_string,

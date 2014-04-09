@@ -15,44 +15,50 @@
 				<th>Title</th>
 				<th>Date</th>
 				<th>Encoding Done</th>
+				{% if settings.USE_BITTORRENT %}
 				<th>Torrent Created</th>
+				{% endif %}
 				<th>Auto Publish</th>
 				<th>Tasks</th>
 			</thead>
 			<tbody>
-				{% for mediaitem in processing_items %}
+				{% for mediaitem in mediaitems %}
 					<tr>
 						<th><a href="/item/{{ mediaitem.slug }}">{{ mediaitem.title }}</a></th>
 						<td>{{ mediaitem.date }}</td>
 						<td>{% if mediaitem.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
-						<td>{% if mediaitem.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}
+						{% if settings.USE_BITTORRENT %}
+						<td>{% if mediaitem.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						{% endif %}
 						<td>{% if mediaitem.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
 						<td>
-						{% for task_list in running_tasks %}
-							{% for task in task_list %}
-								{% if task.object_id == mediaitem.pk|stringformat:"s" %}
-									<li><a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a></li>
-									<ul>
-										<li>{{ task.status }}</li>
-										{% if task.method == "encode_media" %}
-											{% if mediaitem.kind == 0 or mediaitem.kind == 2 %}
-											<li>
-												<a id="logMP4_{{ mediaitem.pk }}">MP4 Log</a>,  													<a id="logWEBM_{{ mediaitem.pk }}">WEBM Log</a>,
-											{% endif %}
-											{% if mediaitem.kind == 1 or mediaitem.kind == 2 %}
-												<a id="logMP3_{{ mediaitem.pk }}">MP3 Log</a>, 
-												<a id="logOGG_{{ mediaitem.pk }}">OGG Log</a>,
-                                                                                                <a id="logOPUS_{{ mediaitem.pk }}">OPUS Log</a>,
-
-											</li>
-											{% endif %}
-										{% endif %}
-									</ul>
-								{% endif %}
+						<ul>
+							{% for task in mediaitem.get_tasks %}
+								<li>
+									{% if task.method == "get_and_save_cover" %}
+										{% trans "Save cover" %}:
+									{% elif task.method == "create_bittorrent" %}
+										{% trans "Create torrent" %}:
+									{% else %}
+										{% trans "Unknown task" %}:
+									{% endif %}
+									<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
+									({{ task.status }})
+								</li>
 							{% endfor %}
-						{% empty %}
-						{% trans "No tasks" %}
-						{% endfor %}
+							{% for mediafile in mediaitem.mediafile_set.all %}
+								<li>
+									{{ mediafile.file_format }}:
+									{% for task in mediafile.get_tasks %}
+										<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
+										({{ task.status }}) |
+									{% empty %}
+										{% trans "No task" %} |
+									{% endfor %}
+									<a href="/media/encoded/{{ mediaitem.slug }}/encoding_{{ mediafile.file_format }}_log.txt" class="show-log">{% trans "Show log" %}</a>
+								</li>
+							{% endfor %}
+						</ul>
 						</td>
 					</tr>
 				{% empty %}
@@ -69,7 +75,7 @@
 			<h3>{% trans "Log" %}</h3>
 		</div>
 		<div class="modal-body">
-			<textarea id="logviewer" cols="500" rows="5" style="width:95%">{% trans "Loading" %}...</textarea>
+			<textarea id="logviewer" cols="500" rows="10" style="width:95%">{% trans "Loading" %}...</textarea>
 		</div>
 		<div class="modal-footer">
 			<a class="btn" id="reloadLog">{% trans "Reload" %}</a>
@@ -80,92 +86,36 @@
 {% endblock %}
 {% block javascript %}
 <script>
-{% for mediaitem in processing_items %}
-	{% for task_list in running_tasks %}
-		{% for task in task_list %}
-			{% if task.object_id == mediaitem.pk|stringformat:"s" %}
-				{% if mediaitem.kind == 0 or mediaitem.kind == 2 %}
-				$("#logMP4_{{mediaitem.pk}}").click(function() {
-				$('#logModal').modal('show')
-				$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp4_log.txt", function(data){
-					$('#logviewer').val(data);
-				});
-				$("#reloadLog").click(function() {
-					$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp4_log.txt", function(data){
-						$('#logviewer').val(data);
-						$("#logviewer").animate({
-							scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
-						},200,function(){});
-					});
-				});
-				});
-				$("#logWEBM_{{mediaitem.pk}}").click(function() {
-					$('#logModal').modal('show');
-					$.get("/media/encoded/{{ mediaitem.slug }}/encoding_webm_log.txt", function(data){
-						$('#logviewer').val(data);
-					});
-					$("#reloadLog").click(function() {
-						$.get("/media/encoded/{{ mediaitem.slug }}/encoding_webm_log.txt", function(data){
-							$('#logviewer').val(data);
-							$("#logviewer").animate({
-								scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
-							},200,function(){});
-						});
-					});
-				});
-				{% endif %}
-				{% if mediaitem.kind == 1 or mediaitem.kind == 2 %}
-					$("#logMP3_{{mediaitem.pk}}").click(function() {
-						$('#logModal').modal('show')
-						$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp3_log.txt", function(data){
-							$('#logviewer').val(data);
-						});
-						$("#reloadLog").click(function() {
-							$.get("/media/encoded/{{ mediaitem.slug }}/encoding_mp3_log.txt", function(data){
-								$('#logviewer').val(data);
-								$("#logviewer").animate({
-									scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
-								},200,function(){});
-							});
-						});
-					});
-					$("#logOGG_{{mediaitem.pk}}").click(function() {
-						$('#logModal').modal('show')
-						$.get("/media/encoded/{{ mediaitem.slug }}/encoding_ogg_log.txt", function(data){
-							$('#logviewer').val(data);
-						});
-						$("#reloadLog").click(function() {
-							$.get("/media/encoded/{{ mediaitem.slug }}/encoding_ogg_log.txt", function(data){
-								$('#logviewer').val(data);
-								$("#logviewer").animate({
-									scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
-								},200,function(){});
-							});
-						});
-					});
-                                        $("#logOPUS_{{mediaitem.pk}}").click(function() {
-                                                $('#logModal').modal('show')
-                                                $.get("/media/encoded/{{ mediaitem.slug }}/encoding_opus_log.txt", function(data){
-                                                        $('#logviewer').val(data);
-                                                });
-                                                $("#reloadLog").click(function() {
-                                                        $.get("/media/encoded/{{ mediaitem.slug }}/encoding_opus_log.txt", function(data){
-                                                                $('#logviewer').val(data);
-                                                                $("#logviewer").animate({
-                                                                        scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
-                                                                },200,function(){});
-                                                        });
-                                                });
-                                        });
-				{% endif %}
-			{% endif %}
-		{% endfor %}
-	{% endfor %}
-{% endfor %}
-$('#logModal').on('shown', function () {
+$.ajaxSetup({
+	// Disable caching of AJAX responses
+	cache: false
+});
+
+var currentLog
+function scrollLogDown() {
 	$("#logviewer").animate({
 		scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
 	},200,function(){});
+}
+function logError() {
+	$('#logviewer').val("{% trans "No log found!" %}");
+}
+
+$(".show-log").click(function(e) {
+	e.preventDefault();
+	$('#logModal').modal('show')
+	$('#logviewer').val("{% trans "Loading" %}...");
+	currentLog = $(this).attr('href');
+	$.get(currentLog, function(data){
+		$('#logviewer').val(data);
+	}).fail(logError);
 });
+$("#reloadLog").click(function() {
+	$.get(currentLog, function(data){
+		$('#logviewer').val(data);
+		scrollLogDown();
+	}).fail(logError);
+});
+$('#logModal').on('shown', scrollLogDown);
 </script>
 {% endblock %}

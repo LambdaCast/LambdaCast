@@ -67,6 +67,9 @@ class MediaFile(models.Model):
         self.save()
         self.media_item.finish_encoding()
 
+    def get_tasks(self):
+        return djangotasks.Task.objects.filter(object_id=self.pk, model="portal.mediafile")
+
 class MediaItem(models.Model):
     ''' The model for our items. It uses slugs (with DjangoAutoSlug) and tags (with Taggit)
     everything else is quite standard. The sizes fields are used in the feeds to make enclosures
@@ -224,6 +227,9 @@ class MediaItem(models.Model):
     def get_comments(self):
         if not self.comments: self.comments = self.comment_set.filter(moderated=True).order_by('-created')
         return self.comments
+
+    def get_tasks(self):
+        return djangotasks.Task.objects.filter(object_id=self.pk, model="portal.mediaitem")
 
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''
