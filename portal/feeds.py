@@ -38,7 +38,7 @@ class iTunesFeed(Rss201rev2Feed):
         handler.addQuickElement(u'itunes:explicit',item['explicit'])
         handler.addQuickElement(u'itunes:image', item['item_thumb'])
 
-class MainFeed(Feed):
+class MediaFeed(Feed):
     feed_type = iTunesFeed
     description = ''
     subtitle = description
@@ -83,11 +83,8 @@ class MainFeed(Feed):
         return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_link(self, item):
-        mediafiles = item.mediafiles()
-        for mediafile in mediafiles:
-            if mediafile.file_format == self.fileformat:
-                return mediafile.url
-        return ""
+        mediafile = item.get_mediafile_with_format(self.fileformat)
+        return mediafile.url if mediafile else ""
 
     def item_pubdate(self, item):
         return item.created
@@ -96,20 +93,13 @@ class MainFeed(Feed):
         return self.item_link(item)
 
     def item_enclosure_length(self, item):
-        mediafiles = item.mediafiles()
-        for mediafile in mediafiles:
-            if mediafile.file_format == self.fileformat:
-                return mediafile.size
-        return 0
+        mediafile = item.get_mediafile_with_format(self.fileformat)
+        return mediafile.size if mediafile else 0
 
     def item_enclosure_mime_type(self, item):
-        mediafiles = item.mediafiles()
-        for mediafile in mediafiles:
-            if mediafile.file_format == self.fileformat:
-                return mediafile.mime_type()
-        return ""
+        return MEDIA_FORMATS[self.fileformat].mime_type
 
-class LatestMedia(MainFeed):
+class LatestMedia(MediaFeed):
     title = _("Latest Episodes")
     link = "/"
     description = _(u"The newest episodes from your beloved podcast")
@@ -144,7 +134,7 @@ class TorrentFeed(Feed):
     def item_pubdate(self, item):
         return item.created
 
-class ChannelFeed(MainFeed):
+class ChannelFeed(MediaFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
     def get_object(self, request, channel_slug, fileformat):
         fileformat = upper(fileformat)
@@ -208,7 +198,7 @@ class ChannelFeedTorrent(Feed):
     def item_pubdate(self, item):
         return item.created
 
-class CollectionFeed(MainFeed):
+class CollectionFeed(MediaFeed):
     def get_object(self, request, collection_slug, fileformat):
         fileformat = upper(fileformat)
         if fileformat not in MEDIA_FORMATS:
