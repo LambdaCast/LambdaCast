@@ -44,6 +44,12 @@ class MediaFeed(Feed):
     subtitle = description
     author_name = settings.AUTHOR_NAME
 
+    def get_object(self, request, fileformat):
+        fileformat = upper(fileformat)
+        if fileformat not in MEDIA_FORMATS:
+            raise Http404
+        self.fileformat = fileformat
+
     def items(self):
         mediaitems = MediaItem.objects.filter(published=True).order_by('-created')
         returneditems = []
@@ -104,12 +110,6 @@ class LatestMedia(MediaFeed):
     link = "/"
     description = _(u"The newest episodes from your beloved podcast")
 
-    def get_object(self, request, fileformat):
-        fileformat = upper(fileformat)
-        if fileformat not in MEDIA_FORMATS:
-            raise Http404
-        self.fileformat = fileformat
-
 class TorrentFeed(Feed):
     title = _(u"TorrentFeed")
     link = "/"
@@ -137,10 +137,7 @@ class TorrentFeed(Feed):
 class ChannelFeed(MediaFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
     def get_object(self, request, channel_slug, fileformat):
-        fileformat = upper(fileformat)
-        if fileformat not in MEDIA_FORMATS:
-            raise Http404
-        self.fileformat = fileformat
+        MediaFeed.get_object(self, request, fileformat)
         return get_object_or_404(Channel, slug=channel_slug)
 
     def feed_extra_kwargs(self, obj):
@@ -200,10 +197,7 @@ class ChannelFeedTorrent(Feed):
 
 class CollectionFeed(MediaFeed):
     def get_object(self, request, collection_slug, fileformat):
-        fileformat = upper(fileformat)
-        if fileformat not in MEDIA_FORMATS:
-            raise Http404
-        self.fileformat = fileformat
+        MediaFeed.get_object(self, request, fileformat)
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
