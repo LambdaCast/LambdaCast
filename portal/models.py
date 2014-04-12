@@ -231,9 +231,6 @@ class MediaItem(models.Model):
     def get_tasks(self):
         return djangotasks.Task.objects.filter(object_id=self.pk, model="portal.mediaitem")
 
-    def get_mediafile_with_format(self, format_filter):
-        return next((mediafile for mediafile in self.mediafiles() if mediafile.file_format == format_filter), None)
-
 class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''
     name = models.CharField(_(u"Name"),max_length=30)

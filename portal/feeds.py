@@ -51,13 +51,7 @@ class MediaFeed(Feed):
         self.fileformat = fileformat
 
     def items(self):
-        mediaitems = MediaItem.objects.filter(published=True).order_by('-created')
-        returneditems = []
-        for mediaitem in mediaitems:
-            mediafiles = MediaFile.objects.filter(media_item=mediaitem,file_format=self.fileformat)
-            for mediafile in mediafiles:
-                returneditems.append(mediafile.media_item)
-        return returneditems
+        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
@@ -69,38 +63,37 @@ class MediaFeed(Feed):
 
     def item_extra_kwargs(self, item):
         extra = {}
-        extra['duration'] = str(item.duration)
+        media_item = item.media_item
+        extra['duration'] = str(media_item.duration)
         extra['summary'] = self.item_description(item)
         extra['explicit'] = 'no'
-        if item.videoThumbURL:
-            extra['item_thumb'] = item.videoThumbURL
-        elif item.audioThumbURL:
-            extra['item_thumb'] = item.audioThumbURL
-        elif item.channel and item.channel.channelThumbURL:
-            extra['item_thumb'] = item.channel.channelThumbURL
+        if media_item.videoThumbURL:
+            extra['item_thumb'] = media_item.videoThumbURL
+        elif media_item.audioThumbURL:
+            extra['item_thumb'] = media_item.audioThumbURL
+        elif media_item.channel and media_item.channel.channelThumbURL:
+            extra['item_thumb'] = media_item.channel.channelThumbURL
         else:
             extra['item_thumb'] = ''
         return extra
 
     def item_title(self, item):
-        return item.title
+        return item.media_item.title
 
     def item_description(self, item):
-        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
+        return markdown.markdown(item.media_item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_link(self, item):
-        mediafile = item.get_mediafile_with_format(self.fileformat)
-        return mediafile.url if mediafile else ""
+        return item.url
 
     def item_pubdate(self, item):
-        return item.created
+        return item.media_item.created
 
     def item_enclosure_url(self, item):
         return self.item_link(item)
 
     def item_enclosure_length(self, item):
-        mediafile = item.get_mediafile_with_format(self.fileformat)
-        return mediafile.size if mediafile else 0
+        return item.size
 
     def item_enclosure_mime_type(self, item):
         return MEDIA_FORMATS[self.fileformat].mime_type
@@ -110,6 +103,9 @@ class LatestMedia(MediaFeed):
     link = "/"
     description = _(u"The newest episodes from your beloved podcast")
 
+    def items(self):
+        return MediaFeed.items(self)[:15]
+
 class TorrentFeed(Feed):
     title = _(u"TorrentFeed")
     link = "/"
@@ -117,7 +113,7 @@ class TorrentFeed(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self):
-        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')
+        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')[:15]
 
     def item_title(self, item):
         return item.title
@@ -158,8 +154,7 @@ class ChannelFeed(MediaFeed):
         return obj.description
 
     def items(self, obj):
-        return MediaItem.objects.filter(encodingDone=True, published=True, channel=obj).order_by('-created')
-
+        return MediaFeed.items(self).filter(media_item__channel=obj)
 
 class ChannelFeedTorrent(Feed):
 
@@ -210,7 +205,7 @@ class CollectionFeed(MediaFeed):
         return obj.description
 
     def items(self, obj):
-        return obj.items.filter(encodingDone=True, published=True).order_by('-created')
+        return MediaFeed.items(self).filter(media_item__in=obj.items.all())
 
 
 class CollectionFeedTorrent(Feed):
@@ -254,7 +249,7 @@ class CommentsFeed(Feed):
     description = _(u"Latest comments from your podcast portal")
 
     def items(self):
-        return Comment.objects.filter(moderated=True).order_by('-created')
+        return Comment.objects.filter(moderated=True).order_by('-created')[:15]
 
     def item_title(self, comment):
         title = _(u"New comment to %s") % comment.item.title
