@@ -13,7 +13,7 @@ import lambdaproject.settings as settings
 
 from pytranscode.ffmpeg import ffmpeg
 
-from portal.signals import get_remote_filesize, purge_encoded_files
+from portal.signals import get_remote_filesize, purge_files
 from portal.licenses import LICENSE_CHOICES, LICENSE_URLS
 from portal.media_formats import FILE_FORMATS, MEDIA_TYPES, MEDIA_FORMATS
 from portal.model_helpers import *
@@ -318,7 +318,7 @@ class Submittal(models.Model):
         return self.title
 
 pre_save.connect(get_remote_filesize, sender=MediaFile)
-post_delete.connect(purge_encoded_files, sender=MediaItem)
+post_delete.connect(purge_files, sender=MediaItem)
 
 djangotasks.register_task(MediaFile.encode_media, "Encode the file using ffmpeg")
 djangotasks.register_task(MediaItem.get_and_save_cover, "Get the cover from the original file")

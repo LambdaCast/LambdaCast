@@ -1,5 +1,6 @@
 import urllib2
 import shutil
+
 import lambdaproject.settings as settings
 
 def get_remote_filesize(sender, instance, **kwargs):
@@ -15,8 +16,7 @@ def _get_remote_filesize_for_url(url):
     except:
         pass
 
-def purge_encoded_files(sender, instance, **kwargs):
-    try:
-        shutil.rmtree(settings.ENCODING_OUTPUT_DIR + instance.slug)
-    except:
-        pass
+def purge_files(sender, instance, **kwargs):
+    shutil.rmtree(settings.ENCODING_OUTPUT_DIR + instance.slug, True)
+    if instance.originalFile:
+        instance.originalFile.delete(False)
