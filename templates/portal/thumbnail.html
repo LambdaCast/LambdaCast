@@ -15,6 +15,7 @@
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="upload">
+
 				<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
 				{% if error %}
 					<div class="alert alert-error">{{ error }}</div>
@@ -26,24 +27,28 @@
 				<div style="display: none" id="formError" class="alert alert-error">
 					<strong>{% trans "Error!" %}</strong>
 				</div><!-- alert-->
-				{% for field in thumbnail_form %}
-				<div class="control-group">
-					{% if field.errors %}
-					<div class="alert alert-error">
-						<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+				<div class="row">
+					<div class="span6">
+					{% for field in thumbnail_form %}
+					<div class="control-group">
+						{% if field.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ field.label_tag }}
+						</div>
+						<div class="controls">
+							{{ field }} <span class="help-block">{{ field.help_text }}</span>
+						</div>
 					</div>
-					{% endif %}
-					<div class="control-label">
-						{{ field.label_tag }}
-					</div>
-					<div class="controls">
-						{{ field }} <span class="help-block">{{ field.help_text }}</span>
+					{% endfor %}
+					<div class="form-actions">
+						<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+					</div><!-- form-actions -->
 					</div>
 				</div>
-				{% endfor %}
-				<div class="form-actions">
-					<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
-				</div><!-- form-actions -->
 				</form>
 			</div><!-- tab-pane -->
 			<div class="tab-pane" id="thumblist">

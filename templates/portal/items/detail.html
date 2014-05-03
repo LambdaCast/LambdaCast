@@ -101,36 +101,40 @@
 					</div>
 				</div>
 				{% endif %}
-				{% if message %}
-				<div class="alert">
-					{{ message }}
+				<div class="row">
+					<div class="span5">
+					{% if message %}
+					<div class="alert">
+						{{ message }}
+					</div>
+					{% endif %}
+					<form enctype="multipart/form-data" class="form-horizontal" action="/item/{{ mediaitem.slug }}/" method="post">{% csrf_token %}
+						{% for field in comment_form %}
+						<div class="control-group">
+							{% if field.errors %}
+							<div class="alert alert-error">
+								<strong>{% trans "Error!" %} </strong>{{ field.errors }}
+							</div>
+							{% endif %}
+							<div class="control-label">
+								{{ field.label_tag }}
+							</div>
+							<div class="controls">
+								{{ field }}
+							</div>
+						</div>
+						{% endfor %}
+						<div class="control-group">
+							<div class="controls">
+								<a name="captcha" href="#captcha"><p name="refresh_captcha" class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</p></a>
+							</div>
+						</div>
+						<div class="form-actions">
+							<input type="submit" name="submit_comment" class="btn btn-primary" value={% trans "Send" %} />
+						</div>
+					</form>
+					</div>
 				</div>
-				{% endif %}
-				<form enctype="multipart/form-data" class="form-horizontal" action="/item/{{ mediaitem.slug }}/" method="post">{% csrf_token %}
-					{% for field in comment_form %}
-					<div class="control-group">
-						{% if field.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %} </strong>{{ field.errors }}
-						</div>
-						{% endif %}
-						<div class="control-label">
-							{{ field.label_tag }}
-						</div>
-						<div class="controls">
-							{{ field }}
-						</div>
-					</div>
-					{% endfor %}
-					<div class="control-group">
-						<div class="controls">
-							<a name="captcha" href="#captcha"><p name="refresh_captcha" class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</p></a>
-						</div>
-					</div>
-					<div class="form-actions">
-						<input type="submit" name="submit_comment" class="btn btn-primary" value={% trans "Send" %} />
-					</div>
-				</form>
 			</div>
 		</div>
 	</div>

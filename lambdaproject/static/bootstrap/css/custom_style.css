@@ -14,7 +14,7 @@ body {
 }
 
 .navbar-search {
-	margin-right: 5px;
+	margin-right: 35px;
 }
 
 #page-container {
@@ -80,3 +80,14 @@ ul.edit-menu {
 	margin: 8px;
 }
 
+input, textarea, .uneditable-input {
+	width: 96%;
+}
+
+select {
+	width: 100%;
+}
+
+dd {
+	margin-right: 20px;
+}
