@@ -24,7 +24,7 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.title.label_tag }}{% if submit_form.title.required %} *{% endif %}
+							{{ submit_form.title.label_tag }}{% if submit_form.title.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.title }}
@@ -40,7 +40,7 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.date.label_tag }}{% if submit_form.date.required %} *{% endif %}
+							{{ submit_form.date.label_tag }}{% if submit_form.date.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.date }}
@@ -58,7 +58,7 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.description.label_tag }}{% if submit_form.description.required %} *{% endif %}
+							{{ submit_form.description.label_tag }}{% if submit_form.description.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.description }}
@@ -74,7 +74,7 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.channel.label_tag }}{% if submit_form.channel.required %} *{% endif %}
+							{{ submit_form.channel.label_tag }}{% if submit_form.channel.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.channel }}
@@ -88,7 +88,7 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.license.label_tag }}{% if submit_form.license.required %} *{% endif %}
+							{{ submit_form.license.label_tag }}{% if submit_form.license.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.license }}
@@ -96,30 +96,16 @@
 					</div>
 					<!-- link -->
 					<div class="control-group">
-						{% if submit_form.link.errors %}
+						{% if submit_form.linkURL.errors %}
 						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.link.errors }}</p>
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.linkURL.errors }}</p>
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.link.label_tag }}{% if submit_form.link.required %} *{% endif %}
+							{{ submit_form.linkURL.label_tag }}{% if submit_form.linkURL.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
-							{{ submit_form.link }}
-						</div>
-					</div>
-					<!-- thumbURL -->
-					<div class="control-group">
-						{% if submit_form.thumbURL.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.thumbURL.errors }}</p>
-						</div>
-						{% endif %}
-						<div class="control-label">
-							{{ submit_form.thumbURL.label_tag }}{% if submit_form.thumbURL.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.thumbURL }}
+							{{ submit_form.linkURL }}
 						</div>
 					</div>
 					<!-- tags -->
@@ -130,7 +116,7 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.tags.label_tag }}{% if submit_form.tags.required %} *{% endif %}
+							{{ submit_form.tags.label_tag }}{% if submit_form.tags.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.tags }}
@@ -146,7 +132,7 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.fileFormats.label_tag }}{% if submit_form.fileFormats.required %} *{% endif %}
+							{{ submit_form.fileFormats.label_tag }}{% if submit_form.fileFormats.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.fileFormats }}
@@ -160,10 +146,24 @@
 						</div>
 						{% endif %}
 						<div class="control-label">
-							{{ submit_form.originalFile.label_tag }}{% if submit_form.originalFile.required %} *{% endif %}
+							{{ submit_form.originalFile.label_tag }}{% if submit_form.originalFile.field.required %} *{% endif %}
 						</div>
 						<div class="controls">
 							{{ submit_form.originalFile }}
+						</div>
+					</div>
+					<!-- thumbURL -->
+					<div class="control-group">
+						{% if submit_form.thumbURL.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.thumbURL.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.thumbURL.label_tag }}{% if submit_form.thumbURL.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.thumbURL }}
 						</div>
 					</div>
 				</div>
