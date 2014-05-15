@@ -35,9 +35,9 @@ class MediaItemForm(ModelForm):
         super(MediaItemForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
-            if field.required:
-                field.widget.attrs['class'] = 'required'
             field.widget.attrs['class'] = 'input-block-level'
+            if field.required:
+                field.widget.attrs['class'] = 'required input-block-level'
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
@@ -63,9 +63,9 @@ class SubmittalForm(ModelForm):
         super(SubmittalForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
-            if field.required:
-                field.widget.attrs['class'] = 'required'
             field.widget.attrs['class'] = 'input-block-level'
+            if field.required:
+                field.widget.attrs['class'] = 'required input-block-level'
 
 
     def create_mediafiles(self, mediaitem):

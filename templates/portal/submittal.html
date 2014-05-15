@@ -9,7 +9,7 @@
 	<h1>{% trans "Submittal" %} "{{ submittal.title }}"</h1>
 </div>
 <div class="row">
-	<div class="span6">
+	<div class="span12">
 		<form id="submittalForm" class="form-horizontal" action="/submittal/{{ submittal.id }}/" method="post">
 			{% csrf_token %}
 			<div style="display: none" id="formError" class="alert alert-error">
@@ -34,7 +34,7 @@
 				<input type="submit" class="btn btn-primary" value="{% trans "Add media" %}" />
 			</div><!-- form-actions -->
 		</form>
-	</div><!-- span6 -->
+	</div><!-- span12 -->
 </div><!-- row -->
 {% endblock %}
 {% block javascript %}

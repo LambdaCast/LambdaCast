@@ -7,7 +7,7 @@
 	<h1>{% trans "Upload" %}</h1>
 </div>
 <div class=row">
-	<div class="span6">
+	<div class="span12">
 		<form id="mediaitemForm" enctype="multipart/form-data" class="form-horizontal" action="/submit/" method="post">
 			{% csrf_token %}
 			<div style="display: none" id="formError" class="alert alert-error">
