@@ -99,17 +99,17 @@ class MediaFeed(Feed):
         return MEDIA_FORMATS[self.fileformat].mime_type
 
 class LatestMedia(MediaFeed):
-    title = _("Latest Episodes")
+    title = _("%s - Latest Episodes")  % (settings.SITE_NAME)
     link = "/"
-    description = _(u"The newest episodes from your beloved podcast")
+    description = _(u"The latest episodes from %s") % (settings.SITE_NAME)
 
     def items(self):
         return MediaFeed.items(self)[:15]
 
 class TorrentFeed(Feed):
-    title = _(u"TorrentFeed")
+    title = _(u"%s - Latest Episodes (Torrent)") % (settings.SITE_NAME)
     link = "/"
-    description = _("Torrent files from your beloved podcast")
+    description = _("Torrent feed for the latest episodes from %s") % (settings.SITE_NAME)
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self):
@@ -244,9 +244,9 @@ class CollectionFeedTorrent(Feed):
 
 
 class CommentsFeed(Feed):
-    title = _(u"Latest comments from your podcast portal")
+    title = _(u"Latest comments from %s") % (settings.SITE_NAME)
     link = "/"
-    description = _(u"Latest comments from your podcast portal")
+    description = _(u"Latest comments from %s") % (settings.SITE_NAME)
 
     def items(self):
         return Comment.objects.filter(moderated=True).order_by('-created')[:15]
