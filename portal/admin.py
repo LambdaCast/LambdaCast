@@ -17,30 +17,33 @@ def make_torrent_done(modeladmin, request, queryset):
     queryset.update(torrentDone=True)
 make_torrent_done.short_description = _(u"Marked media all get a torrent")
 
+class MediaFileInline(admin.StackedInline):
+    model = MediaFile
+    extra = 0
+    list_display = ['title','url','size','file_format','media_item']
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'url', 'media_item')
+        }),
+    )
+
 class MediaItemAdmin (admin.ModelAdmin):
     list_display = ['title','published','encodingDone', 'channel' ,'date']
     ordering = ['-date','-created']
     actions = [make_published,make_torrent_done]
     list_filter = ('published', 'channel')
-    readonly_fields = ('show_mediafiles',)
     fieldsets = (
         (None, {
-            'fields': ('title', 'date', 'description', 'channel', 'license', 'linkURL', 'tags', 'published', 'show_mediafiles')
+            'fields': ('title', 'date', 'description', 'channel', 'license', 'linkURL', 'tags', 'published')
         }),
         (_(u'Advanced options'), {
             'classes': ('collapse',),
             'fields': ('user','torrentURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
         }),
     )
-    def show_mediafiles(self, instance):
-        mediafiles = MediaFile.objects.filter(media_item=instance)
-        list_elements = ""
-        for mediafile in mediafiles:
-            list_element = "<li><a href='/admin/portal/mediafile/%s'>%s</a></li>" % (mediafile.pk, mediafile.title)
-            list_elements += list_element
-        return "<ul>" + list_elements + '</ul><a href="/admin/portal/mediafile/add/">+</a>'
-    show_mediafiles.short_description = "MediaFiles"
-    show_mediafiles.allow_tags = True
+    inlines = [
+        MediaFileInline,
+    ]
 admin.site.register(MediaItem,MediaItemAdmin)
 
 def make_moderated(modeladmin,request, queryset):
@@ -81,7 +84,7 @@ class MediaFileAdmin(admin.ModelAdmin):
     list_display = ['title','url','size','file_format','media_item']
     fieldsets = (
         (None, {
-            'fields': ('title', 'url')
+            'fields': ('title', 'url', 'media_item')
         }),
     )
 
