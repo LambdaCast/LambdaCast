@@ -120,7 +120,7 @@ class TorrentFeed(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self):
-        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-date')[:15]
+        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-date', '-created')[:15]
 
     def item_title(self, item):
         return item.title
@@ -185,7 +185,7 @@ class ChannelFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-date')
+        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-date', '-created')
 
     def item_title(self, item):
         return item.title
@@ -237,7 +237,7 @@ class CollectionFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-date')
+        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-date', '-created')
 
     def item_title(self, item):
         return item.title
