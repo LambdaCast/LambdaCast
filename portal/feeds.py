@@ -12,7 +12,7 @@ from portal.media_formats import MEDIA_FORMATS
 import lambdaproject.settings as settings
 
 import markdown
-
+from datetime import datetime, time
 import os
 
 class iTunesFeed(Rss201rev2Feed):
@@ -51,7 +51,7 @@ class MediaFeed(Feed):
         self.fileformat = fileformat
 
     def items(self):
-        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__created')
+        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__date').order_by('-media_item__created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
@@ -87,7 +87,7 @@ class MediaFeed(Feed):
         return item.url
 
     def item_pubdate(self, item):
-        return item.media_item.created
+        return datetime.combine(item.media_item.date, time())
 
     def item_enclosure_url(self, item):
         return self.item_link(item)
@@ -113,7 +113,7 @@ class TorrentFeed(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self):
-        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')[:15]
+        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-date')[:15]
 
     def item_title(self, item):
         return item.title
@@ -128,7 +128,7 @@ class TorrentFeed(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
 class ChannelFeed(MediaFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
@@ -173,7 +173,7 @@ class ChannelFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-created')
+        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-date')
 
     def item_title(self, item):
         return item.title
@@ -188,7 +188,7 @@ class ChannelFeedTorrent(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
 class CollectionFeed(MediaFeed):
     def get_object(self, request, collection_slug, fileformat):
@@ -225,7 +225,7 @@ class CollectionFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-created')
+        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-date')
 
     def item_title(self, item):
         return item.title
@@ -240,7 +240,7 @@ class CollectionFeedTorrent(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
 
 class CommentsFeed(Feed):
