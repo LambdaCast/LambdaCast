@@ -12,7 +12,7 @@ from portal.media_formats import MEDIA_FORMATS
 import lambdaproject.settings as settings
 
 import markdown
-
+from datetime import datetime, time
 import os
 
 class iTunesFeed(Rss201rev2Feed):
@@ -30,6 +30,11 @@ class iTunesFeed(Rss201rev2Feed):
         handler.addQuickElement(u'itunes:email', self.feed['iTunes_email'])
         handler.endElement(u"itunes:owner")
         handler.addQuickElement(u'itunes:image', self.feed['iTunes_image_url'])
+        handler.startElement('image', {})
+        handler.addQuickElement('title', self.feed['title'])
+        handler.addQuickElement('url', self.feed['iTunes_image_url'])
+        handler.addQuickElement('link', self.feed['img_site_url'])
+        handler.endElement('image')
 
     def add_item_elements(self,  handler, item):
         super(iTunesFeed, self).add_item_elements(handler, item)
@@ -40,6 +45,7 @@ class iTunesFeed(Rss201rev2Feed):
 
 class MediaFeed(Feed):
     feed_type = iTunesFeed
+    title = ''
     description = ''
     subtitle = description
     author_name = settings.AUTHOR_NAME
@@ -51,7 +57,7 @@ class MediaFeed(Feed):
         self.fileformat = fileformat
 
     def items(self):
-        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__created')
+        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__date').order_by('-media_item__created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
@@ -59,6 +65,7 @@ class MediaFeed(Feed):
         extra['iTunes_email'] = settings.CONTACT_EMAIL
         extra['iTunes_image_url'] = settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
+        extra['img_site_url'] = settings.WEBSITE_URL
         return extra
 
     def item_extra_kwargs(self, item):
@@ -84,13 +91,13 @@ class MediaFeed(Feed):
         return markdown.markdown(item.media_item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_link(self, item):
-        return item.url
+        return '/item/' + item.media_item.slug
 
     def item_pubdate(self, item):
-        return item.media_item.created
+        return datetime.combine(item.media_item.date, time())
 
     def item_enclosure_url(self, item):
-        return self.item_link(item)
+        return item.url
 
     def item_enclosure_length(self, item):
         return item.size
@@ -99,21 +106,21 @@ class MediaFeed(Feed):
         return MEDIA_FORMATS[self.fileformat].mime_type
 
 class LatestMedia(MediaFeed):
-    title = _("Latest Episodes")
+    title = _("%s - Latest Episodes")  % (settings.SITE_NAME)
     link = "/"
-    description = _(u"The newest episodes from your beloved podcast")
+    description = _(u"The latest episodes from %s") % (settings.SITE_NAME)
 
     def items(self):
         return MediaFeed.items(self)[:15]
 
 class TorrentFeed(Feed):
-    title = _(u"TorrentFeed")
+    title = _(u"%s - Latest Episodes (Torrent)") % (settings.SITE_NAME)
     link = "/"
-    description = _("Torrent files from your beloved podcast")
+    description = _("Torrent feed for the latest episodes from %s") % (settings.SITE_NAME)
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self):
-        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')[:15]
+        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-date')[:15]
 
     def item_title(self, item):
         return item.title
@@ -128,7 +135,7 @@ class TorrentFeed(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
 class ChannelFeed(MediaFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
@@ -140,8 +147,9 @@ class ChannelFeed(MediaFeed):
         extra = {}
         extra['iTunes_name'] = settings.AUTHOR_NAME
         extra['iTunes_email'] = settings.CONTACT_EMAIL
-        extra['iTunes_image_url'] = obj.channelThumbURL
+        extra['iTunes_image_url'] = obj.channelThumbURL if not obj.channelThumbURL == '' else settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
+        extra['img_site_url'] = settings.WEBSITE_URL
         return extra
 
     def title(self, obj):
@@ -173,7 +181,7 @@ class ChannelFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-created')
+        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-date')
 
     def item_title(self, item):
         return item.title
@@ -188,7 +196,7 @@ class ChannelFeedTorrent(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
 class CollectionFeed(MediaFeed):
     def get_object(self, request, collection_slug, fileformat):
@@ -225,7 +233,7 @@ class CollectionFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-created')
+        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-date')
 
     def item_title(self, item):
         return item.title
@@ -240,13 +248,13 @@ class CollectionFeedTorrent(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
 
 class CommentsFeed(Feed):
-    title = _(u"Latest comments from your podcast portal")
+    title = _(u"Latest comments from %s") % (settings.SITE_NAME)
     link = "/"
-    description = _(u"Latest comments from your podcast portal")
+    description = _(u"Latest comments from %s") % (settings.SITE_NAME)
 
     def items(self):
         return Comment.objects.filter(moderated=True).order_by('-created')[:15]
