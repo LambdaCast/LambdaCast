@@ -91,13 +91,13 @@ class MediaFeed(Feed):
         return markdown.markdown(item.media_item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_link(self, item):
-        return item.url
+        return '/item/' + item.media_item.slug
 
     def item_pubdate(self, item):
         return datetime.combine(item.media_item.date, time())
 
     def item_enclosure_url(self, item):
-        return self.item_link(item)
+        return item.url
 
     def item_enclosure_length(self, item):
         return item.size
