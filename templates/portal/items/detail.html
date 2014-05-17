@@ -42,13 +42,13 @@
 			<div class="span8">
 				{% if mediaitem.get_video_files and mediaitem.get_audio_files %}
 				<ul class="nav nav-tabs">
-					<li class="active" id="video_tab"><a>{% trans "Video" %}</a></li>
-					<li id="audio_tab"><a>{% trans "Audio" %}</a></li>
+					<li class="active" id="video_tab"><a href="#video_player">{% trans "Video" %}</a></li>
+					<li id="audio_tab"><a href="#audio_player">{% trans "Audio" %}</a></li>
 				</ul>
 				{% endif %}
 				<div id="player_container">
 					{% if mediaitem.get_video_files %}
-					<div id="video_player">
+					<div id="video_player" class="player-container">
 						<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
 						{% for video in mediaitem.get_video_files %}
 							<source src="{{ video.url }}" type="{{ video.mime_type }}" />
@@ -57,7 +57,7 @@
 					</div>
 					{% endif %}
 					{% if mediaitem.get_audio_files %}
-					<div id="audio_player" {% if mediaitem.get_video_files and mediaitem.get_audio_files %}style="display:none;"{% endif %}>
+					<div id="audio_player" class="player-container{% if mediaitem.get_video_files %} inactive-player-tab{% endif %}">
 						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }}{% elif mediaitem.channel.channelThumbURL %}{{ mediaitem.channel.channelThumbURL }}{% else %}{{ STATIC_URL }}audio_cover.png{% endif %}" controls>
 						{% for audio in mediaitem.get_audio_files %}
 							<source src="{{ audio.url }}" type="{{ audio.mime_type }}" />
@@ -234,18 +234,12 @@ $(document).ready(function() {
 	var video_player = projekktor('#player_video', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-
-		/* path to the MP3 Flash-player fallback component */
-		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 		streamType: 'http',
 	});
 	video_player.addListener('time', timeListener);
 	{% endif %}
 	{% if mediaitem.get_audio_files %}
 	var audio_player = projekktor('#player_audio', {
-		/* path to the MP4 Flash-player fallback component */
-		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-
 		/* path to the MP3 Flash-player fallback component */
 		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 		streamType: 'http',
@@ -257,19 +251,22 @@ $(document).ready(function() {
 		if (typeof(video_player) !== 'undefined') { video_player.setPlayhead(parseFloat(this.text)); }
 		if (typeof(audio_player) !== 'undefined') { audio_player.setPlayhead(parseFloat(this.text)); }
 		return false;
-	})
+	});
+
+	$('#video_tab a, #audio_tab a').click(function (e) {
+		e.preventDefault();
+		var clickedTab = $(this);
+		if (!clickedTab.parent().hasClass('active')) {
+			clickedTab.tab('show');
+			$('.player-container').each(function() {
+				if ('#' + $(this).attr('id') == clickedTab.attr('href')) {
+					$(this).removeClass('inactive-player-tab');
+				} else {
+					$(this).addClass('inactive-player-tab');
+				}
+			});
+		}
+	});
 });
-$('#video_tab a').click(function (e) {
-	e.preventDefault();
-	$(this).tab('show');
-	$('#video_player').toggle();
-	$('#audio_player').toggle();
-})
-$('#audio_tab a').click(function (e) {
-	e.preventDefault();
-	$(this).tab('show');
-	$('#video_player').toggle();
-	$('#audio_player').toggle();
-})
 </script>
 {% endblock %}
