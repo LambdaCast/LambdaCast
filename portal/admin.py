@@ -17,13 +17,12 @@ def make_torrent_done(modeladmin, request, queryset):
     queryset.update(torrentDone=True)
 make_torrent_done.short_description = _(u"Marked media all get a torrent")
 
-class MediaFileInline(admin.StackedInline):
+class MediaFileInline(admin.TabularInline):
     model = MediaFile
     extra = 0
-    list_display = ['title','url','size','file_format','media_item']
     fieldsets = (
         (None, {
-            'fields': ('title', 'url', 'media_item')
+            'fields': ('title', 'url', 'file_format', 'media_item')
         }),
     )
 
@@ -84,7 +83,7 @@ class MediaFileAdmin(admin.ModelAdmin):
     list_display = ['title','url','size','file_format','media_item']
     fieldsets = (
         (None, {
-            'fields': ('title', 'url', 'media_item')
+            'fields': ('media_item', 'title', 'url', 'file_format')
         }),
     )
 
