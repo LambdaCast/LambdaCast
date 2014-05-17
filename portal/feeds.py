@@ -33,7 +33,7 @@ class iTunesFeed(Rss201rev2Feed):
         handler.startElement('image', {})
         handler.addQuickElement('title', self.feed['title'])
         handler.addQuickElement('url', self.feed['iTunes_image_url'])
-        handler.addQuickElement('link', self.feed['img_site_url'])
+        handler.addQuickElement('link', self.feed['site_url'])
         handler.endElement('image')
 
     def add_item_elements(self,  handler, item):
@@ -65,7 +65,7 @@ class MediaFeed(Feed):
         extra['iTunes_email'] = settings.CONTACT_EMAIL
         extra['iTunes_image_url'] = settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
-        extra['img_site_url'] = settings.WEBSITE_URL
+        extra['site_url'] = settings.WEBSITE_URL
         return extra
 
     def item_extra_kwargs(self, item):
@@ -153,7 +153,7 @@ class ChannelFeed(MediaFeed):
         extra['iTunes_email'] = settings.CONTACT_EMAIL
         extra['iTunes_image_url'] = thumbURL
         extra['iTunes_explicit'] = 'no'
-        extra['img_site_url'] = settings.WEBSITE_URL
+        extra['site_url'] = settings.WEBSITE_URL
         return extra
 
     def title(self, obj):
