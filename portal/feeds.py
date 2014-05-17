@@ -145,13 +145,9 @@ class ChannelFeed(MediaFeed):
 
     def feed_extra_kwargs(self, obj):
         extra = {}
-        if not obj.channelThumbURL == '':
-            thumbURL = obj.channelThumbURL
-        else:
-            thumbURL = settings.LOGO_URL
         extra['iTunes_name'] = settings.AUTHOR_NAME
         extra['iTunes_email'] = settings.CONTACT_EMAIL
-        extra['iTunes_image_url'] = thumbURL
+        extra['iTunes_image_url'] = obj.channelThumbURL if not obj.channelThumbURL == '' else settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
         extra['img_site_url'] = settings.WEBSITE_URL
         return extra
