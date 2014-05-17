@@ -79,4 +79,6 @@ ul.edit-menu {
 .btn-mini-edit {
 	margin: 8px;
 }
-
+.unpublished {
+	margin: 10px 5px 8px 5px;
+}

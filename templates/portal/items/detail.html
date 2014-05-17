@@ -32,7 +32,7 @@
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_mediaitem and user.is_staff %}
-		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}{% if not mediaitem.published %} ({% trans "Unpublished" %}){% endif %}</button></a>
 	{% endif %}
 	<h1>{{ mediaitem.title }}</h1>
 </div>
