@@ -13,7 +13,7 @@ import lambdaproject.settings as settings
 
 from pytranscode.ffmpeg import ffmpeg
 
-from portal.signals import get_remote_filesize, purge_files
+from portal.signals import get_remote_filesize, purge_files, get_mediatype
 from portal.licenses import LICENSE_CHOICES, LICENSE_URLS
 from portal.media_formats import FILE_FORMATS, MEDIA_TYPES, MEDIA_FORMATS
 from portal.model_helpers import *
@@ -109,6 +109,9 @@ class MediaItem(models.Model):
     
     def comments_count(self):
         return self.comment_set.filter(moderated=True).count()
+
+    def comments_count_all(self):
+        return self.comment_set.all().count()
 
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
@@ -223,11 +226,6 @@ class MediaItem(models.Model):
         if not self.video_files: self.video_files = self.mediafiles().filter(mediatype='video')
         return self.video_files
 
-    comments = None
-    def get_comments(self):
-        if not self.comments: self.comments = self.comment_set.filter(moderated=True).order_by('-created')
-        return self.comments
-
     def get_tasks(self):
         return djangotasks.Task.objects.filter(object_id=self.pk, model="portal.mediaitem")
 
@@ -318,6 +316,7 @@ class Submittal(models.Model):
         return self.title
 
 pre_save.connect(get_remote_filesize, sender=MediaFile)
+pre_save.connect(get_mediatype, sender=MediaFile)
 post_delete.connect(purge_files, sender=MediaItem)
 
 djangotasks.register_task(MediaFile.encode_media, "Encode the file using ffmpeg")

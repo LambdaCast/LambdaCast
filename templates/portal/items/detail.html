@@ -32,7 +32,7 @@
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_mediaitem and user.is_staff %}
-		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}{% if not mediaitem.published %} ({% trans "Unpublished" %}){% endif %}</button></a>
 	{% endif %}
 	<h1>{{ mediaitem.title }}</h1>
 </div>
@@ -81,12 +81,18 @@
 				</div>
 				{% endif %}
 				<h2>{% trans "Comments" %}</h2>
-				{% if mediaitem.get_comments %}
-				{% for comment in mediaitem.get_comments %}
+				{% if comment_list %}
+				{% for comment in comment_list %}
 				<div class="row">
 					<div class="span8">
 						<div class="well">
 							<strong>{% trans "Name" %}: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>{% trans "Time" %}: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
+						{% if perms.portal.change_comment and user.is_staff %}
+							<a href="/admin/portal/comment/{{ comment.id }}/"></i><button class="btn btn-warning btn-mini pull-right btn-mini-edit"><i class="icon-pencil"></i></button></a>
+							{% if not comment.moderated %}
+								<div class="label label-warning pull-right unpublished">{% trans "Unpublished" %}</div>
+							{% endif %}
+						{% endif %}
 							<div class="comment-body">{{ comment.comment }}	</div>
 						</div>
 					</div>

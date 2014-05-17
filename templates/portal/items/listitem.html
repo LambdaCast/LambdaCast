@@ -18,10 +18,13 @@
 			</a></div>
 			{% if user.is_authenticated %}
 				<a href="/admin/portal/mediaitem/{{ mediaitem.pk }}"><button class="btn btn-warning btn-mini pull-right btn-mini-edit"><i class="icon-pencil"></i></button></a>
+				{% if not mediaitem.published %}
+					<span class="label label-warning pull-right unpublished">{% trans "Unpublished" %}</span> 
+				{% endif %}
 			{% endif %}
 			<a href="/item/{{ mediaitem.slug }}/"><h4>{{ mediaitem.title }}</h4></a>
 			<span><strong>{% trans "Description" %}: </strong>{{ mediaitem.markdown_free|truncatechars:150 }}</span><br/>
-			<span><strong></strong><i class="icon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %} / <strong></strong><i class="icon-time"></i> {{ mediaitem.duration|secondstohms }}{% endif %} / <strong></strong><i class="icon-comment"></i> {{ mediaitem.comments_count }}</span>
+			<span><strong></strong><i class="icon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %} / <strong></strong><i class="icon-time"></i> {{ mediaitem.duration|secondstohms }}{% endif %} / <strong></strong><i class="icon-comment"></i> {{ mediaitem.comments_count }}{% if user.is_authenticated %} ({{ mediaitem.comments_count_all }}){% endif %}</span>
 		{% else %}
 			<div class="video-image-container"><a href="/collection/{{ mediaitem.slug }}/"><img src="{{ STATIC_URL }}default-playlist.png"/></a></div>
 			{% if user.is_authenticated %}
