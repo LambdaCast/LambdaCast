@@ -57,7 +57,7 @@ class MediaFeed(Feed):
         self.fileformat = fileformat
 
     def items(self):
-        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__date').order_by('-media_item__created')
+        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__date', '-media_item__created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
