@@ -248,8 +248,8 @@ $(document).ready(function() {
 	{% endif %}
 
 	$('.timecode').click(function(){
-		if (typeof(video_player) !== 'undefined') { video_player.setPlayhead(parseFloat(this.text)); }
-		if (typeof(audio_player) !== 'undefined') { audio_player.setPlayhead(parseFloat(this.text)); }
+		if (typeof(video_player) !== 'undefined') { video_player.setPlay();video_player.setPlayhead(parseFloat(this.text)); }
+		if (typeof(audio_player) !== 'undefined') { audio_player.setPlay();audio_player.setPlayhead(parseFloat(this.text)); }
 		return false;
 	})
 });
