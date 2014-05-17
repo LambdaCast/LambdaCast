@@ -65,6 +65,10 @@ def channel_list(request,slug):
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
     mediaitem = get_object_or_404(MediaItem, slug=slug)
+    if request.user.is_authenticated(): 
+        comment_list = Comment.objects.filter(item=mediaitem).order_by('-created')
+    else:
+        comment_list = Comment.objects.filter(item=mediaitem,moderated=True).order_by('-created')
 
     if request.method == 'POST':
         comment = Comment(item=mediaitem,ip=request.META["REMOTE_ADDR"])
@@ -86,6 +90,7 @@ def detail(request, slug):
                 except:
                     pass
             return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+                                                                   'comment_list': comment_list,
                                                                    'mediaitem': mediaitem,
                                                                    'comment_form': emptyform,
                                                                    'message': message,
@@ -93,6 +98,7 @@ def detail(request, slug):
                                                                   }, context_instance=RequestContext(request))
         else:
             return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+                                                                   'comment_list': comment_list,
                                                                    'mediaitem': mediaitem,
                                                                    'comment_form': form,
                                                                    'settings': settings,
@@ -100,6 +106,7 @@ def detail(request, slug):
     else:
         form = CommentForm()
         return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem,
+                                                               'comment_list': comment_list,
                                                                'page_list':get_page_list,
                                                                'submittal_list':get_submittal_list(request),
                                                                'comment_form': form,

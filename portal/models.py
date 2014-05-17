@@ -110,6 +110,9 @@ class MediaItem(models.Model):
     def comments_count(self):
         return self.comment_set.filter(moderated=True).count()
 
+    def comments_count_all(self):
+        return self.comment_set.all().count()
+
     def markdown_free(self):
         md_free_desc = markdown.markdown(self.description)
         md_free_desc = md_free_desc.replace('</p>', ' | ').replace('</li>', ' | ').replace('<ul>', ' | ')
@@ -222,11 +225,6 @@ class MediaItem(models.Model):
     def get_video_files(self):
         if not self.video_files: self.video_files = self.mediafiles().filter(mediatype='video')
         return self.video_files
-
-    comments = None
-    def get_comments(self):
-        if not self.comments: self.comments = self.comment_set.filter(moderated=True).order_by('-created')
-        return self.comments
 
     def get_tasks(self):
         return djangotasks.Task.objects.filter(object_id=self.pk, model="portal.mediaitem")
