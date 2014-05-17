@@ -27,7 +27,10 @@ from sets import Set
 def index(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available media items and
     forwards them to the template. We use Django's Paginator to have pagination '''
-    queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
+    if request.user.is_authenticated():
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
+    else:
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
@@ -46,7 +49,10 @@ def index(request):
 def channel_list(request,slug):
     ''' This view is the view for the channel's list it works almost like the index view'''
     channel = get_object_or_404(Channel, slug=slug)
-    queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
+    if request.user.is_authenticated():
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
+    else:
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
@@ -120,7 +126,10 @@ def iframe(request, slug):
 
 def tag(request, tag):
     ''' Gets all media items for a specified tag'''
-    mediaitemslist = MediaItem.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
+    if request.user.is_authenticated():
+        mediaitemslist = MediaItem.objects.filter(encodingDone=True, tags__slug__in=[tag]).order_by('-date')
+    else:
+        mediaitemslist = MediaItem.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
     tag_name = get_object_or_404(Tag, slug=tag)
     return render_to_response('portal/items/list.html', {'mediaitems_list': mediaitemslist, 'tag':tag_name, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'settings': settings},
                             context_instance=RequestContext(request))
@@ -128,7 +137,10 @@ def tag(request, tag):
 def collection(request, slug):
     ''' Gets all media items for a channel'''
     collection = get_object_or_404(Collection, slug=slug)
-    mediaitemslist = collection.items.filter(encodingDone=True, published=True)
+    if request.user.is_authenticated():
+        mediaitemslist = collection.items.filter(encodingDone=True)
+    else:
+        mediaitemslist = collection.items.filter(encodingDone=True, published=True)
     return render_to_response('portal/collection.html', {'mediaitems_list': mediaitemslist, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'collection':collection, 'settings': settings},
                             context_instance=RequestContext(request))
 
@@ -141,7 +153,10 @@ def search(request):
         
         entry_query = get_query(query_string, ['title', 'description', 'tags__name'])
         
-        found_entries = MediaItem.objects.filter(entry_query).order_by('-date')
+        if request.user.is_authenticated():
+            found_entries = MediaItem.objects.filter(entry_query).order_by('-date')
+        else:
+            found_entries = MediaItem.objects.filter(entry_query, published=True).order_by('-date')
 
     return render_to_response('portal/search_results.html',
                           { 'query_string': query_string, 'mediaitems_list': found_entries, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},

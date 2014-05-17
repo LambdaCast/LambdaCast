@@ -17,6 +17,15 @@ def make_torrent_done(modeladmin, request, queryset):
     queryset.update(torrentDone=True)
 make_torrent_done.short_description = _(u"Marked media all get a torrent")
 
+class MediaFileInline(admin.TabularInline):
+    model = MediaFile
+    extra = 0
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'url', 'file_format', 'media_item')
+        }),
+    )
+
 class MediaItemAdmin (admin.ModelAdmin):
     list_display = ['title','published','encodingDone', 'channel' ,'date']
     ordering = ['-date','-created']
@@ -31,6 +40,9 @@ class MediaItemAdmin (admin.ModelAdmin):
             'fields': ('user','torrentURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
         }),
     )
+    inlines = [
+        MediaFileInline,
+    ]
 admin.site.register(MediaItem,MediaItemAdmin)
 
 def make_moderated(modeladmin,request, queryset):
@@ -68,10 +80,10 @@ class SubmittalAdmin(admin.ModelAdmin):
 admin.site.register(Submittal,SubmittalAdmin)
 
 class MediaFileAdmin(admin.ModelAdmin):
-    list_display = ['title','url','size','file_format','media_item']
+    list_display = ['title','url','size','media_item']
     fieldsets = (
         (None, {
-            'fields': ('title', 'url')
+            'fields': ('media_item', 'title', 'url', 'file_format')
         }),
     )
 

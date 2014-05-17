@@ -18,6 +18,9 @@
 			</a></div>
 			{% if user.is_authenticated %}
 				<a href="/admin/portal/mediaitem/{{ mediaitem.pk }}"><button class="btn btn-warning btn-mini pull-right btn-mini-edit"><i class="icon-pencil"></i></button></a>
+				{% if not mediaitem.published %}
+					<span class="label label-warning pull-right unpublished">{% trans "Unpublished" %}</span> 
+				{% endif %}
 			{% endif %}
 			<a href="/item/{{ mediaitem.slug }}/"><h4>{{ mediaitem.title }}</h4></a>
 			<span><strong>{% trans "Description" %}: </strong>{{ mediaitem.markdown_free|truncatechars:150 }}</span><br/>
