@@ -33,7 +33,7 @@ class iTunesFeed(Rss201rev2Feed):
         handler.startElement('image', {})
         handler.addQuickElement('title', self.feed['title'])
         handler.addQuickElement('url', self.feed['iTunes_image_url'])
-        handler.addQuickElement('link', self.feed['img_site_url'])
+        handler.addQuickElement('link', self.feed['site_url'])
         handler.endElement('image')
 
     def add_item_elements(self,  handler, item):
@@ -57,7 +57,7 @@ class MediaFeed(Feed):
         self.fileformat = fileformat
 
     def items(self):
-        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__date').order_by('-media_item__created')
+        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__date', '-media_item__created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
@@ -65,7 +65,7 @@ class MediaFeed(Feed):
         extra['iTunes_email'] = settings.CONTACT_EMAIL
         extra['iTunes_image_url'] = settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
-        extra['img_site_url'] = settings.WEBSITE_URL
+        extra['site_url'] = settings.WEBSITE_URL
         return extra
 
     def item_extra_kwargs(self, item):
@@ -120,7 +120,7 @@ class TorrentFeed(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self):
-        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-date')[:15]
+        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-date', '-created')[:15]
 
     def item_title(self, item):
         return item.title
@@ -149,7 +149,7 @@ class ChannelFeed(MediaFeed):
         extra['iTunes_email'] = settings.CONTACT_EMAIL
         extra['iTunes_image_url'] = obj.channelThumbURL if not obj.channelThumbURL == '' else settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
-        extra['img_site_url'] = settings.WEBSITE_URL
+        extra['site_url'] = settings.WEBSITE_URL
         return extra
 
     def title(self, obj):
@@ -181,7 +181,7 @@ class ChannelFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-date')
+        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-date', '-created')
 
     def item_title(self, item):
         return item.title
@@ -233,7 +233,7 @@ class CollectionFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-date')
+        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-date', '-created')
 
     def item_title(self, item):
         return item.title
