@@ -227,8 +227,10 @@ function updateCaptcha(){
 $('.js-captcha-refresh').click(updateCaptcha);
 
 $(document).ready(function() {
+	var timecode;
 	var timeListener = function(value) {	
 		$('#id_timecode').val( value.toFixed(2) )
+		timecode = value;
 	}
 	{% if mediaitem.get_video_files %}
 	var video_player = projekktor('#player_video', {
@@ -237,6 +239,7 @@ $(document).ready(function() {
 		streamType: 'http',
 	});
 	video_player.addListener('time', timeListener);
+	$('#video_player').data('player', video_player);
 	{% endif %}
 	{% if mediaitem.get_audio_files %}
 	var audio_player = projekktor('#player_audio', {
@@ -245,6 +248,7 @@ $(document).ready(function() {
 		streamType: 'http',
 	});
 	audio_player.addListener('time', timeListener);
+	$('#audio_player').data('player', audio_player);
 	{% endif %}
 
 	$('.timecode').click(function(){
@@ -258,13 +262,24 @@ $(document).ready(function() {
 		var clickedTab = $(this);
 		if (!clickedTab.parent().hasClass('active')) {
 			clickedTab.tab('show');
+			var activeTab;
+			var inactiveTab;
 			$('.player-container').each(function() {
 				if ('#' + $(this).attr('id') == clickedTab.attr('href')) {
-					$(this).removeClass('inactive-player-tab');
+					activeTab = $(this);
 				} else {
-					$(this).addClass('inactive-player-tab');
+					inactiveTab = $(this);
 				}
 			});
+			inactiveTab.addClass('inactive-player-tab');
+			activeTab.removeClass('inactive-player-tab');
+			inactivePlayer = inactiveTab.data('player');
+			activePlayer = activeTab.data('player');
+			if (inactivePlayer.getState() == 'PLAYING') {
+				inactivePlayer.setPause();
+				activePlayer.setPlay();
+				activePlayer.setPlayhead(timecode);
+			}
 		}
 	});
 });
