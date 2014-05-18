@@ -22,6 +22,7 @@ import subprocess
 import decimal
 import re
 import time
+import os.path
 
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3
@@ -146,7 +147,8 @@ class MediaItem(models.Model):
         outputdir = settings.ENCODING_OUTPUT_DIR + self.slug + '/'
 
         # try to get a video thumbnail
-        outcode = subprocess.Popen(['ffmpeg -i '+ original_path + ' -ss 5.0 -vframes 1 -f image2 ' + outputdir + self.slug + '.jpg'],shell = True)
+        ffmpeg_filename = outputdir + self.slug + '_cover.jpg'
+        outcode = subprocess.Popen(['ffmpeg -i '+ original_path + ' -ss 5.0 -vframes 1 -f image2 ' + ffmpeg_filename],shell = True)
 
         # Get cover of mp3-file
         if original_path.endswith('.mp3') and not self.audioThumbURL:
@@ -171,9 +173,9 @@ class MediaItem(models.Model):
         while outcode.poll() == None:
             time.sleep(0.1);
 
-        if outcode.poll() == 0:
+        if outcode.poll() == 0 and os.path.isfile(ffmpeg_filename):
             # safe if successful, else ignore it
-            self.videoThumbURL = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '.jpg'
+            self.videoThumbURL = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '_cover.jpg'
 
         # TODO: use update_fields after update to django 1.5
         update(self, audioThumbURL=self.audioThumbURL, videoThumbURL=self.videoThumbURL).save()

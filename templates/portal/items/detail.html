@@ -42,13 +42,13 @@
 			<div class="span8">
 				{% if mediaitem.get_video_files and mediaitem.get_audio_files %}
 				<ul class="nav nav-tabs">
-					<li class="active" id="video_tab"><a>{% trans "Video" %}</a></li>
-					<li id="audio_tab"><a>{% trans "Audio" %}</a></li>
+					<li class="active" id="video_tab"><a href="#video_player">{% trans "Video" %}</a></li>
+					<li id="audio_tab"><a href="#audio_player">{% trans "Audio" %}</a></li>
 				</ul>
 				{% endif %}
 				<div id="player_container">
 					{% if mediaitem.get_video_files %}
-					<div id="video_player">
+					<div id="video_player" class="player-container">
 						<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
 						{% for video in mediaitem.get_video_files %}
 							<source src="{{ video.url }}" type="{{ video.mime_type }}" />
@@ -57,7 +57,7 @@
 					</div>
 					{% endif %}
 					{% if mediaitem.get_audio_files %}
-					<div id="audio_player" {% if mediaitem.get_video_files and mediaitem.get_audio_files %}style="display:none;"{% endif %}>
+					<div id="audio_player" class="player-container{% if mediaitem.get_video_files %} inactive-player-tab{% endif %}">
 						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }}{% elif mediaitem.channel.channelThumbURL %}{{ mediaitem.channel.channelThumbURL }}{% else %}{{ STATIC_URL }}audio_cover.png{% endif %}" controls>
 						{% for audio in mediaitem.get_audio_files %}
 							<source src="{{ audio.url }}" type="{{ audio.mime_type }}" />
@@ -227,49 +227,61 @@ function updateCaptcha(){
 $('.js-captcha-refresh').click(updateCaptcha);
 
 $(document).ready(function() {
+	var timecode;
 	var timeListener = function(value) {	
 		$('#id_timecode').val( value.toFixed(2) )
+		timecode = value;
 	}
 	{% if mediaitem.get_video_files %}
 	var video_player = projekktor('#player_video', {
 		/* path to the MP4 Flash-player fallback component */
 		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-
-		/* path to the MP3 Flash-player fallback component */
-		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 		streamType: 'http',
 	});
 	video_player.addListener('time', timeListener);
+	$('#video_player').data('player', video_player);
 	{% endif %}
 	{% if mediaitem.get_audio_files %}
 	var audio_player = projekktor('#player_audio', {
-		/* path to the MP4 Flash-player fallback component */
-		playerFlashMP4:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
-
 		/* path to the MP3 Flash-player fallback component */
 		playerFlashMP3:	'{{ STATIC_URL }}projekktor/jarisplayer.swf',
 		streamType: 'http',
 	});
 	audio_player.addListener('time', timeListener);
+	$('#audio_player').data('player', audio_player);
 	{% endif %}
 
 	$('.timecode').click(function(){
 		if (typeof(video_player) !== 'undefined' && $('#video_tab').hasClass('active')) { video_player.setPlay();video_player.setPlayhead(parseFloat(this.text)); }
 		if (typeof(audio_player) !== 'undefined' && $('#audio_tab').hasClass('active')) { audio_player.setPlay();audio_player.setPlayhead(parseFloat(this.text)); }
 		return false;
-	})
+	});
+
+	$('#video_tab a, #audio_tab a').click(function (e) {
+		e.preventDefault();
+		var clickedTab = $(this);
+		if (!clickedTab.parent().hasClass('active')) {
+			clickedTab.tab('show');
+			var activeTab;
+			var inactiveTab;
+			$('.player-container').each(function() {
+				if ('#' + $(this).attr('id') == clickedTab.attr('href')) {
+					activeTab = $(this);
+				} else {
+					inactiveTab = $(this);
+				}
+			});
+			inactiveTab.addClass('inactive-player-tab');
+			activeTab.removeClass('inactive-player-tab');
+			inactivePlayer = inactiveTab.data('player');
+			activePlayer = activeTab.data('player');
+			if (inactivePlayer.getState() == 'PLAYING') {
+				inactivePlayer.setPause();
+				activePlayer.setPlay();
+				activePlayer.setPlayhead(timecode);
+			}
+		}
+	});
 });
-$('#video_tab a').click(function (e) {
-	e.preventDefault();
-	$(this).tab('show');
-	$('#video_player').toggle();
-	$('#audio_player').toggle();
-})
-$('#audio_tab a').click(function (e) {
-	e.preventDefault();
-	$(this).tab('show');
-	$('#video_player').toggle();
-	$('#audio_player').toggle();
-})
 </script>
 {% endblock %}

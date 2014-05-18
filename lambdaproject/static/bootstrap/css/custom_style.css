@@ -82,3 +82,8 @@ ul.edit-menu {
 .unpublished {
 	margin: 10px 5px 8px 5px;
 }
+
+.inactive-player-tab {
+	position: absolute;
+	left: -2000px;
+}
