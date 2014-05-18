@@ -37,13 +37,14 @@ urlpatterns = patterns('',
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/(?P<fileformat>[-\w]+)/$', CollectionFeed()),
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/torrent/$', CollectionFeedTorrent()),
     url(r'^feeds/comments/$', CommentsFeed()),
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^captcha/', include('captcha.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 
-urlpatterns += patterns('',
-    url(r'^captcha/', include('captcha.urls')),
-)
+if "django.contrib.admindocs" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        url(r'^admindocs/', include('django.contrib.admindocs.urls')),
+    )
 
 if settings.DEBUG:
     urlpatterns += patterns('',

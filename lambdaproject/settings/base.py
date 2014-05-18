@@ -164,9 +164,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'django_admin_bootstrapped',
     'django.contrib.admin',
+    #'django.contrib.admindocs',
     'django.contrib.markup',
     'taggit',
     'portal',
