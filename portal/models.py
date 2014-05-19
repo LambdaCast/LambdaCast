@@ -41,6 +41,10 @@ class MediaFile(models.Model):
     media_item = models.ForeignKey('portal.MediaItem', help_text=_(u"Media Item the file is connected to"))
     mediatype = models.CharField(_(u"Media Type"), max_length=20, choices=MEDIA_TYPES, default="audio", help_text=_(u"File type of the media file (audio or video)"))
 
+    class Meta:
+        verbose_name = _('Media File')
+        verbose_name_plural = _('Media Files')
+
     def mime_type(self):
         return MEDIA_FORMATS[self.file_format].mime_type
 
@@ -96,6 +100,10 @@ class MediaItem(models.Model):
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     originalFile = models.FileField(_(u"File"),upload_to="raw/%Y/%m/%d/",max_length=2048)
+
+    class Meta:
+        verbose_name = _('Media Item')
+        verbose_name_plural = _('Media Items')
 
     def __unicode__(self):
         return self.title
@@ -240,6 +248,10 @@ class Comment(models.Model):
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
 
+    class Meta:
+        verbose_name = _('Comment')
+        verbose_name_plural = _('Comments')
+
     def __unicode__(self):
         return self.comment
 
@@ -273,6 +285,10 @@ class Hotfolder(models.Model):
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
 
+    class Meta:
+        verbose_name = _('Hotfolder')
+        verbose_name_plural = _('Hotfolder')
+
     def __unicode__(self):
         return self.folderName
 
@@ -285,6 +301,11 @@ class Collection(models.Model):
     channel = models.ForeignKey('portal.Channel',blank=True,null=True,help_text=_(u"Channels you want to add to your collection"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
+
+    class Meta:
+        verbose_name = _('Collection')
+        verbose_name_plural = _('Collections')
+
     def __unicode__(self):
         return self.title
     def getClassName(self):
@@ -312,6 +333,11 @@ class Submittal(models.Model):
     media_published = models.BooleanField(verbose_name=_(u"Published"))
     media_tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the media item is about in short terms divided by commas"))
     media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
+
+    class Meta:
+        verbose_name = _('Submittal')
+        verbose_name_plural = _('Submittals')
+
     def __unicode__(self):
         return self.title
 
