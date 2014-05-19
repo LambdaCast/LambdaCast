@@ -87,3 +87,6 @@ ul.edit-menu {
 	position: absolute;
 	left: -2000px;
 }
+.timecode {
+	cursor: pointer;
+}
