@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-20 22:59+0200\n"
+"POT-Creation-Date: 2014-05-20 23:23+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: Dennis (dennis@theradio.cc)\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,6 +174,7 @@ msgid "The latest episodes from %s"
 msgstr "Die neusten Inhalte von %s"
 
 #: portal/feeds.py:117
+#, python-format
 msgid "%s - Latest Episodes (Torrent)"
 msgstr "%s - Neuste Inhalte"
 
@@ -289,7 +290,8 @@ msgstr "CreativeCommons - Namensnennung - Nicht-Kommerziell"
 
 #: portal/licenses.py:14
 msgid "CreativeCommons - Attribution - NonCommercial - NoDerivs"
-msgstr "CreativeCommons - Namensnennung - Nicht-Kommerziell - Keine Bearbeitung"
+msgstr ""
+"CreativeCommons - Namensnennung - Nicht-Kommerziell - Keine Bearbeitung"
 
 #: portal/licenses.py:15
 msgid "CreativeCommons - Attribution - NoDerivs"
@@ -381,7 +383,7 @@ msgid "Shows which user made or uploaded the media item"
 msgstr "Zeigt an welcher Benutzer den Inhalt hochgeladen oder gemacht hat"
 
 #: portal/models.py:89 portal/models.py:282 portal/models.py:324
-#: templates/portal/items/detail.html:148
+#: templates/portal/channel.html:40 templates/portal/items/detail.html:148
 msgid "Channel"
 msgstr "Kanal"
 
@@ -400,7 +402,8 @@ msgstr "Rechte die der Zuhörer/Zuschauer erhält"
 
 #: portal/models.py:91 portal/models.py:326
 msgid "Insert a link to a blog or website that relates to the media"
-msgstr "Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
+msgstr ""
+"Füge einen Link zu einem Blog oder einer Website hinzu, die etwas mit dem "
 "Inhalt zu tun hat."
 
 #: portal/models.py:92 portal/models.py:327
@@ -453,7 +456,8 @@ msgstr "Tags"
 
 #: portal/models.py:100 portal/models.py:336
 msgid "Insert what the media item is about in short terms divided by commas"
-msgstr "Füge kurze Begriffe ein, die den Inhalt beschreiben und trenne sie mit "
+msgstr ""
+"Füge kurze Begriffe ein, die den Inhalt beschreiben und trenne sie mit "
 "Kommatas."
 
 #: portal/models.py:106 portal/models.py:249 portal/models.py:302
@@ -560,7 +564,8 @@ msgstr "Nutzer der Vorlage"
 
 #: portal/models.py:323
 msgid "User who use the submittal and get it shown on frontpage"
-msgstr "Nutzer die, die Vorlage auf der Portalseite auswählen und benutzen können"
+msgstr ""
+"Nutzer die, die Vorlage auf der Portalseite auswählen und benutzen können"
 
 #: portal/models.py:328
 msgid "Add the link of the media folder or any other one with .mp4 ending"
@@ -657,12 +662,14 @@ msgstr "Erstelle eine Torrent-Datei für die Inhalte und biete Bittorrent an"
 
 #: templates/404.html:6
 msgid "The Supercat destroyed it with it's SUPERSCRATCH!"
-msgstr "Die Supercat hat es mithilfe ihrer Heldenfähigkeit SUPERKRATZER kaputt "
+msgstr ""
+"Die Supercat hat es mithilfe ihrer Heldenfähigkeit SUPERKRATZER kaputt "
 "gemacht."
 
 #: templates/404.html:11
 msgid "Supercat does not find anything. Speak Cattish to improve your results."
-msgstr "Supercat hat nichts gefunden. Du musst Katzisch sprechen, damit dir "
+msgstr ""
+"Supercat hat nichts gefunden. Du musst Katzisch sprechen, damit dir "
 "Ergebnisse angezeigt werden."
 
 #: templates/500.html:6
@@ -807,58 +814,58 @@ msgstr "Kanal Audio Feed (MP3)"
 msgid "Channel Audio Feed (OGG)"
 msgstr "Kanal Audio Feed (OGG)"
 
-#: templates/portal/channel.html:46
+#: templates/portal/channel.html:49
 msgid "Latest Media"
 msgstr "Neuste Inhalte"
 
-#: templates/portal/channel.html:59 templates/portal/index.html:27
+#: templates/portal/channel.html:62 templates/portal/index.html:27
 msgid "All Channels"
 msgstr "Alle Kanäle"
 
-#: templates/portal/channel.html:73
+#: templates/portal/channel.html:76
 msgid "Later"
 msgstr "Später"
 
-#: templates/portal/channel.html:78
+#: templates/portal/channel.html:81
 msgid "Earlier"
 msgstr "Früher"
 
-#: templates/portal/channel.html:88 templates/portal/collection.html:36
+#: templates/portal/channel.html:91 templates/portal/collection.html:36
 #: templates/portal/inc/latest-feeds.html:5
 msgid "Original Material"
 msgstr "Originales Material"
 
-#: templates/portal/channel.html:97 templates/portal/collection.html:45
+#: templates/portal/channel.html:100 templates/portal/collection.html:45
 #: templates/portal/inc/latest-feeds.html:14
 msgid "Video-Podcast"
 msgstr "Video-Podcast"
 
-#: templates/portal/channel.html:100 templates/portal/collection.html:48
+#: templates/portal/channel.html:103 templates/portal/collection.html:48
 #: templates/portal/inc/latest-feeds.html:17
 msgid "MP4-Format"
 msgstr "MP4-Format"
 
-#: templates/portal/channel.html:103 templates/portal/collection.html:51
+#: templates/portal/channel.html:106 templates/portal/collection.html:51
 #: templates/portal/inc/latest-feeds.html:20
 msgid "WEBM-Format"
 msgstr "WEBM-Format"
 
-#: templates/portal/channel.html:109 templates/portal/collection.html:57
+#: templates/portal/channel.html:112 templates/portal/collection.html:57
 #: templates/portal/inc/latest-feeds.html:26
 msgid "Audio-Podcast"
 msgstr "Audio-Podcast"
 
-#: templates/portal/channel.html:112 templates/portal/collection.html:60
+#: templates/portal/channel.html:115 templates/portal/collection.html:60
 #: templates/portal/inc/latest-feeds.html:29
 msgid "MP3-Format"
 msgstr "MP3-Format"
 
-#: templates/portal/channel.html:115 templates/portal/collection.html:63
+#: templates/portal/channel.html:118 templates/portal/collection.html:63
 #: templates/portal/inc/latest-feeds.html:32
 msgid "OGG-Format"
 msgstr "OGG-Format"
 
-#: templates/portal/channel.html:120 templates/portal/collection.html:68
+#: templates/portal/channel.html:123 templates/portal/collection.html:68
 #: templates/portal/index.html:63 templates/portal/search_results.html:18
 #: templates/portal/items/list.html:18
 msgid "Contact"
@@ -870,7 +877,8 @@ msgstr "Neueste Inhalte"
 
 #: templates/portal/status.html:9
 msgid "This site shows all media that will be or is transcoded"
-msgstr "Diese Seite zeigt alle Medien, die transkodiert werden oder es schon sind."
+msgstr ""
+"Diese Seite zeigt alle Medien, die transkodiert werden oder es schon sind."
 
 #: templates/portal/status.html:39
 msgid "Save cover"
@@ -1010,4 +1018,3 @@ msgstr "Warnung!"
 #: templates/registration/login.html:14
 msgid "Username and password are not working together"
 msgstr "Benutzername und Passwort sind nicht passend"
-
