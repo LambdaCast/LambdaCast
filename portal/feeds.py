@@ -81,7 +81,7 @@ class MediaFeed(Feed):
         elif media_item.channel and media_item.channel.channelThumbURL:
             extra['item_thumb'] = media_item.channel.channelThumbURL
         else:
-            extra['item_thumb'] = ''
+            extra['item_thumb'] = settings.LOGO_URL
         return extra
 
     def item_title(self, item):
