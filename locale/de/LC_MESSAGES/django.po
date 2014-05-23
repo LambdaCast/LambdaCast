@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-20 23:23+0200\n"
+"POT-Creation-Date: 2014-05-23 03:21+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: Dennis (dennis@theradio.cc)\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,7 +113,7 @@ msgstr "Aktiviert"
 msgid "Is part of the URL that you can define"
 msgstr "Ist Teil der URL, die festgelegt werden kann"
 
-#: pages/models.py:184 portal/forms.py:86 portal/models.py:38
+#: pages/models.py:184 portal/forms.py:87 portal/models.py:38
 #: portal/models.py:84 portal/models.py:284 portal/models.py:298
 #: portal/models.py:321
 msgid "Title"
@@ -208,67 +208,71 @@ msgstr "Neuer Kommentar zu %s"
 msgid "New comment to %s"
 msgstr "Neuer Kommentar zu %s"
 
-#: portal/forms.py:19
+#: portal/forms.py:20
 msgid "Automaticly"
 msgstr "Automatisch"
 
-#: portal/forms.py:27
+#: portal/forms.py:28
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
-#: portal/forms.py:28
+#: portal/forms.py:29
 msgid "File Formats"
 msgstr "Dateiformate"
 
-#: portal/forms.py:52
+#: portal/forms.py:53
 msgid "Enter the URL to the mp4 file"
 msgstr "Füge die URL zur mp4-Datei ein"
 
-#: portal/forms.py:52 portal/models.py:328
+#: portal/forms.py:53 portal/models.py:328
 msgid "MP4-URL"
 msgstr "MP4-URL"
 
-#: portal/forms.py:53
+#: portal/forms.py:54
 msgid "Enter the URL to the WebM file"
 msgstr "Füge die URL zur webm-Datei ein"
 
-#: portal/forms.py:53 portal/models.py:329
+#: portal/forms.py:54 portal/models.py:329
 msgid "WEBM-URL"
 msgstr "WEBM-URL"
 
-#: portal/forms.py:54
+#: portal/forms.py:55
 msgid "Enter the URL to the mp3 file"
 msgstr "Füge die URL zur mp3-Datei ein"
 
-#: portal/forms.py:54 portal/models.py:330
+#: portal/forms.py:55 portal/models.py:330
 msgid "MP3-URL"
 msgstr "MP3-URL"
 
-#: portal/forms.py:55
+#: portal/forms.py:56
 msgid "Enter the URL to the ogg file"
 msgstr "Füge die URL zur ogg-Datei ein"
 
-#: portal/forms.py:55 portal/models.py:331
+#: portal/forms.py:56 portal/models.py:331
 msgid "OGG-URL"
 msgstr "OGG-URL"
 
-#: portal/forms.py:56
+#: portal/forms.py:57
 msgid "Enter the URL to the Opus file"
 msgstr "Füge die URL zur opus-Datei ein"
 
-#: portal/forms.py:56 portal/models.py:332
+#: portal/forms.py:57 portal/models.py:332
 msgid "OPUS-URL"
 msgstr "OPUS-URL"
 
-#: portal/forms.py:86
+#: portal/forms.py:87
 msgid "The name of the image with file format like \"test.png\""
 msgstr "Der Dateiname des Bildes mit Dateiendung \"test.png\""
 
 #: portal/forms.py:87
+msgid "Title must not contain a slash"
+msgstr "Der Titel darf keinen Schrägstrich enthalten"
+
+#: portal/forms.py:88
 msgid "Only upload image files"
 msgstr "Bitte lade ausschließlich Bilddateien hoch"
 
-#: portal/forms.py:87 portal/models.py:103
+#: portal/forms.py:88 portal/models.py:103
 msgid "File"
 msgstr "Datei"
 
