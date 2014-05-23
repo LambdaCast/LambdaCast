@@ -192,6 +192,7 @@ ENCODING_OUTPUT_DIR = MEDIA_ROOT + '/encoded/'
 ENCODED_BASE_URL = DOMAIN + '/media/encoded/'
 
 THUMBNAILS_DIR = MEDIA_ROOT + '/thumbnails/'
+THUMBNAILS_BASE_URL = DOMAIN + '/media/thumbnails/'
 
 ENABLE_LIVESTREAMS = False
 

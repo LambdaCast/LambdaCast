@@ -238,7 +238,7 @@ def upload_thumbnail(request):
 def handle_uploaded_thumbnail(f, filename):
     suffix = '.png' if (f.content_type == 'image/png') else '.jpg'
     suffix = '' if (filename.endswith(suffix)) else suffix
-    destination = open('media/thumbnails/' + filename + suffix, 'wb+')
+    destination = open(settings.THUMBNAILS_DIR + filename + suffix, 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
     destination.close()

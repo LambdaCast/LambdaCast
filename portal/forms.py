@@ -19,7 +19,7 @@ def getThumbnails(thumbssettings):
     thumb_list = [("", _(u"Automaticly"))]
     for thumbfile in os.listdir(thumbsdir):
         if os.path.isfile(os.path.join(thumbsdir, thumbfile)):
-            thumb_list.append(((settings.DOMAIN + "/media/thumbnails/" + thumbfile),(thumbfile)))
+            thumb_list.append(((settings.THUMBNAILS_BASE_URL + thumbfile),(thumbfile)))
     return thumb_list
 
 class MediaItemForm(ModelForm):
