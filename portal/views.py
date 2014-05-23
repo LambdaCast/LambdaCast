@@ -231,7 +231,7 @@ def upload_thumbnail(request):
                 return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list, 'error': error}, context_instance=RequestContext(request))
 
         else:
-            return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+            return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
     else:
         return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
     
