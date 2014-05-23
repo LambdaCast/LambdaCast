@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django.forms import Form, ModelForm
 from django import forms
+from django.core.validators import RegexValidator
 
 from captcha.fields import CaptchaField
 
@@ -83,5 +84,5 @@ class SubmittalForm(ModelForm):
 
 class ThumbnailForm(Form):
     ''' Used for uploading thumbnails '''
-    title = forms.CharField(max_length=50, help_text=_('The name of the image with file format like "test.png"'), label=_("Title"))
+    title = forms.CharField(max_length=50, help_text=_('The name of the image with file format like "test.png"'), label=_("Title"), validators=[RegexValidator(regex="^((?!/).)*$", message=_("Title must not contain a slash"), code='invalid_title')])
     file = forms.FileField(help_text=_('Only upload image files'),label=_("File"))
