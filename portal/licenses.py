@@ -13,6 +13,7 @@ LICENSE_CHOICES = (
     ("CC-BY-NC", _(u"CreativeCommons - Attribution - NonCommercial")),
     ("CC-BY-NC-ND", _(u"CreativeCommons - Attribution - NonCommercial - NoDerivs")),
     ("CC-BY-ND", _(u"CreativeCommons - Attribution - NoDerivs")),
+    ("CC-BY-TRCC", "CreativeCommons - Namensnennung (Musik kann andere Lizenz haben)"),
 )
 
 LICENSE_URLS = {'None': "",
@@ -20,5 +21,6 @@ LICENSE_URLS = {'None': "",
                 'CC-BY': _(u"http://creativecommons.org/licenses/by/3.0/"),
                 'CC-BY-NC': _(u"http://creativecommons.org/licenses/by-nc/3.0/"),
                 'CC-BY-NC-ND': _(u"http://creativecommons.org/licenses/by-nc-nd/3.0/"),
-                'CC-BY-ND': _(u"http://creativecommons.org/licenses/by-nd/3.0/")
+                'CC-BY-ND': _(u"http://creativecommons.org/licenses/by-nd/3.0/"),
+                'CC-BY-TRCC': "http://rec.theradio.cc/p/infos/"
 }
