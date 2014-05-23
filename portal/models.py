@@ -182,8 +182,12 @@ class MediaItem(models.Model):
             time.sleep(0.1);
 
         if outcode.poll() == 0 and os.path.isfile(ffmpeg_filename):
-            # safe if successful, else ignore it
+            # safe if successful, else use audiothumb
             self.videoThumbURL = settings.ENCODED_BASE_URL + self.slug + '/' + self.slug + '_cover.jpg'
+            if not self.audioThumbURL:
+                self.audioThumbURL = self.videoThumbURL
+        elif self.audioThumbURL:
+            self.videoThumbURL = self.audioThumbURL
 
         # TODO: use update_fields after update to django 1.5
         update(self, audioThumbURL=self.audioThumbURL, videoThumbURL=self.videoThumbURL).save()
