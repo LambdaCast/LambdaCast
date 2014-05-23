@@ -957,7 +957,7 @@ msgstr "Mit diesem Formular kann man neue Thumbnails hochladen, um diese dann be
 #: templates/portal/items/detail.html:35 templates/portal/items/detail.html:93
 #: templates/portal/items/listitem.html:22
 msgid "Unpublished"
-msgstr "Veröffentlicht"
+msgstr "Unveröffentlicht"
 
 #: templates/portal/items/detail.html:45
 msgid "Video"
