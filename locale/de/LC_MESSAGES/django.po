@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-23 03:21+0200\n"
+"POT-Creation-Date: 2014-05-23 13:19+0200\n"
 "PO-Revision-Date: 2013-03-02 20:19+0100\n"
 "Last-Translator: Dennis (dennis@theradio.cc)\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -730,7 +730,7 @@ msgstr "Menü"
 
 #: templates/nav.html:8 templates/portal/submit.html:4
 #: templates/portal/submit.html.py:7 templates/portal/submit.html:180
-#: templates/portal/thumbnail.html:13 templates/portal/thumbnail.html.py:45
+#: templates/portal/thumbnail.html:13 templates/portal/thumbnail.html.py:46
 msgid "Upload"
 msgstr "Hochladen"
 
@@ -934,8 +934,8 @@ msgstr "Keine Protokolle gefunden!"
 #: templates/portal/submit.html:101 templates/portal/submit.html.py:115
 #: templates/portal/submit.html:131 templates/portal/submit.html.py:145
 #: templates/portal/submit.html:159 templates/portal/submittal.html:16
-#: templates/portal/submittal.html.py:22 templates/portal/thumbnail.html:27
-#: templates/portal/thumbnail.html.py:33
+#: templates/portal/submittal.html.py:22 templates/portal/thumbnail.html:28
+#: templates/portal/thumbnail.html.py:34
 #: templates/portal/items/detail.html:120
 msgid "Error!"
 msgstr "Fehler!"
@@ -947,6 +947,12 @@ msgstr "Inhalte hinzufügen"
 #: templates/portal/thumbnail.html:14
 msgid "Thumbnail List"
 msgstr "Vorschaubild"
+
+#: templates/portal/thumbnail.html:19
+msgid ""
+"With this form you can upload new thumbnails to then select them when "
+"uploading new content."
+msgstr "Mit diesem Formular kann man neue Thumbnails hochladen, um diese dann beim Upload neuer Inhalte auszuwählen."
 
 #: templates/portal/items/detail.html:35 templates/portal/items/detail.html:93
 #: templates/portal/items/listitem.html:22
