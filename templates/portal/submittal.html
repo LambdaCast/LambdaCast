@@ -3,13 +3,13 @@
 {% block title %} - {% trans "Submittal" %} "{{ submittal.title }}"{% endblock %}
 {% block body %}
 <div class="page-header">
-	{% if perms.portal.change_video and user.is_staff %}
+	{% if perms.portal.change_mediaitem and user.is_staff %}
 			<a href="/admin/portal/submittal/{{ submittal.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 	<h1>{% trans "Submittal" %} "{{ submittal.title }}"</h1>
 </div>
 <div class="row">
-	<div class="span6">
+	<div class="span8">
 		<form id="submittalForm" class="form-horizontal" action="/submittal/{{ submittal.id }}/" method="post">
 			{% csrf_token %}
 			<div style="display: none" id="formError" class="alert alert-error">
@@ -34,7 +34,7 @@
 				<input type="submit" class="btn btn-primary" value="{% trans "Add media" %}" />
 			</div><!-- form-actions -->
 		</form>
-	</div><!-- span6 -->
+	</div><!-- span8 -->
 </div><!-- row -->
 {% endblock %}
 {% block javascript %}

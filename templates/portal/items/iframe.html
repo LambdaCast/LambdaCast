@@ -12,17 +12,18 @@
 		<link rel="stylesheet" href="{{ STATIC_URL }}projekktor/theme/maccaco/projekktor.style.css" type="text/css" media="screen" />
 	</head>
 	<body>
-
-		{% if video.kind == 0 or video.kind == 2 %}
-		<video class="projekktor" poster="{{ video.videoThumbURL }}" title="{{ video.title }}" width="640" height="360" controls>
-			{% if video.webmURL %}<source src="{{ video.webmURL }}" type="video/webm" />{% endif %}
-			{% if video.mp4URL %}<source src="{{ video.mp4URL }}" type="video/mp4" />{% endif %}
+		{% if mediaitem.get_video_files %}
+		<video class="projekktor" poster="{{ mediaitem.videoThumbURL }}" title="{{ mediaitem.title }}" width="640" height="360" controls>
+			{% for video in mediaitem.get_video_files %}
+				<source src="{{ video.url }}" type="{{ video.mime_type }}" />
+			{% endfor %}
 		</video>
 		{% endif %}
-		{% if video.kind == 1 %}
-		<audio class="projekktor" title="{{ video.title}}" width="640" height="360" poster="{% if video.audioThumbURL %}{{ video.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-			{% if video.mp3URL %}<source src="{{ video.mp3URL }}" type="audio/mp3" />{% endif %}
-			{% if video.oggURL %}<source src="{{ video.oggURL }}" type="application/ogg" />{% endif %}
+		{% if not mediaitem.get_video_files and mediaitem.get_audio_files %}
+		<audio class="projekktor" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+			{% for audio in mediaitem.get_audio_files %}
+				<source src="{{ audio.url }}" type="{{ audio.mime_type }}" />
+			{% endfor %}
 		</audio>
 		{% endif %}
 		<script type="text/javascript">

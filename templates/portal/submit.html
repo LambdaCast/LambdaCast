@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block active-upload %}class="active"{% endblock %}
+{% block title %} - {% trans "Upload" %}{% endblock %}
+{% block body %}
+<div class="page-header">
+	<h1>{% trans "Upload" %}</h1>
+</div>
+<div class=row">
+	<div class="span12">
+		<form id="mediaitemForm" enctype="multipart/form-data" class="form-horizontal" action="/submit/" method="post">
+			{% csrf_token %}
+			<div style="display: none" id="formError" class="alert alert-error">
+				<strong>{% trans "Error!" %}</strong>
+			</div>
+
+			<div class="row">
+				<div class="span6">
+					<!-- title -->
+					<div class="control-group">
+						{% if submit_form.title.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.title.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.title.label_tag }}{% if submit_form.title.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.title }}
+						</div>
+					</div>
+				</div>
+				<div class="span6">
+					<!-- date -->
+					<div class="control-group">
+						{% if submit_form.date.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.date.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.date.label_tag }}{% if submit_form.date.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.date }}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<!-- description -->
+					<div class="control-group">
+						{% if submit_form.description.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.description.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.description.label_tag }}{% if submit_form.description.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.description }}
+						</div>
+					</div>
+				</div>
+				<div class="span6">
+					<!-- channel -->
+					<div class="control-group">
+						{% if submit_form.channel.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.channel.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.channel.label_tag }}{% if submit_form.channel.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.channel }}
+						</div>
+					</div>
+					<!-- license -->
+					<div class="control-group">
+						{% if submit_form.license.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.license.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.license.label_tag }}{% if submit_form.license.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.license }}
+						</div>
+					</div>
+					<!-- link -->
+					<div class="control-group">
+						{% if submit_form.linkURL.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.linkURL.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.linkURL.label_tag }}{% if submit_form.linkURL.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.linkURL }}
+						</div>
+					</div>
+					<!-- tags -->
+					<div class="control-group">
+						{% if submit_form.tags.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.tags.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.tags.label_tag }}{% if submit_form.tags.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.tags }}
+						</div>
+					</div>
+				</div>
+				<div class="span6">
+					<!-- fileFormats -->
+					<div class="control-group">
+						{% if submit_form.fileFormats.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.fileFormats.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.fileFormats.label_tag }}{% if submit_form.fileFormats.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.fileFormats }}
+						</div>
+					</div>
+					<!-- originalFile -->
+					<div class="control-group">
+						{% if submit_form.originalFile.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.originalFile.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.originalFile.label_tag }}{% if submit_form.originalFile.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.originalFile }}
+						</div>
+					</div>
+					<!-- thumbURL -->
+					<div class="control-group">
+						{% if submit_form.thumbURL.errors %}
+						<div class="alert alert-error">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.thumbURL.errors }}</p>
+						</div>
+						{% endif %}
+						<div class="control-label">
+							{{ submit_form.thumbURL.label_tag }}{% if submit_form.thumbURL.field.required %} *{% endif %}
+						</div>
+						<div class="controls">
+							{{ submit_form.thumbURL }}
+						</div>
+					</div>
+				</div>
+			</div><!-- row -->
+
+			<div id="progress-indicator">
+				<div class="progress progress-striped active">
+					<div class="bar"></div >
+				</div>
+				<div class="percent">0%</div >
+			</div>
+
+			<div class="form-actions">
+				<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}jquery.validate.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}date.format.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}submit.js"></script>
+{% endblock %}

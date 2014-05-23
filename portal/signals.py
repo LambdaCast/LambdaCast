@@ -1,11 +1,14 @@
-from django.db.models.signals import pre_save
 import urllib2
+import shutil
+
+import lambdaproject.settings as settings
+from portal.media_formats import MEDIA_FORMATS
 
 def get_remote_filesize(sender, instance, **kwargs):
-    instance.mp3Size = _get_remote_filesize_for_url(instance.mp3URL)
-    instance.oggSize = _get_remote_filesize_for_url(instance.oggURL)
-    instance.mp4Size = _get_remote_filesize_for_url(instance.mp4URL)
-    instance.webmSize = _get_remote_filesize_for_url(instance.webmURL)
+    instance.size = _get_remote_filesize_for_url(instance.url)
+
+def get_mediatype(sender, instance, **kwargs):
+    instance.mediatype = MEDIA_FORMATS[instance.file_format].mediatype
 
 def _get_remote_filesize_for_url(url):
     try:
@@ -15,4 +18,9 @@ def _get_remote_filesize_for_url(url):
         response = urllib2.urlopen(request)
         return response.info().getheader('content-length')
     except:
-        return 0
+        pass
+
+def purge_files(sender, instance, **kwargs):
+    shutil.rmtree(settings.ENCODING_OUTPUT_DIR + instance.slug, True)
+    if instance.originalFile:
+        instance.originalFile.delete(False)

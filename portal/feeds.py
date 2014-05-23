@@ -1,17 +1,18 @@
-from django.contrib.syndication.views import Feed, FeedDoesNotExist
+from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from django.utils.feedgenerator import *
+from django.utils.feedgenerator import Rss201rev2Feed
 from django.http import Http404
 
-from portal.models import Video, Channel, Collection, Comment
+from string import upper
 
-from django.utils.feedgenerator import Rss201rev2Feed
+from portal.models import MediaItem, Channel, Collection, Comment, MediaFile
+from portal.media_formats import MEDIA_FORMATS
 
 import lambdaproject.settings as settings
 
 import markdown
-
+from datetime import datetime, time
 import os
 
 class iTunesFeed(Rss201rev2Feed):
@@ -29,22 +30,34 @@ class iTunesFeed(Rss201rev2Feed):
         handler.addQuickElement(u'itunes:email', self.feed['iTunes_email'])
         handler.endElement(u"itunes:owner")
         handler.addQuickElement(u'itunes:image', self.feed['iTunes_image_url'])
-        
+        handler.startElement('image', {})
+        handler.addQuickElement('title', self.feed['title'])
+        handler.addQuickElement('url', self.feed['iTunes_image_url'])
+        handler.addQuickElement('link', self.feed['site_url'])
+        handler.endElement('image')
 
     def add_item_elements(self,  handler, item):
         super(iTunesFeed, self).add_item_elements(handler, item)
         handler.addQuickElement(u'itunes:summary',item['summary'])
         handler.addQuickElement(u'itunes:duration',item['duration'])
         handler.addQuickElement(u'itunes:explicit',item['explicit'])
+        handler.addQuickElement(u'itunes:image', item['item_thumb'])
 
-class MainFeed(Feed):
+class MediaFeed(Feed):
     feed_type = iTunesFeed
+    title = ''
     description = ''
     subtitle = description
     author_name = settings.AUTHOR_NAME
 
+    def get_object(self, request, fileformat):
+        fileformat = upper(fileformat)
+        if fileformat not in MEDIA_FORMATS:
+            raise Http404
+        self.fileformat = fileformat
+
     def items(self):
-        return Video.objects.filter(published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return MediaFile.objects.select_related('media_item').filter(media_item__published=True, file_format=self.fileformat).exclude(size__isnull=True).order_by('-media_item__date', '-media_item__created')
 
     def feed_extra_kwargs(self, obj):
         extra = {}
@@ -52,108 +65,92 @@ class MainFeed(Feed):
         extra['iTunes_email'] = settings.CONTACT_EMAIL
         extra['iTunes_image_url'] = settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
+        extra['site_url'] = settings.WEBSITE_URL
         return extra
 
     def item_extra_kwargs(self, item):
         extra = {}
-        extra['duration'] = str(item.duration)
+        media_item = item.media_item
+        extra['duration'] = str(media_item.duration)
         extra['summary'] = self.item_description(item)
         extra['explicit'] = 'no'
+        if media_item.videoThumbURL:
+            extra['item_thumb'] = media_item.videoThumbURL
+        elif media_item.audioThumbURL:
+            extra['item_thumb'] = media_item.audioThumbURL
+        elif media_item.channel and media_item.channel.channelThumbURL:
+            extra['item_thumb'] = media_item.channel.channelThumbURL
+        else:
+            extra['item_thumb'] = settings.LOGO_URL
         return extra
 
     def item_title(self, item):
-        return item.title
+        return item.media_item.title
 
     def item_description(self, item):
-        return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
-
-    def item_enclosure_url(self, item):
-        if self.fileformat == 'mp3':
-            return item.mp3URL
-        elif self.fileformat == 'mp4':
-            return item.mp4URL
-        elif self.fileformat == 'ogg':
-            return item.oggURL
-        elif self.fileformat == 'webm':
-            return item.webmURL
-        else:
-            raise Http404
+        return markdown.markdown(item.media_item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
 
     def item_link(self, item):
-        if self.fileformat == 'mp3':
-            return item.mp3URL
-        elif self.fileformat == 'mp4':
-            return item.mp4URL
-        elif self.fileformat == 'ogg':
-            return item.oggURL
-        elif self.fileformat == 'webm':
-            return item.webmURL
-        else:
-            raise Http404
-
-    def item_enclosure_length(self, item):
-        if self.fileformat == 'mp3':
-            return item.mp3Size
-        elif self.fileformat == 'mp4':
-           return item.mp4Size
-        elif self.fileformat == 'ogg':
-            return item.oggSize
-        elif self.fileformat == 'webm':
-            return item.webmSize
-        else:
-            raise Http404
+        return '/item/' + item.media_item.slug
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
+
+    def item_enclosure_url(self, item):
+        return item.url
 
     def item_enclosure_length(self, item):
-        return item.duration
+        return item.size
 
-    def item_enclosure_mime_type(self):
-        if self.fileformat == 'mp4' or self.fileformat == 'webm':
-            return 'video/%s' % self.fileformat
-        else:
-            return 'audio/%s' % self.fileformat
+    def item_enclosure_mime_type(self, item):
+        return MEDIA_FORMATS[self.fileformat].mime_type
 
-
-class LatestVideos(MainFeed):
-    title = _("Latest Episodes")
+class LatestMedia(MediaFeed):
+    title = _("%s - Latest Episodes")  % (settings.SITE_NAME)
     link = "/"
-    description = _(u"The newest episodes from your beloved podcast")
-  
-    def get_object(self, request, fileformat):
-        self.fileformat = fileformat
+    description = _(u"The latest episodes from %s") % (settings.SITE_NAME)
 
+    def items(self):
+        return MediaFeed.items(self)[:15]
 
 class TorrentFeed(Feed):
-    title = _(u"TorrentFeed")
+    title = _(u"%s - Latest Episodes (Torrent)") % (settings.SITE_NAME)
     link = "/"
-    description = _("Torrent files from your beloved podcast")
+    description = _("Torrent feed for the latest episodes from %s") % (settings.SITE_NAME)
     item_enclosure_mime_type = "application/x-bittorrent"
-	
+
     def items(self):
-        return Video.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-created')
+        return MediaItem.objects.filter(published=True, torrentDone=True).exclude(torrentURL='').order_by('-date', '-created')[:15]
 
     def item_title(self, item):
         return item.title
 
     def item_description(self, item):
         return markdown.markdown(item.description, safe_mode='replace', html_replacement_text='[HTML_REMOVED]')
-        
-    def item_enclosure_url(self, item):
-    	return item.torrentURL
-    	
-    def item_enclosure_length(self, item):
-    	return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
-    	
-    def item_pubdate(self, item):
-    	return item.created
 
-class ChannelFeed(MainFeed):
+    def item_enclosure_url(self, item):
+        return item.torrentURL
+
+    def item_enclosure_length(self, item):
+        return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
+
+    def item_pubdate(self, item):
+        return datetime.combine(item.media_item.date, time())
+
+class ChannelFeed(MediaFeed):
     ''' This class (like the next one) gives the feeds for channels"'''
     def get_object(self, request, channel_slug, fileformat):
-        self.fileformat = fileformat
+        MediaFeed.get_object(self, request, fileformat)
         return get_object_or_404(Channel, slug=channel_slug)
+
+    def feed_extra_kwargs(self, obj):
+        extra = {}
+        extra['iTunes_name'] = settings.AUTHOR_NAME
+        extra['iTunes_email'] = settings.CONTACT_EMAIL
+        extra['iTunes_image_url'] = obj.channelThumbURL if not obj.channelThumbURL == '' else settings.LOGO_URL
+        extra['iTunes_explicit'] = 'no'
+        extra['site_url'] = settings.WEBSITE_URL
+        return extra
 
     def title(self, obj):
         return "%s: %s" % (settings.AUTHOR_NAME, obj.name)
@@ -163,10 +160,9 @@ class ChannelFeed(MainFeed):
 
     def description(self, obj):
         return obj.description
-    
-    def items(self, obj):
-        return Video.objects.filter(encodingDone=True, published=True, channel=obj).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
 
+    def items(self, obj):
+        return MediaFeed.items(self).filter(media_item__channel=obj)
 
 class ChannelFeedTorrent(Feed):
 
@@ -185,7 +181,7 @@ class ChannelFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return Video.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-created')
+        return MediaItem.objects.filter(published=True, channel=obj, torrentDone=True ).exclude(torrentURL='').order_by('-date', '-created')
 
     def item_title(self, item):
         return item.title
@@ -200,15 +196,15 @@ class ChannelFeedTorrent(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
-class CollectionFeed(MainFeed):
+class CollectionFeed(MediaFeed):
     def get_object(self, request, collection_slug, fileformat):
-        self.fileformat = fileformat
+        MediaFeed.get_object(self, request, fileformat)
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"Videos in Collection %s") % obj.title
+        return _(u"Media Items in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -217,7 +213,7 @@ class CollectionFeed(MainFeed):
         return obj.description
 
     def items(self, obj):
-        return obj.videos.filter(encodingDone=True, published=True).exclude(mp3URL='', oggURL='', webmURL='', mp4URL='').order_by('-created')
+        return MediaFeed.items(self).filter(media_item__in=obj.items.all())
 
 
 class CollectionFeedTorrent(Feed):
@@ -226,7 +222,7 @@ class CollectionFeedTorrent(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"Torrents for videos in Collection %s") % obj.title
+        return _(u"Torrents for items in Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -237,7 +233,7 @@ class CollectionFeedTorrent(Feed):
     item_enclosure_mime_type = "application/x-bittorrent"
 
     def items(self, obj):
-        return obj.videos.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-created')
+        return obj.items.filter(torrentDone=True, published=True).exclude(torrentURL='').order_by('-date', '-created')
 
     def item_title(self, item):
         return item.title
@@ -252,19 +248,19 @@ class CollectionFeedTorrent(Feed):
         return os.path.getsize(settings.BITTORRENT_FILES_DIR + item.slug + '.torrent')
 
     def item_pubdate(self, item):
-        return item.created
+        return datetime.combine(item.media_item.date, time())
 
 
 class CommentsFeed(Feed):
-    title = _(u"Latest comments from your podcast portal")
+    title = _(u"Latest comments from %s") % (settings.SITE_NAME)
     link = "/"
-    description = _(u"Latest comments from your podcast portal")
+    description = _(u"Latest comments from %s") % (settings.SITE_NAME)
 
     def items(self):
-        return Comment.objects.filter(moderated=True).order_by('-created')
+        return Comment.objects.filter(moderated=True).order_by('-created')[:15]
 
-    def item_title(self, item):
-        title = _(u"New comment to %s") % item.video.title
+    def item_title(self, comment):
+        title = _(u"New comment to %s") % comment.item.title
         return title
 
     def item_description(self, item):

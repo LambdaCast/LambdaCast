@@ -16,6 +16,7 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="upload">
 				<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
+				<div style="margin: 0 10px 20px">{% trans "With this form you can upload new thumbnails to then select them when uploading new content." %}</div>
 				{% if error %}
 					<div class="alert alert-error">{{ error }}</div>
 				{% endif %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block active-status %}class="active"{% endblock %}
+{% block title %} - {% trans "Status" %}{% endblock %}
+{% load custom_filters %}
+{% block body %}
+<div class="page-header">
+	<h1>{% trans "Status" %}</h1>
+	<p>{% trans "This site shows all media that will be or is transcoded" %}</p>
+</div>
+<div class="row">
+	<div class="span12">
+		<table class="table">
+			<thead>
+				<th>Title</th>
+				<th>Date</th>
+				<th>Encoding Done</th>
+				{% if settings.USE_BITTORRENT %}
+				<th>Torrent Created</th>
+				{% endif %}
+				<th>Auto Publish</th>
+				<th>Tasks</th>
+			</thead>
+			<tbody>
+				{% for mediaitem in mediaitems %}
+					<tr>
+						<th><a href="/item/{{ mediaitem.slug }}">{{ mediaitem.title }}</a></th>
+						<td>{{ mediaitem.date }}</td>
+						<td>{% if mediaitem.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						{% if settings.USE_BITTORRENT %}
+						<td>{% if mediaitem.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						{% endif %}
+						<td>{% if mediaitem.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<td>
+						<ul>
+							{% for task in mediaitem.get_tasks %}
+								<li>
+									{% if task.method == "get_and_save_cover" %}
+										{% trans "Save cover" %}:
+									{% elif task.method == "create_bittorrent" %}
+										{% trans "Create torrent" %}:
+									{% else %}
+										{% trans "Unknown task" %}:
+									{% endif %}
+									<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
+									({{ task.status }})
+								</li>
+							{% endfor %}
+							{% for mediafile in mediaitem.mediafile_set.all %}
+								<li>
+									{{ mediafile.file_format }}:
+									{% for task in mediafile.get_tasks %}
+										<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
+										({{ task.status }}) |
+									{% empty %}
+										{% trans "No task" %} |
+									{% endfor %}
+									<a href="/media/encoded/{{ mediaitem.slug }}/encoding_{{ mediafile.file_format }}_log.txt" class="show-log">{% trans "Show log" %}</a>
+								</li>
+							{% endfor %}
+						</ul>
+						</td>
+					</tr>
+				{% empty %}
+					<tr>
+						<td colspan="6">{% trans "There are no media to transcode" %}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="modal hide fade" id="logModal" style="width:800px;margin-left:-400px;">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>{% trans "Log" %}</h3>
+		</div>
+		<div class="modal-body">
+			<textarea id="logviewer" cols="500" rows="10" style="width:95%">{% trans "Loading" %}...</textarea>
+		</div>
+		<div class="modal-footer">
+			<a class="btn" id="reloadLog">{% trans "Reload" %}</a>
+			<a class="btn" data-dismiss="modal" aria-hidden="true">{% trans "Close" %}</a>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script>
+$.ajaxSetup({
+	// Disable caching of AJAX responses
+	cache: false
+});
+
+var currentLog
+function scrollLogDown() {
+	$("#logviewer").animate({
+		scrollTop:$("#logviewer")[0].scrollHeight - $("#logviewer").height()
+	},200,function(){});
+}
+function logError() {
+	$('#logviewer').val("{% trans "No log found!" %}");
+}
+
+$(".show-log").click(function(e) {
+	e.preventDefault();
+	$('#logModal').modal('show')
+	$('#logviewer').val("{% trans "Loading" %}...");
+	currentLog = $(this).attr('href');
+	$.get(currentLog, function(data){
+		$('#logviewer').val(data);
+	}).fail(logError);
+});
+$("#reloadLog").click(function() {
+	$.get(currentLog, function(data){
+		$('#logviewer').val(data);
+		scrollLogDown();
+	}).fail(logError);
+});
+$('#logModal').on('shown', scrollLogDown);
+</script>
+{% endblock %}

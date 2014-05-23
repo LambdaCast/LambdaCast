@@ -1,128 +1,149 @@
 from django.shortcuts import render_to_response, get_object_or_404, redirect
-from django import forms
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.core.urlresolvers import reverse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.views.generic.list_detail import object_list
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
 
 from pages.models import Page
-from portal.models import Video, Comment, Channel, Collection, User, Submittal
-from portal.forms import VideoForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
+from portal.models import MediaItem, Comment, Channel, Collection, Submittal, MediaFile
+from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
+from portal.media_formats import MEDIA_FORMATS
 
-from transloadit.client import Client
 from taggit.models import Tag
 import lambdaproject.settings as settings
 
 import djangotasks
 
-import simplejson as json
-import urllib2
 from datetime import datetime
 import os
-import shutil
 import re
-from threading import Event
-from traceback import print_exc
-from sys import argv
 from operator import attrgetter
 import itertools
+from sets import Set
 
-def list(request):
-    ''' This view is the front page of OwnTube. It just gets the first 15 available video and
+def index(request):
+    ''' This view is the front page of OwnTube. It just gets the first 15 available media items and
     forwards them to the template. We use Django's Paginator to have pagination '''
-    queryset = itertools.chain(Video.objects.filter(encodingDone=True, published=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
+    if request.user.is_authenticated():
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
+    else:
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
     try:
-        videos = paginator.page(page)
+        mediaitems = paginator.page(page)
     except PageNotAnInteger:
         # If page is not an integer, deliver first page.
-        videos = paginator.page(1)
+        mediaitems = paginator.page(1)
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        videos = paginator.page(paginator.num_pages)
-    return render_to_response('videos/index.html', {'page_list': get_page_list, 'submittal_list':get_submittal_list(request), 'latest_videos_list': videos, 'channel_list': channel_list, 'settings': settings},
+        mediaitems = paginator.page(paginator.num_pages)
+    return render_to_response('portal/index.html', {'page_list': get_page_list, 'submittal_list':get_submittal_list(request), 'latest_mediaitems_list': mediaitems, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def channel_list(request,slug):
-    ''' This view is the view for the channels video list it works almost like the index view'''
+    ''' This view is the view for the channel's list it works almost like the index view'''
     channel = get_object_or_404(Channel, slug=slug)
-#    videos_list = Video.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified')
-    queryset = itertools.chain(Video.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
+    if request.user.is_authenticated():
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
+    else:
+        queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True, channel__slug=slug).order_by('-date','-modified'),Collection.objects.filter(channel__slug=slug).order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
     try:
-        videos = paginator.page(page)
+        mediaitems = paginator.page(page)
     except PageNotAnInteger:
         # If page is not an integer, deliver first page.
-        videos = paginator.page(1)
+        mediaitems = paginator.page(1)
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        videos = paginator.page(paginator.num_pages)
-    return render_to_response('videos/channel.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'videos_list': videos, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
+        mediaitems = paginator.page(paginator.num_pages)
+    return render_to_response('portal/channel.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def detail(request, slug):
-    ''' Handles the detail view of a video (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
+    ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
+    mediaitem = get_object_or_404(MediaItem, slug=slug)
+    if request.user.is_authenticated(): 
+        comment_list = Comment.objects.filter(item=mediaitem).order_by('-created')
+    else:
+        comment_list = Comment.objects.filter(item=mediaitem,moderated=True).order_by('-created')
+
     if request.method == 'POST':
-        comment = Comment(video=Video.objects.get(slug=slug),ip=request.META["REMOTE_ADDR"])
-        video = get_object_or_404(Video, slug=slug)
+        comment = Comment(item=mediaitem,ip=request.META["REMOTE_ADDR"])
         emptyform = CommentForm()
         form = CommentForm(request.POST, instance=comment)
-        comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
 
         if form.is_valid():
             comment = form.save(commit=False)
             comment.save()
             message = _(u"Your comment will be moderated")
-            user_video = video.user
-            if not user_video.email == '':
-                if not user_video.first_name == '':
-                    mail_message = _(u'Hello %s,\n\nsomeone commented under one of your videos/audios. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_video.first_name
+            user_mediaitem = mediaitem.user
+            if not user_mediaitem.email == '':
+                if not user_mediaitem.first_name == '':
+                    mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.first_name
                 else:
-                    mail_message = _(u'Hello %s,\n\nsomeone commented under one of your videos/audios. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_video.username
-                user_video.email_user(_(u'New Comment: ') + video.title, mail_message)
-            return render_to_response('videos/detail.html', {'page_list':get_page_list,'video': video, 'comment_form': emptyform, 'comments': comments, 'message': message, 'settings': settings}, context_instance=RequestContext(request))
+                    mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.username
+                try:
+                    user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
+                except:
+                    pass
+            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+                                                                   'comment_list': comment_list,
+                                                                   'mediaitem': mediaitem,
+                                                                   'comment_form': emptyform,
+                                                                   'message': message,
+                                                                   'settings': settings,
+                                                                  }, context_instance=RequestContext(request))
         else:
-            return render_to_response('videos/detail.html', {'page_list':get_page_list,'video': video, 'comment_form': form, 'comments': comments, 'settings': settings}, context_instance=RequestContext(request))
-                    
+            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+                                                                   'comment_list': comment_list,
+                                                                   'mediaitem': mediaitem,
+                                                                   'comment_form': form,
+                                                                   'settings': settings,
+                                                                  }, context_instance=RequestContext(request))
     else:
-        video = get_object_or_404(Video, slug=slug)
         form = CommentForm()
-        comments = Comment.objects.filter(moderated=True, video=video).order_by('-created')
-        return render_to_response('videos/detail.html', {'video': video, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'comment_form': form, 'comments': comments, 'settings': settings},
-                            context_instance=RequestContext(request))
+        return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem,
+                                                               'comment_list': comment_list,
+                                                               'page_list':get_page_list,
+                                                               'submittal_list':get_submittal_list(request),
+                                                               'comment_form': form,
+                                                               'settings': settings,
+                                                              },context_instance=RequestContext(request))
 
 def iframe(request, slug):
-    ''' Returns an iframe for a video so that videos can be shared easily '''
-    video = get_object_or_404(Video, slug=slug)
-    return render_to_response('videos/iframe.html', {'video': video, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list}, context_instance=RequestContext(request))
-
+    ''' Returns an iframe for a item so that media items can be shared easily '''
+    mediaitem = get_object_or_404(MediaItem, slug=slug)
+    return render_to_response('portal/items/iframe.html', {'mediaitem': mediaitem, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list}, context_instance=RequestContext(request))
 
 def tag(request, tag):
-    ''' Gets all videos for a specified tag'''
-    videolist = Video.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
+    ''' Gets all media items for a specified tag'''
+    if request.user.is_authenticated():
+        mediaitemslist = MediaItem.objects.filter(encodingDone=True, tags__slug__in=[tag]).order_by('-date')
+    else:
+        mediaitemslist = MediaItem.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
     tag_name = get_object_or_404(Tag, slug=tag)
-    return render_to_response('videos/list.html', {'videos_list': videolist, 'tag':tag_name, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'settings': settings},
+    return render_to_response('portal/items/list.html', {'mediaitems_list': mediaitemslist, 'tag':tag_name, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'settings': settings},
                             context_instance=RequestContext(request))
 
 def collection(request, slug):
-    ''' Gets all videos for a channel'''
+    ''' Gets all media items for a channel'''
     collection = get_object_or_404(Collection, slug=slug)
-    videolist = collection.videos.filter(encodingDone=True, published=True)
-    return render_to_response('videos/collection.html', {'videos_list': videolist, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'collection':collection, 'settings': settings},
+    if request.user.is_authenticated():
+        mediaitemslist = collection.items.filter(encodingDone=True)
+    else:
+        mediaitemslist = collection.items.filter(encodingDone=True, published=True)
+    return render_to_response('portal/collection.html', {'mediaitems_list': mediaitemslist, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'collection':collection, 'settings': settings},
                             context_instance=RequestContext(request))
-                            
+
 def search(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
     query_string = ''
@@ -132,10 +153,13 @@ def search(request):
         
         entry_query = get_query(query_string, ['title', 'description', 'tags__name'])
         
-        found_entries = Video.objects.filter(entry_query).order_by('-date')
+        if request.user.is_authenticated():
+            found_entries = MediaItem.objects.filter(entry_query).order_by('-date')
+        else:
+            found_entries = MediaItem.objects.filter(entry_query, published=True).order_by('-date')
 
-    return render_to_response('videos/search_results.html',
-                          { 'query_string': query_string, 'videos_list': found_entries, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
+    return render_to_response('portal/search_results.html',
+                          { 'query_string': query_string, 'mediaitems_list': found_entries, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
                           context_instance=RequestContext(request))
 
 def search_json(request):
@@ -147,14 +171,14 @@ def search_json(request):
 
         entry_query = get_query(query_string, ['title', 'description','tags__name'])
 
-        found_entries = Video.objects.filter(entry_query).order_by('-date')
+        found_entries = MediaItem.objects.filter(entry_query).order_by('-date')
 
     data = serializers.serialize('json', found_entries)
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
            
 def tag_json(request, tag):
-    videolist = Video.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
-    data = serializers.serialize('json', videolist)
+    mediaitemslist = MediaItem.objects.filter(encodingDone=True, published=True, tags__name__in=[tag]).order_by('-date')
+    data = serializers.serialize('json', mediaitemslist)
     return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
 
 @login_required
@@ -163,12 +187,14 @@ def submittal(request, subm_id):
     if request.method == 'POST':
         form = SubmittalForm(request.POST)
         if form.is_valid():
-            cmodel = form.save()
-            cmodel.user = request.user
-            cmodel.save()
-            return redirect(list)
+            mediaitem = form.save()
+            mediaitem.user = request.user
+            mediaitem.save()
+            form.create_mediafiles(mediaitem)
+            mediaitem.get_and_save_duration()
+            return redirect(index)
         else:
-            return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
+            return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
     else:
         form = SubmittalForm(initial={
             'title': submittal.media_title,
@@ -177,12 +203,10 @@ def submittal(request, subm_id):
             'channel': submittal.media_channel,
             'license': submittal.media_license,
             'linkURL': submittal.media_linkURL,
-            'kind': submittal.media_kind,
             'torrentURL': submittal.media_torrentURL,
-            'mp4URL': submittal.media_mp4URL,
-            'webmURL': submittal.media_webmURL,
-            'mp3URL': submittal.media_mp3URL,
-            'oggURL': submittal.media_oggURL,
+            'media_mp3URL': submittal.media_mp3URL,
+            'media_oggURL': submittal.media_oggURL,
+            'media_opusURL':  submittal.media_opusURL,
             'videoThumbURL': submittal.media_videoThumbURL,
             'audioThumbURL': submittal.media_audioThumbURL,
             'published': submittal.media_published,
@@ -190,7 +214,7 @@ def submittal(request, subm_id):
             'torrentDone': submittal.media_torrentDone,
             'encodingDone': True,
         })
-        return render_to_response('videos/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
+        return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
 
 @login_required
 def upload_thumbnail(request):
@@ -201,187 +225,87 @@ def upload_thumbnail(request):
                 handle_uploaded_thumbnail(request.FILES['file'], form.data['title'])
                 message = _("The upload of %s was successful") % (form.data['title'])
                 form = ThumbnailForm()
-                return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list, 'message': message}, context_instance=RequestContext(request))
+                return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list, 'message': message}, context_instance=RequestContext(request))
             else:
                 error = _("Please upload an image file")
-                return render_to_response('videos/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list, 'error': error}, context_instance=RequestContext(request))
+                return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list, 'error': error}, context_instance=RequestContext(request))
 
         else:
-            return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+            return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
     else:
-        return render_to_response('videos/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+        return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
     
 def handle_uploaded_thumbnail(f, filename):
     suffix = '.png' if (f.content_type == 'image/png') else '.jpg'
     suffix = '' if (filename.endswith(suffix)) else suffix
-    destination = open('media/thumbnails/' + filename + suffix, 'wb+')
+    destination = open(settings.THUMBNAILS_DIR + filename + suffix, 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
     destination.close()
 
 @login_required
 def submit(request):
-    ''' The view for uploading the videos. Only authenticated users can upload videos!
-    If we use transloadit to encode the videos we use the more or less official python
-    "API" to ask transloadit to transcode our files otherwise we use django tasks to make
-    a new task task for encoding this video. If we use bittorrent to distribute our files
-    we also use django tasks to make the .torrent files (this can take a few minutes for
-    very large files '''
+    ''' The view for uploading the items. Only authenticated users can upload media items!
+    We use django tasks to make a new task task for encoding this items. If we use 
+    bittorrent to distribute our files we also use django tasks to make the .torrent 
+    files (this can take a few minutes for very large files '''
     if request.method == 'POST':
-        form = VideoForm(request.POST, request.FILES or None)
+        form = MediaItemForm(request.POST, request.FILES or None)
         if form.is_valid():
-            cmodel = form.save()
-            cmodel.audioThumbURL = form.data['thumbURL']
-            cmodel.videoThumbURL = form.data['thumbURL']
-            if cmodel.originalFile:
-                if settings.USE_TRANLOADIT:
-                    client = Client(settings.TRANSLOAD_AUTH_KEY, settings.TRANSLOAD_AUTH_SECRET)
-                    params = None
-                    if (cmodel.kind==0):
-                        params = {
-                            'steps': {
-                                ':original': {
-                                    'robot': '/http/import',
-                                    'url': cmodel.originalFile.url,
-                                }
-                            },
-                            'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_ID,
-                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                        }
-                    if (cmodel.kind==1):
-                        params = {
-                            'steps': {
-                                ':original': {
-                                    'robot': '/http/import',
-                                    'url': cmodel.originalFile.url,
-                                }
-                            },
-                            'template_id': settings.TRANSLOAD_TEMPLATE_AUDIO_ID,
-                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                        }
-                    if (cmodel.kind==2):
-                        params = {
-                            'steps': {
-                                ':original': {
-                                    'robot': '/http/import',
-                                    'url': cmodel.originalFile.url,
-                                }
-                            },
-                            'template_id': settings.TRANSLOAD_TEMPLATE_VIDEO_AUDIO_ID,
-                            'notify_url': settings.TRANSLOAD_NOTIFY_URL
-                        }
-                    result = client.request(**params)
-                    cmodel.assemblyid = result['assembly_id']
-                    cmodel.published = cmodel.autoPublish
-                    cmodel.encodingDone = False
-                    cmodel.save()
-                else:
-                    cmodel.save()
-                    djangotasks.register_task(cmodel.encode_media, "Encode the files using ffmpeg")
-                    encoding_task = djangotasks.task_for_object(cmodel.encode_media)
-                    djangotasks.run_task(encoding_task)
-            if settings.USE_BITTORRENT:
-                djangotasks.register_task(cmodel.create_bittorrent, "Create Bittorrent file for video and serve it")
-                torrent_task = djangotasks.task_for_object(cmodel.create_bittorrent)
-                djangotasks.run_task(torrent_task)
-            cmodel.user = request.user
-            cmodel.save()
-            return redirect(list)
+            media_item = form.save()
+            if form.cleaned_data['thumbURL']:
+                media_item.audioThumbURL = form.cleaned_data['thumbURL']
+                media_item.videoThumbURL = form.cleaned_data['thumbURL']
+            media_item.user = request.user
+            media_item.save()
+            media_item.get_and_save_duration()
 
-        return render_to_response('videos/submit.html',
+            outputdir = settings.ENCODING_OUTPUT_DIR + media_item.slug
+            if not os.path.exists(outputdir):
+                os.makedirs(outputdir)
+
+            cover_task = djangotasks.task_for_object(media_item.get_and_save_cover)
+            djangotasks.run_task(cover_task)
+
+            for target_format in form.cleaned_data['fileFormats']:
+                media_format = MEDIA_FORMATS[target_format]
+                url = settings.ENCODED_BASE_URL + media_item.slug + '/' + media_item.slug + media_format.extension
+                media_file = MediaFile.objects.create(title=media_item.title + " " + media_format.text,
+                                                      url=url, file_format=media_format.format_key,
+                                                      media_item=media_item, mediatype=media_format.mediatype)
+                encoding_task = djangotasks.task_for_object(media_file.encode_media)
+                djangotasks.run_task(encoding_task)
+
+            if settings.USE_BITTORRENT:
+                torrent_task = djangotasks.task_for_object(media_item.create_bittorrent)
+                djangotasks.run_task(torrent_task)
+            return redirect(index)
+
+        return render_to_response('portal/submit.html',
                                 {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
                                 context_instance=RequestContext(request))
     else:
-        form = VideoForm()
-        return render_to_response('videos/submit.html',
+        form = MediaItemForm()
+        return render_to_response('portal/submit.html',
                                 {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
                                 context_instance=RequestContext(request))
 
 @login_required
 def status(request):
-    if settings.USE_BITTORRENT:
-        processing_videos = Video.objects.filter(Q(encodingDone=False) | Q(torrentDone=False))
-    else:
-        processing_videos = Video.objects.filter(encodingDone=False)
-    running_tasks = []
-    for video in processing_videos:
-        tasks = djangotasks.models.Task.objects.filter(model="portal.video", object_id=video.pk)
-        running_tasks.append(tasks)
-    return render_to_response('videos/status.html',
-                                    {'processing_videos': processing_videos, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'running_tasks': running_tasks, 'settings': settings},
-                                    context_instance=RequestContext(request))
+    tasks_mediaitem = djangotasks.models.Task.objects.filter(model="portal.mediaitem").exclude(status="successful")
+    tasks_mediafile = djangotasks.models.Task.objects.filter(model="portal.mediafile").exclude(status="successful")
 
-@csrf_exempt
-def encodingdone(request):
-    ''' This is a somewhat special view: It is called by transloadit to tell
-    LambdaCast that the encoding process is done. The view then parses the
-    JSON data in the POST request send by transloadit and than get this information
-    into our video model. Of course it can be possible for attackers to alter videos
-    using for example curl but they would need to guess a assembly_id and these are 
-    quite long hex strings. To improve the security we could also use the custom header
-    option from transloadit but I think this wouldn't really help in a open source project'''
-    if request.method == 'POST':
-        data = json.loads(request.POST['transloadit'])
+    mediaitem_ids = Set(map((lambda mediaitem: mediaitem.object_id), tasks_mediaitem))
+    for mediafile in tasks_mediafile:
         try:
-            video = Video.objects.get(assemblyid=data['assembly_id'])
-            if (video.kind == 0):
-                results = data['results']
-                resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
-                resultFirst = resultItem[0]
-                video.mp4URL = resultFirst['url']
-                video.mp4Size = resultFirst['size']
-                resultMeta = resultFirst['meta']
-                video.duration = str(resultMeta['duration'])
-                resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
-                resultFirst = resultItem[0]
-                video.webmURL = resultFirst['url']
-                video.webmSize = resultFirst['size']
-                resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-                resultFirst = resultItem[0]
-                video.videoThumbURL = resultFirst['url']
-            elif (video.kind == 1):
-                results = data['results']
-                resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
-                resultFirst = resultItem[0]
-                video.mp3URL = resultFirst['url']
-                video.mp3Size = resultFirst['size']
-                resultMeta = resultFirst['meta']
-                video.duration = str(resultMeta['duration'])
-                resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
-                resultFirst = resultItem[0]
-                video.oggURL = resultFirst['url']
-                video.oggSize = resultFirst['size']
-            elif (video.kind == 2):
-                results = data['results']
-                resultItem = results[settings.TRANSLOAD_MP4_ENCODE]
-                resultFirst = resultItem[0]
-                video.mp4URL = resultFirst['url']
-                video.mp4Size = resultFirst['size']
-                resultMeta = resultFirst['meta']
-                video.duration = str(resultMeta['duration'])
-                resultItem = results[settings.TRANSLOAD_WEBM_ENCODE]
-                resultFirst = resultItem[0]
-                video.webmURL = resultFirst['url']
-                video.webmSize = resultFirst['size']
-                resultItem = results[settings.TRANSLOAD_MP3_ENCODE]
-                resultFirst = resultItem[0]
-                video.mp3URL = resultFirst['url']
-                video.mp3Size = resultFirst['size']
-                resultItem = results[settings.TRANSLOAD_OGG_ENCODE]
-                resultFirst = resultItem[0]
-                video.oggURL = resultFirst['url']
-                video.oggSize = resultFirst['size']
-                resultItem = results[settings.TRANSLOAD_THUMB_ENCODE]
-                resultFirst = resultItem[0]
-                video.videoThumbURL = resultFirst['url']
-            video.encodingDone = True
-            video.save()
-        except Video.DoesNotExist:
-            raise Http404
-        return HttpResponse(_(u"Video was updated"))
-    else:
-        raise Http404
-    
+            mediaitem_ids.add(MediaFile.objects.get(pk=mediafile.object_id).media_item.pk)
+        except MediaFile.DoesNotExist:
+            pass
+
+    mediaitems = MediaItem.objects.filter(pk__in=mediaitem_ids)
+    return render_to_response('portal/status.html',
+                                    {'mediaitems': mediaitems, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
+                                    context_instance=RequestContext(request))
 
 def normalize_query(query_string,
                     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
@@ -392,14 +316,12 @@ def normalize_query(query_string,
         
         >>> normalize_query('  some random  words "with   quotes  " and   spaces')
         ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
-    
     '''
     return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
 
 def get_query(query_string, search_fields):
     ''' Returns a query, that is a combination of Q objects. That combination
         aims to search keywords within a model by testing the given search fields.
-    
     '''
     query = None # Query to search for every search term        
     terms = normalize_query(query_string)
@@ -423,7 +345,7 @@ def get_thumbnails_list():
     return thumbnails_list
 
 def get_page_list():
-	return Page.objects.filter(activated=True).order_by('orderid')
+    return Page.objects.filter(activated=True).order_by('orderid')
 
 def get_submittal_list(request):
     return Submittal.objects.filter(users=request.user) if request.user.is_authenticated() else []

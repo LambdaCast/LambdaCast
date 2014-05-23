@@ -69,7 +69,7 @@ ul.edit-menu {
 	margin-left: 10px;
 }
 
-#videoForm .control-label label,
+#mediaitemForm .control-label label,
 #submittalForm .control-label label {
 	float: left;
 	text-align: left;
@@ -84,4 +84,24 @@ ul.edit-menu {
 .btn-mini-edit {
 	margin: 8px;
 }
+.unpublished {
+	margin: 10px 5px 8px 5px;
+}
 
+.inactive-player-tab {
+	position: absolute;
+	left: -2000px;
+}
+.timecode {
+	cursor: pointer;
+}
+
+.channel-thumb {
+	max-width: 100px;
+	max-height: 100px;
+	margin: 0px 10px 0px 0px;
+}
+
+.page-header-channel {
+	min-height: 75px;
+}

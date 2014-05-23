@@ -1,9 +1,10 @@
-from portal.models import Video
+from portal.models import MediaItem
 from portal.models import Comment
 from portal.models import Channel
 from portal.models import Hotfolder
 from portal.models import Collection
 from portal.models import Submittal
+from portal.models import MediaFile
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
@@ -16,28 +17,40 @@ def make_torrent_done(modeladmin, request, queryset):
     queryset.update(torrentDone=True)
 make_torrent_done.short_description = _(u"Marked media all get a torrent")
 
-class VideoAdmin (admin.ModelAdmin):
+class MediaFileInline(admin.TabularInline):
+    model = MediaFile
+    extra = 0
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'url', 'file_format', 'media_item')
+        }),
+    )
+
+class MediaItemAdmin (admin.ModelAdmin):
     list_display = ['title','published','encodingDone', 'channel' ,'date']
     ordering = ['-date','-created']
     actions = [make_published,make_torrent_done]
-    list_filter = ('kind', 'published', 'channel')
+    list_filter = ('published', 'channel')
     fieldsets = (
         (None, {
             'fields': ('title', 'date', 'description', 'channel', 'license', 'linkURL', 'tags', 'published')
         }),
         (_(u'Advanced options'), {
             'classes': ('collapse',),
-            'fields': ('kind','user','torrentURL','mp4URL','webmURL','mp3URL','oggURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
+            'fields': ('user','torrentURL','videoThumbURL','audioThumbURL','duration','autoPublish','encodingDone','torrentDone')
         }),
     )
-admin.site.register(Video,VideoAdmin)
+    inlines = [
+        MediaFileInline,
+    ]
+admin.site.register(MediaItem,MediaItemAdmin)
 
 def make_moderated(modeladmin,request, queryset):
     queryset.update(moderated=True)
 make_moderated.short_description = _(u"Moderate marked comments")
 
 class CommentAdmin (admin.ModelAdmin):
-    list_display = ['comment','video','created','name','ip','moderated']
+    list_display = ['comment','item','created','name','ip','moderated']
     ordering = ['-created']
     actions = [make_moderated]
 
@@ -50,7 +63,7 @@ class ChannelAdmin (admin.ModelAdmin):
 admin.site.register(Channel,ChannelAdmin)
 
 class HotfolderAdmin (admin.ModelAdmin):
-    list_display = ['folderName','activated','autoPublish','kind','channel']
+    list_display = ['folderName','activated','autoPublish','channel']
     ordering = ['-created']
 
 admin.site.register(Hotfolder,HotfolderAdmin)
@@ -65,3 +78,13 @@ class SubmittalAdmin(admin.ModelAdmin):
     list_display = ['title','description']
 
 admin.site.register(Submittal,SubmittalAdmin)
+
+class MediaFileAdmin(admin.ModelAdmin):
+    list_display = ['title','url','size','media_item']
+    fieldsets = (
+        (None, {
+            'fields': ('media_item', 'title', 'url', 'file_format')
+        }),
+    )
+
+admin.site.register(MediaFile,MediaFileAdmin)

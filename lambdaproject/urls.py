@@ -1,28 +1,27 @@
 from django.conf.urls import patterns, include, url
-from portal.feeds import *
+from portal.feeds import LatestMedia, TorrentFeed, ChannelFeed, ChannelFeedTorrent, CollectionFeed, CollectionFeedTorrent, CommentsFeed
 from livestream.feeds import UpcomingEvents
-from django.conf import settings
+
+import lambdaproject.settings as settings
 
 from django.contrib import admin
 admin.autodiscover()
 
-
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'portal.views.list'),
+    url(r'^$', 'portal.views.index'),
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/favicon.ico'}),
-    url(r'^videos/(?P<slug>[-\w]+)/$', 'portal.views.detail'),
+    url(r'^item/(?P<slug>[-\w]+)/$', 'portal.views.detail'),
     url(r'^tags/(?P<tag>[\w|\W]+)/$', 'portal.views.tag'),
     url(r'^collection/(?P<slug>[-\w]+)/$', 'portal.views.collection'),
     url(r'^json_tags/(?P<tag>[\w|\W]+)/$', 'portal.views.tag_json'),
-    url(r'^videos/channel/(?P<slug>[-\w]+)/$', 'portal.views.channel_list'),
-    url(r'^videos/iframe/(?P<slug>[-\w]+)/$', 'portal.views.iframe'),
+    url(r'^channel/(?P<slug>[-\w]+)/$', 'portal.views.channel_list'),
+    url(r'^item/iframe/(?P<slug>[-\w]+)/$', 'portal.views.iframe'),
     url(r'^submittal/(?P<subm_id>\d+)/$', 'portal.views.submittal'),
     url(r'^search/', 'portal.views.search'),
     url(r'^json_search/', 'portal.views.search_json'),
     url(r'^submit/', 'portal.views.submit'),
     url(r'^thumbnail/', 'portal.views.upload_thumbnail'),
-    url(r'^encodingdone/', 'portal.views.encodingdone'),
     url(r'^status/', 'portal.views.status'),
     url(r'^p/(?P<slug>[-\w]+)/$', 'pages.views.page'),
     url(r'^stream/$', 'livestream.views.current'),
@@ -30,7 +29,7 @@ urlpatterns = patterns('',
     url(r'^stream/(?P<slug>[-\w]+)/$', 'livestream.views.detail'),
     url(r'^login/', 'django.contrib.auth.views.login'),
     url(r'^logout/', 'django.contrib.auth.views.logout', {'next_page': '/'}),
-    url(r'^feeds/latest/(?P<fileformat>[-\w]+)/$', LatestVideos()),
+    url(r'^feeds/latest/(?P<fileformat>[-\w]+)/$', LatestMedia()),
     url(r'^feeds/stream/upcoming', UpcomingEvents()),
     url(r'^feeds/latest/torrent', TorrentFeed()),
     url(r'^feeds/(?P<channel_slug>[-\w]+)/(?P<fileformat>[-\w]+)/$', ChannelFeed()),
@@ -38,13 +37,14 @@ urlpatterns = patterns('',
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/(?P<fileformat>[-\w]+)/$', CollectionFeed()),
     url(r'^feeds/collection/(?P<collection_slug>[-\w]+)/torrent/$', CollectionFeedTorrent()),
     url(r'^feeds/comments/$', CommentsFeed()),
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^captcha/', include('captcha.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 
-urlpatterns += patterns('',
-    url(r'^captcha/', include('captcha.urls')),
-)
+if "django.contrib.admindocs" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        url(r'^admindocs/', include('django.contrib.admindocs.urls')),
+    )
 
 if settings.DEBUG:
     urlpatterns += patterns('',
