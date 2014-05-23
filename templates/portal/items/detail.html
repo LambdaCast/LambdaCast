@@ -174,7 +174,7 @@
 			{% if mediaitem.license == "None" %}
 			<dd><i class="icon-book"></i> {% trans "None" %}</a></dd>
 			{% else %}
-			<dd><i class="icon-book"></i> <a href="{{ mediaitem.get_license_link }}">{{ mediaitem.license }}</a></dd>
+			<dd><i class="icon-book"></i> <a href="{{ mediaitem.get_license_link }}">{{ mediaitem.get_license_display }}</a></dd>
 			{% endif %}
 			{% if mediaitem.torrentURL %}
 			<dt>{% trans "Torrent" %}:</dt>
