@@ -43,7 +43,7 @@ def index(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return render_to_response('portal/index.html', {'page_list': get_page_list, 'submittal_list':get_submittal_list(request), 'latest_mediaitems_list': mediaitems, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('portal/index.html', {'page_list': _get_page_list, 'submittal_list':_get_submittal_list(request.user), 'latest_mediaitems_list': mediaitems, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def channel_list(request,slug):
@@ -65,7 +65,7 @@ def channel_list(request,slug):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return render_to_response('portal/channel.html', {'page_list':get_page_list, 'submittal_list':get_submittal_list(request), 'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
+    return render_to_response('portal/channel.html', {'page_list':_get_page_list, 'submittal_list':_get_submittal_list(request.user), 'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def detail(request, slug):
@@ -95,7 +95,7 @@ def detail(request, slug):
                     user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
                 except:
                     pass
-            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+            return render_to_response('portal/items/detail.html', {'page_list':_get_page_list,
                                                                    'comment_list': comment_list,
                                                                    'mediaitem': mediaitem,
                                                                    'comment_form': emptyform,
@@ -103,7 +103,7 @@ def detail(request, slug):
                                                                    'settings': settings,
                                                                   }, context_instance=RequestContext(request))
         else:
-            return render_to_response('portal/items/detail.html', {'page_list':get_page_list,
+            return render_to_response('portal/items/detail.html', {'page_list':_get_page_list,
                                                                    'comment_list': comment_list,
                                                                    'mediaitem': mediaitem,
                                                                    'comment_form': form,
@@ -113,8 +113,8 @@ def detail(request, slug):
         form = CommentForm()
         return render_to_response('portal/items/detail.html', {'mediaitem': mediaitem,
                                                                'comment_list': comment_list,
-                                                               'page_list':get_page_list,
-                                                               'submittal_list':get_submittal_list(request),
+                                                               'page_list':_get_page_list,
+                                                               'submittal_list':_get_submittal_list(request.user),
                                                                'comment_form': form,
                                                                'settings': settings,
                                                               },context_instance=RequestContext(request))
@@ -122,7 +122,7 @@ def detail(request, slug):
 def iframe(request, slug):
     ''' Returns an iframe for a item so that media items can be shared easily '''
     mediaitem = get_object_or_404(MediaItem, slug=slug)
-    return render_to_response('portal/items/iframe.html', {'mediaitem': mediaitem, 'settings': settings, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list}, context_instance=RequestContext(request))
+    return render_to_response('portal/items/iframe.html', {'mediaitem': mediaitem, 'settings': settings, 'submittal_list':_get_submittal_list(request.user), 'page_list':_get_page_list}, context_instance=RequestContext(request))
 
 def tag(request, tag):
     ''' Gets all media items for a specified tag'''
@@ -131,7 +131,7 @@ def tag(request, tag):
     else:
         mediaitemslist = MediaItem.objects.filter(encodingDone=True, published=True, tags__slug__in=[tag]).order_by('-date')
     tag_name = get_object_or_404(Tag, slug=tag)
-    return render_to_response('portal/items/list.html', {'mediaitems_list': mediaitemslist, 'tag':tag_name, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'settings': settings},
+    return render_to_response('portal/items/list.html', {'mediaitems_list': mediaitemslist, 'tag':tag_name, 'submittal_list':_get_submittal_list(request.user), 'page_list':_get_page_list,'settings': settings},
                             context_instance=RequestContext(request))
 
 def collection(request, slug):
@@ -141,17 +141,17 @@ def collection(request, slug):
         mediaitemslist = collection.items.filter(encodingDone=True)
     else:
         mediaitemslist = collection.items.filter(encodingDone=True, published=True)
-    return render_to_response('portal/collection.html', {'mediaitems_list': mediaitemslist, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list,'collection':collection, 'settings': settings},
+    return render_to_response('portal/collection.html', {'mediaitems_list': mediaitemslist, 'submittal_list':_get_submittal_list(request.user), 'page_list':_get_page_list,'collection':collection, 'settings': settings},
                             context_instance=RequestContext(request))
 
 def search(request):
-    ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
+    ''' The search view for handling the search using Django's "Q"-class (see normlize_query and _get_query)'''
     query_string = ''
     found_entries = None
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
         
-        entry_query = get_query(query_string, ['title', 'description', 'tags__name'])
+        entry_query = _get_query(query_string, ['title', 'description', 'tags__name'])
         
         if request.user.is_authenticated():
             found_entries = MediaItem.objects.filter(entry_query).order_by('-date')
@@ -159,17 +159,17 @@ def search(request):
             found_entries = MediaItem.objects.filter(entry_query, published=True).order_by('-date')
 
     return render_to_response('portal/search_results.html',
-                          { 'query_string': query_string, 'mediaitems_list': found_entries, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
+                          { 'query_string': query_string, 'mediaitems_list': found_entries, 'submittal_list':_get_submittal_list(request.user), 'page_list':_get_page_list, 'settings': settings},
                           context_instance=RequestContext(request))
 
 def search_json(request):
-    ''' The search view for handling the search using Django's "Q"-class (see normlize_query and get_query)'''
+    ''' The search view for handling the search using Django's "Q"-class (see normlize_query and _get_query)'''
     query_string = ''
     found_entries = None
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
 
-        entry_query = get_query(query_string, ['title', 'description','tags__name'])
+        entry_query = _get_query(query_string, ['title', 'description','tags__name'])
 
         found_entries = MediaItem.objects.filter(entry_query).order_by('-date')
 
@@ -194,7 +194,7 @@ def submittal(request, subm_id):
             mediaitem.get_and_save_duration()
             return redirect(index)
         else:
-            return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
+            return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':_get_page_list, 'submittal_list':_get_submittal_list(request.user)}, context_instance=RequestContext(request))
     else:
         form = SubmittalForm(initial={
             'title': submittal.media_title,
@@ -214,7 +214,7 @@ def submittal(request, subm_id):
             'torrentDone': submittal.media_torrentDone,
             'encodingDone': True,
         })
-        return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':get_page_list, 'submittal_list':get_submittal_list(request)}, context_instance=RequestContext(request))
+        return render_to_response('portal/submittal.html', {'submittal_form': form, 'submittal': submittal, 'settings': settings, 'page_list':_get_page_list, 'submittal_list':_get_submittal_list(request.user)}, context_instance=RequestContext(request))
 
 @login_required
 def upload_thumbnail(request):
@@ -222,20 +222,20 @@ def upload_thumbnail(request):
         form = ThumbnailForm(request.POST, request.FILES or None)
         if form.is_valid():
             if (request.FILES['file'].content_type == 'image/png' or request.FILES['file'].content_type == 'image/jpeg') and not form.data['title'] == '':
-                handle_uploaded_thumbnail(request.FILES['file'], form.data['title'])
+                _handle_uploaded_thumbnail(request.FILES['file'], form.data['title'])
                 message = _("The upload of %s was successful") % (form.data['title'])
                 form = ThumbnailForm()
-                return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list, 'message': message}, context_instance=RequestContext(request))
+                return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':_get_page_list, 'thumbs_list':_get_thumbnails_list, 'message': message}, context_instance=RequestContext(request))
             else:
                 error = _("Please upload an image file")
-                return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list, 'error': error}, context_instance=RequestContext(request))
+                return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':_get_page_list, 'thumbs_list':_get_thumbnails_list, 'error': error}, context_instance=RequestContext(request))
 
         else:
-            return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
+            return render_to_response('portal/thumbnail.html', {'thumbnail_form': form, 'settings': settings, 'page_list':_get_page_list, 'thumbs_list':_get_thumbnails_list}, context_instance=RequestContext(request))
     else:
-        return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':get_page_list, 'thumbs_list':get_thumbnails_list}, context_instance=RequestContext(request))
-    
-def handle_uploaded_thumbnail(f, filename):
+        return render_to_response('portal/thumbnail.html', {'thumbnail_form': ThumbnailForm(), 'settings': settings, 'page_list':_get_page_list, 'thumbs_list':_get_thumbnails_list}, context_instance=RequestContext(request))
+
+def _handle_uploaded_thumbnail(f, filename):
     suffix = '.png' if (f.content_type == 'image/png') else '.jpg'
     suffix = '' if (filename.endswith(suffix)) else suffix
     destination = open(settings.THUMBNAILS_DIR + filename + suffix, 'wb+')
@@ -282,12 +282,12 @@ def submit(request):
             return redirect(index)
 
         return render_to_response('portal/submit.html',
-                                {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
+                                {'submit_form': form, 'settings': settings,'submittal_list':_get_submittal_list(request.user), 'page_list':_get_page_list},
                                 context_instance=RequestContext(request))
     else:
         form = MediaItemForm()
         return render_to_response('portal/submit.html',
-                                {'submit_form': form, 'settings': settings,'submittal_list':get_submittal_list(request), 'page_list':get_page_list},
+                                {'submit_form': form, 'settings': settings,'submittal_list':_get_submittal_list(request.user), 'page_list':_get_page_list},
                                 context_instance=RequestContext(request))
 
 @login_required
@@ -304,27 +304,27 @@ def status(request):
 
     mediaitems = MediaItem.objects.filter(pk__in=mediaitem_ids)
     return render_to_response('portal/status.html',
-                                    {'mediaitems': mediaitems, 'submittal_list':get_submittal_list(request), 'page_list':get_page_list, 'settings': settings},
+                                    {'mediaitems': mediaitems, 'submittal_list':_get_submittal_list(request.user), 'page_list':_get_page_list, 'settings': settings},
                                     context_instance=RequestContext(request))
 
-def normalize_query(query_string,
+def _normalize_query(query_string,
                     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
                     normspace=re.compile(r'\s{2,}').sub):
     ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
         and grouping quoted words together.
         Example:
         
-        >>> normalize_query('  some random  words "with   quotes  " and   spaces')
+        >>> _normalize_query('  some random  words "with   quotes  " and   spaces')
         ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
     '''
     return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
 
-def get_query(query_string, search_fields):
+def _get_query(query_string, search_fields):
     ''' Returns a query, that is a combination of Q objects. That combination
         aims to search keywords within a model by testing the given search fields.
     '''
     query = None # Query to search for every search term        
-    terms = normalize_query(query_string)
+    terms = _normalize_query(query_string)
     for term in terms:
         or_query = None # Query to search for a given term in each field
         for field_name in search_fields:
@@ -339,14 +339,14 @@ def get_query(query_string, search_fields):
             query = query & or_query
     return query
 
-def get_thumbnails_list():
+def _get_thumbnails_list():
     thumbnails_list = getThumbnails(settings.THUMBNAILS_DIR)
     del thumbnails_list[0]
     return thumbnails_list
 
-def get_page_list():
+def _get_page_list():
     return Page.objects.filter(activated=True).order_by('orderid')
 
-def get_submittal_list(request):
-    return Submittal.objects.filter(users=request.user) if request.user.is_authenticated() else []
+def _get_submittal_list(user):
+    return Submittal.objects.filter(users=user) if user.is_authenticated() else []
 
