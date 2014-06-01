@@ -198,7 +198,6 @@ def submittal(request, subm_id):
     else:
         form = SubmittalForm(initial={
             'title': submittal.media_title,
-            'date': datetime.now(),
             'description': submittal.media_description,
             'channel': submittal.media_channel,
             'license': submittal.media_license,

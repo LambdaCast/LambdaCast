@@ -1,7 +1,4 @@
 $(document).ready(function() {
-	var now = new Date();
-	var formatted = now.format("dd.mm.yyyy");
-	$('#id_date').val(formatted);
 	$('#progress-indicator').hide();
 	var bar = $('.bar');
 	var percent = $('.percent');
