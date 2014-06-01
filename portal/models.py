@@ -52,6 +52,9 @@ class MediaFile(models.Model):
     def mime_type(self):
         return MEDIA_FORMATS[self.file_format].mime_type
 
+    def extension(self):
+        return MEDIA_FORMATS[self.file_format].extension
+
     def encode_media(self):
         ''' This is used to tell ffmpeg what to do '''
         media_format = MEDIA_FORMATS[self.file_format]
