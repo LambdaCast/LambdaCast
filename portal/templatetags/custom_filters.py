@@ -9,8 +9,8 @@ from django.utils.text import normalize_newlines
 
 register = template.Library()
 
-@register.filter(name='secondstohms')
-def secondstohms(value):
+@register.filter(name='seconds_to_hms')
+def seconds_to_hms(value):
     ''' This is used to have a nicer format for the media duration in the template'''
     if (value):
         return str(datetime.timedelta(seconds=int(value)))
