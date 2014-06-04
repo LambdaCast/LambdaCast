@@ -1,13 +1,16 @@
-from portal.models import MediaItem
-from portal.models import Comment
-from portal.models import Channel
-from portal.models import Hotfolder
-from portal.models import Collection
-from portal.models import Submittal
-from portal.models import MediaFile
+from portal.models import MediaItem, MediaFile, Comment, Channel, Hotfolder, Collection, Submittal
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
+
+from django import forms
+from django.forms.widgets import Select
+
+class MediaItemForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+            'license': Select(attrs={'class': 'vLargeTextField'}),
+        }
 
 def make_published(modeladmin, request, queryset):
     queryset.update(published=True)
@@ -27,6 +30,7 @@ class MediaFileInline(admin.TabularInline):
     )
 
 class MediaItemAdmin (admin.ModelAdmin):
+    form = MediaItemForm
     list_display = ['title','published','encodingDone', 'channel' ,'date']
     ordering = ['-date','-created']
     actions = [make_published,make_torrent_done]
