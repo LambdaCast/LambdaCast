@@ -144,6 +144,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'lambdaproject.middleware.SettingsMiddleware',
+    'pages.middleware.PagesMiddleware',
     'portal.middleware.SubmittalMiddleware',
 )
 
