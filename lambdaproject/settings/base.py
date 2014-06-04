@@ -106,7 +106,7 @@ STATIC_ROOT = ABSOLUTE_PATH + '/static_files/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = DOMAIN + '/static/'
+STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
