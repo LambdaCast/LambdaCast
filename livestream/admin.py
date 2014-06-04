@@ -1,4 +1,6 @@
 from livestream.models import Stream
 from django.contrib import admin
+from lambdaproject import settings
 
-admin.site.register(Stream)
+if (settings.ENABLE_LIVESTREAMS):
+    admin.site.register(Stream)
