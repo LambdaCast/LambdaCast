@@ -82,13 +82,3 @@ class SubmittalAdmin(admin.ModelAdmin):
     list_display = ['title','description']
 
 admin.site.register(Submittal,SubmittalAdmin)
-
-class MediaFileAdmin(admin.ModelAdmin):
-    list_display = ['title','url','size','media_item']
-    fieldsets = (
-        (None, {
-            'fields': ('media_item', 'title', 'url', 'file_format')
-        }),
-    )
-
-admin.site.register(MediaFile,MediaFileAdmin)
