@@ -106,7 +106,7 @@ STATIC_ROOT = ABSOLUTE_PATH + '/static_files/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = DOMAIN + '/static/'
+STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -143,6 +143,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'lambdaproject.middleware.SettingsMiddleware',
+    'pages.middleware.PagesMiddleware',
+    'portal.middleware.SubmittalMiddleware',
 )
 
 ROOT_URLCONF = 'lambdaproject.urls'

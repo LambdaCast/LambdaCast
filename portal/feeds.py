@@ -29,7 +29,7 @@ class iTunesFeed(Rss201rev2Feed):
         handler.addQuickElement(u'itunes:name', self.feed['iTunes_name'])
         handler.addQuickElement(u'itunes:email', self.feed['iTunes_email'])
         handler.endElement(u"itunes:owner")
-        handler.addQuickElement(u'itunes:image', self.feed['iTunes_image_url'])
+        handler.addQuickElement(u'itunes:image', attrs={"href": self.feed['iTunes_image_url']})
         handler.startElement('image', {})
         handler.addQuickElement('title', self.feed['title'])
         handler.addQuickElement('url', self.feed['iTunes_image_url'])
@@ -41,7 +41,7 @@ class iTunesFeed(Rss201rev2Feed):
         handler.addQuickElement(u'itunes:summary',item['summary'])
         handler.addQuickElement(u'itunes:duration',item['duration'])
         handler.addQuickElement(u'itunes:explicit',item['explicit'])
-        handler.addQuickElement(u'itunes:image', item['item_thumb'])
+        handler.addQuickElement(u'itunes:image', attrs={"href": item['item_thumb']})
 
 class MediaFeed(Feed):
     feed_type = iTunesFeed

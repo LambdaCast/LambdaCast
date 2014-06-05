@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.db.models.signals import pre_save, post_delete
 from django.contrib.auth.models import User
+from django.utils.formats import localize_input
 
 import djangotasks
 
@@ -33,6 +34,8 @@ import markdown
 
 from BitTornadoABC.btmakemetafile import make_meta_file
 
+from datetime import date
+
 class MediaFile(models.Model):
     ''' The model only for the media files '''
     title = models.CharField(_(u"Title"),max_length=200)
@@ -48,6 +51,9 @@ class MediaFile(models.Model):
 
     def mime_type(self):
         return MEDIA_FORMATS[self.file_format].mime_type
+
+    def extension(self):
+        return MEDIA_FORMATS[self.file_format].extension
 
     def encode_media(self):
         ''' This is used to tell ffmpeg what to do '''
@@ -83,7 +89,7 @@ class MediaItem(models.Model):
     store your files '''
     title = models.CharField(_(u"Title"),max_length=200)
     slug = AutoSlugField(populate_from='title',unique=True,verbose_name=_(u"Slug"),help_text=_(u"Slugs are parts of an URL that you can define"))
-    date = models.DateField(_(u"Date"),help_text=_(u"Upload or record date"))
+    date = models.DateField(_(u"Date"),help_text=_(u"Upload or record date"),default=lambda:localize_input(date.today()))
     description = models.TextField(_(u"Description"),blank=True,help_text=_(u"Insert a description to the media. You can use Markdown to add formatting"))
     user = models.ForeignKey(User,verbose_name=_(u"User"), blank=True, null=True, help_text=_(u"Shows which user made or uploaded the media item"))
     channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))

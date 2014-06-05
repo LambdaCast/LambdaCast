@@ -168,7 +168,7 @@
 			{% endif %}
 			{% if mediaitem.duration %}
 			<dt>{% trans "Duration" %}:</dt>
-			<dd><i class="icon-time"></i> {{ mediaitem.duration|secondstohms }}</dd>
+			<dd><i class="icon-time"></i> {{ mediaitem.duration|seconds_to_hms }}</dd>
 			{% endif %}
 			<dt>{% trans "License" %}:</dt>
 			{% if mediaitem.license == "None" %}
@@ -184,7 +184,7 @@
 			{% if mediaitem.get_video_files %}
 				{% for video in mediaitem.get_video_files %}
 					<dd>
-						<a href="{{ video.url }}" download="{{mediaitem.slug}}{{ video.get_file_format_display }}">
+						<a href="{{ video.url }}" download="{{mediaitem.title}}{{ video.extension }}">
 							<i class="icon-film"></i>
 							{% trans "Download" %} {{ video.get_file_format_display }} ({{ video.size|in_mb }} MB)
 						</a>
@@ -194,7 +194,7 @@
 			{% if mediaitem.get_audio_files %}
 				{% for audio in mediaitem.get_audio_files %}
 					<dd>
-						<a href="{{ audio.url }}" download="{{mediaitem.slug}}{{ audio.get_file_format_display }}">
+						<a href="{{ audio.url }}" download="{{mediaitem.title}}{{ audio.extension }}">
 							<i class="icon-headphones"></i>
 							{% trans "Download" %} {{ audio.get_file_format_display }} ({{ audio.size|in_mb }} MB)
 						</a>
