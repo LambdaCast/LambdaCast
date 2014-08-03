@@ -1,0 +1,38 @@
+{% load i18n %}
+<nav class="navbar navbar-default">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#channel-nav-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+	</div>
+	<div class="navbar-collapse collapse" id="channel-nav-collapse">
+		<ul class="nav navbar-nav">
+			<li class="active">
+				<a href="/"><b>{% trans "Latest content" %}</b></a>
+			</li>
+			{% for channel in channel_list %}
+			{% if channel.featured %}
+			<li><a href="/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
+			{% endif %}
+			{% endfor %}
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="glyphicon glyphicon-th-large"></i> {% trans "All Channels" %}
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					{% for channel in channel_list %}
+					<li><a href="/channel/{{ channel.slug }}/">{{ channel.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul><!-- nav -->
+	</div><!-- .nav-collapse -->
+	<ul class="nav navbar-nav">
+
+	</ul>
+	</div>
+</nav>

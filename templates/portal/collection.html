@@ -25,50 +25,10 @@
 	<h1>Playlist: {{ collection.title }}</h1>
 </div>
 <div class="row">
-	<div class="span8">
+	<div class="col-md-8">
 		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 	</div>
-	<div class="span4">
-		<div class=well>
-			<ul class="nav nav-list">
-				{% if settings.USE_BITTORRENT %}
-				<li>
-					<i class="icon-file"></i> <u>{% trans "Original Material" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/torrent/"">Torrents-Feed</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				{% if settings.ENABLE_VIDEO_FEEDS %}
-				<li>
-					<i class="icon-film"></i> <u>{% trans "Video-Podcast" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/mp4/">{% trans "MP4-Format" %}</a>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/webm/">{% trans "WEBM-Format" %}</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				{% if settings.ENABLE_AUDIO_FEEDS %}
-				<li>
-					<i class="icon-headphones"></i> <u>{% trans "Audio-Podcast" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/mp3/">{% trans "MP3-Format" %}</a>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/ogg/">{% trans "OGG-Format" %}</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				<li>
-					<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
-				</li>
-			</ul>
-		</div>
+	<div class="col-md-4">
 	</div>
 </div>
 {% endblock %}
