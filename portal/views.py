@@ -54,6 +54,8 @@ def channel_list(request,slug):
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
+    channel_rss_list = ("/feeds/"+channel.slug+"/torrent/","/feed/"+channel.slug+"/mp4","/feed/"+channel.slug+"/webm","/feed/"+channel.slug+"/mp3", "/feed/"+channel.slug+"/ogg","/feed/"+channel.slug+"/opus")
+#    {% include "portal/standard-sidebar.html" with torrent_link="/feeds/channel.slug/torrent/" mp4_link="/feeds/"+{{ channel.slug }}+"/mp4/" mp3_link="/feeds/"+{% url 'app-views-client' client.id %}+{{ channel.slug }}+"/mp3/" webm_link="/feeds/"+{{ channel.slug }}+"/webm/" ogg_link="/feeds/"+{{ channel.slug }}+"/ogg/" %}
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
@@ -62,7 +64,7 @@ def channel_list(request,slug):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list})
+    return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'rss_list': channel_rss_list})
 
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''

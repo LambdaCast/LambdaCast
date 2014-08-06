@@ -93,12 +93,9 @@ ul.edit-menu {
 	cursor: pointer;
 }
 
-.channel-thumb {
+/*.channel-thumb {
 	max-width: 100px;
 	max-height: 100px;
 	margin: 0px 10px 0px 0px;
-}
+}*/
 
-.page-header-channel {
-	min-height: 75px;
-}

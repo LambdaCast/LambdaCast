@@ -16,31 +16,24 @@
 		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
 		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
-{% block rss %}
-		{% if settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Original Feed (Torrents)" %}" href="/feeds/{{ channel.slug }}/torrent/" />
-		{% endif %}
-		{% if settings.ENABLE_VIDEO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (MP4)" %}" href="/feeds/{{ channel.slug }}/mp4/" />
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (WEBM)" %}" href="/feeds/{{ channel.slug }}/webm/" />
-		{% endif %}
-		{% if settings.ENABLE_AUDIO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (MP3)" %}" href="/feeds/{{ channel.slug }}/mp3/" />
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (OGG)" %}" href="/feeds/{{ channel.slug }}/ogg/" />
-		{% endif %}
-{% endblock %}
 {% block body %}
-<div class="page-header page-header-channel">
+<div class="page-header page-header-channel row">
 	{% if perms.portal.change_channel and user.is_staff %}
 		<a href="/admin/portal/channel/{{ channel.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 	{% if channel.channelThumbURL %}
-	<img src="{{ channel.channelThumbURL }}" class="img-polaroid pull-left channel-thumb"></img>
+	<div class="col-md-2 col-xs-12 col-sm-12">
+		<div class="thumbnail">
+			<img src="{{ channel.channelThumbURL }}"></img>
+		</div>
+	</div>
 	{% endif %}
-	<h1>{% trans "Channel" %}: {{ channel.name }}</h1>
-	{% if channel.description %}
-	<p>{{ channel.description }}</p>
-	{% endif %}
+	<div class="col-md-8 col-xs-12 col-sm-12">
+		<h1>{% trans "Channel" %}: {{ channel.name }}</h1>
+		{% if channel.description %}
+		<p>{{ channel.description }}</p>
+		{% endif %}
+	</div>
 </div>
 <div class="row">
 	<div class="col-md-9">
@@ -59,6 +52,6 @@
 		{% endif %}
 		</ul>
 	</div>
-	{% include "portal/standard-sidebar.html" with torrent_link="/feeds/{{ channel.slug }}/torrent/" mp4_link="/feeds/{{ channel.slug }}/mp4/" mp3_link="/feeds/{% url 'app-views-client' client.id %}{{ channel.slug }}/mp3/" webm_link="/feeds/{{ channel.slug }}/webm/" ogg_link="/feeds/{{ channel.slug }}/ogg/" %}
+	{% include "portal/standard-sidebar.html" with video_source=channel.name torrent_link=rss_list.0 mp4_link=rss_list.1 webm_link=rss_list.2 mp3_link=rss_list.3 ogg_link=rss_list.4 opus_link=rss_list.5 %}
 </div>
 {% endblock %}

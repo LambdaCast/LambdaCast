@@ -7,19 +7,20 @@
 </div>
 <div class="col-md-3 col-xs-6 col-sm-6">
 	<div class="list-group text-center">
-		<a class="list-group-item disabled">{% trans "Feeds and Contact" %}</a>
+		<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Videos" %}Feeds of {{ video_source }} and Contact{% endblocktrans %} </a>
 	{% if settings.USE_BITTORRENT %}
 		<a class="list-group-item" href="{{ torrent_link }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
 	{% endif %}
 	{% if settings.ENABLE_VIDEO_FEEDS %}
-		<a class="list-group-item" href="{{ mp4_link }}"><i class="glyphicon glyphicon-film"></i> {% trans "MP4" %}</a>
-		<a class="list-group-item" href="/feeds/latest/webm/"><i class="glyphicon glyphicon-film"></i> {% trans "WEBM" %}</a>
+		<a class="list-group-item" href="{{ mp4_link }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
+		<a class="list-group-item" href="{{ webm_link }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
 	{% endif %}
 	{% if settings.ENABLE_AUDIO_FEEDS %}
-		<a class="list-group-item" href="{{ mp3_link }}"><i class="glyphicon glyphicon-headphones"></i> {% trans "MP3" %}</a>
-		<a class="list-group-item" href="/feeds/latest/ogg/"><i class="glyphicon glyphicon-headphones"></i> {% trans "OGG" %}</a>
+		<a class="list-group-item" href="{{ mp3_link }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
+		<a class="list-group-item" href="{{ ogg_link }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
+		<a class="list-group-item" href="{{ opus_link }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
 	{% endif %}
-		<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed" %}</a>
+		<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
 		<a class="list-group-item" href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="glyphicon glyphicon-envelope"></i> {% trans "Contact" %}</a>
 	</div>
 </div>
