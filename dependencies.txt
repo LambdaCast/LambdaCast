@@ -6,7 +6,7 @@ django-autoslug==1.5.0
 django-taggit==0.9.3
 django-taggit-templatetags==0.4.6dev
 django-templatetag-sugar==0.1
-django-admin-bootstrapped==1.6.2
+django-admin-bootstrapped==1.6.6
 django-simple-open-graph==0.3
 django-simple-captcha==0.4.2
 mutagen==1.20
