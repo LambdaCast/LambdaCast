@@ -30,7 +30,7 @@ def index(request):
     else:
         queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
-    paginator = Paginator(queryset_sorted,15)
+    paginator = Paginator(queryset_sorted,16)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
     try:
