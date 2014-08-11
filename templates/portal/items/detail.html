@@ -32,128 +32,65 @@
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_mediaitem and user.is_staff %}
-		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}{% if not mediaitem.published %} ({% trans "Unpublished" %}){% endif %}</button></a>
+		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}{% if not mediaitem.published %} ({% trans "Unpublished" %}){% endif %}</button></a>
 	{% endif %}
 	<h1>{{ mediaitem.title }}</h1>
 </div>
 <div class="row">
-	<div class="span8">
-		<div class="row">
-			<div class="span8">
-				{% if mediaitem.get_video_files and mediaitem.get_audio_files %}
-				<ul class="nav nav-tabs">
-					<li class="active" id="video_tab"><a href="#video_player">{% trans "Video" %}</a></li>
-					<li id="audio_tab"><a href="#audio_player">{% trans "Audio" %}</a></li>
-				</ul>
-				{% endif %}
-				<div id="player_container">
-					{% if mediaitem.get_video_files %}
-					<div id="video_player" class="player-container">
-						<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
-						{% for video in mediaitem.get_video_files %}
-							<source src="{{ video.url }}" type="{{ video.mime_type }}" />
-						{% endfor %}
-						</video>
-					</div>
-					{% endif %}
-					{% if mediaitem.get_audio_files %}
-					<div id="audio_player" class="player-container{% if mediaitem.get_video_files %} inactive-player-tab{% endif %}">
-						<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }}{% elif mediaitem.channel.channelThumbURL %}{{ mediaitem.channel.channelThumbURL }}{% else %}{{ STATIC_URL }}audio_cover.png{% endif %}" controls>
-						{% for audio in mediaitem.get_audio_files %}
-							<source src="{{ audio.url }}" type="{{ audio.mime_type }}" />
-						{% endfor %}
-						</audio>
-					</div>
-					{% endif %}
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="span8">
-				{% if mediaitem.description %}
-				<div class="row">
-					<div class="span8">
-						<p><dt>{% trans "Description" %}:</dt></p>
-						<div class="well">
-							<dd><div style="max-height:200px; overflow-y: auto;">{{ mediaitem.description|render_markdown }}</div></dd>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-				<h2>{% trans "Comments" %}</h2>
-				{% if comment_list %}
-				{% for comment in comment_list %}
-				<div class="row">
-					<div class="span8">
-						<div class="well">
-							<strong>{% trans "Name" %}: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>{% trans "Time" %}: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
-						{% if perms.portal.change_comment and user.is_staff %}
-							<a href="/admin/portal/comment/{{ comment.id }}/"></i><button class="btn btn-warning btn-mini pull-right btn-mini-edit"><i class="icon-pencil"></i></button></a>
-							{% if not comment.moderated %}
-								<div class="label label-warning pull-right unpublished">{% trans "Unpublished" %}</div>
-							{% endif %}
-						{% endif %}
-							<div class="comment-body">{{ comment.comment }}	</div>
-						</div>
-					</div>
-				</div>
-				{% endfor %}
-				{% else %}
-				<div class ="row">
-					<div class="span8">
-						<div class="well">
-							<p>{% trans "No comments" %}</p>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-				{% if message %}
-				<div class="alert">
-					{{ message }}
-				</div>
-				{% endif %}
-				<form enctype="multipart/form-data" class="form-horizontal" action="/item/{{ mediaitem.slug }}/" method="post">{% csrf_token %}
-					{% for field in comment_form %}
-					<div class="control-group">
-						{% if field.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %} </strong>{{ field.errors }}
-						</div>
-						{% endif %}
-						<div class="control-label">
-							{{ field.label_tag }}
-						</div>
-						<div class="controls">
-							{{ field }}
-						</div>
-					</div>
+	<div class="col-md-8 col-xs-12 col-sm-12">
+		{% if mediaitem.get_video_files and mediaitem.get_audio_files %}
+		<ul class="nav nav-tabs">
+			<li class="active" id="video_tab"><a href="#video_player">{% trans "Video" %}</a></li>
+			<li id="audio_tab"><a href="#audio_player">{% trans "Audio" %}</a></li>
+		</ul>
+		{% endif %}
+		<div id="player_container">
+			{% if mediaitem.get_video_files %}
+			<div id="video_player" class="player-container">
+				<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+					{% for video in mediaitem.get_video_files %}
+					<source src="{{ video.url }}" type="{{ video.mime_type }}" />
 					{% endfor %}
-					<div class="control-group">
-						<div class="controls">
-							<a name="captcha" href="#captcha"><p name="refresh_captcha" class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</p></a>
-						</div>
-					</div>
-					<div class="form-actions">
-						<input type="submit" name="submit_comment" class="btn btn-primary" value={% trans "Send" %} />
-					</div>
-				</form>
+				</video>
 			</div>
+			{% endif %}
+			{% if mediaitem.get_audio_files %}
+			<div id="audio_player" class="player-container{% if mediaitem.get_video_files %} inactive-player-tab{% endif %}">
+				<audio id="player_audio" class="projekktor center" title="{{ mediaitem.title}}" width="640" height="360" poster="{% if mediaitem.audioThumbURL %}{{ mediaitem.audioThumbURL }}{% elif mediaitem.channel.channelThumbURL %}{{ mediaitem.channel.channelThumbURL }}{% else %}{{ STATIC_URL }}audio_cover.png{% endif %}" controls>
+				{% for audio in mediaitem.get_audio_files %}
+				<source src="{{ audio.url }}" type="{{ audio.mime_type }}" />
+				{% endfor %}
+				</audio>
+			</div>
+			{% endif %}
 		</div>
+		{% if mediaitem.description %}
+		<p><dt>{% trans "Description" %}:</dt></p>
+			<div class="well">
+				<dd><div style="max-height:200px; overflow-y: auto;">{{ mediaitem.description|render_markdown }}</div></dd>
+		{% if mediaitem.tags.all %}
+			<dt>{% trans "Tags" %}:</dt>
+			{% for tag in mediaitem.tags.all %}
+<a href="/tags/{{ tag.name }}/">{{ tag.name }}</a>
+			{% endfor %}
+		{% endif %}
+			</div>
+		{% endif %}
 	</div>
-	<div class="span4">
+	<div class="col-md-4 col-xs-12 col-sm-12">
 		<div class="well">
 			<dt>{% trans "Date" %}:</dt>
-			<dd><i class="icon-calendar"></i> {{ mediaitem.date }}</dd>
+			<dd><i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}</dd>
 			{% if mediaitem.channel %}
 			<dt>{% trans "Channel" %}:</dt>
-			<dd><i class="icon-th"></i> <a href="/channel/{{ mediaitem.channel.slug }}/">{{ mediaitem.channel.name }}</a>
+			<dd><i class="glyphicon glyphicon-th"></i> <a href="/channel/{{ mediaitem.channel.slug }}/">{{ mediaitem.channel.name }}</a>
 			{% endif %}
 			{% if mediaitem.user %}
 			<dt>{% trans "Uploaded by" %}:</dt>
 			{% if mediaitem.user.first_name %}
-			<dd><i class="icon-user"></i> {{ mediaitem.user.first_name }} {{ mediaitem.user.last_name }}</dd>
+			<dd><i class="glyphicon glyphicon-user"></i> {{ mediaitem.user.first_name }} {{ mediaitem.user.last_name }}</dd>
 			{% else %}
-			<dd><i class="icon-user"></i> {{ mediaitem.user }}
+			<dd><i class="glyphicon glyphicon-user"></i> {{ mediaitem.user }}
 			{% endif %}
 			{% endif %}
 			{% if mediaitem.linkURL %}
@@ -168,13 +105,13 @@
 			{% endif %}
 			{% if mediaitem.duration %}
 			<dt>{% trans "Duration" %}:</dt>
-			<dd><i class="icon-time"></i> {{ mediaitem.duration|seconds_to_hms }}</dd>
+			<dd><i class="glyphicon glyphicon-time"></i> {{ mediaitem.duration|seconds_to_hms }}</dd>
 			{% endif %}
 			<dt>{% trans "License" %}:</dt>
 			{% if mediaitem.license == "None" %}
-			<dd><i class="icon-book"></i> {% trans "None" %}</a></dd>
+			<dd><i class="glyphicon glyphicon-book"></i> {% trans "None" %}</a></dd>
 			{% else %}
-			<dd><i class="icon-book"></i> <a href="{{ mediaitem.get_license_link }}">{{ mediaitem.get_license_display }}</a></dd>
+			<dd><i class="glyphicon glyphicon-book"></i> <a href="{{ mediaitem.get_license_link }}">{{ mediaitem.get_license_display }}</a></dd>
 			{% endif %}
 			{% if mediaitem.torrentURL %}
 			<dt>{% trans "Torrent" %}:</dt>
@@ -185,7 +122,7 @@
 				{% for video in mediaitem.get_video_files %}
 					<dd>
 						<a href="{{ video.url }}" download="{{mediaitem.title}}{{ video.extension }}">
-							<i class="icon-film"></i>
+							<i class="glyphicon glyphicon-film"></i>
 							{% trans "Download" %} {{ video.get_file_format_display }} ({{ video.size|in_mb }} MB)
 						</a>
 					</dd>
@@ -195,23 +132,65 @@
 				{% for audio in mediaitem.get_audio_files %}
 					<dd>
 						<a href="{{ audio.url }}" download="{{mediaitem.title}}{{ audio.extension }}">
-							<i class="icon-headphones"></i>
+							<i class="glyphicon glyphicon-headphones"></i>
 							{% trans "Download" %} {{ audio.get_file_format_display }} ({{ audio.size|in_mb }} MB)
 						</a>
 					</dd>
 				{% endfor %}
 			{% endif %}
 		</div>
-		{% if mediaitem.tags.all %}
-		<div class="well">
-			<ul>
-			{% for tag in mediaitem.tags.all %}
-				<li><a href="/tags/{{ tag.name }}/">{{ tag.name }}</a></li>
-			{% endfor %}
-			</ul>
+	</div>
+	<div class="col-md-8 col-xs-12 col-sm-12">
+		<h2>{% trans "Comments" %}</h2>
+		{% if comment_list %}
+		{% for comment in comment_list %}
+			<div class="well">
+				<strong>{% trans "Name" %}: </strong>{{ comment.name }} {% if comment.timecode %} &bull; <strong>{% trans "Time" %}: </strong><a class="timecode">{{ comment.timecode }}</a>{% endif %}
+			{% if perms.portal.change_comment and user.is_staff %}
+				<a href="/admin/portal/comment/{{ comment.id }}/"></i><button class="btn btn-warning btn-xs pull-right btn-mini-edit"><i class="glyphicon glyphicon-pencil"></i></button></a>
+				{% if not comment.moderated %}
+					<div class="label label-warning pull-right unpublished">{% trans "Unpublished" %}</div>
+				{% endif %}
+			{% endif %}
+				<div class="comment-body">{{ comment.comment }}	</div>
+			</div>
+		{% endfor %}
+		{% else %}
+			<div class="well">
+				<p>{% trans "No comments" %}</p>
+			</div>
+		{% endif %}
+		{% if message %}
+		<div class="alert">
+			{{ message }}
 		</div>
 		{% endif %}
-	</div>
+		<form enctype="multipart/form-data" class="form-horizontal" action="/item/{{ mediaitem.slug }}/" method="post">{% csrf_token %}
+			{% for field in comment_form %}
+			<div class="control-group">
+				{% if field.errors %}
+				<div class="alert alert-error">
+					<strong>{% trans "Error!" %} </strong>{{ field.errors }}
+				</div>
+				{% endif %}
+				<div class="control-label">
+					{{ field.label_tag }}
+				</div>
+				<div class="controls">
+					{{ field }}
+				</div>
+			</div>
+			{% endfor %}
+			<div class="control-group">
+				<div class="controls">
+					<a name="captcha" href="#captcha"><p name="refresh_captcha" class='js-captcha-refresh btn btn-inverse btn-mini'>{% trans "Refresh Captcha" %}</p></a>
+				</div>
+			</div>
+			<div class="form-actions">
+				<input type="submit" name="submit_comment" class="btn btn-primary" value={% trans "Send" %} />
+			</div>
+		</form>
+	</div>	
 </div>
 {% endblock %}
 {% block javascript %}
