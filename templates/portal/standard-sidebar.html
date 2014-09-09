@@ -4,32 +4,37 @@
 	<div class="thumbnail">
 		<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>
 	</div>
-</div>
-<div class="col-md-3 col-xs-6 col-sm-6">
-	<div class="list-group text-center">
-		<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Videos" %}Feeds of {{ video_source }} and Contact{% endblocktrans %} </a>
-	{% if settings.USE_BITTORRENT %}
-		<a class="list-group-item" href="{{ torrent_link }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
-	{% endif %}
-	{% if settings.ENABLE_VIDEO_FEEDS %}
-		<a class="list-group-item" href="{{ mp4_link }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
-		<a class="list-group-item" href="{{ webm_link }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
-	{% endif %}
-	{% if settings.ENABLE_AUDIO_FEEDS %}
-		<a class="list-group-item" href="{{ mp3_link }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
-		<a class="list-group-item" href="{{ ogg_link }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
-		<a class="list-group-item" href="{{ opus_link }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
-	{% endif %}
-		<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
-		<a class="list-group-item" href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="glyphicon glyphicon-envelope"></i> {% trans "Contact" %}</a>
+	<div class="row">
+		<div class="col-md-12 col-xs-6">
+			<div class="list-group text-center">
+				<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Content" %}Feeds of {{ video_source }}{% endblocktrans %} </a>
+			{% if settings.USE_BITTORRENT %}
+				<a class="list-group-item" href="{{ torrent_link }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
+			{% endif %}
+			{% if settings.ENABLE_VIDEO_FEEDS %}
+				<a class="list-group-item" href="{{ mp4_link }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
+				<a class="list-group-item" href="{{ webm_link }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
+			{% endif %}
+			{% if settings.ENABLE_AUDIO_FEEDS %}
+				<a class="list-group-item" href="{{ mp3_link }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
+				<a class="list-group-item" href="{{ ogg_link }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
+				<a class="list-group-item" href="{{ opus_link }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
+			{% endif %}
+				<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
+			</div>
+		</div>
+		<div class="col-md-12 col-xs-6">
+			{% get_tagcloud as tags for 'portal.MediaItem' %}
+			{% if tags %}
+			<div class="list-group text-center">
+				<a class="list-group-item disabled">{% trans "Tags" %} </a>
+				<div class="list-group-item">
+				{% for tag in tags %}
+				<a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
+				{% endfor %}
+			</div>
+		</div>
 	</div>
 </div>
-{% get_tagcloud as tags for 'portal.MediaItem' %}
-{% if tags %}
-<div class="col-md-3 col-xs-6 col-sm-6">
-	{% for tag in tags %}
-	<a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
-	{% endfor %}
-</div>
 {% endif %}
-
+</div>

@@ -18,9 +18,6 @@
 {% endblock %}
 {% block body %}
 <div class="page-header page-header-channel row">
-	{% if perms.portal.change_channel and user.is_staff %}
-		<a href="/admin/portal/channel/{{ channel.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}</button></a>
-	{% endif %}
 	{% if channel.channelThumbURL %}
 	<div class="col-md-2 col-xs-12 col-sm-12">
 		<div class="thumbnail">
@@ -34,6 +31,9 @@
 		<p>{{ channel.description }}</p>
 		{% endif %}
 	</div>
+	{% if perms.portal.change_channel and user.is_staff %}
+		<a href="/admin/portal/channel/{{ channel.id }}/" class="pull-right"><button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}</button></a>
+	{% endif %}
 </div>
 <div class="row">
 	<div class="col-md-9">

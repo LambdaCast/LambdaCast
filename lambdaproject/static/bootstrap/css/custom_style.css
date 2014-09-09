@@ -51,14 +51,15 @@ body {
 .thumbnail-image-container img {
 	width: 150px;
 }
-.listitem-thumbnail {
-	height: 150px;
+.thumbnail.listitem-thumbnail {
+	height: 165px;
+	margin-bottom: 0;
 }
 .listitem-thumbnail img {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
-	max-height:145px;
+	max-height: 156px;
 }
 
 ul.edit-menu {
@@ -93,9 +94,14 @@ ul.edit-menu {
 	cursor: pointer;
 }
 
-/*.channel-thumb {
-	max-width: 100px;
-	max-height: 100px;
-	margin: 0px 10px 0px 0px;
-}*/
+.page-header.page-header-channel {
+	margin: 0;
+	border: none;
+}
+.media-metadata {
+	margin: 5px 0 10px;
+}
+.media-metadata .glyphicon {
+	margin-right: 5px;
+}
 

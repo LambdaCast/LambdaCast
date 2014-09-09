@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load markup %}
 {% for mediaitem in mediaitem_list %}
-	<div class="col-md-6 col-xs-12 col-sm-12 col-lg-offset-0">
+	<div class="col-md-6 col-xs-12 col-sm-12">
 		<div class="panel panel-default">
 		{% if mediaitem.getClassName == 'MediaItem' %}
 			<div class="panel-heading">
@@ -11,29 +11,33 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-			<div class="col-md-6">
-			<a href="/item/{{ mediaitem.slug }}/">
-				<div class="thumbnail listitem-thumbnail">
-				{% if mediaitem.videoThumbURL %}
-					<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
-				{% elif mediaitem.audioThumbURL %}
-					<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
-				{% elif mediaitem.channel.channelThumbURL %}
-					<img src="{{ mediaitem.channel.channelThumbURL }}" alt="videoThumb" />
-				{% else %}
-					<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
-				{% endif %}
+			<div class="row">
+				<div class="col-md-6">
+				<a href="/item/{{ mediaitem.slug }}/">
+					<div class="thumbnail listitem-thumbnail">
+					{% if mediaitem.videoThumbURL %}
+						<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
+					{% elif mediaitem.audioThumbURL %}
+						<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
+					{% elif mediaitem.channel.channelThumbURL %}
+						<img src="{{ mediaitem.channel.channelThumbURL }}" alt="videoThumb" />
+					{% else %}
+						<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
+					{% endif %}
+					</div>
+				</a>
 				</div>
-			</a>
-			</div>
-			<div class="col-md-6 col-xs-12 caption">
-				<i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %}<br>
-				<i class="glyphicon glyphicon-time"></i> {{ mediaitem.duration|seconds_to_hms }}{% endif %}<br>
-				<i class="glyphicon glyphicon-comment"></i> <span class="label label-default">{{ mediaitem.comments_count }}</span><br>
-				{% if mediaitem.channel %}
-					<i class="glyphicon glyphicon-th-large"></i> <a href="/channel/{{ mediaitem.channel.name }}">{{ mediaitem.channel.name }}</a>
-				{% endif %}
-			</div>
+				<div class="col-md-6 col-xs-12 caption">
+					<div class="media-metadata"><i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %}</div>
+					<div class="media-metadata"><i class="glyphicon glyphicon-time"></i> {{ mediaitem.duration|seconds_to_hms }}{% endif %}</div>
+					<div class="media-metadata"><i class="glyphicon glyphicon-comment"></i> {{ mediaitem.comments_count }}</div>
+					{% if mediaitem.channel %}
+						<div class="media-metadata">
+							<i class="glyphicon glyphicon-th-large"></i> <a href="/channel/{{ mediaitem.channel.name }}">{{ mediaitem.channel.name }}</a>
+						</div>
+					{% endif %}
+				</div>
+				</div>
 			</div>
 			{% if user.is_authenticated %}
 			<div class="panel-footer">
@@ -53,6 +57,7 @@
 			</h3>
 		</div>
 		<div class="panel-body">
+		<div class="row">
 			<div class="col-md-6">
 			<a href="/collection/{{ mediaitem.slug }}/">
 				<div class="thumbnail listitem-thumbnail">
@@ -61,8 +66,11 @@
 			</a>
 			</div>
 			<div class="col-md-6 col-xs-12">
-				<i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}
+				<div class="media-metadata">
+					<i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}
+				</div>
 			</div>
+		</div>
 		</div>
 		{% if user.is_authenticated %}
 		<div class="panel-footer">
