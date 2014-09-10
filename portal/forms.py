@@ -31,7 +31,6 @@ class MediaItemForm(ModelForm):
     class Meta:
         model = MediaItem
         exclude = ["slug","duration","published","encodingDone","torrentURL","user","autoPublish", "torrentDone","videoThumbURL","audioThumbURL"]
-        name = forms.CharField(widget=forms.FileInput(attrs={'class':''}))
 
     def __init__(self, *args, **kwargs):
         super(MediaItemForm, self).__init__(*args, **kwargs)
@@ -40,6 +39,8 @@ class MediaItemForm(ModelForm):
             field.widget.attrs['class'] = 'form-control'
             if field.required:
                 field.widget.attrs['class'] = 'required form-control'
+                if fieldName == 'originalFile':
+                    field.widget.attrs['class'] = 'required'
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
