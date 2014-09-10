@@ -32,7 +32,7 @@
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_mediaitem and user.is_staff %}
-		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}{% if not mediaitem.published %} ({% trans "Unpublished" %}){% endif %}</button></a>
+		<a href="/admin/portal/mediaitem/{{ mediaitem.id }}/" class="pull-right"><button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}{% if not mediaitem.published %} ({% trans "Unpublished" %}){% endif %}</button></a>
 	{% endif %}
 	<h1>{{ mediaitem.title }}</h1>
 </div>
@@ -65,10 +65,10 @@
 			{% endif %}
 		</div>
 		{% if mediaitem.description %}
-		<div class="panel panel-default" style="margin-top: 30px;">
+		<div class="panel panel-default">
 			<div class="panel-heading">{% trans "Description" %}:</div>
 			<div class="panel-body">
-				<div style="max-height:200px; overflow-y: auto;">{{ mediaitem.description|render_markdown }}</div>
+				{{ mediaitem.description|render_markdown }}
 			</div>
 		</div>
 		{% endif %}

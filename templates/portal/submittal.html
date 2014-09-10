@@ -4,7 +4,7 @@
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_mediaitem and user.is_staff %}
-			<a href="/admin/portal/submittal/{{ submittal.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+			<a href="/admin/portal/submittal/{{ submittal.id }}/" class="pull-right"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 	<h1>{% trans "Submittal" %} "{{ submittal.title }}"</h1>
 </div>

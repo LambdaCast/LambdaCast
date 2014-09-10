@@ -63,19 +63,19 @@
 					</tr>
 				{% empty %}
 					<tr>
-						<td colspan="6">{% trans "There are no media to transcode" %}</td>
+						<td colspan="6">{% trans "There is no media to transcode" %}</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
-	<div class="modal hide fade" id="logModal" style="width:800px;margin-left:-400px;">
+	<div class="modal hide fade" id="logModal">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			<h3>{% trans "Log" %}</h3>
 		</div>
 		<div class="modal-body">
-			<textarea id="logviewer" cols="500" rows="10" style="width:95%">{% trans "Loading" %}...</textarea>
+			<textarea id="logviewer" cols="500" rows="10">{% trans "Loading" %}...</textarea>
 		</div>
 		<div class="modal-footer">
 			<a class="btn" id="reloadLog">{% trans "Reload" %}</a>
