@@ -8,7 +8,7 @@
 </div>
 <div class=row">
 	<div class="col-md-12">
-		<form id="mediaitemForm" enctype="multipart/form-data" class="form-horizontal" action="/submit/" method="post">
+		<form id="mediaitemForm" enctype="multipart/form-data" class="form" action="/submit/" method="post">
 			{% csrf_token %}
 			<div style="display: none" id="formError" class="alert alert-danger">
 				<strong>{% trans "Error!" %}</strong>
@@ -17,7 +17,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<!-- title -->
-					<div class="form-group">
+					<div class="from-group">
 						{% if submit_form.title.errors %}
 						<div class="alert alert-danger">
 							<strong>{% trans "Error!" %}</strong>{{ submit_form.title.errors }}</p>
