@@ -31,14 +31,15 @@ class MediaItemForm(ModelForm):
     class Meta:
         model = MediaItem
         exclude = ["slug","duration","published","encodingDone","torrentURL","user","autoPublish", "torrentDone","videoThumbURL","audioThumbURL"]
+        name = forms.CharField(widget=forms.FileInput(attrs={'class':''}))
 
     def __init__(self, *args, **kwargs):
         super(MediaItemForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
-            field.widget.attrs['class'] = 'input-block-level'
+            field.widget.attrs['class'] = 'form-control'
             if field.required:
-                field.widget.attrs['class'] = 'required input-block-level'
+                field.widget.attrs['class'] = 'required form-control'
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
@@ -64,9 +65,9 @@ class SubmittalForm(ModelForm):
         super(SubmittalForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
-            field.widget.attrs['class'] = 'input-block-level'
+            field.widget.attrs['class'] = 'form-control'
             if field.required:
-                field.widget.attrs['class'] = 'required input-block-level'
+                field.widget.attrs['class'] = 'required form-control'
 
 
     def create_mediafiles(self, mediaitem):
