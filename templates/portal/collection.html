@@ -25,10 +25,14 @@
 	<h1>Playlist: {{ collection.title }}</h1>
 </div>
 <div class="row">
-	<div class="col-md-8">
-		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
+	<div class="col-md-2">
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-8">
+		<div class="row">
+		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
+		</div>
+	</div>
+	<div class="col-md-2">
 	</div>
 </div>
 {% endblock %}
