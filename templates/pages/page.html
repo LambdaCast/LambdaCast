@@ -22,6 +22,7 @@
 	{% endif %}
 	<h1>{{ current_page.title }} <small>{{ current_page.description }}</small></h1>
 </div>
+<div class="col-md-12">
 {{ current_page.body|safe|escape }}
-
+</div>
 {% endblock %}
