@@ -4,7 +4,7 @@ body {
 	-o-hyphens: auto;
 	-ms-hyphens: auto;
 	hyphens: auto;
-	padding-top: 32px;
+	padding-top: 51px;
 }
 
 @media (max-width: 979px) {
@@ -15,10 +15,6 @@ body {
 
 .navbar-search {
 	margin-right: 5px;
-}
-
-#page-container {
-	margin-top: 70px;
 }
 
 .iframe-code {
@@ -95,9 +91,12 @@ ul.edit-menu {
 }
 
 .page-header.page-header-channel {
-	margin: 0;
 	border: none;
 }
+.page-container-index {
+        margin-top: 32px;
+}
+
 .media-metadata {
 	margin: 5px 0 10px;
 }

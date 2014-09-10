@@ -10,6 +10,7 @@
 		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
 {% block body %}
+<div class="page-container-index">
 <div class="row">
 	<div class="col-md-9 col-xs-12 col-sm-12">
 		{% include "portal/channelmenu.html" %}
@@ -28,5 +29,6 @@
 		</ul>
 	</div>
 	{% include "portal/standard-sidebar.html" with torrent_link="/feeds/latest/torrents/" mp4_link="/feeds/latest/mp4/" webm_link="/feeds/latest/webm/" mp3_link="/feeds/latest/mp3/" ogg_link="/feeds/latest/ogg/" opus_link="/feeds/latest/opus/" %}
+</div>
 </div>
 {% endblock %}

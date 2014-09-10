@@ -80,6 +80,9 @@ class SubmittalForm(ModelForm):
             field.widget.attrs['class'] = 'form-control'
             if field.required:
                 field.widget.attrs['class'] = 'required form-control'
+            self.fields['published'].widget.attrs['class'] = ''
+            self.fields['encodingDone'].widget.attrs['class'] = ''
+            self.fields['torrentDone'].widget.attrs['class'] = ''
 
     def create_mediafiles(self, mediaitem):
         if not self.data['media_webmURL'] == "":
