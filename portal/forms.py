@@ -85,5 +85,5 @@ class SubmittalForm(ModelForm):
 
 class ThumbnailForm(Form):
     ''' Used for uploading thumbnails '''
-    title = forms.CharField(max_length=50, help_text=_('The name of the image with file format like "test.png"'), label=_("Title"), validators=[RegexValidator(regex="^((?!/).)*$", message=_("Title must not contain a slash"), code='invalid_title')])
+    title = forms.CharField(max_length=50, help_text=_('The name of the image with file format like "test.png"'), label=_("Title"), validators=[RegexValidator(regex="^((?!/).)*$", message=_("Title must not contain a slash"), code='invalid_title')], widget=forms.TextInput(attrs={'class':'form-control'}))
     file = forms.FileField(help_text=_('Only upload image files'),label=_("File"))
