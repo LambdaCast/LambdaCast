@@ -9,12 +9,5 @@
 <div class="col-md-8">
 	{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 </div>
-<div class="col-md-4">
-	<ul class="nav nav-list">
-		{% include "portal/inc/latest-feeds.html" %}
-		<li>
-			<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="glyphicon glyphicon-envelope"></i> {% trans "Contact" %}</a>
-		</li>
-	</ul>
-</div>
+{% include "portal/standard-sidebar.html" %}
 {% endblock %}
