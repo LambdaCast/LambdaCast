@@ -33,7 +33,7 @@
 					<div class="media-metadata"><i class="glyphicon glyphicon-comment"></i> {{ mediaitem.comments_count }}</div>
 					{% if mediaitem.channel %}
 						<div class="media-metadata">
-							<i class="glyphicon glyphicon-th-large"></i> <a href="/channel/{{ mediaitem.channel.name }}">{{ mediaitem.channel.name }}</a>
+							<i class="glyphicon glyphicon-th-large"></i> <a href="/channel/{{ mediaitem.channel.slug }}">{{ mediaitem.channel.name }}</a>
 						</div>
 					{% endif %}
 				</div>
