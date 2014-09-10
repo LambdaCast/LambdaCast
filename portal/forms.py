@@ -50,6 +50,17 @@ class CommentForm(ModelForm):
         model = Comment
         exclude = ["ip","moderated","item"]
 
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        for fieldName in self.fields:
+            field = self.fields[fieldName]
+            field.widget.attrs['class'] = 'form-control'
+            if field.required:
+                field.widget.attrs['class'] = 'required form-control'
+            self.fields['captcha'].label = "Captcha"
+            field.widget.attrs['placeholder'] = field.label
+            self.fields['timecode'].initial = '0'
+
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
     media_mp4URL = forms.URLField(help_text=_('Enter the URL to the mp4 file'), label=_("MP4-URL"),required=False)
@@ -69,7 +80,6 @@ class SubmittalForm(ModelForm):
             field.widget.attrs['class'] = 'form-control'
             if field.required:
                 field.widget.attrs['class'] = 'required form-control'
-
 
     def create_mediafiles(self, mediaitem):
         if not self.data['media_webmURL'] == "":

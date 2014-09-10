@@ -23,14 +23,14 @@
 				<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
 			</div>
 		</div>
+		{% get_tagcloud as tags for 'portal.MediaItem' %}
 		<div class="col-md-12 col-xs-6">
-			{% get_tagcloud as tags for 'portal.MediaItem' %}
 			{% if tags %}
 			<div class="list-group text-center">
 				<a class="list-group-item disabled">{% trans "Tags" %} </a>
 				<div class="list-group-item">
 				{% for tag in tags %}
-				<a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
+					<a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
 				{% endfor %}
 			</div>
 		</div>
