@@ -65,10 +65,16 @@
 			{% endif %}
 		</div>
 		{% if mediaitem.description %}
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Description" %}:</div>
-			<div class="panel-body">
-				{{ mediaitem.description|render_markdown }}
+		<div class="panel panel-default" id="description">
+			<div class="panel-heading">
+				<a data-toggle="collapse" data-parent="#description" href="#furtherDescription">
+					<div class="panel-title"><strong>{% trans "Description" %}</strong> <span class="caret"></span></div> 
+				</a>
+			</div>
+			<div id="furtherDescription" class="panel-collapse collapse">
+				<div class="panel-body">
+					{{ mediaitem.description|render_markdown }}
+				</div>
 			</div>
 		</div>
 		{% endif %}
