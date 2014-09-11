@@ -9,16 +9,16 @@
 			<div class="list-group text-center">
 				<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Content" %}Feeds of {{ video_source }}{% endblocktrans %} </a>
 			{% if settings.USE_BITTORRENT %}
-				<a class="list-group-item" href="{{ torrent_link }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
+				<a class="list-group-item" href="{{ torrent_link|default:'/feeds/latest/torrent' }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
 			{% endif %}
 			{% if settings.ENABLE_VIDEO_FEEDS %}
-				<a class="list-group-item" href="{{ mp4_link }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
-				<a class="list-group-item" href="{{ webm_link }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
+				<a class="list-group-item" href="{{ mp4_link|default:'/feeds/latest/mp4' }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
+				<a class="list-group-item" href="{{ webm_link|default:'/feeds/latest/webm' }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
 			{% endif %}
 			{% if settings.ENABLE_AUDIO_FEEDS %}
-				<a class="list-group-item" href="{{ mp3_link }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
-				<a class="list-group-item" href="{{ ogg_link }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
-				<a class="list-group-item" href="{{ opus_link }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
+				<a class="list-group-item" href="{{ mp3_link|default:'/feeds/latest/mp3' }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
+				<a class="list-group-item" href="{{ ogg_link|default:'/feeds/latest/ogg' }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
+				<a class="list-group-item" href="{{ opus_link|default:'/feeds/latest/opus' }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
 			{% endif %}
 				<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
 			</div>
