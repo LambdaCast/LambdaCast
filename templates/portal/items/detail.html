@@ -169,14 +169,14 @@
 				{% endfor %}
 			{% endif %}
 			</li>
+			{% if mediaitem.tags.all %}
 			<li class="list-group-item">
-				{% if mediaitem.tags.all %}
-					<dd><i class="glyphicon glyphicon-tags"></i> {% trans "Tags" %}:</dd>
-					{% for tag in mediaitem.tags.all %}
-						<a href="/tags/{{ tag.slug }}/" class="tag-weight-{{tag.weight|floatformat:0}}">{{ tag.name }}</a>
-					{% endfor %}
-				{% endif %}
+				<dd><i class="glyphicon glyphicon-tags"></i> {% trans "Tags" %}:</dd>
+				{% for tag in mediaitem.tags.all %}
+					<a href="/tags/{{ tag.slug }}/" class="tag-weight-{{tag.weight|floatformat:0}}">{{ tag.name }}</a>
+				{% endfor %}
 			</li>
+			{% endif %}
 		</ul>
 		<ul class="list-group">
 			<li class="list-group-item list-group-item-info">{% trans "Leave a Comment" %}</li>
