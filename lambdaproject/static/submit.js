@@ -1,20 +1,22 @@
 $(document).ready(function() {
 	$('#progress-indicator').hide();
-	var bar = $('.bar');
+	$('#upload-success').hide();
+	$('#form-error').hide();
+	var bar = $('#bar');
 	var percent = $('.percent');
 
 	$('#mediaitemForm').ajaxForm({
 		beforeSend: function(xhr) {
 			var validator = $("#mediaitemForm").validate({errorClass: "text-error",});
 			if (!validator.form()) {
-				$("#formError").show();
+				$("#form-error").show();
 				xhr.abort();
 			} else {
-				$("#formError").hide();
+				$("#form-error").hide();
 				$('#progress-indicator').show();
 			}
 			var percentVal = '0%';
-			bar.width(percentVal)
+			bar.attr('aria-valuenow', percentVal)
 			percent.html(percentVal);
 		},
 		uploadProgress: function(event, position, total, percentComplete) {
@@ -25,12 +27,9 @@ $(document).ready(function() {
 		},
 		complete: function(xhr) {
 			if (xhr.status == 200){
-				// TODO: remove alert
-				alert("Thank you, your media will be transcoded and should be available soon.");
-				window.location.href = "/status/";
+				$('#upload-success').show();
 			}else {
-				$("#formError").html("An error accured. Please, try again or contact the administrator.");
-				$("#formError").show();
+				$("#form-error").show();
 			}
 		}
 	});
