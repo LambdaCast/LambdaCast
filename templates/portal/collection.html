@@ -20,19 +20,15 @@
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_collection and user.is_staff %}
-		<a href="/admin/portal/collection/{{ collection.id }}/" class="pull-right""><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+		<a href="/admin/portal/collection/{{ collection.id }}/" class="pull-right"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 	<h1>Playlist: {{ collection.title }}</h1>
 </div>
 <div class="row">
-	<div class="col-md-2">
-	</div>
-	<div class="col-md-8">
+	<div class="col-md-offset-2 col-md-8 col-sm-offset-0">
 		<div class="row">
 		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 		</div>
-	</div>
-	<div class="col-md-2">
 	</div>
 </div>
 {% endblock %}
