@@ -1,5 +1,19 @@
 {% load i18n %}
 {% load taggit_extras %}
+{% block rss %}
+	{% if settings.USE_BITTORRENT %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Original Feed (Torrents)" %}" href="{{ rss_list.0 }}" />
+	{% endif %}
+	{% if settings.ENABLE_VIDEO_FEEDS %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Video Feed (MP4)" %}" href="{{ rss_list.1 }}" />
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Video Feed (WEBM)" %}" href="{{ rss_list.2 }}" />
+	{% endif %}
+	{% if settings.ENABLE_AUDIO_FEEDS %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (MP3)" %}" href="{{ rss_list.3 }}" />
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (OGG)" %}" href="{{ rss_list.4 }}" />
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (OPUS)" %}" href="{{ rss_list.5 }}" />
+	{% endif %}
+{% endblock %}
 <div class="col-md-3 col-xs-12 col-sm-12">
 	<div class="thumbnail">
 		<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>

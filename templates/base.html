@@ -9,17 +9,6 @@
 		{% block extra_meta %}{% endblock %}
 		{% block rss %}
 		{% endblock %}
-		{% if settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Originals" %}" href="/feeds/latest/torrent/" />
-		{% endif %}
-		{% if settings.ENABLE_VIDEO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Videos (MP4)" %}" href="/feeds/latest/mp4/" />
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Videos (WEBM)" %}" href="/feeds/latest/webm/" />
-		{% endif %}
-		{% if settings.ENABLE_AUDIO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Audio Files (MP3)" %}" href="/feeds/latest/mp3/" />
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Latest Audio Files (OGG)" %}" href="/feeds/latest/ogg/" />
-		{% endif %}
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Comments-Feed" %}" href="/feeds/comments/" />
 		{% if settings.ENABLE_LIVESTREAMS %}
 		<link rel="alternate" type="application/rss+xml" title="{% trans "Upcoming Events" %}" href="/feeds/stream/upcoming/" />
