@@ -65,13 +65,11 @@
 			{% endif %}
 		</div>
 		{% if mediaitem.description %}
-		<div class="panel panel-default" id="description">
+		<div class="panel panel-default">
 			<div class="panel-heading">
-				<a data-toggle="collapse" data-parent="#description" href="#furtherDescription">
-					<div class="panel-title"><strong>{% trans "Description" %}</strong> <span class="caret"></span></div> 
-				</a>
+				<div class="panel-title"><strong>{% trans "Description" %}</strong></div> 
 			</div>
-			<div id="furtherDescription" class="panel-collapse collapse">
+			<div id="description" class="readmore-js-section readmore-js-collapsed">
 				<div class="panel-body">
 					{{ mediaitem.description|render_markdown }}
 				</div>
@@ -232,6 +230,10 @@ function updateCaptcha(){
 }
 
 $('.js-captcha-refresh').click(updateCaptcha);
+$('#description').readmore({
+	moreLink: '<a class="pull-right btn btn-primary btn-xs" href="#">{% trans "Read more" %}</a>',
+	lessLink: '<a class="pull-right btn btn-primary btn-xs" href="#">{% trans "Close" %}</a>'
+});
 
 $(document).ready(function() {
 	var timecode;
