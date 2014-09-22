@@ -33,7 +33,13 @@ def index(request):
     paginator = Paginator(queryset_sorted,16)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
-    rss_list = ("/feeds/latest/torrents/","/feeds/latest/mp4/","/feeds/latest/webm/","/feeds/latest/mp3/","/feeds/latest/ogg/","/feeds/latest/opus/")
+    torrents_link = "/feeds/latest/torrents/"
+    mp4_link = "/feeds/latest/mp4/"
+    webm_link = "/feeds/latest/webm/"
+    mp3_link = "/feeds/latest/mp3/"
+    ogg_link = "/feeds/latest/ogg/"
+    opus_link = "/feeds/latest/opus/"
+    rss_list = {'torrents_link':torrents_link, 'webm_link':webm_link, 'mp4_link':mp4_link,'mp3_link':mp3_link, 'ogg_link':ogg_link, 'opus_link':opus_link}
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
@@ -42,7 +48,7 @@ def index(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, 'portal/index.html', {'latest_mediaitems_list': mediaitems, 'channel_list': channel_list, 'rss_list':rss_list})
+    return TemplateResponse(request, 'portal/index.html', {'latest_mediaitems_list': mediaitems, 'channel_list': channel_list, 'rss_list': rss_list})
 
 def channel_list(request,slug):
     ''' This view is the view for the channel's list it works almost like the index view'''
@@ -55,8 +61,13 @@ def channel_list(request,slug):
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
-    channel_rss_list = ("/feeds/"+channel.slug+"/torrent/","/feeds/"+channel.slug+"/mp4","/feeds/"+channel.slug+"/webm","/feeds/"+channel.slug+"/mp3", "/feeds/"+channel.slug+"/ogg","/feeds/"+channel.slug+"/opus")
-#    {% include "portal/standard-sidebar.html" with torrent_link="/feeds/channel.slug/torrent/" mp4_link="/feeds/"+{{ channel.slug }}+"/mp4/" mp3_link="/feeds/"+{% url 'app-views-client' client.id %}+{{ channel.slug }}+"/mp3/" webm_link="/feeds/"+{{ channel.slug }}+"/webm/" ogg_link="/feeds/"+{{ channel.slug }}+"/ogg/" %}
+    torrents_link = "/feeds/"+channel.slug+"/torrent/"
+    mp4_link = "/feeds/"+channel.slug+"/mp4/"
+    webm_link = "/feeds/"+channel.slug+"/webm/"
+    mp3_link = "/feeds/"+channel.slug+"/mp3/"
+    ogg_link = "/feeds/"+channel.slug+"/ogg/"
+    opus_link = "/feeds/"+channel.slug+"/opus/"
+    rss_list = {'torrents_link':torrents_link, 'webm_link':webm_link, 'mp4_link':mp4_link,'mp3_link':mp3_link, 'ogg_link':ogg_link, 'opus_link':opus_link}
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
@@ -65,7 +76,7 @@ def channel_list(request,slug):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'rss_list': channel_rss_list})
+    return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'rss_list': rss_list})
 
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''

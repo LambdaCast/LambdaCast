@@ -1,19 +1,5 @@
 {% load i18n %}
 {% load taggit_extras %}
-{% block rss %}
-	{% if settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Original Feed (Torrents)" %}" href="{{ rss_list.0 }}" />
-	{% endif %}
-	{% if settings.ENABLE_VIDEO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Video Feed (MP4)" %}" href="{{ rss_list.1 }}" />
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Video Feed (WEBM)" %}" href="{{ rss_list.2 }}" />
-	{% endif %}
-	{% if settings.ENABLE_AUDIO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (MP3)" %}" href="{{ rss_list.3 }}" />
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (OGG)" %}" href="{{ rss_list.4 }}" />
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (OPUS)" %}" href="{{ rss_list.5 }}" />
-	{% endif %}
-{% endblock %}
 <div class="col-md-3 col-xs-12 col-sm-12">
 	<div class="thumbnail">
 		<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>
@@ -23,16 +9,28 @@
 			<div class="list-group text-center">
 				<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Content" %}Feeds of {{ video_source }}{% endblocktrans %} </a>
 			{% if settings.USE_BITTORRENT %}
-				<a class="list-group-item" href="{{ rss_list.0|default:'/feeds/latest/torrent' }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
+				{% if rss_list.torrents_link %}
+				<a class="list-group-item" href="{{ rss_list.torrents_link|default:'/feeds/latest/torrent' }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
+				{% endif %}
 			{% endif %}
 			{% if settings.ENABLE_VIDEO_FEEDS %}
-				<a class="list-group-item" href="{{ rss_list.1|default:'/feeds/latest/mp4' }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
-				<a class="list-group-item" href="{{ rss_list.2|default:'/feeds/latest/webm' }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
+				{% if rss_list.mp4_link %}
+				<a class="list-group-item" href="{{ rss_list.mp4_link|default:'/feeds/latest/mp4' }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
+				{% endif %}
+				{% if rss_list.webm_link %}
+				<a class="list-group-item" href="{{ rss_list.webm_link|default:'/feeds/latest/webm' }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
+				{% endif %}
 			{% endif %}
 			{% if settings.ENABLE_AUDIO_FEEDS %}
-				<a class="list-group-item" href="{{ rss_list.3|default:'/feeds/latest/mp3' }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
-				<a class="list-group-item" href="{{ rss_list.4|default:'/feeds/latest/ogg' }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
-				<a class="list-group-item" href="{{ rss_list.5|default:'/feeds/latest/opus' }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
+				{% if rss_list.mp3_link %}
+				<a class="list-group-item" href="{{ rss_list.mp3_link|default:'/feeds/latest/mp3' }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
+				{% endif %}
+				{% if rss_list.ogg_link %}
+				<a class="list-group-item" href="{{ rss_list.ogg_link|default:'/feeds/latest/ogg' }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
+				{% endif %}
+				{% if rss_list.opus_link %}
+				<a class="list-group-item" href="{{ rss_list.opus_link|default:'/feeds/latest/opus' }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
+				{% endif %}
 			{% endif %}
 				<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
 			</div>

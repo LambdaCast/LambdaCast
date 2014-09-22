@@ -9,6 +9,30 @@
 		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
 		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
+{% block rss %}
+	{% if settings.USE_BITTORRENT and rss_list.torrents_link %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Original Feed (Torrents)" %}" href="{{ rss_list.torrents_link }}" />
+	{% endif %}
+	{% if settings.ENABLE_VIDEO_FEEDS %}
+		{% if rss_list.mp4_link %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Video Feed (MP4)" %}" href="{{ rss_list.mp4_link }}" />
+		{% endif %}
+		{% if rss_list.webm_link %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Video Feed (WEBM)" %}" href="{{ rss_list.webm_link }}" />
+		{% endif %}
+	{% endif %}
+	{% if settings.ENABLE_AUDIO_FEEDS %}
+		{% if rss_list.mp3_link %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (MP3)" %}" href="{{ rss_list.mp3_link }}" />
+		{% endif %}
+		{% if rss_list.ogg_link %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (OGG)" %}" href="{{ rss_list.ogg_link }}" />
+		{% endif %}
+		{% if rss_list.opus_link %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:"Latest Content" }} {% trans "Audio Feed (OPUS)" %}" href="{{ rss_list.opus_link }}" />
+		{% endif %}
+	{% endif %}
+{% endblock %}
 {% block body %}
 <div class="page-container-index">
 <div class="row">
