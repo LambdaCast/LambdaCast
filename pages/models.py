@@ -158,22 +158,18 @@ class Page(models.Model):
     )
     
     DEFAULT_CONTENT = """
-    <div class="row">
-    <div class="span12">
     <dib class="row">
-    <div class="span3">
+    <div class="col-md-4">
     <h3>Title 1</h3>
     <p>This is sample content</p>
     </div>
-    <div class="span3">
+    <div class="col-md-4">
     <h3>Title 2</h3>
     <p>This is sample content</p>
     </div>
-    <div class="span3">
+    <div class="col-md-4">
     <h3>Title</h3>
     <p>This is sample content</p>
-    </div>
-    </div>
     </div>
     </div>
     """   
