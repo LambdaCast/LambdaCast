@@ -8,30 +8,19 @@
 		<div class="col-md-12 col-xs-6">
 			<div class="list-group text-center">
 				<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Content" %}Feeds of {{ video_source }}{% endblocktrans %} </a>
-			{% if settings.USE_BITTORRENT %}
-				{% if rss_list.torrents_link %}
-				<a class="list-group-item" href="{{ rss_list.torrents_link|default:'/feeds/latest/torrent' }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
+				{% if settings.USE_BITTORRENT %}
+					{% if rss_list.torrents_link %}
+					<a class="list-group-item" href="{{ rss_list.torrents_link|default:'/feeds/latest/torrent' }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
+					{% endif %}
 				{% endif %}
-			{% endif %}
-			{% if settings.ENABLE_VIDEO_FEEDS %}
-				{% if rss_list.mp4_link %}
-				<a class="list-group-item" href="{{ rss_list.mp4_link|default:'/feeds/latest/mp4' }}"><i class="glyphicon glyphicon-film"></i> MP4</a>
-				{% endif %}
-				{% if rss_list.webm_link %}
-				<a class="list-group-item" href="{{ rss_list.webm_link|default:'/feeds/latest/webm' }}"><i class="glyphicon glyphicon-film"></i> WEBM</a>
-				{% endif %}
-			{% endif %}
-			{% if settings.ENABLE_AUDIO_FEEDS %}
-				{% if rss_list.mp3_link %}
-				<a class="list-group-item" href="{{ rss_list.mp3_link|default:'/feeds/latest/mp3' }}"><i class="glyphicon glyphicon-headphones"></i> MP3</a>
-				{% endif %}
-				{% if rss_list.ogg_link %}
-				<a class="list-group-item" href="{{ rss_list.ogg_link|default:'/feeds/latest/ogg' }}"><i class="glyphicon glyphicon-headphones"></i> OGG</a>
-				{% endif %}
-				{% if rss_list.opus_link %}
-				<a class="list-group-item" href="{{ rss_list.opus_link|default:'/feeds/latest/opus' }}"><i class="glyphicon glyphicon-headphones"></i> OPUS</a>
-				{% endif %}
-			{% endif %}
+				{% for feed_item in rss_list %}
+					{% if feed_item.1 == "audio" and settings.ENABLE_AUDIO %}
+					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-film"></i> {{ feed_item.0 }}</a>
+					{% endif %}
+					{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
+					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-film"></i> {{ feed_item.0 }}</a>
+					{% endif %}
+				{% endfor %}
 				<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
 			</div>
 		</div>

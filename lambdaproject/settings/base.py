@@ -200,8 +200,8 @@ THUMBNAILS_BASE_URL = DOMAIN + '/media/thumbnails/'
 
 ENABLE_LIVESTREAMS = False
 
-ENABLE_AUDIO_FEEDS = True
-ENABLE_VIDEO_FEEDS = True
+ENABLE_AUDIO = True
+ENABLE_VIDEO = True
 
 # Host and port for the mail server to send mails for new comments
 EMAIL_HOST = 'localhost'

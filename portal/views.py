@@ -33,13 +33,9 @@ def index(request):
     paginator = Paginator(queryset_sorted,16)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
-    torrents_link = "/feeds/latest/torrents/"
-    mp4_link = "/feeds/latest/mp4/"
-    webm_link = "/feeds/latest/webm/"
-    mp3_link = "/feeds/latest/mp3/"
-    ogg_link = "/feeds/latest/ogg/"
-    opus_link = "/feeds/latest/opus/"
-    rss_list = {'torrents_link':torrents_link, 'webm_link':webm_link, 'mp4_link':mp4_link,'mp3_link':mp3_link, 'ogg_link':ogg_link, 'opus_link':opus_link}
+    rss_list = []
+    for file_type in MEDIA_FORMATS:
+        rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/latest/"+file_type))
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
@@ -61,13 +57,9 @@ def channel_list(request,slug):
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
-    torrents_link = "/feeds/"+channel.slug+"/torrent/"
-    mp4_link = "/feeds/"+channel.slug+"/mp4/"
-    webm_link = "/feeds/"+channel.slug+"/webm/"
-    mp3_link = "/feeds/"+channel.slug+"/mp3/"
-    ogg_link = "/feeds/"+channel.slug+"/ogg/"
-    opus_link = "/feeds/"+channel.slug+"/opus/"
-    rss_list = {'torrents_link':torrents_link, 'webm_link':webm_link, 'mp4_link':mp4_link,'mp3_link':mp3_link, 'ogg_link':ogg_link, 'opus_link':opus_link}
+    rss_list = []
+    for file_type in MEDIA_FORMATS:
+        rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/"+channel.slug+"/"+file_type))
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
