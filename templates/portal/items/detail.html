@@ -48,7 +48,7 @@
 		<div id="player_container">
 			{% if mediaitem.get_video_files %}
 			<div id="video_player" class="player-container">
-				<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}audio_cover.png {% endif %}" controls>
+				<video id="player_video" class="projekktor center" title="{{ mediaitem.title }}" width="640" height="360" poster="{% if mediaitem.videoThumbURL %}{{ mediaitem.videoThumbURL }} {% elif mediaitem.channel.channelThumbURL %} {{ mediaitem.channel.channelThumbURL }} {% else %} {{ STATIC_URL }}video_cover.png {% endif %}" controls>
 					{% for video in mediaitem.get_video_files %}
 					<source src="{{ video.url }}" type="{{ video.mime_type }}" />
 					{% endfor %}
