@@ -120,11 +120,14 @@ def tag(request, tag):
 def collection(request, slug):
     ''' Gets all media items for a channel'''
     collection = get_object_or_404(Collection, slug=slug)
+    rss_list = []
+    for file_type in MEDIA_FORMATS:
+        rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/latest/"+file_type))
     if request.user.is_authenticated():
         mediaitemslist = collection.items.filter(encodingDone=True)
     else:
         mediaitemslist = collection.items.filter(encodingDone=True, published=True)
-    return TemplateResponse(request, 'portal/collection.html', {'mediaitems_list': mediaitemslist, 'collection': collection})
+    return TemplateResponse(request, 'portal/collection.html', {'mediaitems_list': mediaitemslist, 'collection': collection, 'rss_list': rss_list })
 
 def search(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and _get_query)'''

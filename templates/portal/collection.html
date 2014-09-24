@@ -15,6 +15,19 @@
 		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
 		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
+{% block rss %}
+	{% if settings.USE_BITTORRENT %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:'Latest Content' }} (Torrents)" %}" href="/feeds/latest/torrent/" />
+	{% endif %}
+	{% for feed_item in rss_list %}
+		{% if feed_item.1 == "audio" and settings.ENABLE_AUDIO %}
+		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
+		{% endif %}
+		{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
+		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
+		{% endif %}
+	{% endfor %}
+{% endblock %}
 {% block head %}
 {% endblock %}
 {% block body %}
@@ -25,10 +38,11 @@
 	<h1>Playlist: {{ collection.title }}</h1>
 </div>
 <div class="row">
-	<div class="col-md-offset-2 col-md-8 col-sm-offset-0">
+	<div class="col-md-9">
 		<div class="row">
 		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 		</div>
 	</div>
+	{% include "portal/inc/standard-sidebar.html" %}
 </div>
 {% endblock %}
