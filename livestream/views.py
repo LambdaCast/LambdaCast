@@ -12,7 +12,7 @@ def current(request):
     stream_list = Stream.objects.filter(published=True,startDate__lt=timezone.now, endDate__gt=timezone.now).order_by('-startDate')
     upcoming_streams_list = Stream.objects.filter(published=True,endDate__gt=timezone.now).order_by('-startDate')[:5]
     if not stream_list:
-        return redirect(list)
+        return redirect(list_streams)
     else:
         return TemplateResponse(request, 'livestream/current.html', {'stream_list': stream_list, 'upcoming_streams_list': upcoming_streams_list})
 
