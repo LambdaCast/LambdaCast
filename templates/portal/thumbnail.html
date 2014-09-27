@@ -17,35 +17,35 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="upload">
 				<form id="thumbnailForm" enctype="multipart/form-data" class="form-group" action="/thumbnail/" method="post" role="form">
-				<p class="help-block">{% trans "With this form you can upload new thumbnails to then select them when uploading new content." %}</p>
-				{% if error %}
-					<div class="alert alert-danger">{{ error }}</div>
-				{% endif %}
-				{% if message %}
-					<div class="alert alert-success">{{ message }}</div>
-				{% endif %}
-				{% csrf_token %}
-				<div style="display: none" id="formError" class="alert alert-danger">
-					<strong>{% trans "Error!" %}</strong>
-				</div><!-- alert-->
-				{% for field in thumbnail_form %}
-				<div class="form-group">
-					{% if field.errors %}
-					<div class="alert alert-danger">
-						<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
-					</div>
+					<p class="help-block">{% trans "With this form you can upload new thumbnails to then select them when uploading new content." %}</p>
+					{% if error %}
+						<div class="alert alert-danger">{{ error }}</div>
 					{% endif %}
-					<label>
-						{{ field.label_tag }}
-					</label>
-					{{ field }} <span class="help-block">{{ field.help_text }}</span>
-				</div>
-				{% endfor %}
-				<div class="form-actions">
-					<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
-				</div><!-- form-actions -->
+					{% if message %}
+						<div class="alert alert-success">{{ message }}</div>
+					{% endif %}
+					{% csrf_token %}
+					<div style="display: none" id="formError" class="alert alert-danger">
+						<strong>{% trans "Error!" %}</strong>
+					</div>
+					{% for field in thumbnail_form %}
+					<div class="form-group">
+						{% if field.errors %}
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+						</div>
+						{% endif %}
+						<label>
+							{{ field.label_tag }}
+						</label>
+						{{ field }} <span class="help-block">{{ field.help_text }}</span>
+					</div>
+					{% endfor %}
+					<div class="form-actions">
+						<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+					</div>
 				</form>
-			</div><!-- tab-pane -->
+			</div>
 			<div class="tab-pane" id="thumblist">
 				<div class="row">
 				{% for thumbnail in thumbs_list %}
@@ -57,10 +57,10 @@
 				</div>
 				{% endfor %}
 				</div>
-			</div><!-- tab-pane -->
-		</div><!-- tab-content -->
-	</div><!-- span12 -->
-</div><!-- row -->
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>

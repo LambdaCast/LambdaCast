@@ -11,72 +11,72 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-			<div class="row">
-				<div class="col-md-6">
-				<a href="/item/{{ mediaitem.slug }}/">
-					<div class="thumbnail listitem-thumbnail">
-					{% if mediaitem.videoThumbURL %}
-						<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
-					{% elif mediaitem.audioThumbURL %}
-						<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
-					{% elif mediaitem.channel.channelThumbURL %}
-						<img src="{{ mediaitem.channel.channelThumbURL }}" alt="videoThumb" />
-					{% else %}
-						<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
-					{% endif %}
+				<div class="row">
+					<div class="col-md-6">
+						<a href="/item/{{ mediaitem.slug }}/">
+							<div class="thumbnail listitem-thumbnail">
+							{% if mediaitem.videoThumbURL %}
+								<img src="{{ mediaitem.videoThumbURL }}" alt="videoThumb" />
+							{% elif mediaitem.audioThumbURL %}
+								<img src="{{ mediaitem.audioThumbURL }}" alt="audioThumb" />
+							{% elif mediaitem.channel.channelThumbURL %}
+								<img src="{{ mediaitem.channel.channelThumbURL }}" alt="videoThumb" />
+							{% else %}
+								<img src="{{ STATIC_URL }}default-audio.png" alt="audioThumb" />
+							{% endif %}
+							</div>
+						</a>
 					</div>
-				</a>
-				</div>
-				<div class="col-md-6 col-xs-12 caption">
-					<div class="media-metadata"><i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %}</div>
-					<div class="media-metadata"><i class="glyphicon glyphicon-time"></i> {{ mediaitem.duration|seconds_to_hms }}{% endif %}</div>
-					<div class="media-metadata"><i class="glyphicon glyphicon-comment"></i> {{ mediaitem.comments_count }}</div>
-					{% if mediaitem.channel %}
-						<div class="media-metadata">
-							<i class="glyphicon glyphicon-th-large"></i> <a href="/channel/{{ mediaitem.channel.slug }}">{{ mediaitem.channel.name }}</a>
-						</div>
-					{% endif %}
-				</div>
+					<div class="col-md-6 col-xs-12 caption">
+						<div class="media-metadata"><i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}{% if mediaitem.duration %}</div>
+						<div class="media-metadata"><i class="glyphicon glyphicon-time"></i> {{ mediaitem.duration|seconds_to_hms }}{% endif %}</div>
+						<div class="media-metadata"><i class="glyphicon glyphicon-comment"></i> {{ mediaitem.comments_count }}</div>
+						{% if mediaitem.channel %}
+							<div class="media-metadata">
+								<i class="glyphicon glyphicon-th-large"></i> <a href="/channel/{{ mediaitem.channel.slug }}">{{ mediaitem.channel.name }}</a>
+							</div>
+						{% endif %}
+					</div>
 				</div>
 			</div>
 			{% if user.is_authenticated %}
 			<div class="panel-footer">
 				<a href="/admin/portal/mediaitem/{{ mediaitem.pk }}"><span class="label label-warning"><i class="glyphicon glyphicon-pencil"></i></span></a>
 				<div class="pull-right">				
-				<span class="label label-warning"><i class="glyphicon glyphicon-comment"></i> ({{ mediaitem.comments_count_all }})</span>
-				{% if not mediaitem.published %}
-					<span class="label label-warning unpublished"> <i class="glyphicon glyphicon-eye-close"></i> {% trans "Unpublished" %}</span> 
-				{% endif %}
+					<span class="label label-warning"><i class="glyphicon glyphicon-comment"></i> ({{ mediaitem.comments_count_all }})</span>
+					{% if not mediaitem.published %}
+						<span class="label label-warning unpublished"> <i class="glyphicon glyphicon-eye-close"></i> {% trans "Unpublished" %}</span> 
+					{% endif %}
 				</div>
 			</div>
 			{% endif %}
 		{% else %}
-		<div class="panel-heading">
-			<h3 class="panel-title">
-				<a href="/collection/{{ mediaitem.slug }}/">{% trans "Collection" %}: {{ mediaitem.title }}</a>
-			</h3>
-		</div>
-		<div class="panel-body">
-		<div class="row">
-			<div class="col-md-6">
-			<a href="/collection/{{ mediaitem.slug }}/">
-				<div class="thumbnail listitem-thumbnail">
-					<img src="{{ STATIC_URL }}default-playlist.png" />
-				</div>
-			</a>
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<a href="/collection/{{ mediaitem.slug }}/">{% trans "Collection" %}: {{ mediaitem.title }}</a>
+				</h3>
 			</div>
-			<div class="col-md-6 col-xs-12">
-				<div class="media-metadata">
-					<i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6">
+					<a href="/collection/{{ mediaitem.slug }}/">
+						<div class="thumbnail listitem-thumbnail">
+							<img src="{{ STATIC_URL }}default-playlist.png" />
+						</div>
+					</a>
+					</div>
+					<div class="col-md-6 col-xs-12">
+						<div class="media-metadata">
+							<i class="glyphicon glyphicon-calendar"></i> {{ mediaitem.date }}
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		</div>
-		{% if user.is_authenticated %}
-		<div class="panel-footer">
-			<a href="/admin/portal/collection/{{ collection.pk }}"><span class="label label-warning"><i class="glyphicon glyphicon-pencil"></i></span></a>
-		</div>
-		{% endif %}
+			{% if user.is_authenticated %}
+				<div class="panel-footer">
+					<a href="/admin/portal/collection/{{ collection.pk }}"><span class="label label-warning"><i class="glyphicon glyphicon-pencil"></i></span></a>
+				</div>
+			{% endif %}
 		{% endif %}
 		</div>
 	</div>

@@ -14,7 +14,7 @@
 			{% csrf_token %}
 			<div style="display: none" id="formError" class="alert alert-error">
 				<strong>{% trans "Error!" %}</strong>
-			</div><!-- alert-->
+			</div>
 			<div class="form-group">
 			{% for field in submittal_form %}
 				{% if field.errors %}
@@ -30,10 +30,10 @@
 			</div>
 			<div class="form-actions">
 				<input type="submit" class="btn btn-primary" value="{% trans "Add media" %}" />
-			</div><!-- form-actions -->
+			</div>
 		</form>
-	</div><!-- span8 -->
-</div><!-- row -->
+	</div>
+</div>
 {% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>
