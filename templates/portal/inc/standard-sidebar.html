@@ -5,6 +5,7 @@
 		<a href="{{ settings.WEBSITE_URL }}"><img src="{{ STATIC_URL }}logo.png" alt="logo"></a>
 	</div>
 	<div class="row">
+		{% if rss_list %}
 		<div class="col-md-12 col-xs-6">
 			<div class="list-group text-center">
 				<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Content" %}Feeds of {{ video_source }}{% endblocktrans %} </a>
@@ -22,6 +23,7 @@
 				<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
 			</div>
 		</div>
+		{% endif %}
 		{% get_tagcloud as tags for 'portal.MediaItem' %}
 		<div class="col-md-12 col-xs-6">
 			{% if tags %}
