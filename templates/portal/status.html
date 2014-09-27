@@ -48,7 +48,11 @@
 									{% if task.status == 'successful' %}
 										<i class="glyphicon glyphicon-ok"></i> ({% trans "Successful" %})
 									{% else %}
-										<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+										{% if task.status == 'unsuccessful' %}
+											<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+										{% else %}
+											<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
+										{% endif %}
 									{% endif %}
 								</li>
 							{% endfor %}
@@ -60,7 +64,11 @@
 										{% if task.status == 'successful' %}
 											<i class="glyphicon glyphicon-ok"></i> ({% trans "Successful" %})
 										{% else %}
-											<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+											{% if task.status == 'unsuccessful' %}
+												<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+											{% else %}
+												<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
+											{% endif %}
 										{% endif %}|
 									{% empty %}
 										{% trans "No task" %} |
