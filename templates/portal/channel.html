@@ -17,15 +17,15 @@
 		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
 {% block rss %}
-	{% if settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:'Latest Content' }} (Torrents)" %}" href="/feeds/latest/torrent/" />
-	{% endif %}
 	{% for feed_item in rss_list %}
 		{% if feed_item.1 == "audio" and settings.ENABLE_AUDIO %}
 		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
 		{% endif %}
 		{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
 		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
+		{% endif %}
+		{% if feed_item.1 == 'torrent' and settings.USE_BITTORRENT %}
+		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:'Latest Content' }} (Torrents)" %}" href="{{ feed_item.2 }}" />
 		{% endif %}
 	{% endfor %}
 {% endblock %}

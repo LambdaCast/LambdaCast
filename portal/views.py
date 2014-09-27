@@ -36,6 +36,7 @@ def index(request):
     rss_list = []
     for file_type in MEDIA_FORMATS:
         rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/latest/"+file_type))
+    rss_list.append(('torrent','torrent','/feeds/latest/torrent'))
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
@@ -60,6 +61,7 @@ def channel_list(request,slug):
     rss_list = []
     for file_type in MEDIA_FORMATS:
         rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/"+channel.slug+"/"+file_type))
+    rss_list.append(('torrent','torrent','/feeds/'+channel.slug+'/torrent'))
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:

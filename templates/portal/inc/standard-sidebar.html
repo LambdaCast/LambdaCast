@@ -8,17 +8,15 @@
 		<div class="col-md-12 col-xs-6">
 			<div class="list-group text-center">
 				<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Content" %}Feeds of {{ video_source }}{% endblocktrans %} </a>
-				{% if settings.USE_BITTORRENT %}
-					{% if rss_list.torrents_link %}
-					<a class="list-group-item" href="{{ rss_list.torrents_link|default:'/feeds/latest/torrent' }}"><i class="glyphicon glyphicon-file"></i> Torrents-Feed</a>
-					{% endif %}
-				{% endif %}
 				{% for feed_item in rss_list %}
 					{% if feed_item.1 == "audio" and settings.ENABLE_AUDIO %}
 					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-film"></i> {{ feed_item.0 }}</a>
 					{% endif %}
 					{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
 					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-film"></i> {{ feed_item.0 }}</a>
+					{% endif %}
+					{% if feed_item.1 == "torrent" and settings.USE_BITTORRENT %}
+					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-file"></i> {{ feed_item.0 }}</a>
 					{% endif %}
 				{% endfor %}
 				<a class="list-group-item" href="/feeds/comments/"><i class="glyphicon glyphicon-comment"></i> {% trans "Comments-Feed (all)" %}</a>
@@ -33,9 +31,9 @@
 				{% for tag in tags %}
 					<a href="/tags/{{tag.slug}}" class="tag-weight-{{tag.weight|floatformat:0}}">{{tag.name}}</a>
 				{% endfor %}
+				</div>
 			</div>
+			{% endif %}
 		</div>
 	</div>
-</div>
-{% endif %}
 </div>
