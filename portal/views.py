@@ -125,7 +125,6 @@ def collection(request, slug):
     rss_list = []
     for file_type in MEDIA_FORMATS:
         rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/collection/"+collection.slug+"/"+file_type))
-    rss_list.append(('torrent','torrent','/feeds/collection/'+collection.slug+'/torrent'))
     if request.user.is_authenticated():
         mediaitemslist = collection.items.filter(encodingDone=True)
     else:

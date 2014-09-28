@@ -23,9 +23,6 @@
 		{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
 		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
 		{% endif %}
-		{% if feed_item.1 == 'torrent' and settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title="{{ video_source|default:'Latest Content' }} (Torrents)" %}" href="{{ feed_item.2 }}" />
-		{% endif %}
 	{% endfor %}
 {% endblock %}
 {% block head %}
