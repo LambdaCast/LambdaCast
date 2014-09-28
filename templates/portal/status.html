@@ -47,12 +47,12 @@
 									<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
 									{% if task.status == 'successful' %}
 										<i class="glyphicon glyphicon-ok"></i> ({% trans "Successful" %})
+									{% elif task.status == 'unsuccessful' %}
+										<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+									{% elif task.status == 'scheduled' %}
+										<i class="glyphicon glyphicon-th-list"></i> ({% trans "Scheduled" %})
 									{% else %}
-										{% if task.status == 'unsuccessful' %}
-											<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
-										{% else %}
-											<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
-										{% endif %}
+										<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
 									{% endif %}
 								</li>
 							{% endfor %}
@@ -63,12 +63,12 @@
 										<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
 										{% if task.status == 'successful' %}
 											<i class="glyphicon glyphicon-ok"></i> ({% trans "Successful" %})
+										{% elif task.status == 'unsuccessful' %}
+											<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+										{% elif task.status == 'scheduled' %}
+											<i class="glyphicon glyphicon-th-list"></i> ({% trans "Scheduled" %})
 										{% else %}
-											{% if task.status == 'unsuccessful' %}
-												<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
-											{% else %}
-												<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
-											{% endif %}
+											<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
 										{% endif %}|
 									{% empty %}
 										{% trans "No task" %} |
