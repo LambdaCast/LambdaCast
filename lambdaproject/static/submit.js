@@ -2,6 +2,7 @@ $(document).ready(function() {
 	$('#progress-indicator').hide();
 	$('#upload-success').hide();
 	$('#form-error').hide();
+        $('#upload-error').hide();
 	var bar = $('#bar');
 	var percent = $('.percent');
 
@@ -13,6 +14,7 @@ $(document).ready(function() {
 				xhr.abort();
 			} else {
 				$("#form-error").hide();
+				$("#upload-error").hide();
 				$('#progress-indicator').show();
 			}
 			var percentVal = '0%';
@@ -28,8 +30,9 @@ $(document).ready(function() {
 		complete: function(xhr) {
 			if (xhr.status == 200){
 				$('#upload-success').show();
-			}else {
-				$("#form-error").show();
+			} else {
+				$('#upload-success').hide();
+				$("#upload-error").show();
 			}
 		}
 	});
