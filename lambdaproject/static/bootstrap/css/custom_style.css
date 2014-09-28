@@ -35,7 +35,9 @@ body {
 	min-height: 90px !important;
 	padding: 0 0 10px;
 }
-
+.thumbnail-tab-pane {
+        margin-top: 20px;
+}
 .thumbnail-image-container {
 	display: table-cell;
 	padding: 0px 15px;
