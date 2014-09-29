@@ -50,7 +50,7 @@
 									{% elif task.status == 'unsuccessful' %}
 										<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
 									{% elif task.status == 'scheduled' %}
-										<i class="glyphicon glyphicon-time"></i> ({% trans "Scheduled" %})
+										<i class="glyphicon glyphicon-th-list"></i> ({% trans "Scheduled" %})
 									{% else %}
 										<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
 									{% endif %}
@@ -66,7 +66,7 @@
 										{% elif task.status == 'unsuccessful' %}
 											<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
 										{% elif task.status == 'scheduled' %}
-											<i class="glyphicon glyphicon-time"></i> ({% trans "Scheduled" %})
+											<i class="glyphicon glyphicon-th-list"></i> ({% trans "Scheduled" %})
 										{% else %}
 											<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
 										{% endif %}|

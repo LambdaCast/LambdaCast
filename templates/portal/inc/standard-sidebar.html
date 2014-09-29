@@ -11,7 +11,7 @@
 				<a class="list-group-item disabled">{% blocktrans with video_source=video_source|default:"Latest Content" %}Feeds of {{ video_source }}{% endblocktrans %} </a>
 				{% for feed_item in rss_list %}
 					{% if feed_item.1 == "audio" and settings.ENABLE_AUDIO %}
-					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-headphones"></i> {{ feed_item.0 }}</a>
+					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-film"></i> {{ feed_item.0 }}</a>
 					{% endif %}
 					{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
 					<a class="list-group-item" href="{{ feed_item.2 }}"><i class="glyphicon glyphicon-film"></i> {{ feed_item.0 }}</a>
