@@ -7,6 +7,8 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        db.send_pending_create_signals()
+
         add_mediaitem = orm['auth.permission'].objects.get(codename='add_mediaitem')
         add_mediafile = orm['auth.permission'].objects.get(codename='add_mediafile')
         for user in orm['auth.user'].objects.filter(user_permissions=add_mediaitem):
