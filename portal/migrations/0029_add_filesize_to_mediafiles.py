@@ -6,6 +6,8 @@ from django.db import models
 
 from portal.signals import get_remote_filesize
 
+db.send_pending_create_signals()
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
