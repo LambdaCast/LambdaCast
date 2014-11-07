@@ -39,6 +39,8 @@ ADMINS = (
     ('name', 'root@localhost'),
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 # Your database settings, sqlite is good for development and testing, not for deployment
 DATABASES = {
     'default': {
