@@ -130,6 +130,18 @@
 						</label>
 						{{ submit_form.originalFile }}
 					</div>
+					<!-- autoPublish -->
+					<div class="form-group">
+						{% if submit_form.autoPublish.errors %}
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.autoPublish.errors }}
+						</div>
+						{% endif %}
+						<label>
+							{{ submit_form.autoPublish.label_tag }}{% if submit_form.autoPublish.field.required %} *{% endif %}
+						</label>
+						{{ submit_form.autoPublish }}
+					</div>
 					<!-- thumbURL -->
 					<div class="form-group">
 						{% if submit_form.thumbURL.errors %}

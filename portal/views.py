@@ -238,7 +238,6 @@ def submit(request):
         if form.is_valid():
             media_item = form.save()
             if form.cleaned_data['thumbURL']:
-                media_item.audioThumbURL = form.cleaned_data['thumbURL']
                 media_item.videoThumbURL = form.cleaned_data['thumbURL']
             media_item.user = request.user
             media_item.save()
