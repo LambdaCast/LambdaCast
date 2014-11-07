@@ -20,7 +20,7 @@ class Stream(models.Model):
     rtmpLink = models.URLField(_(u"RTMP Link"),blank=True,null=False,help_text=_(u"RTMP is a protocol to stream video. If you have a server as host, you can insert a link of the output"))
     audioOnlyLink = models.URLField(_(u"Audio-only Link"),blank=True,null=False)
     iframe = models.TextField(_(u"iFrame of the Stream"))
-    published = models.BooleanField(verbose_name=_(u"Published"))
+    published = models.BooleanField(verbose_name=_(u"Published"),default=False)
     created = models.DateTimeField(auto_now_add=True,verbose_name=_(u"Created"))
     modified = models.DateTimeField(auto_now=True, verbose_name=_(u"Modified"))
     def __unicode__(self):

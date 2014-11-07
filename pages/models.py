@@ -174,7 +174,7 @@ class Page(models.Model):
     </div>
     """   
 
-    activated = models.BooleanField(verbose_name=_(u"Activated"))
+    activated = models.BooleanField(verbose_name=_(u"Activated"),default=False)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     slug = AutoSlugField(verbose_name=_(u"Slug"),populate_from='title',unique=True,help_text=_(u"Is part of the URL that you can define"))
     title = models.CharField(_(u"Title"),max_length=200)
