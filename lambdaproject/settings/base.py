@@ -157,7 +157,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    ABSOLUTE_PATH + '/templates'
+    ABSOLUTE_PATH, 'templates'
 )
 
 INSTALLED_APPS = (
@@ -171,7 +171,6 @@ INSTALLED_APPS = (
     'django_admin_bootstrapped',
     'django.contrib.admin',
     #'django.contrib.admindocs',
-    #'django.contrib.markup',
     'taggit',
     'portal',
     'livestream',
