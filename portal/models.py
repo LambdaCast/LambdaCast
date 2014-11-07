@@ -253,7 +253,7 @@ class Comment(models.Model):
     ''' The model for our comments, please note that (right now) LambdaCast comments are moderated only'''
     name = models.CharField(_(u"Name"),max_length=30)
     ip = models.GenericIPAddressField("IP",blank=True,null=True,help_text=_(u"The IP of the one who posted the comment"))
-    moderated = models.BooleanField(verbose_name=_(u"Moderated"))
+    moderated = models.BooleanField(verbose_name=_(u"Moderated"),default=False)
     timecode = models.DecimalField(null=True,max_digits=10, decimal_places=2,blank=True,verbose_name=_(u"Timecode"))
     comment = models.TextField(_(u"Comment"),max_length=1000)
     item = models.ForeignKey(MediaItem,verbose_name=_(u"Media Item"))
@@ -277,7 +277,7 @@ class Channel(models.Model):
     description = models.TextField(_(u"Description"), max_length=1000, null=True, blank=True,help_text=_(u"Describe the topic or content of the channel"))
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
-    featured = models.BooleanField(verbose_name=_(u"Featured"))
+    featured = models.BooleanField(verbose_name=_(u"Featured"),default=False)
     channelThumbURL = models.URLField(_(u"Channel Thumb URL"),blank=True,null=False, help_text=_(u"Use a picture as thumbnail for the RSS-Feed"))
 
     def __unicode__(self):
@@ -288,12 +288,12 @@ class Channel(models.Model):
 
 class Hotfolder(models.Model):
     ''' This is used for hotfolder support. Files in one of these will be added to LambdaCast automagicly using a cron job and a manage task '''
-    activated = models.BooleanField(_(u"Activated"))
+    activated = models.BooleanField(_(u"Activated"),default=False)
     channel = models.ForeignKey(Channel,verbose_name=_(u"Channel"),help_text=_(u"The media in the folder will be added to the channel automatically"))
     folderName = models.CharField(u"Name of the folder",max_length=30,help_text=_(u"Set a folder you can add media in and then get it automatically listed in LambdaCast"))
     defaultName = models.CharField(_(u"Title"),max_length=30, blank=True)
     description = models.TextField(_(u"Description"), max_length=1000, null=True, blank=True)
-    autoPublish = models.BooleanField(_(u"Auto-Publish"))
+    autoPublish = models.BooleanField(_(u"Auto-Publish"),default=False)
     created = models.DateTimeField(verbose_name=_(u"Created"),auto_now_add=True)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
 
@@ -342,9 +342,9 @@ class Submittal(models.Model):
     media_opusURL = models.URLField(_(u"OPUS-URL"),blank=True,null=False, help_text=_(u"Add the link of the media folder or any other one with .opus ending"))
     media_videoThumbURL = models.URLField(_(u"Video Thumb-URL"),blank=True,null=False, help_text=_(u"Use a picture as thumbnail"))
     media_audioThumbURL = models.URLField(_(u"Audio Cover-URL"),blank=True,null=False, help_text=_(u"Use a picture as cover"))
-    media_published = models.BooleanField(verbose_name=_(u"Published"))
+    media_published = models.BooleanField(verbose_name=_(u"Published"),default=False)
     media_tags = TaggableManager(_(u"Tags"),blank=True,help_text=_(u"Insert what the media item is about in short terms divided by commas"))
-    media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"))
+    media_torrentDone = models.BooleanField(verbose_name=_(u"Torrent done"),default=False)
 
     class Meta:
         verbose_name = _('Submittal')
