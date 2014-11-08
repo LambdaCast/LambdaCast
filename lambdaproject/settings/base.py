@@ -178,7 +178,6 @@ INSTALLED_APPS = (
     'livestream',
     'pages',
     'djangotasks',
-    'south',
     'taggit_templatetags',
     'simple_open_graph',
     'captcha',
