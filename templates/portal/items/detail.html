@@ -82,8 +82,8 @@
 		{% for comment in comment_list %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">{{ comment.name }} {% if comment.timecode %}{% trans "at time" %} <a class="timecode"><strong>{{ comment.timecode }}</strong></a>{% endif %}</h3>
-			</div>
+				<h3 class="panel-title" id="{{ comment.name }}-{{comment.id}}">{{ comment.name }} {% if comment.timecode %}{% trans "at time" %} <a class="timecode"><strong>{{ comment.timecode }}</strong></a>{% endif %} <a href="#{{ comment.name }}-{{comment.id}}" class="pull-right"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+			</div></h3>
 			<div class="panel-body">
 				<div class="comment-body">{{ comment.comment }}	</div>
 			</div>
