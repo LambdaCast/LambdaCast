@@ -13,7 +13,7 @@
 			<strong>{% trans "Warning!" %} </strong>{% trans "Username and password are not working together" %}</p>
 		</div>
 		{% endif %}
-		<form method="post" class="form" action="{% url django.contrib.auth.views.login %}">
+		<form method="post" class="form" action="{% url 'django.contrib.auth.views.login' %}">
 			{% csrf_token %}
 			<div class="form-group">
 				<div class="form-label">
