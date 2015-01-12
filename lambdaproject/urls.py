@@ -11,7 +11,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'portal.views.index'),
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon.ico/')),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon.ico')),
     url(r'^item/(?P<slug>[-\w]+)/$', 'portal.views.detail'),
     url(r'^tags/(?P<tag>[\w|\W]+)/$', 'portal.views.tag'),
     url(r'^collection/(?P<slug>[-\w]+)/$', 'portal.views.collection'),
