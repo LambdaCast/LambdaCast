@@ -187,7 +187,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'django.contrib.auth.views.login'
+LOGOUT_URL = 'django.contrib.auth.views.logout'
 
 
 # ehemalig "portal/appsettings.py"
