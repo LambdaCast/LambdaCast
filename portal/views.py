@@ -6,10 +6,8 @@ from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
-from django.utils.formats import date_format, time_format
 from django.utils import timezone
 from django.template.response import TemplateResponse
-from django.core.mail import send_mail
 
 from portal.models import MediaItem, Comment, Channel, Collection, Submittal, MediaFile
 from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
@@ -92,13 +90,7 @@ def detail(request, slug):
             comment = form.save(commit=False)
             comment.save()
             message = _(u"Your comment will be moderated")
-            user_mediaitem = mediaitem.user
-            if not user_mediaitem.email == '':
-                recipient = user_mediaitem.first_name
-                if user_mediaitem.first_name == '':
-                    recipient = user_mediaitem.username
-                mail_message = _(u'Hello %s,\n\n%s commented at %s %s under your item called "%s".\n\nContent:\n"%s"\n\nThe comment needs moderation: %s/item/%s/#%s-%s\n\nThank You.') % (recipient, comment.name, date_format(timezone.localtime(comment.created)), time_format(timezone.localtime(comment.created)), mediaitem.title, comment.comment, settings.DOMAIN, mediaitem.slug, comment.name, comment.id)
-                send_mail(_(u'[%s] New Comment: %s') % (settings.SITE_NAME, mediaitem.title), mail_message, settings.CONTACT_EMAIL, [user_mediaitem.email], fail_silently=False)
+            comment.send_notification_mail()
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': CommentForm(), 'message': message})
         else:
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': form})
