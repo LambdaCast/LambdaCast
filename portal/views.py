@@ -6,7 +6,6 @@ from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
 from django.template.response import TemplateResponse
 
 from portal.models import MediaItem, Comment, Channel, Collection, Submittal, MediaFile
