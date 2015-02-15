@@ -20,7 +20,6 @@ import os
 import re
 from operator import attrgetter
 import itertools
-from sets import Set
 
 def index(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available media items and
@@ -275,7 +274,7 @@ def status(request):
     tasks_mediaitem = djangotasks.models.Task.objects.filter(model="portal.mediaitem").exclude(status="successful")
     tasks_mediafile = djangotasks.models.Task.objects.filter(model="portal.mediafile").exclude(status="successful")
 
-    mediaitem_ids = Set(map((lambda mediaitem: mediaitem.object_id), tasks_mediaitem))
+    mediaitem_ids = set(map((lambda mediaitem: mediaitem.object_id), tasks_mediaitem))
     for mediafile in tasks_mediafile:
         try:
             mediaitem_ids.add(MediaFile.objects.get(pk=mediafile.object_id).media_item.pk)
