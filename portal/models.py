@@ -285,7 +285,7 @@ class Comment(models.Model):
 Content:
 "%s"
 
-The comment needs moderation: %s/item/%s/#%s-%s
+The comment needs moderation: %s/item/%s/#comment-%s
 
 Thank You.''') % (recipient, 
                   self.name, 
