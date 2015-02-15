@@ -41,7 +41,8 @@ class MediaItemForm(ModelForm):
                 field.widget.attrs['class'] = 'required form-control'
                 if fieldName == 'originalFile':
                     field.widget.attrs['class'] = 'required'
-            self.fields['autoPublish'].widget.attrs['class'] = 'pull-right'
+        self.fields['autoPublish'].widget.attrs['class'] = 'pull-left'
+        self.fields['autoPublish'].label_tag(label_suffix='=')
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
