@@ -3,7 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.db.models.signals import pre_save, post_delete
 from django.contrib.auth.models import User
-from django.utils.formats import localize_input
+from django.utils.formats import localize_input, date_format, time_format
+from django.utils import timezone
+from django.core.mail import send_mail
 
 import djangotasks
 
@@ -269,6 +271,37 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return "/item/%s/" % self.item.slug
+
+    def send_notification_mail(self):
+        user_mediaitem = self.item.user
+        if not user_mediaitem.email == '':
+            recipient = user_mediaitem.first_name
+            if user_mediaitem.first_name == '':
+                recipient = user_mediaitem.username
+            mail_message = _(u'''Hello %s,
+
+%s commented at %s %s under your item called "%s".
+
+Content:
+"%s"
+
+The comment needs moderation: %s/item/%s/#comment-%s
+
+Thank You.''') % (recipient, 
+                  self.name, 
+                  date_format(timezone.localtime(self.created)), 
+                  time_format(timezone.localtime(self.created)), 
+                  self.item.title, 
+                  self.comment, 
+                  settings.DOMAIN, 
+                  self.item.slug,
+                  self.name, 
+                  self.id)
+            send_mail(_(u'[%s] New Comment: %s') % (settings.SITE_NAME, self.item.title), 
+                      mail_message, settings.CONTACT_EMAIL,
+                      [user_mediaitem.email],
+                      fail_silently=False)
+        return True
 
 class Channel(models.Model):
     ''' The model for our channels, all channels can hold items but items can only be part of one channel'''

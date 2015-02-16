@@ -113,4 +113,6 @@ ul.edit-menu {
 #player_container {
 	margin: 30px 0px;
 }
-
+a.comment-link {
+	color: #777;
+}

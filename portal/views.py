@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -87,16 +88,7 @@ def detail(request, slug):
             comment = form.save(commit=False)
             comment.save()
             message = _(u"Your comment will be moderated")
-            user_mediaitem = mediaitem.user
-            if not user_mediaitem.email == '':
-                if not user_mediaitem.first_name == '':
-                    mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.first_name
-                else:
-                    mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.username
-                try:
-                    user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
-                except:
-                    pass
+            comment.send_notification_mail()
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': CommentForm(), 'message': message})
         else:
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': form})
