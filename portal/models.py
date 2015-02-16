@@ -295,7 +295,6 @@ Thank You.''') % (recipient,
                   self.comment, 
                   settings.DOMAIN, 
                   self.item.slug,
-                  self.name, 
                   self.id)
             send_mail(_(u'[%s] New Comment: %s') % (settings.SITE_NAME, self.item.title), 
                       mail_message, settings.CONTACT_EMAIL,
