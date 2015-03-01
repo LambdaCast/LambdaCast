@@ -33,6 +33,7 @@ class MediaItemForm(ModelForm):
         exclude = ["slug","duration","published","encodingDone","torrentURL","user", "torrentDone","videoThumbURL","audioThumbURL"]
 
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
         super(MediaItemForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
@@ -73,8 +74,9 @@ class SubmittalForm(ModelForm):
     class Meta:
         model = MediaItem
         exclude = ["slug","user","autoPublish","originalFile", "duration"]
-
+        
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
         super(SubmittalForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
