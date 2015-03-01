@@ -137,10 +137,12 @@
 							<strong>{% trans "Error!" %}</strong>{{ submit_form.autoPublish.errors }}
 						</div>
 						{% endif %}
-						<label class="control-label">
-							{{ submit_form.autoPublish.label_tag }}{% if submit_form.autoPublish.field.required %} *{% endif %}
-						</label>
-						{{ submit_form.autoPublish }}
+						<div class="checkbox">
+							<label>
+								{{ submit_form.autoPublish }}
+								{{ submit_form.autoPublish.label_tag }}{% if submit_form.autoPublish.field.required %} *{% endif %}
+							</label>
+						</div>
 					</div>
 					<!-- thumbURL -->
 					<div class="form-group">
