@@ -116,7 +116,7 @@ ul.edit-menu {
 a.comment-link {
 	color: #777;
 }
-.panel-title {
+.panel-heading .panel-title {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
