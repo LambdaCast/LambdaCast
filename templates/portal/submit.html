@@ -15,7 +15,7 @@
 					<!-- title -->
 					<div class="from-group">
 						{% if submit_form.title.errors %}
-						<div class="alert alert-danger">
+						<div class="alert alert-danger" role="alert">
 							<strong>{% trans "Error!" %}</strong>{{ submit_form.title.errors }}</p>
 						</div>
 						{% endif %}
