@@ -1,11 +1,11 @@
 {% load custom_filters %}
 {% load i18n %}
 {% for mediaitem in mediaitem_list %}
-	<div class="col-md-6 col-sm-6 col-xs-12">
+	<div class="col-md-6 col-sm-6 col-xs-12 listitem">
 		<div class="panel panel-default">
 		{% if mediaitem.getClassName == 'MediaItem' %}
 			<div class="panel-heading">
-				<h3 class="panel-title">
+				<h3 class="panel-title" title="{{ mediaitem.title }}">
 					<a href="/item/{{ mediaitem.slug }}/">{{ mediaitem.title }}</a>
 				</h3>
 			</div>
@@ -51,7 +51,7 @@
 			{% endif %}
 		{% else %}
 			<div class="panel-heading">
-				<h3 class="panel-title">
+				<h3 class="panel-title" title="{{ mediaitem.title }}">
 					<a href="/collection/{{ mediaitem.slug }}/">{% trans "Collection" %}: {{ mediaitem.title }}</a>
 				</h3>
 			</div>
