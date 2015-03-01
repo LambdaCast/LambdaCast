@@ -8,7 +8,17 @@ $(document).ready(function() {
 
 	$('#mediaitemForm').ajaxForm({
 		beforeSend: function(xhr) {
-			var validator = $("#mediaitemForm").validate({errorClass: "text-error",});
+			var validator = $("#mediaitemForm").validate(
+					{
+						errorClass: "text-danger",
+						highlight: function(element, errorClass, validClass) {
+							$(element).parent(".form-group").addClass("has-error");
+						},
+						unhighlight: function(element, errorClass, validClass) {
+							$(element).parent(".form-group").removeClass("has-error");
+						}
+					}
+					);
 			if (!validator.form()) {
 				$("#form-error").show();
 				xhr.abort();
