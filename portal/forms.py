@@ -42,7 +42,7 @@ class MediaItemForm(ModelForm):
                 field.widget.attrs['class'] = 'required form-control'
                 if fieldName == 'originalFile':
                     field.widget.attrs['class'] = 'required'
-            self.fields['autoPublish'].widget.attrs['class'] = 'clear'
+            self.fields['autoPublish'].widget.attrs['class'] = ''
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
@@ -74,7 +74,7 @@ class SubmittalForm(ModelForm):
     class Meta:
         model = MediaItem
         exclude = ["slug","user","autoPublish","originalFile", "duration"]
-        
+
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super(SubmittalForm, self).__init__(*args, **kwargs)
