@@ -5,12 +5,11 @@
 # see LICENSE.txt for license information
 
 import sys
-import md5
+from hashlib import md5
 import zlib
 
 from os.path import getsize, split, join, abspath, isdir, normpath
 from os import listdir
-from sha import sha
 from copy import copy
 from string import strip
 from threading import Event

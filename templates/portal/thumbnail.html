@@ -7,55 +7,60 @@
 	<h1>{% trans "Thumbnails" %}</h1>
 </div>
 <div class="row">
-	<div class="span12">
-	<div class="tabbable">
-		<ul class="nav nav-tabs">
+	<div class="col-md-12">
+		<ul class="nav nav-tabs" role="tablist">
 			<li class="active"><a href="#upload" data-toggle="tab">{% trans "Upload" %}</a></li>
 			<li><a href="#thumblist" data-toggle="tab">{% trans "Thumbnail List" %}</a></li>
 		</ul>
+	</div>
+	<div class="col-md-12">
 		<div class="tab-content">
 			<div class="tab-pane active" id="upload">
-				<form id="thumbnailForm" enctype="multipart/form-data" class="form-horizontal" action="/thumbnail/" method="post">
-				<div style="margin: 0 10px 20px">{% trans "With this form you can upload new thumbnails to then select them when uploading new content." %}</div>
-				{% if error %}
-					<div class="alert alert-error">{{ error }}</div>
-				{% endif %}
-				{% if message %}
-					<div class="alert alert-success">{{ message }}</div>
-				{% endif %}
-				{% csrf_token %}
-				<div style="display: none" id="formError" class="alert alert-error">
-					<strong>{% trans "Error!" %}</strong>
-				</div><!-- alert-->
-				{% for field in thumbnail_form %}
-				<div class="control-group">
-					{% if field.errors %}
-					<div class="alert alert-error">
-						<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
-					</div>
+				<form id="thumbnailForm" enctype="multipart/form-data" class="form-group" action="/thumbnail/" method="post" role="form">
+					<p class="help-block">{% trans "With this form you can upload new thumbnails to then select them when uploading new content." %}</p>
+					{% if error %}
+						<div class="alert alert-danger">{{ error }}</div>
 					{% endif %}
-					<div class="control-label">
-						{{ field.label_tag }}
+					{% if message %}
+						<div class="alert alert-success">{{ message }}</div>
+					{% endif %}
+					{% csrf_token %}
+					<div style="display: none" id="formError" class="alert alert-danger">
+						<strong>{% trans "Error!" %}</strong>
 					</div>
-					<div class="controls">
+					{% for field in thumbnail_form %}
+					<div class="form-group">
+						{% if field.errors %}
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+						</div>
+						{% endif %}
+						<label>
+							{{ field.label_tag }}
+						</label>
 						{{ field }} <span class="help-block">{{ field.help_text }}</span>
+					</div>
+					{% endfor %}
+					<div class="form-actions">
+						<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
+					</div>
+				</form>
+			</div>
+			<div class="tab-pane" id="thumblist">
+				<div class="row thumbnail-tab-pane">
+				{% for thumbnail in thumbs_list %}
+				<div class="col-md-2 col-xs-6">
+					<div class="thumbnail thumblist-item">
+						<a href="{{ thumbnail.0 }}"><img src="{{ thumbnail.0 }}" /></a>
+						<div class="caption"><p>{{ thumbnail.1 }}</p></div>
 					</div>
 				</div>
 				{% endfor %}
-				<div class="form-actions">
-					<input type="submit" class="btn btn-primary" value={% trans "Upload" %} />
-				</div><!-- form-actions -->
-				</form>
-			</div><!-- tab-pane -->
-			<div class="tab-pane" id="thumblist">
-				{% for thumbnail in thumbs_list %}
-					<div class="thumbnail-image-container"><a href="{{ thumbnail.0 }}"><img class="img-rounded" src="{{ thumbnail.0 }}" /></a><p>{{ thumbnail.1 }}</p></div>
-				{% endfor %}
-			</div><!-- tab-pane -->
-		</div><!-- tab-content -->
-	</div><!-- tabbable -->
-	</div><!-- span12 -->
-</div><!-- row -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>

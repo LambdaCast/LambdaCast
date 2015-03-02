@@ -5,7 +5,7 @@ version = version_short + ' (' + product_name + ' - BitTornado 0.3.13'
 report_email = version_short+'@degreez.net'
 
 from types import StringType
-from sha import sha
+from hashlib import sha512 as sha
 from time import time, clock
 try:
     from os import getpid

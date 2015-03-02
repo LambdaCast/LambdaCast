@@ -7,173 +7,171 @@
 	<h1>{% trans "Upload" %}</h1>
 </div>
 <div class=row">
-	<div class="span12">
-		<form id="mediaitemForm" enctype="multipart/form-data" class="form-horizontal" action="/submit/" method="post">
+	<div class="col-md-12">
+		<form id="mediaitemForm" enctype="multipart/form-data" class="form" action="/submit/" method="post">
 			{% csrf_token %}
-			<div style="display: none" id="formError" class="alert alert-error">
-				<strong>{% trans "Error!" %}</strong>
-			</div>
-
 			<div class="row">
-				<div class="span6">
+				<div class="col-md-6">
 					<!-- title -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.title.errors %}
-						<div class="alert alert-error">
+						<div class="alert alert-danger" role="alert">
 							<strong>{% trans "Error!" %}</strong>{{ submit_form.title.errors }}</p>
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.title.label_tag }}{% if submit_form.title.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.title }}
-						</div>
+						</label>
+						{{ submit_form.title }}
 					</div>
 				</div>
-				<div class="span6">
+				<div class="col-md-6">
 					<!-- date -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.date.errors %}
-						<div class="alert alert-error">
+						<div class="alert alert-danger">
 							<strong>{% trans "Error!" %}</strong>{{ submit_form.date.errors }}</p>
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.date.label_tag }}{% if submit_form.date.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.date }}
-						</div>
+						</label>
+						{{ submit_form.date }}
 					</div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="span12">
+				<div class="col-md-12">
 					<!-- description -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.description.errors %}
-						<div class="alert alert-error">
+						<div class="alert alert-danger">
 							<strong>{% trans "Error!" %}</strong>{{ submit_form.description.errors }}</p>
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.description.label_tag }}{% if submit_form.description.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.description }}
-						</div>
+						</label>
+						{{ submit_form.description }}
 					</div>
 				</div>
-				<div class="span6">
+				<div class="col-md-6">
 					<!-- channel -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.channel.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.channel.errors }}</p>
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.channel.errors }}
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.channel.label_tag }}{% if submit_form.channel.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.channel }}
-						</div>
+						</label>
+						{{ submit_form.channel }}
 					</div>
 					<!-- license -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.license.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.license.errors }}</p>
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.license.errors }}
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.license.label_tag }}{% if submit_form.license.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.license }}
-						</div>
+						</label>
+						{{ submit_form.license }}
 					</div>
 					<!-- link -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.linkURL.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.linkURL.errors }}</p>
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.linkURL.errors }}
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.linkURL.label_tag }}{% if submit_form.linkURL.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.linkURL }}
-						</div>
+						</label>
+						{{ submit_form.linkURL }}
 					</div>
 					<!-- tags -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.tags.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.tags.errors }}</p>
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.tags.errors }}
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.tags.label_tag }}{% if submit_form.tags.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.tags }}
-						</div>
+						</label>
+						{{ submit_form.tags }}
 					</div>
 				</div>
-				<div class="span6">
+				<div class="col-md-6">
 					<!-- fileFormats -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.fileFormats.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.fileFormats.errors }}</p>
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.fileFormats.errors }}
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.fileFormats.label_tag }}{% if submit_form.fileFormats.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.fileFormats }}
-						</div>
+						</label>
+						{{ submit_form.fileFormats }}
 					</div>
 					<!-- originalFile -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.originalFile.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.originalFile.errors }}</p>
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.originalFile.errors }}
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.originalFile.label_tag }}{% if submit_form.originalFile.field.required %} *{% endif %}
+						</label>
+						{{ submit_form.originalFile }}
+					</div>
+					<!-- autoPublish -->
+					<div class="form-group">
+						{% if submit_form.autoPublish.errors %}
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.autoPublish.errors }}
 						</div>
-						<div class="controls">
-							{{ submit_form.originalFile }}
+						{% endif %}
+						<div class="checkbox">
+							<label>
+								{{ submit_form.autoPublish }}
+								{{ submit_form.autoPublish.label_tag }}{% if submit_form.autoPublish.field.required %} *{% endif %}
+							</label>
 						</div>
 					</div>
 					<!-- thumbURL -->
-					<div class="control-group">
+					<div class="form-group">
 						{% if submit_form.thumbURL.errors %}
-						<div class="alert alert-error">
-							<strong>{% trans "Error!" %}</strong>{{ submit_form.thumbURL.errors }}</p>
+						<div class="alert alert-danger">
+							<strong>{% trans "Error!" %}</strong>{{ submit_form.thumbURL.errors }}
 						</div>
 						{% endif %}
-						<div class="control-label">
+						<label class="control-label">
 							{{ submit_form.thumbURL.label_tag }}{% if submit_form.thumbURL.field.required %} *{% endif %}
-						</div>
-						<div class="controls">
-							{{ submit_form.thumbURL }}
-						</div>
+						</label>
+						{{ submit_form.thumbURL }}
 					</div>
 				</div>
 			</div><!-- row -->
 
-			<div id="progress-indicator">
-				<div class="progress progress-striped active">
-					<div class="bar"></div >
+			<div class="alert alert-success" id="upload-success"><strong>{% trans "Successful" %}!</strong> {% trans "Your media will be transcoded and should be available soon. Please, check the 'Status' page." %} <a href="/status">{% trans "Status" %}</a></div>
+
+			<div id="form-error" class="alert alert-danger">
+				<strong>{% trans "Error!" %}</strong> {% trans "We found an error caused by form values." %}
+			</div>
+			<div id="upload-error" class="alert alert-danger">
+				<strong>{% trans "Error!" %}</strong> {% trans "An error accured. Please, try again or contact the administrator." %}
+			</div>
+
+			<div class="progress" id="progress-indicator">
+				<div class="progress-bar progress-bar progress-bar-success progress-bar-striped" id="bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+					<div class="percent">0%</div >
 				</div>
-				<div class="percent">0%</div >
 			</div>
 
 			<div class="form-actions">

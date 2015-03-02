@@ -4,7 +4,7 @@ body {
 	-o-hyphens: auto;
 	-ms-hyphens: auto;
 	hyphens: auto;
-	padding-top: 32px;
+	padding-top: 51px;
 }
 
 @media (max-width: 979px) {
@@ -20,10 +20,6 @@ img.header-image {
 
 .navbar-search {
 	margin-right: 5px;
-}
-
-#page-container {
-	margin-top: 30px;
 }
 
 .iframe-code {
@@ -44,26 +40,36 @@ img.header-image {
 	min-height: 90px !important;
 	padding: 0 0 10px;
 }
-
-.video-image-container, .thumbnail-image-container {
+.thumbnail-tab-pane {
+        margin-top: 20px;
+}
+.thumbnail-image-container {
 	display: table-cell;
 	padding: 0px 15px;
 	vertical-align: middle;
 }
-.video-image-container {
-	width: 100px;
-}
 .thumbnail-image-container {
 	width: 150px;
-}
-.video-image-container img {
-	width: 100px;
-	padding-top:10px;
 }
 .thumbnail-image-container img {
 	width: 150px;
 }
-
+.thumbnail.listitem-thumbnail {
+	height: 165px;
+	margin-bottom: 0;
+}
+.listitem-thumbnail img {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	max-height: 156px;
+}
+.thumblist-item {
+	height: 210px;
+}
+.thumblist-item img {
+	max-height: 130px;
+}
 ul.edit-menu {
 	list-style-type: none;
 	margin-left: 10px;
@@ -96,12 +102,27 @@ ul.edit-menu {
 	cursor: pointer;
 }
 
-.channel-thumb {
-	max-width: 100px;
-	max-height: 100px;
-	margin: 0px 10px 0px 0px;
+.page-header.page-header-channel {
+	border: none;
+}
+.page-container-index {
+        margin-top: 32px;
 }
 
-.page-header-channel {
-	min-height: 75px;
+.media-metadata {
+	margin: 5px 0 10px;
+}
+.media-metadata .glyphicon {
+	margin-right: 5px;
+}
+#player_container {
+	margin: 30px 0px;
+}
+a.comment-link {
+	color: #777;
+}
+.listitem .panel-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 }

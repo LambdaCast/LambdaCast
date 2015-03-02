@@ -6,31 +6,26 @@
 <div class="page-header">
 	<h1>{% trans "Login" %}</h1>
 </div>
-
-<div class=row>
-	<div class="span6">
+<div class="row">
+	<div class="col-md-6">
 		{% if form.errors %}
 		<div class="alert alert-error">
 			<strong>{% trans "Warning!" %} </strong>{% trans "Username and password are not working together" %}</p>
 		</div>
 		{% endif %}
-		<form method="post" class="form-horizontal" action="{% url django.contrib.auth.views.login %}">
+		<form method="post" class="form" action="{% url 'django.contrib.auth.views.login' %}">
 			{% csrf_token %}
-			<div class="control-group">
-				<div class="control-label">
+			<div class="form-group">
+				<div class="form-label">
 					{{ form.username.label_tag }}
 				</div>
-				<div class="controls">
-					{{ form.username }}
-				</div>
+				{{ form.username }}
 			</div>
-			<div class="control-group">
+			<div class="form-group">
 				<div class="control-label">
 					{{ form.password.label_tag }}
 				</div>
-				<div class="controls">
-					{{ form.password }}
-				</div>
+				{{ form.password }}
 			</div>
 			<div class="form-actions">
 				<input type="submit" class="btn btn-primary" value={% trans "Login" %} />

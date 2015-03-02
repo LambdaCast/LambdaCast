@@ -4,21 +4,10 @@
 {% load custom_filters %}
 {% block body %}
 <div class="page-header">
-	<h1>Suche nach: {{ query_string }}</h1>
+	<h1>{% trans "Suche nach:" %} {{ query_string }}</h1>
 </div>
-<div class="row">
-	<div class="span8">
-		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
-	</div>
-	<div class="span4">
-		<div class=well>
-			<ul class="nav nav-list">
-				{% include "portal/inc/latest-feeds.html" %}
-				<li>
-					<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+<div class="col-md-9">
+	{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 </div>
+{% include "portal/inc/standard-sidebar.html" %}
 {% endblock %}

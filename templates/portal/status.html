@@ -9,28 +9,30 @@
 	<p>{% trans "This site shows all media that will be or is transcoded" %}</p>
 </div>
 <div class="row">
-	<div class="span12">
-		<table class="table">
+	<div class="col-md-12">
+		<table class="table table-striped">
 			<thead>
-				<th>Title</th>
-				<th>Date</th>
-				<th>Encoding Done</th>
+				<tr>
+				<th>{% trans "Title" %}</th>
+				<th>{% trans "Date" %}</th>
+				<th>{% trans "Encoding Done" %}</th>
 				{% if settings.USE_BITTORRENT %}
-				<th>Torrent Created</th>
+				<th>{% trans "Torrent Created" %}</th>
 				{% endif %}
-				<th>Auto Publish</th>
-				<th>Tasks</th>
+				<th>{%trans "Auto Publish" %}</th>
+				<th>{% trans "Tasks" %}</th>
+				</tr>
 			</thead>
 			<tbody>
 				{% for mediaitem in mediaitems %}
 					<tr>
 						<th><a href="/item/{{ mediaitem.slug }}">{{ mediaitem.title }}</a></th>
 						<td>{{ mediaitem.date }}</td>
-						<td>{% if mediaitem.encodingDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<td>{% if mediaitem.encodingDone %}<i class="glyphicon glyphicon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
 						{% if settings.USE_BITTORRENT %}
-						<td>{% if mediaitem.torrentDone %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<td>{% if mediaitem.torrentDone %}<i class="glyphicon glyphicon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
 						{% endif %}
-						<td>{% if mediaitem.autoPublish %}<i class="icon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
+						<td>{% if mediaitem.autoPublish %}<i class="glyphicon glyphicon-ok"></i>{% else %}<i class="icon-remove"></i>{% endif %}</td>
 						<td>
 						<ul>
 							{% for task in mediaitem.get_tasks %}
@@ -43,7 +45,15 @@
 										{% trans "Unknown task" %}:
 									{% endif %}
 									<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
-									({{ task.status }})
+									{% if task.status == 'successful' %}
+										<i class="glyphicon glyphicon-ok"></i> ({% trans "Successful" %})
+									{% elif task.status == 'unsuccessful' %}
+										<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+									{% elif task.status == 'scheduled' %}
+										<i class="glyphicon glyphicon-time"></i> ({% trans "Scheduled" %})
+									{% else %}
+										<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
+									{% endif %}
 								</li>
 							{% endfor %}
 							{% for mediafile in mediaitem.mediafile_set.all %}
@@ -51,7 +61,15 @@
 									{{ mediafile.file_format }}:
 									{% for task in mediafile.get_tasks %}
 										<a href="/admin/djangotasks/task/{{ task.id }}">{{ task.id }}</a>
-										({{ task.status }}) |
+										{% if task.status == 'successful' %}
+											<i class="glyphicon glyphicon-ok"></i> ({% trans "Successful" %})
+										{% elif task.status == 'unsuccessful' %}
+											<i class="glyphicon glyphicon-remove"></i> ({% trans "Unsuccessful" %})
+										{% elif task.status == 'scheduled' %}
+											<i class="glyphicon glyphicon-time"></i> ({% trans "Scheduled" %})
+										{% else %}
+											<i class="glyphicon glyphicon-refresh"></i> ({% trans "In Progress" %})
+										{% endif %}|
 									{% empty %}
 										{% trans "No task" %} |
 									{% endfor %}
@@ -63,23 +81,27 @@
 					</tr>
 				{% empty %}
 					<tr>
-						<td colspan="6">{% trans "There are no media to transcode" %}</td>
+						<td colspan="6">{% trans "There is no media to transcode" %}</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
-	<div class="modal hide fade" id="logModal" style="width:800px;margin-left:-400px;">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3>{% trans "Log" %}</h3>
-		</div>
-		<div class="modal-body">
-			<textarea id="logviewer" cols="500" rows="10" style="width:95%">{% trans "Loading" %}...</textarea>
-		</div>
-		<div class="modal-footer">
-			<a class="btn" id="reloadLog">{% trans "Reload" %}</a>
-			<a class="btn" data-dismiss="modal" aria-hidden="true">{% trans "Close" %}</a>
+	<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">{% trans "Log" %}</h4>
+				</div>
+				<div class="modal-body">
+					<textarea id="logviewer" class="form-control" cols="67" rows="20" readonly="true">{% trans "Loading" %}...</textarea>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-success" id="reloadLog">{% trans "Reload" %}</a>
+					<a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">{% trans "Close" %}</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -4,38 +4,36 @@
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_mediaitem and user.is_staff %}
-			<a href="/admin/portal/submittal/{{ submittal.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+			<a href="/admin/portal/submittal/{{ submittal.id }}/" class="pull-right"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 	<h1>{% trans "Submittal" %} "{{ submittal.title }}"</h1>
 </div>
 <div class="row">
-	<div class="span8">
-		<form id="submittalForm" class="form-horizontal" action="/submittal/{{ submittal.id }}/" method="post">
+	<div class="col-md-12" style="margin-bottom: 50px;">
+		<form id="submittalForm" class="form" action="/submittal/{{ submittal.id }}/" method="post">
 			{% csrf_token %}
-			<div style="display: none" id="formError" class="alert alert-error">
-				<strong>{% trans "Error!" %}</strong>
-			</div><!-- alert-->
+			<div style="display: none" id="formError" class="alert alert-danger">
+				<strong>{% trans "Your form contains errors! See details below." %}</strong>
+			</div>
 			{% for field in submittal_form %}
-			<div class="control-group">
-				{% if field.errors %}
-				<div class="alert alert-error">
-					<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
-				</div>
-				{% endif %}
-				<div class="control-label">
-					{{ field.label_tag }}{% if field.field.required %} *{% endif %}
-				</div>
-				<div class="controls">
+				<div class="form-group">
+					{% if field.errors %}
+					<div class="alert alert-danger">
+						<strong>{% trans "Error!" %}</strong>{{ field.errors }}</p>
+					</div>
+					{% endif %}
+					<label class="control-label">
+						{{ field.label_tag }}{% if field.field.required %} *{% endif %}
+					</label>
 					{{ field }} <span class="help-block">{{ field.help_text }}</span>
 				</div>
-			</div>
 			{% endfor %}
 			<div class="form-actions">
 				<input type="submit" class="btn btn-primary" value="{% trans "Add media" %}" />
-			</div><!-- form-actions -->
+			</div>
 		</form>
-	</div><!-- span8 -->
-</div><!-- row -->
+	</div>
+</div>
 {% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="{{ STATIC_URL }}jquery.form.js"></script>
@@ -44,7 +42,16 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('#submittalForm').submit(function(e) {
-			var validator = $("#submittalForm").validate({errorClass: "text-error",});
+			var validator = $("#submittalForm").validate(
+					{
+						errorClass: "text-danger",
+						highlight: function(element, errorClass, validClass) {
+							$(element).parent(".form-group").addClass("has-error");
+						},
+						unhighlight: function(element, errorClass, validClass) {
+							$(element).parent(".form-group").removeClass("has-error");
+						}
+					});
 			if (!validator.form()) {
 				$("#formError").show();
 				e.preventDefault();

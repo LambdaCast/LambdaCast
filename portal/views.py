@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -20,7 +21,6 @@ import os
 import re
 from operator import attrgetter
 import itertools
-from sets import Set
 
 def index(request):
     ''' This view is the front page of OwnTube. It just gets the first 15 available media items and
@@ -30,9 +30,13 @@ def index(request):
     else:
         queryset = itertools.chain(MediaItem.objects.filter(encodingDone=True, published=True).order_by('-date','-modified'),Collection.objects.all().order_by('-created'))
     queryset_sorted = sorted(queryset, key=attrgetter('date', 'created'), reverse=True)
-    paginator = Paginator(queryset_sorted,15)
+    paginator = Paginator(queryset_sorted,16)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
+    rss_list = []
+    for file_type in MEDIA_FORMATS:
+        rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/latest/"+file_type))
+    rss_list.append(('torrent','torrent','/feeds/latest/torrent'))
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
@@ -41,7 +45,7 @@ def index(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, 'portal/index.html', {'latest_mediaitems_list': mediaitems, 'channel_list': channel_list})
+    return TemplateResponse(request, 'portal/index.html', {'latest_mediaitems_list': mediaitems, 'channel_list': channel_list, 'rss_list': rss_list})
 
 def channel_list(request,slug):
     ''' This view is the view for the channel's list it works almost like the index view'''
@@ -54,6 +58,10 @@ def channel_list(request,slug):
     paginator = Paginator(queryset_sorted,15)
     channel_list = Channel.objects.all()
     page = request.GET.get('page')
+    rss_list = []
+    for file_type in MEDIA_FORMATS:
+        rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/"+channel.slug+"/"+file_type))
+    rss_list.append(('torrent','torrent','/feeds/'+channel.slug+'/torrent'))
     try:
         mediaitems = paginator.page(page)
     except PageNotAnInteger:
@@ -62,7 +70,7 @@ def channel_list(request,slug):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list})
+    return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'rss_list': rss_list})
 
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
@@ -80,16 +88,7 @@ def detail(request, slug):
             comment = form.save(commit=False)
             comment.save()
             message = _(u"Your comment will be moderated")
-            user_mediaitem = mediaitem.user
-            if not user_mediaitem.email == '':
-                if not user_mediaitem.first_name == '':
-                    mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.first_name
-                else:
-                    mail_message = _(u'Hello %s,\n\nSomeone commented under one of your content. Please check and moderate it, so others can see the comment.\n\nThank You.') % user_mediaitem.username
-                try:
-                    user_mediaitem.email_user(_(u'New Comment: ') + mediaitem.title, mail_message)
-                except:
-                    pass
+            comment.send_notification_mail()
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': CommentForm(), 'message': message})
         else:
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': form})
@@ -114,11 +113,14 @@ def tag(request, tag):
 def collection(request, slug):
     ''' Gets all media items for a channel'''
     collection = get_object_or_404(Collection, slug=slug)
+    rss_list = []
+    for file_type in MEDIA_FORMATS:
+        rss_list.append((MEDIA_FORMATS[file_type].format_key,MEDIA_FORMATS[file_type].mediatype,"/feeds/collection/"+collection.slug+"/"+file_type))
     if request.user.is_authenticated():
         mediaitemslist = collection.items.filter(encodingDone=True)
     else:
         mediaitemslist = collection.items.filter(encodingDone=True, published=True)
-    return TemplateResponse(request, 'portal/collection.html', {'mediaitems_list': mediaitemslist, 'collection': collection})
+    return TemplateResponse(request, 'portal/collection.html', {'mediaitems_list': mediaitemslist, 'collection': collection, 'rss_list': rss_list })
 
 def search(request):
     ''' The search view for handling the search using Django's "Q"-class (see normlize_query and _get_query)'''
@@ -264,7 +266,7 @@ def status(request):
     tasks_mediaitem = djangotasks.models.Task.objects.filter(model="portal.mediaitem").exclude(status="successful")
     tasks_mediafile = djangotasks.models.Task.objects.filter(model="portal.mediafile").exclude(status="successful")
 
-    mediaitem_ids = Set(map((lambda mediaitem: mediaitem.object_id), tasks_mediaitem))
+    mediaitem_ids = set(map((lambda mediaitem: mediaitem.object_id), tasks_mediaitem))
     for mediafile in tasks_mediafile:
         try:
             mediaitem_ids.add(MediaFile.objects.get(pk=mediafile.object_id).media_item.pk)

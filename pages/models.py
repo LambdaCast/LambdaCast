@@ -159,26 +159,22 @@ class Page(models.Model):
     
     DEFAULT_CONTENT = """
     <div class="row">
-    <div class="span12">
-    <dib class="row">
-    <div class="span3">
+    <div class="col-md-4">
     <h3>Title 1</h3>
     <p>This is sample content</p>
     </div>
-    <div class="span3">
+    <div class="col-md-4">
     <h3>Title 2</h3>
     <p>This is sample content</p>
     </div>
-    <div class="span3">
+    <div class="col-md-4">
     <h3>Title</h3>
     <p>This is sample content</p>
     </div>
     </div>
-    </div>
-    </div>
     """   
 
-    activated = models.BooleanField(verbose_name=_(u"Activated"))
+    activated = models.BooleanField(verbose_name=_(u"Activated"),default=False)
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     slug = AutoSlugField(verbose_name=_(u"Slug"),populate_from='title',unique=True,help_text=_(u"Is part of the URL that you can define"))
     title = models.CharField(_(u"Title"),max_length=200)

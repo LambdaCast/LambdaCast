@@ -39,6 +39,8 @@ ADMINS = (
     ('name', 'root@localhost'),
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 # Your database settings, sqlite is good for development and testing, not for deployment
 DATABASES = {
     'default': {
@@ -157,7 +159,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    ABSOLUTE_PATH + '/templates'
+    ABSOLUTE_PATH + '/templates',
 )
 
 INSTALLED_APPS = (
@@ -167,16 +169,15 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_admin_bootstrapped.bootstrap3',
     'django_admin_bootstrapped',
     'django.contrib.admin',
     #'django.contrib.admindocs',
-    'django.contrib.markup',
     'taggit',
     'portal',
     'livestream',
     'pages',
     'djangotasks',
-    'south',
     'taggit_templatetags',
     'simple_open_graph',
     'captcha',
@@ -186,7 +187,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'django.contrib.auth.views.login'
+LOGOUT_URL = 'django.contrib.auth.views.logout'
 
 
 # ehemalig "portal/appsettings.py"
@@ -199,8 +201,8 @@ THUMBNAILS_BASE_URL = DOMAIN + '/media/thumbnails/'
 
 ENABLE_LIVESTREAMS = False
 
-ENABLE_AUDIO_FEEDS = True
-ENABLE_VIDEO_FEEDS = True
+ENABLE_AUDIO = True
+ENABLE_VIDEO = True
 
 # Host and port for the mail server to send mails for new comments
 EMAIL_HOST = 'localhost'

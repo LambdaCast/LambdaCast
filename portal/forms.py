@@ -30,15 +30,19 @@ class MediaItemForm(ModelForm):
 
     class Meta:
         model = MediaItem
-        exclude = ["slug","duration","published","encodingDone","torrentURL","user","autoPublish", "torrentDone","videoThumbURL","audioThumbURL"]
+        exclude = ["slug","duration","published","encodingDone","torrentURL","user", "torrentDone","videoThumbURL","audioThumbURL"]
 
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
         super(MediaItemForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
-            field.widget.attrs['class'] = 'input-block-level'
+            field.widget.attrs['class'] = 'form-control'
             if field.required:
-                field.widget.attrs['class'] = 'required input-block-level'
+                field.widget.attrs['class'] = 'required form-control'
+                if fieldName == 'originalFile':
+                    field.widget.attrs['class'] = 'required'
+            self.fields['autoPublish'].widget.attrs['class'] = ''
 
 class CommentForm(ModelForm):
     ''' Used for the comments '''
@@ -47,6 +51,17 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         exclude = ["ip","moderated","item"]
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        for fieldName in self.fields:
+            field = self.fields[fieldName]
+            field.widget.attrs['class'] = 'form-control'
+            if field.required:
+                field.widget.attrs['class'] = 'required form-control'
+            self.fields['captcha'].label = "Captcha"
+            field.widget.attrs['placeholder'] = field.label
+            self.fields['timecode'].initial = '0'
 
 class SubmittalForm(ModelForm):
     ''' Used for creating media instances through submittals '''
@@ -61,13 +76,16 @@ class SubmittalForm(ModelForm):
         exclude = ["slug","user","autoPublish","originalFile", "duration"]
 
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
         super(SubmittalForm, self).__init__(*args, **kwargs)
         for fieldName in self.fields:
             field = self.fields[fieldName]
-            field.widget.attrs['class'] = 'input-block-level'
+            field.widget.attrs['class'] = 'form-control'
             if field.required:
-                field.widget.attrs['class'] = 'required input-block-level'
-
+                field.widget.attrs['class'] = 'required form-control'
+            self.fields['published'].widget.attrs['class'] = ''
+            self.fields['encodingDone'].widget.attrs['class'] = ''
+            self.fields['torrentDone'].widget.attrs['class'] = ''
 
     def create_mediafiles(self, mediaitem):
         if not self.data['media_webmURL'] == "":
@@ -84,5 +102,5 @@ class SubmittalForm(ModelForm):
 
 class ThumbnailForm(Form):
     ''' Used for uploading thumbnails '''
-    title = forms.CharField(max_length=50, help_text=_('The name of the image with file format like "test.png"'), label=_("Title"), validators=[RegexValidator(regex="^((?!/).)*$", message=_("Title must not contain a slash"), code='invalid_title')])
+    title = forms.CharField(max_length=50, help_text=_('The name of the image with file format like "test.png"'), label=_("Title"), validators=[RegexValidator(regex="^((?!/).)*$", message=_("Title must not contain a slash"), code='invalid_title')], widget=forms.TextInput(attrs={'class':'form-control'}))
     file = forms.FileField(help_text=_('Only upload image files'),label=_("File"))

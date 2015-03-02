@@ -15,60 +15,31 @@
 		<meta property="og:locale" content="{{ settings.OG_LANGUAGE_CODE }}"></meta>
 		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
+{% block rss %}
+	{% for feed_item in rss_list %}
+		{% if feed_item.1 == "audio" and settings.ENABLE_AUDIO %}
+		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
+		{% endif %}
+		{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
+		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
+		{% endif %}
+	{% endfor %}
+{% endblock %}
 {% block head %}
 {% endblock %}
 {% block body %}
 <div class="page-header">
 	{% if perms.portal.change_collection and user.is_staff %}
-		<a href="/admin/portal/collection/{{ collection.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
+		<a href="/admin/portal/collection/{{ collection.id }}/" class="pull-right"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 	<h1>Playlist: {{ collection.title }}</h1>
 </div>
 <div class="row">
-	<div class="span8">
+	<div class="col-md-9">
+		<div class="row">
 		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
-	</div>
-	<div class="span4">
-		<div class=well>
-			<ul class="nav nav-list">
-				{% if settings.USE_BITTORRENT %}
-				<li>
-					<i class="icon-file"></i> <u>{% trans "Original Material" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/torrent/"">Torrents-Feed</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				{% if settings.ENABLE_VIDEO_FEEDS %}
-				<li>
-					<i class="icon-film"></i> <u>{% trans "Video-Podcast" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/mp4/">{% trans "MP4-Format" %}</a>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/webm/">{% trans "WEBM-Format" %}</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				{% if settings.ENABLE_AUDIO_FEEDS %}
-				<li>
-					<i class="icon-headphones"></i> <u>{% trans "Audio-Podcast" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/mp3/">{% trans "MP3-Format" %}</a>
-				</li>
-				<li>
-					<a href="/feeds/collection/{{ collection.slug }}/ogg/">{% trans "OGG-Format" %}</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				<li>
-					<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
-				</li>
-			</ul>
 		</div>
 	</div>
+	{% include "portal/inc/standard-sidebar.html" %}
 </div>
 {% endblock %}

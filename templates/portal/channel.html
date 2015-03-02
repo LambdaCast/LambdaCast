@@ -17,58 +17,40 @@
 		<meta property="og:site_name" content="{{ settings.SITE_NAME }}"></meta>
 {% endblock %}
 {% block rss %}
-		{% if settings.USE_BITTORRENT %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Original Feed (Torrents)" %}" href="/feeds/{{ channel.slug }}/torrent/" />
+	{% for feed_item in rss_list %}
+		{% if feed_item.1 == "audio" and settings.ENABLE_AUDIO %}
+		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
 		{% endif %}
-		{% if settings.ENABLE_VIDEO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (MP4)" %}" href="/feeds/{{ channel.slug }}/mp4/" />
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Video Feed (WEBM)" %}" href="/feeds/{{ channel.slug }}/webm/" />
+		{% if feed_item.1 == "video" and settings.ENABLE_VIDEO %}
+		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' feed_item_type=feed_item.0 %}{{ feed_title }} Feed ({{ feed_item_type }}){% endblocktrans %}" href="{{ feed_item.2 }}" />
 		{% endif %}
-		{% if settings.ENABLE_AUDIO_FEEDS %}
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (MP3)" %}" href="/feeds/{{ channel.slug }}/mp3/" />
-		<link rel="alternate" type="application/rss+xml" title="{% trans "Channel Audio Feed (OGG)" %}" href="/feeds/{{ channel.slug }}/ogg/" />
+		{% if feed_item.1 == 'torrent' and settings.USE_BITTORRENT %}
+		<link rel="alternate" type="application/rss+xml" title="{% blocktrans with feed_title=video_source|default:'Latest Content' %}{{ feed_title }} (Torrents) {% endblocktrans %}" href="{{ feed_item.2 }}" />
 		{% endif %}
+	{% endfor %}
 {% endblock %}
 {% block body %}
-<div class="page-header page-header-channel">
-	{% if perms.portal.change_channel and user.is_staff %}
-		<a href="/admin/portal/channel/{{ channel.id }}/" class="pull-right" style="margin-top: 15px;"><button class="btn btn-warning" type="button"><i class="icon-pencil"></i> {% trans "Edit" %}</button></a>
-	{% endif %}
+<div class="page-header page-header-channel row">
 	{% if channel.channelThumbURL %}
-	<img src="{{ channel.channelThumbURL }}" class="img-polaroid pull-left channel-thumb"></img>
+	<div class="col-md-2 col-xs-12 col-sm-12">
+		<div class="thumbnail">
+			<img src="{{ channel.channelThumbURL }}"></img>
+		</div>
+	</div>
 	{% endif %}
-	<h1>{% trans "Channel" %}: {{ channel.name }}</h1>
-	{% if channel.description %}
-	<p>{{ channel.description }}</p>
+	<div class="col-md-8 col-xs-12 col-sm-12">
+		<h1>{% trans "Channel" %}: {{ channel.name }}</h1>
+		{% if channel.description %}
+		<p>{{ channel.description }}</p>
+		{% endif %}
+	</div>
+	{% if perms.portal.change_channel and user.is_staff %}
+		<a href="/admin/portal/channel/{{ channel.id }}/" class="pull-right"><button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}</button></a>
 	{% endif %}
 </div>
 <div class="row">
-	<div class="span8">
-		<ul class="nav nav-tabs">
-			<li>
-				<a href="/">{% trans "Latest Media" %}</a>
-			</li>
-			{% for aChannel in channel_list %}
-			{% if aChannel.featured %}
-				{% if channel.slug == aChannel.slug %}
-					<li class="active"><a href="/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
-				{% else %}
-					<li><a href="/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
-				{% endif %}
-			{% endif %}
-			{% endfor %}
-			<li class="dropdown">
-				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					{% trans "All Channels" %}
-					<b class="caret"></b>
-				</a>
-				<ul class="dropdown-menu">
-					{% for aChannel in channel_list %}
-						<li><a href="/channel/{{ aChannel.slug }}/">{{ aChannel.name }}</a></li>
-					{% endfor %}
-				</ul>
-			</li>
-		</ul>
+	<div class="col-md-9">
+		{% include "portal/channelmenu.html" %}
 		{% include "portal/items/listitem.html" with mediaitem_list=mediaitems_list %}
 		<ul class="pager">
 		{% if mediaitems_list.has_previous %}
@@ -83,47 +65,6 @@
 		{% endif %}
 		</ul>
 	</div>
-	<div class="span4">
-		<div class=well>
-			<ul class="nav nav-list">
-				{% if settings.USE_BITTORRENT %}
-				<li>
-					<i class="icon-file"></i> <u>{% trans "Original Material" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/{{ channel.slug }}/torrent/">Torrents-Feed</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				{% if settings.ENABLE_VIDEO_FEEDS %}
-				<li>
-					<i class="icon-film"></i> <u>{% trans "Video-Podcast" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/{{ channel.slug }}/mp4/">{% trans "MP4-Format" %}</a>
-				</li>
-				<li>
-					<a href="/feeds/{{ channel.slug }}/webm/">{% trans "WEBM-Format" %}</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				{% if settings.ENABLE_AUDIO_FEEDS %}
-				<li>
-					<i class="icon-headphones"></i> <u>{% trans "Audio-Podcast" %}</u>
-				</li>
-				<li>
-					<a href="/feeds/{{ channel.slug }}/mp3/">{% trans "MP3-Format" %}</a>
-				</li>
-				<li>
-					<a href="/feeds/{{ channel.slug }}/ogg/">{% trans "OGG-Format" %}</a>
-				</li>
-				<li class="divider"></li>
-				{% endif %}
-				<li>
-					<a href="mailto:{{ settings.CONTACT_EMAIL }}"><i class="icon-envelope"></i> {% trans "Contact" %}</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+	{% include "portal/inc/standard-sidebar.html" with video_source=channel.name %}
 </div>
 {% endblock %}
