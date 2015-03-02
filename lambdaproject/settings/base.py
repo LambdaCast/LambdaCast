@@ -12,6 +12,8 @@ try:
 except ImportError:
     DOMAIN = 'http://localhost:8000'
 
+ALLOWED_HOSTS = ['*',]
+
 # Domain of your website, for example: 'http://example.com' (no / behind the path)
 WEBSITE_URL = 'http://example.com'
 
