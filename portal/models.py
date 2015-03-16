@@ -230,15 +230,15 @@ class MediaItem(models.Model):
         stdout, _ = process.communicate()
         try: 
             matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
+            return matches
         except AttributeError:
-            matches = None
-        return matches 
+            return None
 
     def get_and_save_duration(self):
         ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
         if os.path.exists(self.originalFile.path):
             filepath = self.originalFile.path
-        elif self.mediafiles()[0]:
+        elif self.mediafiles():
             filepath = self.mediafiles()[0].url
         else:
             filepath = None
