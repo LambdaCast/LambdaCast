@@ -236,7 +236,7 @@ class MediaItem(models.Model):
 
     def get_and_save_duration(self):
         ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
-        if os.path.exists(self.originalFile.path):
+        if self.originalFile and os.path.exists(self.originalFile.path):
             filepath = self.originalFile.path
         elif self.mediafiles():
             filepath = self.mediafiles()[0].url
