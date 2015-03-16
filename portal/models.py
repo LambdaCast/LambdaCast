@@ -241,16 +241,13 @@ class MediaItem(models.Model):
         elif self.mediafiles():
             filepath = self.mediafiles()[0].url
         else:
-            filepath = None
+            return False
 
-        if filepath:
-            matches = self.get_duration(filepath)
-            if matches:
-                self.duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
-                self.save()
-                return True
-            else:
-                return False
+        matches = self.get_duration(filepath)
+        if matches:
+            self.duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
+            self.save()
+            return True
         else:
             return False
 
