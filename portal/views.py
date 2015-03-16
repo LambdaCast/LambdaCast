@@ -11,6 +11,7 @@ from django.template.response import TemplateResponse
 from portal.models import MediaItem, Comment, Channel, Collection, Submittal, MediaFile
 from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
 from portal.media_formats import MEDIA_FORMATS
+from portal.templatetags.custom_filters import seconds_to_hms
 
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -75,8 +76,17 @@ def channel_list(request,slug):
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
     mediaitem = get_object_or_404(MediaItem, slug=slug)
+    form = CommentForm()
     if request.user.is_authenticated(): 
         comment_list = Comment.objects.filter(item=mediaitem).order_by('-created')
+        if request.GET.get('get_duration', False):
+            if mediaitem.get_and_save_duration():
+                duration_feedback = seconds_to_hms(mediaitem.duration)
+            else:
+                duration_feedback = "Error"
+            return HttpResponse(duration_feedback)
+        else:
+            return TemplateResponse(request, 'portal/items/detail.html', {'mediaitem': mediaitem, 'comment_list': comment_list, 'comment_form': form})
     else:
         comment_list = Comment.objects.filter(item=mediaitem,moderated=True).order_by('-created')
 
@@ -93,7 +103,6 @@ def detail(request, slug):
         else:
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': form})
     else:
-        form = CommentForm()
         return TemplateResponse(request, 'portal/items/detail.html', {'mediaitem': mediaitem, 'comment_list': comment_list, 'comment_form': form})
 
 def iframe(request, slug):
