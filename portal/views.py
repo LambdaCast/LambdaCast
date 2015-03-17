@@ -91,7 +91,6 @@ def detail(request, slug):
         comment_list = Comment.objects.filter(item=mediaitem,moderated=True).order_by('-created')
 
     if request.method == 'POST':
-        form = CommentForm()
         comment = Comment(item=mediaitem,ip=request.META["REMOTE_ADDR"])
         form = CommentForm(request.POST, instance=comment)
 
@@ -104,6 +103,7 @@ def detail(request, slug):
         else:
             return TemplateResponse(request, 'portal/items/detail.html', {'comment_list': comment_list, 'mediaitem': mediaitem, 'comment_form': form})
     else:
+        form = CommentForm()
         return TemplateResponse(request, 'portal/items/detail.html', {'mediaitem': mediaitem, 'comment_list': comment_list, 'comment_form': form})
 
 def iframe(request, slug):
