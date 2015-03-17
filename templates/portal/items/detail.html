@@ -140,7 +140,7 @@
 			{% endif %}
 			{% if user.is_staff %}
 			<li class="list-group-item">
-				<button type="button" id="get_duration" class="btn btn-warning" title="{% trans "Generate Duration (Time)" %}"><i class="glyphicon glyphicon-time"></i></button> {% trans "Duration" %}: <div style="display:inline;" id="duration">{{ mediaitem.duration|seconds_to_hms }}</div>
+				<i class="glyphicon glyphicon-time"></i> {% trans "Duration" %}: <div style="display:inline;" id="duration">{{ mediaitem.duration|seconds_to_hms }}</div> <button type="button" style="display:inline;" id="get_duration" class="btn btn-warning btn-xs" title="{% trans "Generate Duration (Time)" %}"><i class="glyphicon glyphicon-refresh"></i></button>
 			</li>
 			{% elif mediaitem.duration %}
 			<li class="list-group-item">
@@ -244,8 +244,8 @@ $('#description').readmore({
 
 $(document).ready(function() {
 	$('#get_duration').click(function(){
-		$('#duration').html("...");
-		$.get('/item/{{ mediaitem.slug }}', {get_duration: 'get_duration'}, function(data){
+		$('#duration').html('...');
+		$.get('/item/{{mediaitem.slug}}/get_duration', function(data){
 			$('#duration').html(data);
 		});
 	});

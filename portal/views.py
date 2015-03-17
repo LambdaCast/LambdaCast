@@ -73,20 +73,21 @@ def channel_list(request,slug):
         mediaitems = paginator.page(paginator.num_pages)
     return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'rss_list': rss_list})
 
+@login_required
+def detail_get_duration(request, slug):
+    mediaitem = get_object_or_404(MediaItem, slug=slug)
+    if mediaitem.get_and_save_duration():
+        duration_feedback = seconds_to_hms(mediaitem.duration)
+    else:
+        duration_feedback = "Error"
+    return HttpResponse(duration_feedback)
+
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''
     mediaitem = get_object_or_404(MediaItem, slug=slug)
     form = CommentForm()
     if request.user.is_authenticated(): 
         comment_list = Comment.objects.filter(item=mediaitem).order_by('-created')
-        if request.GET.get('get_duration', False):
-            if mediaitem.get_and_save_duration():
-                duration_feedback = seconds_to_hms(mediaitem.duration)
-            else:
-                duration_feedback = "Error"
-            return HttpResponse(duration_feedback)
-        else:
-            return TemplateResponse(request, 'portal/items/detail.html', {'mediaitem': mediaitem, 'comment_list': comment_list, 'comment_form': form})
     else:
         comment_list = Comment.objects.filter(item=mediaitem,moderated=True).order_by('-created')
 
