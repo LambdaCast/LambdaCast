@@ -67,7 +67,7 @@ class MediaFile(models.Model):
         # Create the command line (MP3)
         logfile = outputdir + 'encoding_' + media_format.format_key + '_log.txt'
         outfile = outputdir + self.media_item.slug + media_format.extension
-        cl = ffmpeg(path, outfile, logfile, media_format.video_options , media_format.audio_options).build_command_line()
+        cl = ffmpeg(path, outfile, logfile, media_format.video_options, media_format.audio_options).build_command_line()
 
         outcode = subprocess.Popen(cl, shell=True)
 
@@ -225,15 +225,30 @@ class MediaItem(models.Model):
         self.published = self.autoPublish
         self.save()
 
+    def get_duration(self, filepath):
+        process = subprocess.Popen(['ffmpeg',  '-i', filepath], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        stdout, _ = process.communicate()
+        try: 
+            return re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
+        except AttributeError:
+            return None
+
     def get_and_save_duration(self):
         ''' Just a little helper to get the duration (in seconds) from a file using ffmpeg '''
-        filepath = self.originalFile.path if self.originalFile else (self.mediafiles()[0].url if self.mediafiles() else None)
-        if filepath:
-            process = subprocess.Popen(['ffmpeg',  '-i', filepath], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            stdout, _ = process.communicate()
-            matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
+        if self.originalFile and os.path.exists(self.originalFile.path):
+            filepath = self.originalFile.path
+        elif self.mediafiles():
+            filepath = self.mediafiles()[0].url
+        else:
+            return False
+
+        matches = self.get_duration(filepath)
+        if matches:
             self.duration = decimal.Decimal(matches['hours'])*3600 + decimal.Decimal(matches['minutes'])*60 + decimal.Decimal(matches['seconds'])
             self.save()
+            return True
+        else:
+            return False
 
     def get_license_link(self):
         return LICENSE_URLS[self.license]
@@ -391,4 +406,5 @@ post_delete.connect(purge_files, sender=MediaItem)
 
 djangotasks.register_task(MediaFile.encode_media, "Encode the file using ffmpeg")
 djangotasks.register_task(MediaItem.get_and_save_cover, "Get the cover from the original file")
+djangotasks.register_task(MediaItem.get_and_save_duration, "Get the duration from the original or transcoded file")
 djangotasks.register_task(MediaItem.create_bittorrent, "Create Bittorrent file for item and serve it")

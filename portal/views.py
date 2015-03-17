@@ -11,6 +11,7 @@ from django.template.response import TemplateResponse
 from portal.models import MediaItem, Comment, Channel, Collection, Submittal, MediaFile
 from portal.forms import MediaItemForm, CommentForm, getThumbnails, ThumbnailForm, SubmittalForm
 from portal.media_formats import MEDIA_FORMATS
+from portal.templatetags.custom_filters import seconds_to_hms
 
 from taggit.models import Tag
 import lambdaproject.settings as settings
@@ -71,6 +72,15 @@ def channel_list(request,slug):
         # If page is out of range (e.g. 9999), deliver last page of results.
         mediaitems = paginator.page(paginator.num_pages)
     return TemplateResponse(request, 'portal/channel.html', {'mediaitems_list': mediaitems, 'channel': channel, 'channel_list': channel_list, 'rss_list': rss_list})
+
+@login_required
+def get_duration(request, slug):
+    mediaitem = get_object_or_404(MediaItem, slug=slug)
+    if mediaitem.get_and_save_duration():
+        duration_feedback = seconds_to_hms(mediaitem.duration)
+    else:
+        duration_feedback = "Error"
+    return HttpResponse(duration_feedback)
 
 def detail(request, slug):
     ''' Handles the detail view of a media item (the player so to say) and handles the comments (this should become nicer with AJAX and stuff)'''

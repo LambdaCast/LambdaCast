@@ -138,9 +138,9 @@
 				<textarea readonly="readonly" class="form-control">{{ mediaitem.get_wp_code }}</textarea>
 			</li>
 			{% endif %}
-			{% if mediaitem.duration %}
+			{% if user.is_staff or mediaitem.duration %}
 			<li class="list-group-item">
-				<i class="glyphicon glyphicon-time"></i> {% trans "Duration" %}: {{ mediaitem.duration|seconds_to_hms }}
+				<i class="glyphicon glyphicon-time"></i> {% trans "Duration" %}: <div style="display:inline;" id="duration">{{ mediaitem.duration|seconds_to_hms }}</div> {% if user.is_staff %}<button type="button" id="get_duration" class="btn btn-warning btn-xs" title="{% trans "Generate Duration (Time)" %}"><i class="glyphicon glyphicon-refresh"></i></button>{% endif %}
 			</li>
 			{% endif %}
 			<li class="list-group-item">
@@ -239,6 +239,12 @@ $('#description').readmore({
 });
 
 $(document).ready(function() {
+	$('#get_duration').click(function(){
+		$('#duration').html('...');
+		$.get('/item/{{mediaitem.slug}}/get_duration', function(data){
+			$('#duration').html(data);
+		});
+	});
 	var timecode;
 	var timeListener = function(value) {	
 		$('#id_timecode').val( value.toFixed(2) )
