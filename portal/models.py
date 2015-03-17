@@ -229,8 +229,7 @@ class MediaItem(models.Model):
         process = subprocess.Popen(['ffmpeg',  '-i', filepath], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout, _ = process.communicate()
         try: 
-            matches = re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
-            return matches
+            return re.search(r"Duration:\s{1}(?P<hours>\d+?):(?P<minutes>\d+?):(?P<seconds>\d+\.\d+?),", stdout, re.DOTALL).groupdict()
         except AttributeError:
             return None
 
