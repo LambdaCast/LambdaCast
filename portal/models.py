@@ -377,7 +377,7 @@ class Submittal(models.Model):
     description = models.TextField(_(u"Description of the submittal"),blank=True,help_text=_(u"Insert a sample description to the media. You can use Markdown to add formatting"))
     media_title = models.CharField(_(u"Title"),max_length=200)
     media_description = models.TextField(_(u"Description"),blank=True,help_text=_(u"Insert a sample description to the media. You can use Markdown to add formatting"))
-    users = models.ManyToManyField(User,verbose_name=_(u"Users of the submittal"), blank=True, null=True, help_text=_(u"User who use the submittal and get it shown on frontpage"))
+    users = models.ManyToManyField(User,verbose_name=_(u"Users of the submittal"), blank=True, help_text=_(u"User who use the submittal and get it shown on frontpage"))
     media_channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
     media_license = models.CharField(_(u"License"),max_length=200,choices=LICENSE_CHOICES,default="CC-BY",help_text=_(u"Rights the viewer/listener has"))
     media_linkURL = models.URLField(_(u"Link"),blank=True,help_text=_(u"Insert a link to a blog or website that relates to the media"))
