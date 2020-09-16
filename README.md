@@ -26,7 +26,7 @@ Features
 Status
 ------
 
-The code is beta. If you find any bugs, just [send them to us](http://jira.coding4coffee.org/browse/LAMBDA).
+The code is beta. If you find any bugs, just [send them to us](https://github.com/LambdaCast/LambdaCast/issues).
 
 
 Requirements & Installation
