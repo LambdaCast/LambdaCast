@@ -2,9 +2,9 @@ import os
 import site
 import sys
 
-sys.path.append('/data/srv/LambdaCast')
+sys.path.append('/opt/LambdaCast')
 
-site.addsitedir('/data/srv/LambdaCast/.venv/lib/python2.7/site-packages')
+site.addsitedir('/opt/LambdaCast/.venv/lib/python2.7/site-packages')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'lambdaproject.settings'
 
