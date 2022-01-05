@@ -189,6 +189,8 @@ def submittal(request, subm_id):
             'license': submittal.media_license,
             'linkURL': submittal.media_linkURL,
             'torrentURL': submittal.media_torrentURL,
+            'media_mp4URL': submittal.media_mp4URL,
+            'media_webmURL': submittal.media_webmURL,
             'media_mp3URL': submittal.media_mp3URL,
             'media_oggURL': submittal.media_oggURL,
             'media_opusURL':  submittal.media_opusURL,
