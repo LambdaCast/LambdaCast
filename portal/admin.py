@@ -1,10 +1,10 @@
+from django import forms
+from django.contrib import admin
+from django.forms.widgets import Select
+from django.utils.translation import ugettext_lazy as _
+
 from portal.models import MediaItem, MediaFile, Comment, Channel, Hotfolder, Collection, Submittal
 
-from django.utils.translation import ugettext_lazy as _
-from django.contrib import admin
-
-from django import forms
-from django.forms.widgets import Select
 
 class MediaItemForm(forms.ModelForm):
     class Meta:
@@ -61,7 +61,7 @@ class CommentAdmin (admin.ModelAdmin):
 admin.site.register(Comment,CommentAdmin)
 
 class ChannelAdmin (admin.ModelAdmin):
-    list_display = ['name','description','featured']
+    list_display = ['name','description','featured', 'itunes_main_category', 'itunes_subcategory']
     ordering = ['-created']
 
 admin.site.register(Channel,ChannelAdmin)

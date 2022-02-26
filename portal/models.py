@@ -1,42 +1,33 @@
 # -*- coding: utf-8 -*-
-from django.utils.translation import ugettext_lazy as _
-from django.db import models
-from django.db.models.signals import pre_save, post_delete
-from django.contrib.auth.models import User
-from django.utils.formats import localize_input, date_format, time_format
-from django.utils import timezone
-from django.core.mail import send_mail
+import decimal
+import os.path
+import re
+import subprocess
+import time
+from threading import Event
 
 import djangotasks
-
+import markdown
 from autoslug import AutoSlugField
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.db import models
+from django.db.models.signals import pre_save, post_delete
+from django.utils import timezone
+from django.utils.formats import date_format, time_format
+from django.utils.translation import ugettext_lazy as _
+from mutagen.id3 import ID3
+from mutagen.mp3 import MP3
+from pytranscode.ffmpeg import ffmpeg
 from taggit.managers import TaggableManager
 
 import lambdaproject.settings as settings
-
-from pytranscode.ffmpeg import ffmpeg
-
-from portal.signals import get_remote_filesize, purge_files, get_mediatype
+from BitTornadoABC.btmakemetafile import make_meta_file
 from portal.licenses import LICENSE_CHOICES, LICENSE_URLS
 from portal.media_formats import FILE_FORMATS, MEDIA_TYPES, MEDIA_FORMATS
 from portal.model_helpers import *
+from portal.signals import get_remote_filesize, purge_files, get_mediatype
 
-import subprocess
-import decimal
-import re
-import time
-import os.path
-
-from mutagen.mp3 import MP3
-from mutagen.id3 import ID3
-
-from threading import Event
-
-import markdown
-
-from BitTornadoABC.btmakemetafile import make_meta_file
-
-from datetime import date
 
 class MediaFile(models.Model):
     ''' The model only for the media files '''
@@ -91,7 +82,7 @@ class MediaItem(models.Model):
     store your files '''
     title = models.CharField(_(u"Title"),max_length=200)
     slug = AutoSlugField(populate_from='title',unique=True,verbose_name=_(u"Slug"),help_text=_(u"Slugs are parts of an URL that you can define"))
-    date = models.DateField(_(u"Date"),help_text=_(u"Upload or record date"),default=lambda:localize_input(date.today()))
+    date = models.DateField(_(u"Date"),help_text=_(u"Upload or record date"),null=True)
     description = models.TextField(_(u"Description"),blank=True,help_text=_(u"Insert a description to the media. You can use Markdown to add formatting"))
     user = models.ForeignKey(User,verbose_name=_(u"User"), blank=True, null=True, help_text=_(u"Shows which user made or uploaded the media item"))
     channel = models.ForeignKey('portal.Channel',blank=True,null=True,verbose_name=_(u"Channel"),help_text=_(u"Channels are used to order your media"))
@@ -326,6 +317,8 @@ class Channel(models.Model):
     modified = models.DateTimeField(verbose_name=_(u"Modified"),auto_now=True)
     featured = models.BooleanField(verbose_name=_(u"Featured"),default=False)
     channelThumbURL = models.URLField(_(u"Channel Thumb URL"),blank=True, help_text=_(u"Use a picture as thumbnail for the RSS-Feed"))
+    itunes_main_category = models.CharField(_(u"iTunes Main Category"),max_length=60, blank=True)
+    itunes_subcategory = models.CharField(_(u"iTunes Subcategory"),max_length=60, blank=True)
 
     def __unicode__(self):
         return self.name

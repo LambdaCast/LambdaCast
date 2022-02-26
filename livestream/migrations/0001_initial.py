@@ -1,54 +1,35 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+import autoslug.fields
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Stream'
-        db.create_table('livestream_stream', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=())),
-            ('startDate', self.gf('django.db.models.fields.DateTimeField')()),
-            ('endDate', self.gf('django.db.models.fields.DateTimeField')()),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('link', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('rtmpLink', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('audioOnlyLink', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('iframe', self.gf('django.db.models.fields.TextField')()),
-            ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('livestream', ['Stream'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Stream'
-        db.delete_table('livestream_stream')
-
-
-    models = {
-        'livestream.stream': {
-            'Meta': {'object_name': 'Stream'},
-            'audioOnlyLink': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {}),
-            'endDate': ('django.db.models.fields.DateTimeField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'iframe': ('django.db.models.fields.TextField', [], {}),
-            'link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'rtmpLink': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'}),
-            'startDate': ('django.db.models.fields.DateTimeField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        }
-    }
-
-    complete_apps = ['livestream']
+    operations = [
+        migrations.CreateModel(
+            name='Stream',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(max_length=200, verbose_name='Stream title')),
+                ('slug', autoslug.fields.AutoSlugField(editable=False, help_text='Slugs are parts of an URL that you can define', unique=True, verbose_name='Slug')),
+                ('startDate', models.DateTimeField(verbose_name='Beginning of the event')),
+                ('endDate', models.DateTimeField(verbose_name='End of the event')),
+                ('description', models.TextField(verbose_name='Description')),
+                ('link', models.URLField(verbose_name='Link', blank=True)),
+                ('rtmpLink', models.URLField(help_text='RTMP is a protocol to stream video. If you have a server as host, you can insert a link of the output', verbose_name='RTMP Link', blank=True)),
+                ('audioOnlyLink', models.URLField(verbose_name='Audio-only Link', blank=True)),
+                ('iframe', models.TextField(verbose_name='iFrame of the Stream')),
+                ('published', models.BooleanField(default=False, verbose_name='Published')),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='Created')),
+                ('modified', models.DateTimeField(auto_now=True, verbose_name='Modified')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+    ]

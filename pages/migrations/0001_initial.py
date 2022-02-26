@@ -1,48 +1,33 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+import autoslug.fields
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Page'
-        db.create_table('pages_page', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('activated', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=())),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
-            ('body', self.gf('django.db.models.fields.TextField')(max_length=10000, blank=True)),
-            ('icon', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
-            ('link', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('orderid', self.gf('django.db.models.fields.DecimalField')(unique=True, max_digits=10, decimal_places=2)),
-        ))
-        db.send_create_signal('pages', ['Page'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Page'
-        db.delete_table('pages_page')
-
-
-    models = {
-        'pages.page': {
-            'Meta': {'object_name': 'Page'},
-            'activated': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'body': ('django.db.models.fields.TextField', [], {'max_length': '10000', 'blank': 'True'}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
-            'icon': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'orderid': ('django.db.models.fields.DecimalField', [], {'unique': 'True', 'max_digits': '10', 'decimal_places': '2'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        }
-    }
-
-    complete_apps = ['pages']
+    operations = [
+        migrations.CreateModel(
+            name='Page',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('activated', models.BooleanField(default=False, verbose_name='Activated')),
+                ('modified', models.DateTimeField(auto_now=True, verbose_name='Modified')),
+                ('slug', autoslug.fields.AutoSlugField(editable=False, help_text='Is part of the URL that you can define', unique=True, verbose_name='Slug')),
+                ('title', models.CharField(max_length=200, verbose_name='Title')),
+                ('description', models.CharField(max_length=200, verbose_name='Description', blank=True)),
+                ('display', models.CharField(default=b'body', max_length=20, verbose_name='Display', choices=[(b'link', 'link to another website'), (b'body', 'display the content of body')])),
+                ('body', models.TextField(default=b'\n    <div class="row">\n    <div class="col-md-4">\n    <h3>Title 1</h3>\n    <p>This is sample content</p>\n    </div>\n    <div class="col-md-4">\n    <h3>Title 2</h3>\n    <p>This is sample content</p>\n    </div>\n    <div class="col-md-4">\n    <h3>Title</h3>\n    <p>This is sample content</p>\n    </div>\n    </div>\n    ', max_length=10000, verbose_name='Body', blank=True)),
+                ('icon', models.CharField(blank=True, max_length=200, verbose_name='Icon', choices=[(b'glass', b'icon-glass'), (b'music', b'icon-music'), (b'search', b'icon-search'), (b'envelope', b'icon-envelope'), (b'heart', b'icon-heart'), (b'star', b'icon-star'), (b'star-empty', b'icon-star-empty'), (b'user', b'icon-user'), (b'film', b'icon-film'), (b'th-large', b'icon-th-large'), (b'th', b'icon-th'), (b'th-list', b'icon-th-list'), (b'ok', b'icon-ok'), (b'remove', b'icon-remove'), (b'zoom-in', b'icon-zoom-in'), (b'zoom-out', b'icon-zoom-out'), (b'off', b'icon-off'), (b'signal', b'icon-signal'), (b'cog', b'icon-cog'), (b'trash', b'icon-trash'), (b'home', b'icon-home'), (b'file', b'icon-file'), (b'time', b'icon-time'), (b'road', b'icon-road'), (b'download-alt', b'icon-download-alt'), (b'download', b'icon-download'), (b'upload', b'icon-upload'), (b'inbox', b'icon-inbox'), (b'play-circle', b'icon-play-circle'), (b'repeat', b'icon-repeat'), (b'refresh', b'icon-refresh'), (b'list-alt', b'icon-list-alt'), (b'lock', b'icon-lock'), (b'flag', b'icon-flag'), (b'headphones', b'icon-headphones'), (b'volume-off', b'icon-volume-off'), (b'volume-down', b'icon-volume-down'), (b'volume-up', b'icon-volume-up'), (b'qrcode', b'icon-qrcode'), (b'barcode', b'icon-barcode'), (b'tag', b'icon-tag'), (b'tags', b'icon-tags'), (b'book', b'icon-book'), (b'bookmark', b'icon-bookmark'), (b'print', b'icon-print'), (b'camera', b'icon-camera'), (b'font', b'icon-font'), (b'bold', b'icon-bold'), (b'italic', b'icon-italic'), (b'text-height', b'icon-text-height'), (b'text-width', b'icon-text-width'), (b'align-left', b'icon-align-left'), (b'align-center', b'icon-align-center'), (b'align-right', b'icon-align-right'), (b'align-justify', b'icon-align-justify'), (b'list', b'icon-list'), (b'indent-left', b'icon-indent-left'), (b'indent-right', b'icon-indent-right'), (b'facetime-video', b'icon-facetime-video'), (b'picture', b'icon-picture'), (b'pencil', b'icon-pencil'), (b'map-marker', b'icon-map-marker'), (b'adjust', b'icon-adjust'), (b'tint', b'icon-tint'), (b'edit', b'icon-edit'), (b'share', b'icon-share'), (b'check', b'icon-check'), (b'move', b'icon-move'), (b'step-backward', b'icon-step-backward'), (b'fast-backward', b'icon-fast-backward'), (b'backward', b'icon-backward'), (b'play', b'icon-play'), (b'pause', b'icon-pause'), (b'stop', b'icon-stop'), (b'forward', b'icon-forward'), (b'fast-forward', b'icon-fast-forward'), (b'step-forward', b'icon-step-forward'), (b'eject', b'icon-eject'), (b'chevron-left', b'icon-chevron-left'), (b'chevron-right', b'icon-chevron-right'), (b'plus-sign', b'icon-plus-sign'), (b'minus-sign', b'icon-minus-sign'), (b'remove-sign', b'icon-remove-sign'), (b'ok-sign', b'icon-ok-sign'), (b'question-sign', b'icon-question-sign'), (b'info-sign', b'icon-info-sign'), (b'screenshot', b'icon-screenshot'), (b'remove-circle', b'icon-remove-circle'), (b'ok-circle', b'icon-ok-circle'), (b'ban-circle', b'icon-ban-circle'), (b'arrow-left', b'icon-arrow-left'), (b'arrow-right', b'icon-arrow-right'), (b'arrow-up', b'icon-arrow-up'), (b'arrow-down', b'icon-arrow-down'), (b'share-alt', b'icon-share-alt'), (b'resize-full', b'icon-resize-full'), (b'resize-small', b'icon-resize-small'), (b'plus', b'icon-plus'), (b'minus', b'icon-minus'), (b'asterisk', b'icon-asterisk'), (b'exclamation-sign', b'icon-exclamation-sign'), (b'gift', b'icon-gift'), (b'leaf', b'icon-leaf'), (b'fire', b'icon-fire'), (b'eye-open', b'icon-eye-open'), (b'eye-close', b'icon-eye-close'), (b'warning-sign', b'icon-warning-sign'), (b'plane', b'icon-plane'), (b'calendar', b'icon-calendar'), (b'random', b'icon-random'), (b'comment', b'icon-comment'), (b'magnet', b'icon-magnet'), (b'chevron-up', b'icon-chevron-up'), (b'chevron-down', b'icon-chevron-down'), (b'retweet', b'icon-retweet'), (b'shopping-cart', b'icon-shopping-cart'), (b'folder-close', b'icon-folder-close'), (b'folder-open', b'icon-folder-open'), (b'resize-vertical', b'icon-resize-vertical'), (b'resize-horizontal', b'icon-resize-horizontal'), (b'hdd', b'icon-hdd'), (b'bullhorn', b'icon-bullhorn'), (b'bell', b'icon-bell'), (b'certificate', b'icon-certificate'), (b'thumbs-up', b'icon-thumbs-up'), (b'thumbs-down', b'icon-thumbs-down'), (b'hand-right', b'icon-hand-right'), (b'hand-left', b'icon-hand-left'), (b'hand-up', b'icon-hand-up'), (b'hand-down', b'icon-hand-down'), (b'circle-arrow-right', b'icon-circle-arrow-right'), (b'circle-arrow-left', b'icon-circle-arrow-left'), (b'circle-arrow-up', b'icon-circle-arrow-up'), (b'circle-arrow-down', b'icon-circle-arrow-down'), (b'globe', b'icon-globe'), (b'wrench', b'icon-wrench'), (b'tasks', b'icon-tasks'), (b'filter', b'icon-filter'), (b'briefcase', b'icon-briefcase'), (b'fullscreen', b'icon-fullscreen')])),
+                ('link', models.URLField(help_text='URL that links to an external website', verbose_name='URL', blank=True)),
+                ('orderid', models.DecimalField(help_text='Set the order of the menu items with smallest number first', unique=True, verbose_name='Order', max_digits=2, decimal_places=0)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+    ]

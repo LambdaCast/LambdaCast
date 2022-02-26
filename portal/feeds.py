@@ -1,19 +1,18 @@
-from django.contrib.syndication.views import Feed
-from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext_lazy as _
-from django.utils.feedgenerator import Rss201rev2Feed
-from django.http import Http404
-
+import os
+from datetime import datetime, time
 from string import upper
 
-from portal.models import MediaItem, Channel, Collection, Comment, MediaFile
-from portal.media_formats import MEDIA_FORMATS
+import markdown
+from django.contrib.syndication.views import Feed
+from django.http import Http404
+from django.shortcuts import get_object_or_404
+from django.utils.feedgenerator import Rss201rev2Feed
+from django.utils.translation import ugettext_lazy as _
 
 import lambdaproject.settings as settings
+from portal.media_formats import MEDIA_FORMATS
+from portal.models import MediaItem, Channel, Collection, Comment, MediaFile
 
-import markdown
-from datetime import datetime, time
-import os
 
 class iTunesFeed(Rss201rev2Feed):
     def rss_attributes(self):
@@ -29,6 +28,10 @@ class iTunesFeed(Rss201rev2Feed):
         handler.addQuickElement(u'itunes:name', self.feed['iTunes_name'])
         handler.addQuickElement(u'itunes:email', self.feed['iTunes_email'])
         handler.endElement(u"itunes:owner")
+        handler.startElement(u'itunes:category', attrs={"text": self.feed['iTunes_main_category']})
+        if self.feed['iTunes_subcategory']:
+          handler.addQuickElement(u'itunes:category', attrs={"text": self.feed['iTunes_subcategory']})
+        handler.endElement(u'itunes:category')
         handler.addQuickElement(u'itunes:image', attrs={"href": self.feed['iTunes_image_url']})
         handler.startElement('image', {})
         handler.addQuickElement('title', self.feed['title'])
@@ -63,6 +66,8 @@ class MediaFeed(Feed):
         extra = {}
         extra['iTunes_name'] = settings.AUTHOR_NAME
         extra['iTunes_email'] = settings.CONTACT_EMAIL
+        extra['iTunes_main_category'] = 'Leisure'
+        extra['iTunes_subcategory'] = ''
         extra['iTunes_image_url'] = settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
         extra['site_url'] = settings.WEBSITE_URL
@@ -147,6 +152,8 @@ class ChannelFeed(MediaFeed):
         extra = {}
         extra['iTunes_name'] = settings.AUTHOR_NAME
         extra['iTunes_email'] = settings.CONTACT_EMAIL
+        extra['iTunes_main_category'] = obj.itunes_main_category
+        extra['iTunes_subcategory'] = obj.itunes_subcategory
         extra['iTunes_image_url'] = obj.channelThumbURL if not obj.channelThumbURL == '' else settings.LOGO_URL
         extra['iTunes_explicit'] = 'no'
         extra['site_url'] = settings.WEBSITE_URL
