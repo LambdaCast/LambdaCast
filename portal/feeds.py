@@ -153,7 +153,7 @@ class ChannelFeed(MediaFeed):
         return extra
 
     def title(self, obj):
-        return "%s: %s" % (settings.AUTHOR_NAME, obj.name)
+        return "%s (%s)" % (obj.name, settings.AUTHOR_NAME)
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -170,7 +170,7 @@ class ChannelFeedTorrent(Feed):
         return get_object_or_404(Channel, slug=channel_slug)
 
     def title(self, obj):
-        return _(u"Torrents for Channel %s") % obj.name
+        return _(u"%s (Torrents)") % obj.name
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -204,7 +204,7 @@ class CollectionFeed(MediaFeed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"Media Items in Collection %s") % obj.title
+        return _(u"Collection %s") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -222,7 +222,7 @@ class CollectionFeedTorrent(Feed):
         return get_object_or_404(Collection, slug=collection_slug)
 
     def title(self, obj):
-        return _(u"Torrents for items in Collection %s") % obj.title
+        return _(u"Collection %s (Torrents)") % obj.title
 
     def link(self, obj):
         return obj.get_absolute_url()
@@ -252,7 +252,7 @@ class CollectionFeedTorrent(Feed):
 
 
 class CommentsFeed(Feed):
-    title = _(u"Latest comments from %s") % (settings.SITE_NAME)
+    title = _(u"%s: Latest Comments") % (settings.SITE_NAME)
     link = "/"
     description = _(u"Latest comments from %s") % (settings.SITE_NAME)
 
