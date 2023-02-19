@@ -12,5 +12,5 @@ mutagen==1.25.1
 simplejson==3.6.5
 wsgiref==0.1.2
 docutils==0.12
--e git://github.com/puzzlet/pytranscode.git@master#egg=pytranscode-dev
--e git://github.com/LambdaCast/django-tasks.git#egg=djangotasks-dev
+-e git+https://github.com/puzzlet/pytranscode.git@master#egg=pytranscode-dev
+-e git+https://github.com/LambdaCast/django-tasks.git#egg=djangotasks-dev
