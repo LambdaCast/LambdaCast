@@ -1,0 +1,160 @@
+[
+{
+    "fields": {
+        "file_format": "MP3",
+        "url": "https://rec.theradio.cc/auphonic/20230212_linuxlounge266.mp3",
+        "title": "LL266 Mein Linux saugt. mp3",
+        "mediatype": "audio",
+        "media_item": 1,
+        "size": 83158623
+    },
+    "model": "portal.mediafile",
+    "pk": 1
+},
+{
+    "fields": {
+        "file_format": "OGG",
+        "url": "https://rec.theradio.cc/auphonic/20230212_linuxlounge266.ogg",
+        "title": "LL266 Mein Linux saugt. ogg",
+        "mediatype": "audio",
+        "media_item": 1,
+        "size": 72446869
+    },
+    "model": "portal.mediafile",
+    "pk": 2
+},
+{
+    "fields": {
+        "file_format": "OPUS",
+        "url": "https://rec.theradio.cc/auphonic/20230212_linuxlounge266.opus",
+        "title": "LL266 Mein Linux saugt. Opus",
+        "mediatype": "audio",
+        "media_item": 1,
+        "size": 56024314
+    },
+    "model": "portal.mediafile",
+    "pk": 3
+},
+{
+    "fields": {
+        "autoPublish": true,
+        "description": "#### Neues aus dem Repo\r\n* [Jupyter Desktop 3.6.1](https://github.com/jupyterlab/jupyterlab-desktop/releases/tag/v3.6.1-1 )\r\n* [Celeste 0.4.0 - Datei-Sync-Client f\u00fcr viele Dienste](https://github.com/hwittenborn/celeste/releases/tag/v0.4.0 )\r\n* [memtest86plus v6.10](v6.10)\r\n* [PDF Metadata Editor 1.0](https://github.com/Diego-Ivan/pdf-metadata-editor/releases/tag/v1.0 )\r\n* [Mastrotron - Interface mit Netzwerkansicht von Posts](https://zirk.us/@heuser/109838089472588601 ) | [Projektwebseite](https://github.com/quadrismegistus/mastotron)\r\n* [Lineageos 20 auf Android 13 Basis](https://lineageos.org/Changelog-27/)\r\n* [elementary OS 7 - Fokus auf Barrierefreiheit](https://www.makeuseof.com/ways-elementary-os-improves-accessibility-on-linux/ )\r\n* [Valetudo 23.01.0](https://github.com/Hypfer/Valetudo/releases/tag/2023.01.0) [und 2023.02.0](https://github.com/Hypfer/Valetudo/releases/tag/2023.02.0)\r\n* [OpenSource Hardware Ploopy Headphones ver\u00f6ffentlicht](https://github.com/ploopyco/headphones ) | [Offizielle Webseite](https://ploopy.co/headphones/)\r\n* [fwupd 1.8.9 und 1.8.10](https://github.com/fwupd/fwupd/releases)\r\n* [U-boot HTTP support endlich fertig](https://www.linaro.org/blog/http-now-supported-in-u-boot/)\r\n* [Cavalier - Audio Visualizer](https://github.com/fsobolev/cavalier/releases/tag/2023.01.29 ) | [OMGLinux-Beitrag](https://www.omglinux.com/cavalier-music-visualizer-app-for-linux/ )\r\n* [Pandoc 3.0 und 3.1](https://pandoc.org/releases.html)\r\n* [FirewallD 1.3](https://github.com/firewalld/firewalld/releases/tag/v1.3.0)\r\n* [Transmission 4.0.0](https://github.com/transmission/transmission/releases/tag/4.0.0 )\r\n* [OsmAnd 4.3](https://gnulinux.ch/osmand-4-3-rockt )\r\n* [OpenZFS Verbesserungen](https://github.com/openzfs/zfs/pull/14243)\r\n\r\n##### Matrix\r\n* [This Week in Matrix 2023-02-10](https://matrix.org/blog/2023/02/10/this-week-in-matrix-2023-02-10)\r\n* [FOSDEM: Matrix 2.0](https://www.youtube.com/watch?v=eUPJ9zFV5IE )\r\n* [Endless OS 5.0](https://9to5linux.com/endless-os-5-0-is-out-with-refreshed-desktop-experience-wayland-support )\r\n\r\n#### Newsflash\r\n* [Mozilla scheint keine Ambitionen mehr zu haben, JPEG-XL zu unterst\u00fctzen](https://github.com/mozilla/standards-positions/issues/522#issuecomment-1409539985)\r\n* [Thunderbird wird komplett renoviert](https://blog.thunderbird.net/2023/02/the-future-of-thunderbird-why-were-rebuilding-from-the-ground-up/ )\r\n* [Mozilla Common Voice Corpus 12.0](https://www.soeren-hentzschel.at/mozilla/mozilla-common-voice-corpus-12-0/)\r\n* [FOSDEM: I was wrong about Flatpak, AppImage, and Snap](https://reddit.com/r/linux/comments/10vv9hi/fosdem_23_i_was_wrong_about_flatpak_appimage_and/ )\r\n* [Flathub bereitet verfizierte Flatpaks vor](https://gnulinux.ch/flathub-bereitet-verifizierte-flatpaks-vor)\r\n* [Ubuntu 23.04 kommt mit Flutter-basiertem Installer](https://9to5linux.com/first-look-at-ubuntu-23-04s-brand-new-desktop-installer-written-in-flutter)\r\n* [Aktuelle Orga-Probleme von Debian](https://linuxnews.de/2020/09/11/debian-projektleiter-zu-den-aktuellen-problemen-der-distribution/ )\r\n* [Telemetrie als Opt-Out bei Go demn\u00e4chst?](https://www.theregister.com/2023/02/10/googles_go_programming_language_telemetry_debate/)\r\n* [Linux Foundation kritisiert starken US-Amerikanischen Einfluss auf OpenSource](https://thenewstack.io/futurewei-backed-lf-study-critiques-us-influence-on-oss/ )\r\n* [LLVM Backend f\u00fcr Xtensa Architektur](https://www.phoronix.com/news/LLVM-Xtensa-Backend)\r\n* [Das ClangBuiltLinux Projekt ist noch sehr aktiv](https://clangbuiltlinux.github.io/). [2022 Retro und](https://nathanchance.dev/posts/2022-cbl-retrospective/) [Januar 2023 Bericht](https://nathanchance.dev/posts/january-2023-cbl-work/)\r\n* [ASRock Industrial arbeitet mit Canonical an Ubuntu-Zertifizierung](https://www.phoronix.com/news/ASRock-Industrial-Ubuntu)\r\n\r\n#### Zockerecke\r\n* [This Month in Veloren](https://veloren.net)\r\n* [Erste Spiele funktionieren mit neuem nVidia Treiber nvk](https://www.gamingonlinux.com/2023/01/the-open-source-nvidia-vulkan-driver-nvk-begins-to-run-games/)\r\n* [Duelyst - Digitales Trading Card Game unter CC0](https://github.com/open-duelyst/duelyst)\r\n* [Gro\u00dfes Team Fortress 2 Update angek\u00fcndigt](https://www.gamingonlinux.com/2023/02/valve-proper-big-team-fortress-2-update-is-coming/)\r\n* [Speed Dreams 2.3.0 RC](https://www.speed-dreams.net/en/new-2-3-0-release-candidate/ )\r\n* [Stadia Controller Bluetooth mit](https://www.gamingonlinux.com/2023/01/bluetooth-support-for-the-stadia-controller-is-now-live/) [Google WebUSB Tool](https://stadia.google.com/controller/index_de.html)\r\n* [Cemu 2.0 ist nun OpenSource](https://cemu.info/changelog.html )\r\n* [X86_64 f\u00fcr ARM Emulator FEX 2301 und 2302](https://fex-emu.com/FEX-2302/)\r\n* [Lutris 0.5.13 Beta](https://www.phoronix.com/news/Lutris-0.5.13-Beta )\r\n\r\n##### Steam Deck\r\n* [Framework k\u00fcndigt 2TB Festplatte f\u00fcr die Steam Deck an](https://www.gamingonlinux.com/2023/02/framework-begin-offering-2tb-ssd-upgrades-for-steam-deck/ )\r\n* [Anf\u00e4nglicher Steam Deck Support in Kernel 6.3](https://www.s3nnet.de/kurz-informiert-anfaenglicher-steam-deck-support-kommt-mit-linux-63/ )\r\n\r\n#### Kommando der Woche\r\n* [nec: NextCloud Fileshares von der CLI kontrollieren](https://github.com/gnojus/nec)\r\n\r\n#### Tipps & Tricks\r\n* [NextCloud Auto-Upload Fix](https://github.com/nextcloud/android/issues/10628 )\r\n* [Notrufnummern als .VCF](https://gist.github.com/rugk/817048d3a43be5711647ce611993bbe3 )\r\n* [chiefonboarding - Streamline employee onboarding](https://chiefonboarding.com)\r\n* [GNULinux.ch: Bashtrash bringt Papierkorb f\u00fcr die Shell](https://gnulinux.ch/muelleimer-f%C3%BCr-die-bash)\r\n* [Titanium SDK, Java Script f\u00fcr native iOS und Android Apps](https://github.com/tidev/titanium_mobile)\r\n* [Paleta - App um Farbpaletten aus Bildern zu extrahieren](https://github.com/nate-xyz/paleta )\r\n* [Streamlit UI f\u00fcr OpenAI's Whisper](https://github.com/hayabhay/whisper-ui )\r\n* [Dateien bequem austauschen mit Pairdrop](https://github.com/schlagmichdoch/PairDrop) | [Pairdrop PWA](https://pairdrop.net/)\r\n* [OSS Timetracker Timinute beherrscht Timesheetgenerierung und Benutzerverwaltung](https://github.com/jame581/Timinute)\r\n* [Linktipp: Wie mit Telemetrie als OpenSource Entwickler\\*in umgehen](https://research.swtch.com/telemetry-intro)\r\n* [SocialHub - das Fediverse-Forum - weiterverbreiten](https://socialhub.activitypub.rocks/t/please-promote-your-socialhub-it-is-important/2941 )\r\n* [Unter Fedora 38 funktioniert nun die Camera des Microsoft Surface Pro 4](https://marius.bloggt-in-braunschweig.de/2023/02/10/linux-surface-cams-arbeiten-endlich-unter-fedora-38/ )\r\n* [Wie GNOME Software mit Profiling optimiert wurde](https://feaneron.com/2023/02/07/profiling-optimizing-gnome-software/)\r\n",
+        "license": "CC-BY",
+        "title": "LL266 Mein Linux saugt.",
+        "audioThumbURL": "https://rec.theradio.cc/media/thumbnails/LinuxLounge.png",
+        "created": "2023-02-19T21:20:27.640Z",
+        "modified": "2023-02-19T21:28:35.109Z",
+        "originalFile": "",
+        "torrentURL": "",
+        "duration": "6925.5",
+        "videoThumbURL": "",
+        "published": true,
+        "date": "2023-02-19",
+        "torrentDone": false,
+        "linkURL": "",
+        "slug": "ll266-mein-linux-saugt",
+        "channel": 2,
+        "encodingDone": true,
+        "user": 1
+    },
+    "model": "portal.mediaitem",
+    "pk": 1
+},
+{
+    "fields": {
+        "comment": "I\u2019m not sure where you\u2019re getting your information, but great topic. I needs to spend some time learning much more or understanding more. \r\nThanks for excellent info I was looking for this information for my mission.",
+        "name": "TestNutzer",
+        "created": "2023-02-19T21:23:28.835Z",
+        "ip": "178.159.37.11",
+        "modified": "2023-02-19T21:23:28.835Z",
+        "item": 1,
+        "moderated": false,
+        "timecode": "0"
+    },
+    "model": "portal.comment",
+    "pk": 1
+},
+{
+    "fields": {
+        "comment": "\u00d6ffentlich: I\u2019m not sure where you\u2019re getting your information, but great topic. I needs to spend some time learning much more or understanding more. \r\nThanks for excellent info I was looking for this information for my mission.",
+        "name": "TestNutzer",
+        "created": "2023-02-19T21:28:13.086Z",
+        "ip": "178.159.37.11",
+        "modified": "2023-02-19T21:28:13.086Z",
+        "item": 1,
+        "moderated": true,
+        "timecode": "0"
+    },
+    "model": "portal.comment",
+    "pk": 2
+},
+{
+    "fields": {
+        "description": "Dies ist eine Beschreibung.",
+        "created": "2023-02-19T16:06:59.052Z",
+        "modified": "2023-02-19T21:19:16.385Z",
+        "featured": true,
+        "channelThumbURL": "http://rec.theradio.cc/media/thumbnails/LinuxLounge.png",
+        "slug": "linuxlounge",
+        "name": "LinuxLounge"
+    },
+    "model": "portal.channel",
+    "pk": 2
+},
+{
+    "fields": {
+        "media_published": true,
+        "description": "Dies ist eine Beschreibung der Vorlage.",
+        "media_description": "In dieser Folge der LinuxLounge geht es um...",
+        "title": "LinuxLounge",
+	"users": [1],
+        "media_videoThumbURL": "",
+        "media_linkURL": "https://theradio.cc/blog/2023/02/12/ll266-mein-linux-saugt/",
+        "media_webmURL": "",
+        "media_mp4URL": "",
+        "media_opusURL": "",
+        "media_title": "LL2XX",
+        "media_license": "CC-BY",
+        "media_torrentURL": "",
+        "media_oggURL": "",
+        "media_torrentDone": false,
+        "media_audioThumbURL": "https://rec.theradio.cc/media/thumbnails/LinuxLounge.png",
+        "media_mp3URL": "https://rec.theradio.cc/auphonic/20230212_linuxlounge266.mp3",
+        "media_channel": 2
+    },
+    "model": "portal.submittal",
+    "pk": 3
+},
+{
+    "fields": {
+        "body": "\r\n    <div class=\"row\">\r\n    <div class=\"col-md-4\">\r\n    <h3>Title 1</h3>\r\n    <p>This is sample content</p>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n    <h3>Title 2</h3>\r\n    <p>This is sample content</p>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n    <h3>Title</h3>\r\n    <p>This is sample content</p>\r\n    </div>\r\n    </div>\r\n    ",
+        "orderid": "2",
+        "description": "This is an imprint",
+        "title": "Imprint",
+        "activated": true,
+        "modified": "2023-02-19T21:17:46.317Z",
+        "slug": "imprint",
+        "link": "",
+        "display": "body",
+        "icon": "glass"
+    },
+    "model": "pages.page",
+    "pk": 1
+},
+{
+    "fields": {
+        "body": "\r\n    <div class=\"row\">\r\n    <div class=\"col-md-4\">\r\n    <h3>Title 1</h3>\r\n    <p>This is sample content</p>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n    <h3>Title 2</h3>\r\n    <p>This is sample content</p>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n    <h3>Title</h3>\r\n    <p>This is sample content</p>\r\n    </div>\r\n    </div>\r\n    ",
+        "orderid": "1",
+        "description": "",
+        "title": "Test Extern",
+        "activated": false,
+        "modified": "2023-02-19T21:18:41.675Z",
+        "slug": "test-extern",
+        "link": "https://github.com/LambdaCast/LambdaCast/",
+        "display": "link",
+        "icon": "hdd"
+    },
+    "model": "pages.page",
+    "pk": 2
+}
+]
