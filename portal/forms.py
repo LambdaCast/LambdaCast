@@ -25,7 +25,7 @@ def getThumbnails(thumbssettings):
 
 class MediaItemForm(ModelForm):
     ''' Used for the uploading form '''
-    thumbURL = forms.ChoiceField(choices=getThumbnails(settings.THUMBNAILS_DIR), required=False, label=_("Thumbnail"))
+    thumbURL = forms.ChoiceField(required=False, label=_("Thumbnail"))
     fileFormats = forms.MultipleChoiceField(choices=FILE_FORMATS, required=True, label=_("File Formats"))
 
     class Meta:
@@ -35,6 +35,7 @@ class MediaItemForm(ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super(MediaItemForm, self).__init__(*args, **kwargs)
+        self.fields['thumbURL'].choices = getThumbnails(settings.THUMBNAILS_DIR)
         for fieldName in self.fields:
             field = self.fields[fieldName]
             field.widget.attrs['class'] = 'form-control'
